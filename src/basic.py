@@ -26,6 +26,10 @@ COMMAND_NUM_MAX = BASE_NUM_MAX + FORT_NUM_MAX + MOVEABLE_UNIT_NUM_MAX    # 每�
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 
+# 维修代价
+METAL_PER_HEALTH = 0.2    # 恢复1点生命所需金属
+
+
 # 地图分层
 UNDERWATER = 0  # 水下
 SURFACE = 1     # 水面 or 地面
@@ -213,9 +217,12 @@ class Rectangle(object):
 
 class UnitBase(object):
     """单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, pos, sight_ranges, fire_ranges, health, fuel, ammo, attacks, defences):
+    def __init__(self, team, pos, sight_ranges, fire_ranges, health, fuel, ammo, 
+                 attacks, defences):
         super(UnitBase, self).__init__()
-        self.pos = pos
+        self.team = team
+        self.pos = pos                      # pos可以是一个点(Position类型), 
+                                            # 也可以是矩形(Rectangle类型)
         self.sight_ranges = sight_ranges
         self.fire_ranges = fire_ranges
         self.health = health
@@ -227,9 +234,9 @@ class UnitBase(object):
     def availableRegion(self, option = 'sight'):
         """返回三维视野区域或可攻击区域(option == 'fire')"""
         if option == 'sight':
-            ranges = sight_ranges
+            ranges = self.sight_ranges
         elif option == 'fire':
-            ranges = fire_ranges
+            ranges = self.fire_ranges
         else:
             return -1   # unknown option
         available_region = []
@@ -242,6 +249,7 @@ class UnitBase(object):
         if target_pos not in self.availableRegion('sight'):
             return -1   # 不在视野范围内, 不可见
         else:
+            pass
             ## 返回单位信息...
 
     def attack(self, target_pos, attack_type = FIRE):
@@ -252,12 +260,40 @@ class UnitBase(object):
             return -2   # 无弹药
         else:
             self.ammo -= 1  # 弹药-1
+            pass
             ## 计算伤害...
+
+def repairToNew(repairer, broken, new):   # 维修者(基地), 损坏单位, 新单位
+    provides = [0, 0, 0]    # 维修者可提供的燃料, 弹药, 金属
+    provides[0] = max(repairer.fuel, new.fuel - broken.fuel)
+    provides[1] = max(repairer.ammo, new.ammo - broken.ammo)
+    provides[2] = max(repairer.metal, (new.health - broken.health) * METAL_PER_HEALTH)
+    repairer.fuel -= provides[0]
+    repairer.ammo -= provides[1]
+    repairer.metal -= provides[2]
+    broken.fuel += provides[0]
+
 
 
 class Base(UnitBase):
-    """基地类, 继承自UnitBase"""
-    def __init__(self, rectangle, ):
-        super(Base, self).__init__()
-        self.rectangle = rectangle
-        
+    """建筑类, 继承自UnitBase"""
+    def __init__(self, team, rectangle, metal):
+        super(Base, self).__init__(team, rectangle, 
+                                   *(BUILDINGS[BASE][:5] + BUILDINGS[BASE][-2:]))
+                                   # 从元组解析出数据后传入UnitBase.__init__()
+        self.kind = 'BASE'  # 以字符串储存单位种类
+        self.metal = BUILDINGS[BASE][6]
+
+    def supply(self, ):
+        pass
+
+    def repair(self, our_unit, plane_nums = [3, 3, 3, 1]):  # 提供默认编队配置
+        """维修"""
+        if not self.team == our_unit.team:
+            return -1   # 非友军
+        elif our_unit.kind == 'FORMATION':  
+            if not our_unit.pos in self.pos.region(level = AIR):   # range = 0
+                return -2   # 不在范围内
+            else:
+                new_formation = Formation(...)      # 维修后理想状态
+                repairToNew(self, our_unit, new_formation)
