@@ -7,14 +7,18 @@
 \newfontfamily\zhfont[BoldFont=STHeiti]{STFangsong}
 \newfontfamily\zhpunctfont{STFangsong}
 \setmainfont{Times New Roman}
+\setmonofont{DejaVu Sans Mono}
 \usepackage{indentfirst}
 \usepackage{zhspacing}
 \zhspacing
 
+\renewcommand{\descriptionlabel}[1]{\ttname{#1}}
+\newcommand{\ttname}[1]{\mbox{ \ttfamily{#1}}}
+\linespread{1.2}
+
 \usepackage{amsmath}
 \usepackage{enumerate}
-\usepackage[colorlinks=true,linkcolor=black]{hyperref}
-
+\usepackage[colorlinks=true]{hyperref}
 
 \begin{document}
 
@@ -23,7 +27,7 @@
   \maketitle
 
   \section{地图元素}
-    地图采用\texttt{MapSize} $*$ \texttt{MapSize}的矩阵棋盘式地图，方格有水下（下/0）、水面（中/1）、空中（上/2）三个层次。同一格子的同一层次同时只能被一个单位占据。
+    地图采用$\text{\ttfamily MapSize} * \text{\ttfamily MapSize}$的矩阵棋盘式地图，方格有水下（下~/~0）、水面（中~/~1）、空中（上~/~2）三个层次。同一格子的同一层次同时只能被一个单位占据。
 
     \paragraph{地形} 海洋、陆地
       \subparagraph{海洋} 相当于空地，上中下层分别可停留一个单位。
@@ -31,11 +35,11 @@
 
 
   \section{建筑}
-    建筑包括基地、据点（相当于原来的岛屿）。基地和据点占据一矩形区域（不一定1×1方格）。
+    建筑包括基地、据点（相当于原来的岛屿）。基地和据点占据一矩形区域（不一定$1×1$方格）。
 
     \subsection{基地}
       \paragraph{状态量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[BaseHealth] 生命值
             \item[BaseFuel] 燃料
@@ -45,24 +49,24 @@
         \end{minipage}
 
       \paragraph{常量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[BaseHealthMax] 生命值上限
             \item[BaseFuelMax] 燃料上限
             \item[{BaseSigntRange[3]}] 视野范围（三层）
             \item[{BaseFireRange[3]}] 攻击范围
-            \item[BaseAttack[2]] 攻击力(火力伤害和鱼雷伤害)
+            \item[{BaseAttack[2]}] 攻击力（火力伤害和鱼雷伤害）
             \item[BaseMetalMax] 金属上限
           \end{description}
         \end{minipage}
 
       \paragraph{操作} 攻击、补给、维修。详见第\ref{sec:作战系统}节
-      \paragraph{其他说明} 基地不可移动，不可维修，即生命值无法恢复。
+      \paragraph{其他说明} 基地不可移动，\textbf{不可维修}，即生命值无法恢复。
 
 
     \subsection{岛屿}
       \paragraph{状态量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[IslandTeam] 所属阵营
             \item[IslandHealth] 生命值
@@ -72,43 +76,42 @@
         \end{minipage}
 
       \paragraph{常量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[IslandHealthMax] 生命值上限
             \item[IslandFuelMax] 燃料上限
             \item[{IslandSigntRange[3]}] 视野范围（三层）
             \item[{IslandFireRange[3]}] 攻击范围
-            \item[{IslandAttack[2]}] 攻击力(火力伤害和鱼雷伤害)
+            \item[{IslandAttack[2]}] 攻击力（火力伤害和鱼雷伤害）
           \end{description}
         \end{minipage}
 
       \paragraph{操作} 攻击、补给。
       \paragraph{占领}
-        游戏开始时，所有岛屿均为无主状态，无主状态岛屿无燃料和弹药储备，故无攻击能力。双方可以对岛屿发动攻击，当岛屿的生命值降为0时，岛屿的所有权归于使岛屿生命力降为0的攻击发出方。岛屿被占领后，占领方可通过运输舰向岛屿运输资源，也可将岛屿的资源运往其他地方。只有占领方可以控制岛屿进行攻击或补给。攻下对方的岛屿后，对方剩余的资源不消失，转为己方岛屿的资源可任意利用。
+        游戏开始时，所有岛屿均为\textbf{无主状态}，无主状态岛屿\textbf{无燃料和弹药储备}，故\textbf{无攻击能力}。双方可以对岛屿发动攻击，当岛屿的生命值降为0时，岛屿的所有权归于\textbf{使岛屿生命力降为0的攻击发出方}。岛屿被占领后，占领方可通过运输舰向岛屿运输资源，也可将岛屿的资源运往其他地方。只有占领方可以控制岛屿进行攻击或补给。攻下对方的岛屿后，对方剩余的\textbf{资源不消失}，转为己方岛屿的资源可任意利用。
 
 
   \section{单位（可移动单位）}
     \paragraph{可移动单位} 飞机、潜艇、船舰。
 
     \paragraph{可移动单位共有属性}
+      \begin{minipage}[t]{0.6\textwidth}
+        \begin{description}
+          \item[{Destination[2]}] 移动目的地
+          \item[Command] 指令
+          \item[{CommandCoordinate[3]}] 指令目标坐标
+        \end{description}
+      \end{minipage}
 
-    \begin{minipage}[t]{0.6\textwidth}
-      \begin{description}
-        \item[{Destination[2]}] 移动目的地
-        \item[Command] 指令
-        \item[{CommandCoordinate[3]}] 指令目标坐标
-      \end{description}
-    \end{minipage}
-
-    可移动单位占一个格子。
+    \paragraph{} 可移动单位占一个格子。
 
 
     \subsection{飞机}
       \paragraph{编队}
-        地图上一个格子内的飞机并不是一架飞机，而是一个飞机编队，每个飞机编队飞机数为常量 FormationSize。生产飞机时，玩家可自由安排编队内机种配置方案。编队内共四个机种：战斗机（0）、鱼雷机（1）、轰炸机（2）、侦察机（3）。不同的配置方案会对一个飞机编队（在地图上则呈现为一个飞机单位）的攻击、侦查范围、生命值产生影响。飞机编队不可合并。
+        地图上一个格子内的飞机并不是一架飞机，而是一个飞机编队，每个飞机编队飞机数为常量\ttname{FormationSize}。生产飞机时，玩家可自由安排编队内机种配置方案。编队内共四个机种：战斗机（0）、鱼雷机（1）、轰炸机（2）、侦察机（3）。不同的配置方案会对一个飞机编队（在地图上则呈现为一个飞机单位）的攻击、侦查范围、生命值产生影响。飞机编队不可合并。
 
       \paragraph{状态量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[{FormationNum[4]}] 各机种数量
             \item[FormationHealth] 生命值
@@ -126,7 +129,7 @@
           由于编队的具体配置方案是在生产时由玩家自主决定的，故生命值上限、视野范围、攻击力、燃料上限、弹药上限、各机种初始数量的值只有在游戏过程中才能确定，除了初始数量，其他值还与当前生命值有关。其中视野范围只决定于编队是否有侦察机。
 
       \paragraph{常量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[{FormationUnitAttack[4][3]}] 单位机种单位弹药攻击力
             \item[{FormationUnitHealthMax[4]}] 单位机种生命值上限
@@ -145,7 +148,7 @@
 
     \subsection{潜艇}
       \paragraph{状态量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[SubmarineHealth] 生命值
             \item[SubmarineFuel] 燃料
@@ -154,7 +157,7 @@
         \end{minipage}
 
       \paragraph{常量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[SubmarineHealthMax] 生命值上限
             \item[SubmarineFuelMax] 燃料上限
@@ -173,7 +176,7 @@
       \paragraph{派生单位}
         驱逐舰（各方面能力均衡）、巡洋舰（航速大，机动力强）、航空母舰（航速小，兼备攻击和补给能力）、运输舰（无攻击能力，运输资源）
       \paragraph{状态量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[ShipHealth] 生命值
             \item[ShipFuel] 燃料
@@ -182,22 +185,22 @@
         \end{minipage}
 
       \paragraph{常量}
-        \begin{minipage}[t]{0.6\textwidth}
+        \begin{minipage}[t]{0.8\textwidth}
           \begin{description}
             \item[ ]  
           \end{description}
         \end{minipage}
 
-      \paragraph{操作} 移动、攻击（除运输舰）、补给（运输舰和航母，只有航母可以补给飞机）、收集（运输舰独有功能，从岛屿、资源点收集资源运往其他位置）
+      \paragraph{操作} 移动、攻击（除运输舰）、补给（运输舰和航母，只有航母可以补给飞机）、收集（运输舰独有功能，从岛屿、资源点收集资源运往其他位置）。
 
 
   \section{作战系统}
   \label{sec:作战系统}
       \paragraph{游戏模式}
-        每回合双方玩家首先为所有可移动单位设定移动目的地\texttt{Destination}，如果未设定，则按上回合的目的地继续移动。再设定本回合移动后的指令\texttt{Command}：攻击、补给、维修（每回合只能设定一条指令）。双方设定完所有指令后共同结算。
+        每回合双方玩家首先为所有可移动单位设定移动目的地 \ttname{Destination}，如果未设定，则按上回合的目的地继续移动。再设定本回合移动后的指令 \ttname{Command}：攻击、补给、维修（每回合只能设定一条指令）。双方设定完所有指令后共同结算。
 
       \paragraph{胜利条件}
-        摧毁对方基地 或 回合数达到最大回合数\texttt{RoundMax}时，积分高的一方获胜。详见第\ref{sec:积分系统}节。
+        摧毁对方基地 或 回合数达到最大回合数 \ttname{RoundMax}时，积分高的一方获胜。详见第\ref{sec:积分系统}节。
 
       \paragraph{距离}
         水平距离与竖直距离之和
@@ -206,19 +209,19 @@
         双方所有单位（包括基地）资源充满，满血。岛屿满血无主。
 
       \paragraph{视野范围}
-        地形全可见（海洋、基地、岛屿、油田、矿场），每个单位均有三层视野范围，己方单位共享视野范围，构成地图可见状态\texttt{FieldofVison[MapSize][MapSize][3]}，-2表示不可见，-1表示无单位，否则为单位ID。
+        地形全可见（海洋、基地、岛屿、油田、矿场），每个单位均有三层视野范围，己方单位共享视野范围，构成地图可见状态\mbox{ \ttfamily FieldofVison[MapSize][MapSize][3]}，$-2$表示不可见，$-1$表示无单位，否则为单位ID。
 
       \paragraph{移动}
         移动时只能在同一层次内移动，且移动时不能穿越同层其他单位，同层单位亦不能堆叠于同一格。每移动一格消耗一单位燃料，燃料$\leq 0$则不能继续移动。特别地，若飞机编队燃料降至零，则坠毁，并对当前坐标的1层（水面）单位造成一定伤害。若飞机编队未发生实际移动（可能发出了移动指令但并未成功），则视为原地盘旋一回合，同样要消耗一单位燃料。
 
       \paragraph{特殊情况}
-        当某两个单位在移动过程中将通过同一坐标时，则速度\texttt{Speed}大的单位移动成功并继续移动，移动未成功的单位停留在前一格不能继续移动，若两单位速度相同，则采取随机的方式决定哪个单位移动成功。
+        当某两个单位在移动过程中将通过同一坐标时，则速度 \ttname{Speed}大的单位移动成功并继续移动，移动未成功的单位停留在前一格不能继续移动，若两单位速度相同，则采取随机的方式决定哪个单位移动成功。
 
       \paragraph{攻击}
-        攻击在移动结束（包括上述意外停止的情况）后发动，攻击时需指定攻击的三维坐标点\texttt{CommandCoordinate[3]}，即攻击地图某一坐标的下中上三层的某一层。如果该坐标不在该单位的相应视野范围内，则返回错误值，视为放弃此次攻击。弹药量$\leq 0$时不能发动攻击。弹药在回合结束时到达该坐标产生伤害（即对方可以通过移动回避攻击）。异层攻击不考虑弹药攻击路径；某些情况（具体哪些情况暂未确定）需考虑弹药的攻击路径，若攻击路径上有其他单位，则弹药会击中障碍并产生相应伤害（注意：有友军伤害！）。
+        攻击在移动结束（包括上述意外停止的情况）后发动，攻击时需指定攻击的三维坐标点 \ttname{CommandCoordinate[3]}，即攻击地图某一坐标的下中上三层的某一层。如果该坐标不在该单位的相应视野范围内，则返回错误值，视为放弃此次攻击。弹药量$\leq 0$时不能发动攻击。弹药在回合结束时到达该坐标产生伤害（即对方可以通过移动回避攻击）。异层攻击不考虑弹药攻击路径；某些情况（具体哪些情况暂未确定）需考虑弹药的攻击路径，若攻击路径上有其他单位，则弹药会击中障碍并产生相应伤害（注意：有友军伤害！）。
 
       \paragraph{补给}
-        运输舰、航母、岛屿、基地特有指令，航母、岛屿、基地可以对任意单位补给，运输舰不能补给飞机。补给在移动结束后发动，同样需指定补给目标坐标，对空补给距离为0，对水面补给距离为1，对水下补给距离为0,1。超出范围则视为放弃补给。每次补给补满对方容量，若剩余量不足以补满对方，则全部补充给对方。（这种情况下，运输舰、航母是否需要自动保留一些燃料供自己使用？）
+        运输舰、航母、岛屿、基地特有指令，航母、岛屿、基地可以对任意单位补给，运输舰不能补给飞机。补给在移动结束后发动，同样需指定补给目标坐标，对空补给距离为0，对水面补给距离为1，对水下补给距离为0, 1。超出范围则视为放弃补给。每次补给补满对方容量，若剩余量不足以补满对方，则全部补充给对方。（这种情况下，运输舰、航母是否需要自动保留一些燃料供自己使用？）
 
       \paragraph{收集}
         运输舰特有指令，从岛屿或资源点获取资源，每次收集补满运输舰容量。收集距离为1。
@@ -231,13 +234,13 @@
     资源点分为油田和矿场，均在陆地地形上。
 
     \paragraph{油田}
-      不可攻击，油储备总量\texttt{TotalFuel}，双方基地附近各有一小油田，地图的中间区域可设大油田，油田储备的燃料只能由运输舰收集获得（不可攻占，但可以派单位在周围保证运输舰运输安全）。
+      不可攻击，油储备总量 \ttname{TotalFuel}，双方基地附近各有一小油田，地图的中间区域可设大油田，油田储备的燃料只能由运输舰收集获得（不可攻占，但可以派单位在周围保证运输舰运输安全）。
 
     \paragraph{矿产}
-      不可攻击，金属储备总量\texttt{TotalMetal}，双方基地附近各有一小矿场，地图的中间区域可设大矿场，矿场储备的金属只能由运输舰收集获得（不可攻占，但可以派单位在周围保证运输舰运输安全）。
+      不可攻击，金属储备总量 \ttname{TotalMetal}，双方基地附近各有一小矿场，地图的中间区域可设大矿场，矿场储备的金属只能由运输舰收集获得（不可攻占，但可以派单位在周围保证运输舰运输安全）。
 
     \paragraph{生产 Build}
-      基地除了常规指令外，额外拥有生产指令，给出各单位对应的编号，若生产飞机编队，还需给出编队配置方案B\texttt{uildFormationNum[4]}。常量：生产飞机编队各机种所需资源及回合 \texttt{BuildFormation[4][4]}
+      基地除了常规指令外，额外拥有生产指令，给出各单位对应的编号，若生产飞机编队，还需给出编队配置方案~\ttname{BuildFormationNum[4]}。常量：生产飞机编队各机种所需资源及回合~\ttname{BuildFormation[4][4]}
 
 
   \section{积分系统}
@@ -248,17 +251,21 @@
   \section{伤害计算}
     \subsection{制空权值}
       空对空伤害与制空权比值相关。
-
-      制空权值 = 空对空伤害 + 距离为1的海军对空伤害
+      \begin{equation}
+        \text{制空权值} = \text{空对空伤害} + \text{距离为1的海军对空伤害}
+      \end{equation}
 
     \subsection{伤害计算公式}
-    伤害 = 攻击 – 防御
+      \begin{equation}
+        \text{伤害} = \text{攻击} – \text{防御}
+      \end{equation}
 
-    潜艇只能造成和接受鱼雷伤害
 
-    陆地建筑只能造成和接受火力伤害
+    // 潜艇只能造成和接受鱼雷伤害。
 
-    飞机不能接受鱼雷伤害
+    // 陆地建筑只能造成和接受火力伤害。
+
+    // 飞机不能接受鱼雷伤害。
 
 
 \end{document}
