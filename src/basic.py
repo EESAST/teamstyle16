@@ -29,6 +29,12 @@ INFINITY = float('inf')     # 正无穷, 大于任何有限数
 # 维修代价
 METAL_PER_HEALTH = 0.2    # 恢复1点生命所需金属
 
+# 补给底线
+SUPPLY_LIMIT = 0.1  # 资源数少于 SUPPLY_LIMIT * 上限 即不可继续补给(留给自己用..)
+                    # 基地, 据点燃料不设底线
+                    # 基地弹药无限, 故也不必设底线
+                    # 运输舰无攻击能力, 弹药不设底线
+
 
 # 地图分层
 UNDERWATER = 0  # 水下
@@ -272,6 +278,8 @@ def repairToNew(repairer, broken, new):   # 维修者(基地), 损坏单位, 新
     repairer.ammo -= provides[1]
     repairer.metal -= provides[2]
     broken.fuel += provides[0]
+    broken.ammo += provides[1]
+    broken.health += provides[2] / METAL_PER_HEALTH
 
 
 
@@ -284,7 +292,7 @@ class Base(UnitBase):
         self.kind = 'BASE'  # 以字符串储存单位种类
         self.metal = BUILDINGS[BASE][6]
 
-    def supply(self, ):
+    def supply(self):   # 补给操作
         pass
 
     def repair(self, our_unit, plane_nums = [3, 3, 3, 1]):  # 提供默认编队配置
@@ -297,3 +305,7 @@ class Base(UnitBase):
             else:
                 new_formation = Formation(...)      # 维修后理想状态
                 repairToNew(self, our_unit, new_formation)
+                return 0
+
+    def build(self, ):
+        pass
