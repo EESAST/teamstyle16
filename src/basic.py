@@ -231,9 +231,9 @@ class UnitBase(object):
                                             # 也可以是矩形(Rectangle类型)
         self.sight_ranges = sight_ranges
         self.fire_ranges = fire_ranges
-        self.health = health
-        self.fuel = fuel
-        self.ammo = ammo
+        self.health = self.health_max = health
+        self.fuel = self.fuel_max = fuel
+        self.ammo = self.ammo_max = ammo
         self.attacks = attacks
         self.defences = defences
 
@@ -270,9 +270,21 @@ class UnitBase(object):
             ## 计算伤害...
 
 def repairToNew(repairer, broken, new):   # 维修者(基地), 损坏单位, 新单位
+    if repairer.kind == 'BASE':
+        fuel_supply_limit = ammo_supply_limit = 0
+    elif repairer.kind == 'FORT':
+        fuel_supply_limit = 0
+        ammo_supply_limit = SUPPLY_LIMIT
+    elif repairer.kind == 'CARGO':
+        fuel_supply_limit = SUPPLY_LIMIT
+        ammo_supply_limit = 0
+    else:
+        fuel_supply_limit = ammo_supply_limit = SUPPLY_LIMIT
     provides = [0, 0, 0]    # 维修者可提供的燃料, 弹药, 金属
-    provides[0] = max(repairer.fuel, new.fuel - broken.fuel)
-    provides[1] = max(repairer.ammo, new.ammo - broken.ammo)
+    provides[0] = max(repairer.fuel - repairer.fuel_max * fuel_supply_limit, 
+                      new.fuel - broken.fuel)
+    provides[1] = max(repairer.ammo - repairer.ammo_max * ammo_supply_limit, 
+                      new.ammo - broken.ammo)
     provides[2] = max(repairer.metal, (new.health - broken.health) * METAL_PER_HEALTH)
     repairer.fuel -= provides[0]
     repairer.ammo -= provides[1]
@@ -290,7 +302,7 @@ class Base(UnitBase):
                                    *(BUILDINGS[BASE][:5] + BUILDINGS[BASE][-2:]))
                                    # 从元组解析出数据后传入UnitBase.__init__()
         self.kind = 'BASE'  # 以字符串储存单位种类
-        self.metal = BUILDINGS[BASE][6]
+        self.metal = self.metal_max = BUILDINGS[BASE][6]
 
     def supply(self):   # 补给操作
         pass
