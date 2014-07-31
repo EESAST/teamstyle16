@@ -223,10 +223,11 @@ class Rectangle(object):
 
 class UnitBase(object):
     """单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, team, pos, sight_ranges, fire_ranges, health, fuel, ammo, 
+    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, health, fuel, ammo, 
                  attacks, defences):
         super(UnitBase, self).__init__()
         self.team = team
+        self.kind = kind                    # 单位种类以字符串保存
         self.pos = pos                      # pos可以是一个点(Position类型), 
                                             # 也可以是矩形(Rectangle类型)
         self.sight_ranges = sight_ranges
@@ -269,43 +270,40 @@ class UnitBase(object):
             pass
             ## 计算伤害...
 
-def repairToNew(repairer, broken, new):   # 维修者(基地), 损坏单位, 新单位
-    if repairer.kind == 'BASE':
+def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
+    if giver.kind == 'BASE':
         fuel_supply_limit = ammo_supply_limit = 0
-    elif repairer.kind == 'FORT':
+    elif giver.kind == 'FORT':
         fuel_supply_limit = 0
         ammo_supply_limit = SUPPLY_LIMIT
-    elif repairer.kind == 'CARGO':
+    elif giver.kind == 'CARGO':
         fuel_supply_limit = SUPPLY_LIMIT
         ammo_supply_limit = 0
     else:
         fuel_supply_limit = ammo_supply_limit = SUPPLY_LIMIT
-    provides = [0, 0, 0]    # 维修者可提供的燃料, 弹药, 金属
-    provides[0] = max(repairer.fuel - repairer.fuel_max * fuel_supply_limit, 
-                      new.fuel - broken.fuel)
-    provides[1] = max(repairer.ammo - repairer.ammo_max * ammo_supply_limit, 
-                      new.ammo - broken.ammo)
-    provides[2] = max(repairer.metal, (new.health - broken.health) * METAL_PER_HEALTH)
-    repairer.fuel -= provides[0]
-    repairer.ammo -= provides[1]
-    repairer.metal -= provides[2]
-    broken.fuel += provides[0]
-    broken.ammo += provides[1]
-    broken.health += provides[2] / METAL_PER_HEALTH
+    provides = [0, 0]    # 维修者提供的燃料, 弹药
+    provides[0] = max(giver.fuel - giver.fuel_max * fuel_supply_limit, 
+                      receiver.fuel_max - receiver.fuel)
+    provides[1] = max(giver.ammo - giver.ammo_max * ammo_supply_limit, 
+                      receiver.ammo_max - receiver.ammo)
+    giver.fuel -= provides[0]
+    giver.ammo -= provides[1]
+    receiver.fuel += provides[0]
+    receiver.ammo += provides[1]
 
 
 
 class Base(UnitBase):
     """建筑类, 继承自UnitBase"""
     def __init__(self, team, rectangle, metal):
-        super(Base, self).__init__(team, rectangle, 
+        super(Base, self).__init__(team, 'BASE', rectangle, 
                                    *(BUILDINGS[BASE][:5] + BUILDINGS[BASE][-2:]))
                                    # 从元组解析出数据后传入UnitBase.__init__()
-        self.kind = 'BASE'  # 以字符串储存单位种类
         self.metal = self.metal_max = BUILDINGS[BASE][6]
 
-    def supply(self):   # 补给操作
-        pass
+    def supply(self, our_unit):   # 补给操作
+        if not self.team == our_unit.team:
+
 
     def repair(self, our_unit, plane_nums = [3, 3, 3, 1]):  # 提供默认编队配置
         """维修"""
@@ -315,9 +313,15 @@ class Base(UnitBase):
             if not our_unit.pos in self.pos.region(level = AIR):   # range = 0
                 return -2   # 不在范围内
             else:
-                new_formation = Formation(...)      # 维修后理想状态
-                repairToNew(self, our_unit, new_formation)
+                ## 维修飞机至plane_nums配置, 如果金属不足, 则按侦察机->鱼雷机->轰炸机->战斗机的顺序依次维修
+                replenishFuelAmmo(self, our_unit)
                 return 0
+        else:
+            provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
+            self.metal -= provide_metal
+            our_unit.health += provide_metal / METAL_PER_HEALTH
+            replenishFuelAmmo(self, our_unit)
+            return 0
 
     def build(self, ):
         pass
