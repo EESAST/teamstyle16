@@ -339,7 +339,18 @@ class Base(UnitBase):
 
 class Fort(UnitBase):
     """据点, 继承自UnitBase"""
-    def __init__(self, arg):
-        super(Fort, self).__init__()
-        self.arg = arg
-        
+    def __init__(self, team, rectangle):
+        super(Fort, self).__init__(team, 'FORT', rectangle, 
+                                   *(BUILDINGS[FORT][:5] + BUILDINGS[FORT][-2:]))
+
+    def supply(self, our_unit):
+        """据点对周围单位补给燃料弹药"""  
+        if not self.team == our_unit.team:
+            return -1   # 非友军
+        elif (our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+             or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1):
+            return -2   # 不在范围内
+        else:
+            replenishFuelAmmo(self, our_unit)
+            return 0
+
