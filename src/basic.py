@@ -302,14 +302,18 @@ class Base(UnitBase):
         self.metal = self.metal_max = BUILDINGS[BASE][6]
 
     def supply(self, our_unit):   # 补给操作
+        """基地对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
+        elif (our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+             or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1):
+            return -2   # 不在范围内
         else:
-
-
+            replenishFuelAmmo(self, our_unit)
+            return 0
 
     def repair(self, our_unit, plane_nums = [3, 3, 3, 1]):  # 提供默认编队配置
-        """维修"""
+        """维修, 对飞机的维修操作特殊"""
         if not self.team == our_unit.team:
             return -1   # 非友军
         elif our_unit.kind == 'FORMATION':  
