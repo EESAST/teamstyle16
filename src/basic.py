@@ -294,7 +294,7 @@ def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
 
 
 class Base(UnitBase):
-    """建筑类, 继承自UnitBase"""
+    """基地, 继承自UnitBase"""
     def __init__(self, team, rectangle, metal):
         super(Base, self).__init__(team, 'BASE', rectangle, 
                                    *(BUILDINGS[BASE][:5] + BUILDINGS[BASE][-2:]))
@@ -333,5 +333,13 @@ class Base(UnitBase):
                 replenishFuelAmmo(self, our_unit)
                 return 0
 
-    def build(self, ):
-        pass
+    def build(self, kind, plane_nums = [3, 3, 3, 1]):
+        """生产单位, 新单位出生地在基地陆地周围一圈"""
+
+
+class Fort(UnitBase):
+    """据点, 继承自UnitBase"""
+    def __init__(self, arg):
+        super(Fort, self).__init__()
+        self.arg = arg
+        
