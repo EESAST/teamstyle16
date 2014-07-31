@@ -30,7 +30,7 @@ enum UnitType { SUBMARINE, DESTROYER, CRUISER, BATTLESHIP, CARRIER, CARGO, FORMA
 // 潜艇，驱逐舰，巡洋舰，战舰，航母，运输舰，机群（飞机编队）
 // 机种
 enum PlaneType { FIGHTER, TORPEDOER, BOMBER, SCOUT };
-
+// 战斗机, 鱼雷机, 轰炸机, 侦察机
 ///////////////////////////////////////////////////////////////////
 
 struct BuildingProperty {
@@ -48,7 +48,7 @@ const ResourceProperty Resource[2] = {};
 
 struct UnitProperty {
     int sight_range[3], fire_range[3];
-    int health_max, fuel_max, ammo_max, speed;
+    int health_max, fuel_max, ammo_max, metal_max, speed;
     int attack[2], defence[2];
 };
 const UnitProperty Unit[6] = {}; // 飞机除外（飞机编队的这些属性不是常量，在飞机结构体中定义）
@@ -61,7 +61,7 @@ const int FormationSpeed = 5;
 
 
 struct PlaneProperty {
-  int health, fuel, ammo;
+  int health_max, fuel_max, ammo_max;
   int attack[2], denfence[2];
 };
 const PlaneProperty Plane[4] = {};  // 各机种参数
