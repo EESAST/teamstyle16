@@ -294,7 +294,7 @@ def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
 
 
 class Base(UnitBase):
-    """建筑类, 继承自UnitBase"""
+    """基地, 继承自UnitBase"""
     def __init__(self, team, rectangle, metal):
         super(Base, self).__init__(team, 'BASE', rectangle, 
                                    *(BUILDINGS[BASE][:5] + BUILDINGS[BASE][-2:]))
@@ -302,26 +302,44 @@ class Base(UnitBase):
         self.metal = self.metal_max = BUILDINGS[BASE][6]
 
     def supply(self, our_unit):   # 补给操作
+        """基地对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
-
+            return -1   # 非友军
+        elif (our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+             or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1):
+            return -2   # 不在范围内
+        else:
+            replenishFuelAmmo(self, our_unit)
+            return 0
 
     def repair(self, our_unit, plane_nums = [3, 3, 3, 1]):  # 提供默认编队配置
-        """维修"""
+        """维修, 对飞机的维修操作特殊"""
         if not self.team == our_unit.team:
             return -1   # 非友军
         elif our_unit.kind == 'FORMATION':  
-            if not our_unit.pos in self.pos.region(level = AIR):   # range = 0
+            if not our_unit.pos in self.pos.region(level = AIR, range = 0):  
                 return -2   # 不在范围内
             else:
                 ## 维修飞机至plane_nums配置, 如果金属不足, 则按侦察机->鱼雷机->轰炸机->战斗机的顺序依次维修
                 replenishFuelAmmo(self, our_unit)
                 return 0
         else:
-            provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
-            self.metal -= provide_metal
-            our_unit.health += provide_metal / METAL_PER_HEALTH
-            replenishFuelAmmo(self, our_unit)
-            return 0
+            if not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1):
+                return -2   # 不在范围内
+            else:
+                provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
+                self.metal -= provide_metal
+                our_unit.health += provide_metal / METAL_PER_HEALTH
+                replenishFuelAmmo(self, our_unit)
+                return 0
 
-    def build(self, ):
-        pass
+    def build(self, kind, plane_nums = [3, 3, 3, 1]):
+        """生产单位, 新单位出生地在基地陆地周围一圈"""
+
+
+class Fort(UnitBase):
+    """据点, 继承自UnitBase"""
+    def __init__(self, arg):
+        super(Fort, self).__init__()
+        self.arg = arg
+        
