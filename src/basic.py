@@ -65,7 +65,7 @@ MINE = 0        # 矿场
 OILFIELD = 1    # 油田
 
 
-# 可移动单位
+# 可移动单位(water_unit + formation)
 SUBMARINE = 0   # 潜艇
 DESTROYER = 1   # 驱逐舰
 CRUISER = 2     # 巡洋舰
@@ -87,9 +87,9 @@ SCOUT = 3       # 侦察机
                                                  health_max, fuel_max, ammo_max, metal_max, 
                                                  attacks, defences)
         其中 sight_ranges = [UNDERWATER, SURFACE, AIR]
-                 fire_ranges = [UNDERWATER, SURFACE, AIR]
-                 attacks = [FIRE, TORPEDO]
-                 defences = [FIRE, TORPEDO] """
+             fire_ranges = [UNDERWATER, SURFACE, AIR]
+             attacks = [FIRE, TORPEDO]
+             defences = [FIRE, TORPEDO] """
 BUILDINGS = [([4, 10, 8], [0, 7, 5], 
               2000, 1000, INFINITY, 200, 
               [50, 0], [30, INFINITY]),     # 基地
@@ -98,41 +98,41 @@ BUILDINGS = [([4, 10, 8], [0, 7, 5],
               [30, 0], [12, INFINITY])]      # 据点
 
 
-# 可移动单位(除飞机)属性
-""" moveable_unit_except_formation_property = (sight_ranges, fire_ranges,
-                                                                                             health_max, fuel_max, ammo_max, metal_max, 
-                                                                                             speed,
-                                                                                             attacks, defences) """
+# 可移动单位(除飞机)属性, 即水面及水下单位属性
+""" water_unit_property = (sight_ranges, fire_ranges,
+                           health_max, fuel_max, ammo_max, metal_max, 
+                           speed,
+                           attacks, defences) """
 # 数据不可信...
-MOVEABLE_UNITS_EXCEPT_FORMATION = [([6, 5, 3], [5, 5, 0],
-                                    50, 120, 20, 0,
-                                    5,
-                                    [0, 18], [INFINITY, 10]),    # 潜艇
-                                   ([5, 10, 8], [4, 8, 6],
-                                    80, 150, 30, 0,
-                                    8,
-                                    [12, 20], [10, 10]),          # 驱逐舰
-                                   ([5, 10, 8], [4, 8, 6],
-                                    85, 300, 30, 0,
-                                    7,
-                                    [20, 12], [10, 8]),          # 巡洋舰
-                                   ([5, 10, 8], [4, 8, 6],
-                                    200, 200, 50, 0,
-                                    5,
-                                    [30, 12], [16, 16]),          # 战舰
-                                   ([5, 10, 8], [4, 8, 6],
-                                    600, 400, 70, 80,
-                                    6,
-                                    [15, 12], [20, 15]),          # 航母
-                                   ([5, 10, 8], [4, 8, 6],
-                                    170, 300, 40, 20,
-                                    7,
-                                    [0, 0], [10, 8])]          # 运输舰
+WATER_UNITS = [([6, 5, 3], [5, 5, 0],
+                50, 120, 20, 0,
+                5,
+                [0, 18], [INFINITY, 10]),    # 潜艇
+               ([5, 10, 8], [4, 8, 6],
+                80, 150, 30, 0,
+                8,
+                [12, 20], [10, 10]),          # 驱逐舰
+               ([5, 10, 8], [4, 8, 6],
+                85, 300, 30, 0,
+                7,
+                [20, 12], [10, 8]),          # 巡洋舰
+               ([5, 10, 8], [4, 8, 6],
+                200, 200, 50, 0,
+                5,
+                [30, 12], [16, 16]),          # 战舰
+               ([5, 10, 8], [4, 8, 6],
+                600, 400, 70, 80,
+                6,
+                [15, 12], [20, 15]),          # 航母
+               ([5, 10, 8], [4, 8, 6],
+                170, 300, 40, 20,
+                7,
+                [0, 0], [10, 8])]          # 运输舰
 
 
 # 飞机常量属性
-FORMATION_SIGHT_RANGES_WITH_SCOUT = [2, 12, 16]
-FORMATION_SIGHT_RANGES_WITHOUT_SCOUT = [0, 8, 10]
+SCOUT_SIGHT_RANGES = [2, 12, 16]    # 侦察机视野
+OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 8, 10]   # 其他机种视野
 FORMATION_FIRE_RANGES = [0, 8, 10]
 FORMATION_SPEED = 12
 FORMATION_TOTAL_PLANES = 10     # 一个机群最多10架飞机
@@ -299,14 +299,14 @@ class Base(UnitBase):
         super(Base, self).__init__(team, 'BASE', rectangle, 
                                    *(BUILDINGS[BASE][:5] + BUILDINGS[BASE][-2:]))
                                    # 从元组解析出数据后传入UnitBase.__init__()
-        self.metal = self.metal_max = BUILDINGS[BASE][6]
+        self.metal = self.metal_max = BUILDINGS[BASE][5]
 
     def supply(self, our_unit):   # 补给操作
         """基地对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif (our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
-             or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1):
+        elif ((our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+             or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1)):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
@@ -321,6 +321,8 @@ class Base(UnitBase):
                 return -2   # 不在范围内
             else:
                 ## 维修飞机至plane_nums配置, 如果金属不足, 则按侦察机->鱼雷机->轰炸机->战斗机的顺序依次维修
+                while self.metal >= METAL_PER_HEALTH:
+                    pass
                 replenishFuelAmmo(self, our_unit)
                 return 0
         else:
@@ -335,6 +337,7 @@ class Base(UnitBase):
 
     def build(self, kind, plane_nums = [3, 3, 3, 1]):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
+        pass    ##
 
 
 class Fort(UnitBase):
@@ -347,10 +350,147 @@ class Fort(UnitBase):
         """据点对周围单位补给燃料弹药"""  
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif (our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
-             or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1):
+        elif ((our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+              or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1)):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
             return 0
+
+
+class Submarine(UnitBase):
+    """潜艇"""
+    def __init__(self, team, pos):
+        super(Submarine, self).__init__(team, 'SUBMARINE', pos,
+                                        *(WATER_UNITS[SUBMARINE][:5] + WATER_UNITS[SUBMARINE][-2:]))
+        self.speed = WATER_UNITS[SUBMARINE][6]
+
+
+class Destroyer(UnitBase):
+    """驱逐舰"""
+    def __init__(self, team, pos):
+        super(Destroyer, self).__init__(team, 'DESTROYER', pos,
+                                        *(WATER_UNITS[DESTROYER][:5] + WATER_UNITS[DESTROYER][-2:]))
+        self.speed = WATER_UNITS[DESTROYER][6]
+
+
+class Cruiser(UnitBase):
+    """巡洋舰"""
+    def __init__(self, team, pos):
+        super(Cruiser, self).__init__(team, 'CRUISER', pos,
+                                      *(WATER_UNITS[CRUISER][:5] + WATER_UNITS[CRUISER][-2:]))
+        self.speed = WATER_UNITS[CRUISER][6]
+        
+
+class Battleship(UnitBase):
+    """战舰"""
+    def __init__(self, team, pos):
+        super(Battleship, self).__init__(team, 'BATTLESHIP', pos,
+                                         *(WATER_UNITS[BATTLESHIP][:5] + WATER_UNITS[BATTLESHIP][-2:]))
+        self.speed = WATER_UNITS[BATTLESHIP][6]
+
+
+class Carrier(UnitBase):
+    """航母"""
+    def __init__(self, team, pos, metal):
+        super(Carrier, self).__init__(team, 'CARRIER', pos,
+                                      *(WATER_UNITS[CARRIER][:5] + WATER_UNITS[CARRIER][-2:]))
+        self.metal = self.metal_max = WATER_UNITS[CARRIER][5]
+        self.speed = WATER_UNITS[CARRIER][6]
+
+    def supply(self, our_unit):
+        """航母对周围单位补给燃料弹药, 可向基地,运输舰以及航母补充金属"""
+        if not self.team == our_unit.team:
+            return -1   # 非友军
+        elif ((our_unit.kind == 'FORMATION' and not self.pos in our_unit.pos.region(level = AIR, range = 0))
+              or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
+             # our_unit可能是基地或据点, 即our_unit.pos可能是矩形, 因此改为判断self.pos 是否在our_unit.pos.region()内
+             # 考虑是否可以将region()优化为distance(), 可以较好地兼容Position和Rectangle
+            return -2   # 不在范围内
+        else:
+            replenishFuelAmmo(self, our_unit)
+            if our_unit.kind == 'BASE' or our_unit.kind == 'CARGO' or our_unit.kind == 'CARRIER':
+                provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
+                self.metal -= provide_metal
+                our_unit.metal += provide_metal
+            return 0 
+
+
+class Cargo(UnitBase):
+    """运输舰"""
+    def __init__(self, team, pos, metal):
+        super(Cargo, self).__init__(team, 'CARGO', pos,
+                                    *(WATER_UNITS[CARGO][:5] + WATER_UNITS[CARGO][-2:]))
+        self.metal = self.metal_max = WATER_UNITS[CARGO][5]
+        self.speed = WATER_UNITS[CARGO][6]
+
+    def supply(self, our_unit):
+        """运输舰对周围单位补给燃料弹药, 可向基地,运输舰以及航母补充金属"""
+        if not self.team == our_unit.team:
+            return -1   # 非友军
+        elif ((our_unit.kind == 'FORMATION' and not self.pos in our_unit.pos.region(level = AIR, range = 0))
+              or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
+            return -2   # 不在范围内
+        else:
+            replenishFuelAmmo(self, our_unit)
+            if our_unit.kind == 'BASE' or our_unit.kind == 'CARGO' or our_unit.kind == 'CARRIER':
+                provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
+                self.metal -= provide_metal
+                our_unit.metal += provide_metal
+            return 0 
+
+
+def renum(formation):
+    """根据飞机编队的剩余health重置"""
+    health_tank = formation.health
+    max_nums = formation.plane_nums
+    formation.plane_nums = [0, 0, 0, 0]
+    index = 0     # 战斗机
+    while health_tank > 0 and index < 4:
+        if formation.plane_nums[index] == max_nums[index]:
+            index += 1
+            continue
+        elif health_tank >= PLANES[index][0]:
+            health_tank -= PLANES[index][0]
+            formation.plane_nums[index] += 1
+        else:
+            formation.plane_nums[index] += 1    # 残血
+            break
+    return 
+
+
+class Formation(UnitBase):
+    """飞机编队"""
+    def __init__(self, team, pos, plane_nums = [3, 3, 3, 1]):
+        if sum(plane_nums) > FORMATION_TOTAL_PLANES:
+            return -1   # 飞机数超出编队容量
+        sight_ranges = (SCOUT_SIGHT_RANGES if plane_nums[3] > 0 else OTHER_SIGHT_RANGES_WITHOUT_SCOUT)
+        health = sum([PLANES[i][0] * plane_nums[i] for i in xrange(4)])
+        fuel = sum([PLANES[i][1] * plane_nums[i] for i in xrange(4)])
+        ammo = sum([PLANES[i][2] * plane_nums[i] for i in xrange(4)])
+        attacks = defences = [0, 0]
+        for i in xrange(4):
+            attacks[0] += [PLANES[i][-2][j] * plane_nums[i] for j in xrange(2)][0]
+            attacks[1] += [PLANES[i][-2][j] * plane_nums[i] for j in xrange(2)][1]
+            defences[0] += [PLANES[i][-1][j] * plane_nums[i] for j in xrange(2)][0]
+            defences[1] += [PLANES[i][-1][j] * plane_nums[i] for j in xrange(2)][1]     # tested. result is good
+        super(Formation, self).__init__(team, 'FORMATION', pos,
+                                        sight_ranges, FORMATION_FIRE_RANGES, 
+                                        health, fuel, ammo, attacks, defences)
+        self.plane_nums = plane_nums
+        self.speed = FORMATION_SPEED
+
+    def update(self):
+        """飞机的参数随plane_nums动态变化, update函数用于更新机群参数"""
+        renum(self)
+        self.sight_ranges = (SCOUT_SIGHT_RANGES if self.plane_nums[3] > 0 else OTHER_SIGHT_RANGES_WITHOUT_SCOUT)
+        self.health_max = sum([PLANES[i][0] * self.plane_nums[i] for i in xrange(4)])
+        self.fuel_max = sum([PLANES[i][1] * self.plane_nums[i] for i in xrange(4)])
+        self.ammo_max = sum([PLANES[i][2] * self.plane_nums[i] for i in xrange(4)])
+        attacks = defences = [0, 0]
+        for i in xrange(4):
+            attacks[0] += [PLANES[i][-2][j] * self.plane_nums[i] for j in xrange(2)][0]
+            attacks[1] += [PLANES[i][-2][j] * self.plane_nums[i] for j in xrange(2)][1]
+            defences[0] += [PLANES[i][-1][j] * self.plane_nums[i] for j in xrange(2)][0]
+            defences[1] += [PLANES[i][-1][j] * self.plane_nums[i] for j in xrange(2)][1]
 
