@@ -8,7 +8,7 @@
 
 **逻辑组**：郭一隆 (@Nuullll), 孙胜扬 (@ssydasheng), 杨幻睿 (@yanghr)
 
-**平台组**：李思涵 (@ThomasLee969), 刘家硕 (@Liudada)
+**平台组**：李思涵 (@ThomasLee969), 刘家硕 (@Liudada), 阮磊 (@tristoner-RL)
 
 谁知道科协git肿么了……
 
