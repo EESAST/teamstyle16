@@ -2,11 +2,11 @@
 
 欢迎来到队式16的开发仓库~
 
-本仓库目前包括了逻辑组和平台组，未来…会不会有界面组和3D组呢(⊙_⊙?)
+本仓库目前包括了逻辑组和平台组。
 
 目前入驻的暂时只有：
 
-**逻辑组**：郭一隆 (@Nuullll), 孙胜扬 (@ssydasheng), 杨幻睿 (@yanghr), 王殷豪 (YacratesWyh)
+**逻辑组**：郭一隆 (@Nuullll), 孙胜扬 (@ssydasheng), 杨幻睿 (@yanghr), 王殷豪 (@YacratesWyh)
 
 **平台组**：李思涵 (@ThomasLee969), 刘家硕 (@Liudada), 阮磊 (@tristoner-RL)
 
@@ -45,7 +45,7 @@
 * 完成能黑箱运行的对战程序
 
 ## 已完成
-√ 提供 Markdown/LaTex 格式的选手文档 (@ThomasLee)
+√ 提供 Markdown/LaTex 格式的选手文档
 
 ## 关于Git
 请大家 ***不要*** 使用中文文件名或目录名 = =
