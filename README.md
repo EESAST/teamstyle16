@@ -6,7 +6,7 @@
 
 目前入驻的暂时只有：
 
-**逻辑组**：郭一隆 (@Nuullll), 孙胜扬 (@ssydasheng), 杨幻睿 (@yanghr)
+**逻辑组**：郭一隆 (@Nuullll), 孙胜扬 (@ssydasheng), 杨幻睿 (@yanghr), 王殷豪 (YacratesWyh)
 
 **平台组**：李思涵 (@ThomasLee969), 刘家硕 (@Liudada), 阮磊 (@tristoner-RL)
 
