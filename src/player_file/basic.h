@@ -4,10 +4,9 @@
 // 地图参数
 const int kMaxRound = 1000;           // 最大回合数
 const int kMaxMapSize = 200;          // 地图最大边长
+const int kMaxFortNum = 6;            // 据点最大数
 const int kMaxProductionNum = 10;
 
-//
-const int kMaxFortNum = 6;            // 据点最大数
 const int kMaxBuildingNum = 2 + kMaxFortNum;
 
 const int kMaxMineNum = 8;            // 矿场最大数
@@ -16,13 +15,6 @@ const int kMaxResourceNum = kMaxMineNum + kMaxOilfieldNum;
 
 const int kMaxUnitNum = 100;          // 每方最大单位数
 
-const int kMaxElementNum = kMaxBuildingNum + kMaxResourceNum + kMaxUnitNum;
-//
-
-const int kIslandScoreTime = 5;   // 连续占有岛屿触发积分奖励的回合数
-                                  // @Vone 每回合奖励的分数？
-
-enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
 enum AttackType { FIRE, TORPEDO };  // 攻击类型
 // 潜艇只能造成和接受鱼雷伤害
@@ -31,15 +23,10 @@ enum AttackType { FIRE, TORPEDO };  // 攻击类型
 // Attack[0],[1]分别代表火力攻击和鱼雷攻击，
 // Defence[0],[1]分别代表对火力防御和对鱼雷防御
 enum MapType { OCEAN, LAND };       // 地形：海洋，陆地
-enum ElementType
+enum BuildingType { BASE, FORT, kMaxBuildingType };  // 建筑
+enum ResourceType { MINE, OILFIELD, kMaxResourceType };   // 资源
+enum UnitType  // 单位
 {
-    // Buildings
-    BASE,
-    FORT,
-    // Resources
-    MINE,
-    OILFIELD,
-    // Units
     SUBMARINE,   // 潜艇
     DESTROYER,   // 驱逐舰
     CRUISER,     // 巡洋舰
@@ -47,12 +34,8 @@ enum ElementType
     CARRIER,     // 航母
     CARGO,       // 运输舰
     FORMATION,   // 机群（飞机编队）
-    kElementTypes
+    kMaxUnitType
 };
-const int kBuildingTypes = 2;
-const int kResourceTypes = 2;
-const int kUnitTypes = 7;
-
 enum PlaneType  // 机种
 {
     FIGHTER,    // 战斗机
@@ -62,32 +45,18 @@ enum PlaneType  // 机种
     kMaxPlaneType
 };
 
-struct Formation
-{
-    int num[kMaxPlaneType];
-};
 
-bool ParseFormation(int type, Formation *formation);
-int MakeFormation(const Formation *Formation);
-
-
-struct Position
-{
-    int x;
-    int y;
-    int z;
-};
-
-struct Rectangle
+struct Size
 {
     int x_length;
     int y_length;
 };
 
+
 struct Property
 {
     Level level;
-    Rectangle size;
+    Size size;
 
     int sight_range[3];
     int fire_range[3];
@@ -103,30 +72,33 @@ struct Property
 
     int cost;
 };
-
-const Property kElementInfo[kElementTypes] = {};
-const Property kPlaneInfo[4] = {};
-
-// if type is a basic type (is ElementType but is not Formation), return
-//     a pointer pointing into kElementInfo
-// Else if type can be parsed into Formation, generate the property of it.
-//     The returned value points to an internal object whose validity or value
-//     may be altered by any subsequent call to GetProperty.
-// Else, return NULL
-const Property * GetProperty(int type);
+const Property kBuildingInfo[kMaxBuildingType] = {};
+const Property kUnitInfo[kMaxUnitType] = {};
+const Property kPlaneInfo[4] = {};  // 各机种参数
+// 飞机的部分属性不是常量
 
 const int ScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
 const int NonScoutSightRange[3] = {0, 1, 2};     // 编队内无侦察机时的视野范围
 
 
+
+const int IslandScoreTime = 5;   // 连续占有岛屿触发积分奖励的回合数
+                                 // @Vone 每回合奖励的分数？
+
+
+
+struct Position
+{
+    int x;
+    int y;
+};
+
 struct State
 {
-    int element_index;  // every element has a unique index
+    int index;
 
-    Position pos;  // Position of the upper-left corner
+    Position pos;
     int type;
-    int team;
-    bool visible;
 
     int health;
     int fuel;
@@ -134,18 +106,8 @@ struct State
     int metal;
 
     Position destination;
-};
 
-struct Map
-{
-    int row;
-    int col;
-
-    MapType type[kMaxMapSize][kMaxMapSize];  // 地形
-
-    // 存储地图各处元素索引号，包含建筑，资源，单位
-    // 若该处不存在元素，则为-1
-    int element[kMaxMapSize][kMaxMapSize][3];
+    const Property *info;
 };
 
 struct ProductionEntry
@@ -156,47 +118,29 @@ struct ProductionEntry
 
 struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的信息
 {
-    int team_num;  // 队伍号(0或1)
-    int score[2];  // 两队当前积分
-    int round;     // 当前总回合数
-
-    Map map;
-
-    int element_num;
-    State elements[kMaxElementNum];
-
-    int building_num;
-    State *building;  // point into elements
+    int team_num;                                // 队伍号(0或1)
+    int score[2];                                   // 两队当前积分
+    int round;                                      // 当前总回合数
 
     int resource_num;
-    State *resource;  // point into elements
+    State resources[kMaxResourceNum]; // 资源点
 
     int unit_num[2];
-    State *unit;  // point into elements
+    State units[2 * kMaxUnitNum];            // 己方视野范围内的所有单位的数组
 
-    int production_num;
+    int building_num;
+    State buildings[kMaxBuildingNum];
+
     ProductionEntry production_list[kMaxProductionNum];
 };
 
-enum OrderType
-{
-    PASS,
-    CHANGE_DESTINATION,  // 更改目的地为target
-    ATTACK,   // 攻击target
-    SUPPLY,   // 补给target处的单位
-    FIX,      // 维修target处的单位
-    EXPLODE,  // 自爆
-    PRODUCE   // 生产type类型的单位
-};
-
+enum Order { ATTACK, SUPPLY, FIX, BUILD，EXPLODE };   // 攻击，补给，维修，生产，自爆
 
 struct Command
 {
-    int element_index;  // 操作对象索引号
-    int order;
-
-    Position target;
-    int type;
+    Position destination;  // 要移动的目的地   移动目的可以为原地，即原地等待
+    Order order;                // 攻击，补给，维修，生产，自爆
+    Position order_target;      // order操作目标的坐标
 };
 
 
