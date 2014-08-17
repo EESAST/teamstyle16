@@ -14,7 +14,7 @@ const int kMaxMineNum = 8;            // 矿场最大数
 const int kMaxOilfieldNum = 8;        // 油田最大数
 const int kMaxResourceNum = kMaxMineNum + kMaxOilfieldNum;
 
-const int kMaxUnitNum = 30;           // 每方最大单位数
+const int kMaxUnitNum = 200;           // 每方最大单位数
 
 const int kMaxElementNum = kMaxBuildingNum + kMaxResourceNum + kMaxUnitNum;
 //
@@ -24,7 +24,7 @@ const int kDamageScore = 1;     // 造成一点伤害奖励的积分
 const int kCollectScore = 1;    // 收集一单位资源奖励的积分
 
 enum { NO_TEAM = 2 };
-enum Level { UNDERWATER, SURFACE, AIR };  // 层次
+enum Unitlevel { UNDERWATER, SURFACE, AIR };  // 单位类型
 enum AttackType { FIRE, TORPEDO };  // 攻击类型
 // 潜艇只能造成和接受鱼雷伤害
 // 陆地建筑只能造成和接受火力伤害
@@ -87,7 +87,7 @@ struct Rectangle
 
 struct Property
 {
-    Level level;
+    Unitlevel level;
     Rectangle size;
 
     int sight_range[3];
@@ -102,14 +102,16 @@ struct Property
     int defence[2];
     int speed;
 
-    int cost;
+    int price;//消耗钢铁
+	
+	int food;//人口占有
 };
 
 const Property kElementInfo[kElementTypes] = {};
 const Property kPlaneInfo[4] = {};
 
-// if type is a basic type (is ElementType but is not Formation), return
-//     a pointer pointing into kElementInfo
+// if type is a basic type (is ElementType but is not Formation), 
+//    return a pointer pointing into kElementInfo
 // Else if type can be parsed into Formation, generate the property of it.
 //     The returned value points to an internal object whose validity or value
 //     may be altered by any subsequent call to GetProperty.
@@ -142,6 +144,8 @@ struct Map
     int row;
     int col;
 
+	int weather;//天气影响所有单位的视野，数值为存储
+	
     MapType type[kMaxMapSize][kMaxMapSize];  // 地形
 
     // 存储地图各处元素索引号，包含建筑，资源，单位
