@@ -14,17 +14,25 @@
 
 # 以下所有数据暂时并无理论依据...
 
+import random from random
+
 # 基础参数限制
-ROUND_MAX = 1000    # 最大回合数
-MAP_SIZE_MAX = 200  # 地图最大边长
-BASE_NUM_MAX = 1    # 每方基地最大数量
+ROUND_MAX = 300     # 最大回合数
+MAP_SIZE_MAX = 80   # 地图最大边长
 FORT_NUM_MAX = 6    # 据点最大数量
 MINE_NUM_MAX = 8    # 矿场最大数量
 OILFIELD_NUM_MAX = 8    # 油田最大数量
-MOVEABLE_UNIT_NUM_MAX = 100      # 每方最大可移动单位数
-COMMAND_NUM_MAX = BASE_NUM_MAX + FORT_NUM_MAX + MOVEABLE_UNIT_NUM_MAX    # 每方单回合最大总指令数
+MOVEABLE_UNIT_NUM_MAX = 30      # 每方最大可移动单位数
+COMMAND_NUM_MAX = 1 + FORT_NUM_MAX + MOVEABLE_UNIT_NUM_MAX    # 每方单回合最大总指令数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
+
+score = [0, 0]      # 两队积分
+
+#积分规则
+FORT_SCORE = 1      # 占领据点每回合奖励积分
+DAMAGE_SCORE = 1    # 每点伤害奖励积分
+COLLECT_SCORE = 1   # 采集一单位资源奖励积分
 
 # 维修代价
 METAL_PER_HEALTH = 0.2    # 恢复1点生命所需金属
@@ -44,8 +52,8 @@ AIR = 2         # 空中
 
 # 伤害类型
 """ 潜艇只能造成和接受鱼雷伤害
-        陆地建筑只能造成和受到火力伤害
-        飞机不能受到鱼雷伤害 """
+    陆地建筑只能造成和受到火力伤害
+    飞机不能受到鱼雷伤害 """
 FIRE = 0        # 火力伤害
 TORPEDO = 1     # 鱼雷伤害
 
@@ -84,8 +92,8 @@ SCOUT = 3       # 侦察机
 
 # 建筑属性
 """ building_property = (sight_ranges, fire_ranges, 
-                                                 health_max, fuel_max, ammo_max, metal_max, 
-                                                 attacks, defences)
+                         health_max, fuel_max, ammo_max, metal_max, 
+                         attacks, defences)
         其中 sight_ranges = [UNDERWATER, SURFACE, AIR]
              fire_ranges = [UNDERWATER, SURFACE, AIR]
              attacks = [FIRE, TORPEDO]
@@ -140,7 +148,7 @@ FORMATION_TOTAL_PLANES = 10     # 一个机群最多10架飞机
 
 # 各机种参数
 """ plane_property = (health_max, fuel_max, ammo_max,
-                                            attacks, defences) """
+                      attacks, defences) """
 PLANES = [(7, 10, 5, 
            [2, 0], [1, INFINITY]),    # 单架战斗机
           (6, 10, 4,
@@ -150,6 +158,19 @@ PLANES = [(7, 10, 5,
           (5, 15, 2,
            [1, 0], [0, INFINITY])]    # 单架侦察机
 
+# 命中率
+def isHit(distance, fire_range):
+    """与双方距离, 攻方射程有关的命中率, 返回是否命中"""
+    if distance > fire_range:
+        accuracy = 0
+    else:
+        accuracy = 1 - float(distance) / (fire_range + 1)
+    return random() < accuracy
+
+# 攻击修正
+def modifiedAttack(distance, fire_range, attack):
+    """返回距离修正后的攻击力"""
+    return int((1 - float(distance - 1) / (fire_range + 1)) * attack)    # 可能大于attack
 
 # 对象
 
@@ -160,6 +181,7 @@ class Position(object):
         self.x = x
         self.y = y
         self.z = z
+        self.level = z      
 
     def __eq__(self, other):
         """判断两Position实例相等"""
@@ -168,9 +190,14 @@ class Position(object):
         else:
             return False
 
-    def distance(self, target_pos):
-        """返回该位置到target_pos的距离"""
-        return abs(target_pos.x - self.x) + abs(target_pos.y - self.y)
+    def distance(self, target):
+        """返回该位置到target(点或矩形)的(最小)距离"""
+        if isinstance(target, Position):
+            return abs(target_pos.x - self.x) + abs(target_pos.y - self.y)
+        elif isinstance(target, Rectangle):
+            return target.distance(self)    # 调用Rectangle.distance()
+        else:
+            return -1;
 
     def region(self, level, range):     
         """返回距离该位置range以内区域点集list"""
@@ -182,8 +209,6 @@ class Position(object):
         # 在一矩形范围内寻找符合条件的点
         return region_points
 
-    def display(self):
-        print '(', self.x, ',', self.y, ',', self.z, ')',
 
 class Rectangle(object):
     """平面矩形区域, 由左上及右下两顶点坐标确定"""
@@ -205,6 +230,15 @@ class Rectangle(object):
             bound_points.append(Position(self.lower_right.x, y, self.level))
         return bound_points
 
+    def distance(self, target):
+        """返回该矩形区域到target(点或矩形)的最小距离"""
+        if isinstance(target, Position):
+            return min([point.distance(target) for point in self.bound()])
+        elif isinstance(target, Rectangle):
+            return min([self.distance(point) for point in target.bound()])
+        else:
+            return -1
+
     def region(self, level, range = 0):
         """返回矩形区域向外延伸range范围的区域点集list"""
         region_points = []
@@ -221,6 +255,23 @@ class Rectangle(object):
             return region_points
 
 
+class Mine(object):
+    """矿场"""
+    def __init__(self, kind, pos, metal):
+        super(Mine, self).__init__()
+        self.kind = 'MINE'
+        self.pos = pos
+        self.metal = metal
+
+class Oilfield(object):
+    """油田"""
+    def __init__(self, kind, pos, fuel):
+        super(Oilfield, self).__init__()
+        self.kind = 'OILFIELD'
+        self.pos = pos
+        self.fuel = fuel
+        
+        
 class UnitBase(object):
     """单位抽象, 派生出建筑类以及可移动单位类"""
     def __init__(self, team, kind, pos, sight_ranges, fire_ranges, health, fuel, ammo, 
@@ -259,16 +310,28 @@ class UnitBase(object):
             pass
             ## 返回单位信息...
 
-    def attack(self, target_pos, attack_type = FIRE):
-        """攻击(默认火力攻击)某三维坐标位置"""
-        if target_pos not in self.pos.region(target_pos.z, fire_ranges[target_pos.z]):
+    def attack(self, target_unit, attack_type = FIRE):
+        """攻击(默认火力攻击)某单位"""
+        distance = self.pos.distance(target_unit.pos)
+        range = self.fire_ranges[target_unit.pos.level]
+        if distance > range:
             return -1   # 不在攻击范围内
         elif self.ammo <= 0:
             return -2   # 无弹药
         else:
             self.ammo -= 1  # 弹药-1
-            pass
-            ## 计算伤害...
+            if not isHit(distance, range):
+                damage = 0  # miss
+                return
+            else:
+                damage = modifiedAttack(distance, range, self.attacks[attack_type]) 
+                         - target_unit.defences[attack_type]
+                score[self.team] += damage
+                if damage >= target_unit.health:
+                    target_unit.health = 0  # killed
+                else:
+                    target_unit.health -= damage
+                return
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
     if giver.kind == 'BASE':
@@ -290,6 +353,7 @@ def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
     giver.ammo -= provides[1]
     receiver.fuel += provides[0]
     receiver.ammo += provides[1]
+
 
 
 
@@ -438,6 +502,20 @@ class Cargo(UnitBase):
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
             return 0 
+
+    def collect(self, resource):
+        """运输舰从资源点采集资源"""
+        if resource.kind == 'MINE' and resource.metal > 0:
+            supply = min(self.metal_max - self.metal, resource.metal)
+            self.metal += supply
+            resource.metal -= supply
+        elif resource.kind == 'OILFIELD' and resource.fuel > 0:
+            supply = min(self.fuel_max - self.fuel, resource.fuel)
+            self.fuel += supply
+            resource.fuel -= supply
+        else:
+            return -1
+
 
 
 def renum(formation):
