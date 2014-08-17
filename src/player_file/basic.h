@@ -2,8 +2,8 @@
 #define  BASIC_H
 
 // 地图参数
-const int kMaxRound = 1000;           // 最大回合数
-const int kMaxMapSize = 200;          // 地图最大边长
+const int kMaxRound = 300;           // 最大回合数
+const int kMaxMapSize = 80;          // 地图最大边长
 const int kMaxProductionNum = 10;
 
 //
@@ -14,13 +14,12 @@ const int kMaxMineNum = 8;            // 矿场最大数
 const int kMaxOilfieldNum = 8;        // 油田最大数
 const int kMaxResourceNum = kMaxMineNum + kMaxOilfieldNum;
 
-const int kMaxUnitNum = 100;          // 每方最大单位数
+const int kMaxUnitNum = 30;           // 每方最大单位数
 
 const int kMaxElementNum = kMaxBuildingNum + kMaxResourceNum + kMaxUnitNum;
 //
 
-const int kIslandScoreTime = 5;   // 连续占有岛屿触发积分奖励的回合数
-                                  // @Vone 每回合奖励的分数？
+const int kFortScore = 1;       // 占领据点每回合奖励的积分
 
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
@@ -182,11 +181,12 @@ enum OrderType
 {
     PASS,
     CHANGE_DESTINATION,  // 更改目的地为target
-    ATTACK,   // 攻击target
-    SUPPLY,   // 补给target处的单位
-    FIX,      // 维修target处的单位
+    ATTACK,   // 攻击索引号为value的单位
+    SUPPLY,   // 补给索引号为value的单位
+    COLLECT,  // 收集索引号为value的单位
+    FIX,      // 维修索引号为value的单位
     EXPLODE,  // 自爆
-    PRODUCE   // 生产type类型的单位
+    PRODUCE   // 生产value类型的单位
 };
 
 
@@ -196,7 +196,7 @@ struct Command
     int order;
 
     Position target;
-    int type;
+    int value;          // 各项指令的value
 };
 
 
