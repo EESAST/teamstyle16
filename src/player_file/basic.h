@@ -20,6 +20,8 @@ const int kMaxElementNum = kMaxBuildingNum + kMaxResourceNum + kMaxUnitNum;
 //
 
 const int kFortScore = 1;       // 占领据点每回合奖励的积分
+const int kDamageScore = 1;     // 造成一点伤害奖励的积分
+const int kCollectScore = 1;    // 收集一单位资源奖励的积分
 
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
