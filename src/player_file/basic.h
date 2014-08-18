@@ -14,7 +14,7 @@ const int kMaxMineNum = 8;            // 矿场最大数
 const int kMaxOilfieldNum = 8;        // 油田最大数
 const int kMaxResourceNum = kMaxMineNum + kMaxOilfieldNum;
 
-const int kMaxUnitNum = 200;           // 每方最大单位数
+const int kMaxUnitFood = 200;           // 每方最大单位数
 
 const int kMaxElementNum = kMaxBuildingNum + kMaxResourceNum + kMaxUnitNum;
 //
@@ -144,8 +144,6 @@ struct Map
     int row;
     int col;
 
-	int weather;//天气影响所有单位的视野，数值为存储
-	
     MapType type[kMaxMapSize][kMaxMapSize];  // 地形
 
     // 存储地图各处元素索引号，包含建筑，资源，单位
@@ -164,7 +162,8 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     int team_num;  // 队伍号(0或1)
     int score[2];  // 两队当前积分
     int round;     // 当前总回合数
-
+	static int weather;//天气影响所有单位的视野，数值为单位视野的改变量
+	
     Map map;
 
     int element_num;
