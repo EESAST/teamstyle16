@@ -38,7 +38,7 @@ COLLECT_SCORE = 1   # 采集一单位资源奖励积分
 METAL_PER_HEALTH = 0.2    # 恢复1点生命所需金属
 
 # 补给底线
-SUPPLY_LIMIT = 0.1  # 资源数少于 SUPPLY_LIMIT * 上限 即不可继续补给(留给自己用..)
+SUPPLY_LIMIT = 0.1  # 资源数少于 SUPPLY_LIMIT * 上限 即不可继续补给(留给自己用..)(抛锚不可以么？）
                     # 基地, 据点燃料不设底线
                     # 基地弹药无限, 故也不必设底线
                     # 运输舰无攻击能力, 弹药不设底线
@@ -92,71 +92,72 @@ SCOUT = 3       # 侦察机
 
 # 建筑属性
 """ building_property = (sight_ranges, fire_ranges, 
-                         health_max, fuel_max, ammo_max, metal_max, 
+                         health_max, fuel_max, ammo_max,ammo_once, metal_max, 
                          attacks, defences)
         其中 sight_ranges = [UNDERWATER, SURFACE, AIR]
              fire_ranges = [UNDERWATER, SURFACE, AIR]
              attacks = [FIRE, TORPEDO]
              defences = [FIRE, TORPEDO] """
 BUILDINGS = [([4, 10, 8], [0, 7, 5], 
-              2000, 1000, INFINITY, 200, 
-              [50, 0], [30, INFINITY]),     # 基地
+              2000, 1000, INFINITY,6, 200, 
+              [40, 0], [30, INFINITY]),     # 基地
              ([3, 8, 6], [0, 5, 4], 
-              800, 200, 300, 0, 
-              [30, 0], [12, INFINITY])]      # 据点
+              800, 200, 300,4, 200, 
+              [25, 0], [12, INFINITY])]      # 据点
 
 
 # 可移动单位(除飞机)属性, 即水面及水下单位属性
 """ water_unit_property = (sight_ranges, fire_ranges,
-                           health_max, fuel_max, ammo_max, metal_max, 
-                           speed,
+                           health_max, fuel_max, ammo_max,ammo_once, metal_max, 
+                           speed,food
                            attacks, defences) """
 # 数据不可信...
 WATER_UNITS = [([6, 5, 3], [5, 5, 0],
-                50, 120, 20, 0,
-                5,
-                [0, 18], [INFINITY, 10]),    # 潜艇
+                35, 120, 20,2, 0,
+                6,2
+                [0, 40], [INFINITY, 5]),    # 潜艇
                ([5, 10, 8], [4, 8, 6],
-                80, 150, 30, 0,
-                8,
-                [12, 20], [10, 10]),          # 驱逐舰
+                50, 150, 30,3, 0,
+                8,2
+                [13, 20], [10, 15]),          # 驱逐舰
                ([5, 10, 8], [4, 8, 6],
-                85, 300, 30, 0,
-                7,
-                [20, 12], [10, 8]),          # 巡洋舰
+                70, 300, 30,3, 0,
+                7,3
+                [20, 10], [12, 13]),          # 巡洋舰
                ([5, 10, 8], [4, 8, 6],
-                200, 200, 50, 0,
-                5,
-                [30, 12], [16, 16]),          # 战舰
+                100, 200, 50,5, 0,
+                6,4
+                [30, 10], [20, 15]),          # 战舰
                ([5, 10, 8], [4, 8, 6],
-                600, 400, 70, 80,
-                6,
-                [15, 12], [20, 15]),          # 航母
+                100, 400, 70,2, 80,
+                5,4
+                [15, 0], [16, 12]),          # 航母
                ([5, 10, 8], [4, 8, 6],
-                170, 300, 40, 20,
-                7,
-                [0, 0], [10, 8])]          # 运输舰
+                60, 300, 50,0, 50,
+                7,1
+                [0, 0], [15, 10])]          # 运输舰
 
 
 # 飞机常量属性
 SCOUT_SIGHT_RANGES = [2, 12, 16]    # 侦察机视野
 OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 8, 10]   # 其他机种视野
-FORMATION_FIRE_RANGES = [0, 8, 10]
+FORMATION_FIRE_RANGES = [0, 0, 1]
 FORMATION_SPEED = 12
-FORMATION_TOTAL_PLANES = 10     # 一个机群最多10架飞机
-
+FORMATION_FOOD = 1
+FORMATION_TOTAL_PLANES = 30     # 一个机群最多30架飞机
+FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，属性提升百分比
 
 # 各机种参数
-""" plane_property = (health_max, fuel_max, ammo_max,
+""" plane_property = (health_max, fuel_max, ammo_max,ammo_once
                       attacks, defences) """
-PLANES = [(7, 10, 5, 
+PLANES = [(7, 10, 5, 1
            [2, 0], [1, INFINITY]),    # 单架战斗机
-          (6, 10, 4,
+          (6, 10, 4,2
            [0, 2], [1, INFINITY]),    # 单架鱼雷机
-          (8, 10, 4,
+          (8, 10, 4,2
            [3, 0], [2, INFINITY]),    # 单架轰炸机
-          (5, 15, 2,
-           [1, 0], [0, INFINITY])]    # 单架侦察机
+          (5, 15, 2,2
+           [1, 1], [0, INFINITY])]    # 单架侦察机
 
 # 命中率
 def isHit(distance, fire_range):
@@ -164,7 +165,7 @@ def isHit(distance, fire_range):
     if distance > fire_range:
         accuracy = 0
     else:
-        accuracy = 1 - float(distance) / (fire_range + 1)
+        accuracy = 1 - float(distance) *(distance - 1) /(fire_range + 1) / (fire_range + 1)
     return random() < accuracy
 
 # 攻击修正
@@ -319,13 +320,13 @@ class UnitBase(object):
         elif self.ammo <= 0:
             return -2   # 无弹药
         else:
-            self.ammo -= 1  # 弹药-1
+            self.ammo -= self.ammo_once  # 减少弹药数目
             if not isHit(distance, range):
                 damage = 0  # miss
                 return
             else:
-                damage = modifiedAttack(distance, range, self.attacks[attack_type]) 
-                         - target_unit.defences[attack_type]
+                damage = self.attacks[attack_type]* scount
+                         - target_unit.defences[attack_type]*
                 score[self.team] += damage
                 if damage >= target_unit.health:
                     target_unit.health = 0  # killed
