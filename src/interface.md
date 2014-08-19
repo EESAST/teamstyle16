@@ -88,19 +88,19 @@ Provide game information for a certain team
 
 ## Class gamebody.GameBody
 
-|               Methods               |            Return Value            |               Description                |
-| ----------------------------------- | ---------------------------------- | ---------------------------------------- |
-| team_name()                         | (team0_name, team1_name)           | Return team names                        |
-| score()                             | (team0_score, team1_score)         | Return current score                     |
-| round()                             | int                                | Return current round                     |
-|                                     |                                    |                                          |
-| buildings()                         |                                    |                                          |
-| resources()                         |                                    |                                          |
-| units()                             |                                    |                                          |
-| production_list()                   | (ProductionEntry, ProductionEntry) | Return production lists of the two teams |
-|                                     |                                    |                                          |
-| team_game_info()                    | (team0_game_info, team1_game_info) |                                          |
-| run(team0_commands, team1_commands) | (state, max_round_reached)         |                                          |
+|               Methods               |              Return Value              |               Description                |
+| ----------------------------------- | -------------------------------------- | ---------------------------------------- |
+| team_name()                         | (team0_name, team1_name)               | Return team names                        |
+| score()                             | (team0_score, team1_score)             | Return current score                     |
+| round()                             | int                                    | Return current round                     |
+|                                     |                                        |                                          |
+| elements()                          |                                        |                                          |
+| production_list()                   | ([ProductionEntry], [ProductionEntry]) | Return production lists of the two teams |
+|                                     |                                        |                                          |
+| team_game_info()                    | (team0_game_info, team1_game_info)     |                                          |
+| run(team0_commands, team1_commands) | (state, max_round_reached)             |                                          |
+
+
 
 
 
