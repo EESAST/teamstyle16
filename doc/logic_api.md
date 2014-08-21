@@ -25,6 +25,11 @@
                         Destroyer
                     Formation
 
+|            方法           | 返回值 |       描述       |
+|---------------------------|--------|------------------|
+| kind_to_formation(kind)   | int[4] | 类型值->机群组成 |
+| formation_to_kind(int[4]) | int    | 机群组成->类型值 |
+
 ### Class Position
 
 |      构造函数     |             描述            |
@@ -40,10 +45,12 @@
 ### Class Element
 地图上所有元素的抽象
 
-| 属性 |   类型   |     描述     |
-|------|----------|--------------|
-| kind | int      | 元素类型     |
-| pos  | Position | 该元素的位置 |
+|   属性  |   类型   |      描述      |
+|---------|----------|----------------|
+| index   | int      | 元素的索引号   |
+| kind    | int      | 元素类型       |
+| pos     | Position | 该元素的位置   |
+| visible | bool     | 该元素是否可见 |
 
 ### Class Resource
 |  属性  | 类型 |   描述   |
@@ -51,7 +58,7 @@
 | remain | int  | 剩余资源 |
 
 ### Class UnitBase
-|   属性  |  类型  |    描述    |
+|     属性    |  类型  |    描述    |
 |-------------|--------|------------|
 | team        | int    | 所属队伍   |
 | sight_range | int[3] | 视野范围   |
@@ -62,6 +69,8 @@
 | fuel_max    | int    | 燃料上限   |
 | ammo        | int    | 弹药       |
 | ammo_max    | int    | 弹药上限   |
+| metal       | int    | 金属       |
+| metal_max   | int    | 金属上限   |
 | attacks     | int[2] | 攻击       |
 | defences    | int[2] | 防御       |
 
@@ -71,9 +80,12 @@
 | size | (x_length, y_length) | 建筑物的大小 |
 
 ### Class Unit
-|  属性 | 类型 |   描述   |
-|-------|------|----------|
-| speed | int  | 移动速度 |
+|    属性    |   类型   |     描述     |
+|------------|----------|--------------|
+| speed      | int      | 移动速度     |
+| dest       | Position | 当前目的地   |
+| cost       | int      | 生产所需金属 |
+| population | int      | 占有人口数   |
 
 ### Class Formation
 |    属性    |  类型  |     描述    |
@@ -82,15 +94,19 @@
 
 
 ## Module map
-定义用于设置初始状态的地图，及相关的函数
+定义地图及相关的函数
+
 类继承关系
 
     object
         Map
 
-|      方法      | 返回值 |                描述               |
-|----------------|--------|-----------------------------------|
-| load(filename) | Map    | 从文件中载入地图，存放在Map对象中 |
+|         方法        | 返回值 |                 描述                |
+|---------------------|--------|-------------------------------------|
+| save(filename, Map) | None   | 保存地图至文件                      |
+| saves(Map)          | str    | 保存地图至字符串                    |
+| load(filename)      | Map    | 从文件中载入地图，存放在Map对象中   |
+| loads(s)            | Map    | 从字符串中载入地图，存放在Map对象中 |
 
 ### Class Map
 
@@ -102,81 +118,117 @@
 | elements()     | [(int, Position)] | 返回所有元素的类型和位置 |
 
 
+## Module command
+定义玩家/AI所下达的指令
+
+类继承关系
+
+    object
+        Command
+            Attack
+            ChangeDest
+            Collect
+            Explode
+            Fix
+            Produce
+            Supply
+
+### Class Command
+|        构造函数        | 描述 |
+|------------------------|------|
+| Command(operand) | 指令 |
+
+|   属性  | 类型 |      描述      |
+|---------|------|----------------|
+| operand | int  | 操作对象索引号 |
+
+### Class Attack/Collect/Fix
+|       构造函数       |      描述      |
+|----------------------|----------------|
+| XXX(operand, target) | 攻击/收集/维修 |
+
+|  属性  | 类型 |       描述       |
+|--------|------|------------------|
+| target | int  | 指令目标的索引号 |
+
+### Class ChangeDest
+|          构造函数         |    描述    |
+|---------------------------|------------|
+| ChangeDest(operand, dest) | 更改目的地 |
+
+| 属性 |   类型   |      描述      |
+|------|----------|----------------|
+| dest | Position | 新目的地的坐标 |
+
+### Class Produce
+|        构造函数        | 描述 |
+|------------------------|------|
+| Produce(operand, kind) | 生产 |
+
+| 属性 | 类型 |        描述        |
+|------|------|--------------------|
+| kind | int  | 要生产的对象的类型 |
+
+### Class Supply
+|               构造函数               | 描述 |
+|--------------------------------------|------|
+| Supply(operand, target, metal, ammo) | 补给 |
+
+|  属性  | 类型 |              描述              |
+|--------|------|--------------------------------|
+| target | int  | 补给对象的索引号               |
+| metal  | int  | 要补给的金属量，为负则尽力补给 |
+| ammo   | int  | 要补给的弹药量，为负则尽力补给 |
+
+## Module event
+定义
+
+类继承关系
+
+    object
+        Event
+
+TODO
+
 
 ## Module gamebody
+提供游戏主体
 
-|       属性      | 类型 |           描述           |
-|-----------------|------|--------------------------|
-| STATE_CONTINUE  | int  | The game should continue |
-| STATE_TEAM0_WON | int  | Team 0 won               |
-| STATE_TEAM1_WON | int  | Team 1 won               |
-| STATE_TIE       | int  | Tie                      |
+类继承关系
 
+    object
+        GameBody
 
 
-## Class gamebody.State
-Describe the state of a certain element, including building, resource and unit.
-Any invalid data should be set to an invalid state (e.g. -1)
+|      属性      | 类型 |             描述             |
+|----------------|------|------------------------------|
+| GOD            | int  | 值不为0或1，表示上帝视角     |
+| STATE_CONTINUE | int  | 值不为0或1，表示游戏应当继续 |
+| STATE_TIE      | int  | 值不为0或1，表示平局         |
 
-|      属性     |   类型   |              描述              |
-|---------------|----------|--------------------------------|
-| element_index | int      | Index of the element           |
-|               |          |                                |
-| pos           | Position | Position of the element        |
-| type          | int      |                                |
-| team          | int      |                                |
-| visible       | bool     | Whether the element is visible |
-|               |          |                                |
-| health        | int      |                                |
-| fuel          | int      |                                |
-| ammo          | int      |                                |
-| metal         | int      |                                |
-|               |          |                                |
-| destination   | Position |                                |
+### Class GameBody
+游戏主体
+
+只有在设置map后（即map()返回值不为None）才能运行
+
+|               构造函数              |     描述     |
+|-------------------------------------|--------------|
+| GameBody(team_names=None, map=None) | 构造游戏主体 |
 
 
-
-## Class gamebody.TeamGameInfo
-Provide game information for a certain team
-
-|   属性   |   类型  |                         描述                        |
-|----------|---------|-----------------------------------------------------|
-| elements | [State] | Everything in the map that can be seen by this team |
-
-
-
-## Class gamebody.ProductionEntry
-
-|    属性    | 类型 |                描述               |
-|------------|------|-----------------------------------|
-| unit_type  | int  | type of the unit to be produced   |
-| round_left | int  | rounds needed to produce the unit |
-
-
-
-## Class gamebody.GameBody
-
-|                 方法                |                 返回值                 |                   描述                   |
-|-------------------------------------|----------------------------------------|------------------------------------------|
-| team_name()                         | (team0_name, team1_name)               | Return team names                        |
-| score()                             | (team0_score, team1_score)             | Return current score                     |
-| round()                             | int                                    | Return current round                     |
-|                                     |                                        |                                          |
-| elements()                          |                                        |                                          |
-| production_list()                   | ([ProductionEntry], [ProductionEntry]) | Return production lists of the two teams |
-|                                     |                                        |                                          |
-| team_game_info()                    | (team0_game_info, team1_game_info)     |                                          |
-| run(team0_commands, team1_commands) | (state, max_round_reached)             |                                          |
-
-
-
-
-
-## Class gamebody.Command
-
-|      属性     |   类型   |          描述          |
-|---------------|----------|------------------------|
-| element_index | int      |                        |
-| order         | int      | Type of the order      |
-| target        | Position | Position of the target |
-| type          | int      | Used for PRODUCE       |
+|            方法           |        返回值        |                               描述                               |
+|---------------------------|----------------------|------------------------------------------------------------------|
+| elements(perspective=GOD) | [Element]            | 返回上帝/某队视角下的所有元素                                    |
+| map()                     | Map                  | 返回当前地图                                                                 |
+| production_list(team)     | [(kind, round_left)] | 返回生产列表                                                     |
+| round()                   | int                  | 返回当前回合数                                                   |
+| run(commands0, commands1) | (state, [Event])     | 接收两队发出的指令，运行一回合，返回游戏状态及该回合内发生的事件 |
+| score(team)               | int                  | 返回分数                                                         |
+| team_name(team)           | str                  | 返回队伍名                                                       |
+|                           |                      |                                                                  |
+| load_map(map)             | None                 | 加载地图。若成功，则清空当前状态                                 |
+| set_team_name(team, name) | None                 | 设置队伍名                                                       |
+| save(filename)            | None                 | 保存当前游戏状态（包括地图）                                     |
+| saves()                   | str                  | 保存当前游戏状态（包括地图）至字符串                             |
+| load(filename)            | None                 | 载入游戏状态（包括地图）                                         |
+| loads(s)                  | None                 | 从字符串中载入游戏状态（包括地图）                               |
