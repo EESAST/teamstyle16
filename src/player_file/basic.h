@@ -14,9 +14,9 @@ const int kMaxMineNum = 8;            // 矿场最大数
 const int kMaxOilfieldNum = 8;        // 油田最大数
 const int kMaxResourceNum = kMaxMineNum + kMaxOilfieldNum;
 
-const int kMaxUnitFood = 200;           // 每方最大单位数
+const int kMaxUnitFood = 200;           // 每方最大人口数
 
-const int kMaxElementNum = kMaxBuildingNum + kMaxResourceNum + kMaxUnitNum;
+const int kMaxElementNum = kMaxBuildingNum + kMaxResourceNum + kMaxUnitFood;
 //
 
 const int kFortScore = 1;       // 占领据点每回合奖励的积分
@@ -68,8 +68,10 @@ struct Formation
     int num[kMaxPlaneType];
 };
 
-bool ParseFormation(int type, Formation *formation);
-int MakeFormation(const Formation *Formation);
+// Parse formation from type number
+bool KindToFormation(int type, Formation *formation);
+// Make type number from struct Formation
+int FormationToKind(const Formation *Formation);
 
 
 struct Position
@@ -79,7 +81,7 @@ struct Position
     int z;
 };
 
-struct Rectangle
+struct Size
 {
     int x_length;
     int y_length;
@@ -88,7 +90,7 @@ struct Rectangle
 struct Property
 {
     Unitlevel level;
-    Rectangle size;
+    Size size;
 
     int sight_range[3];
     int fire_range[3];
@@ -102,9 +104,8 @@ struct Property
     int defence[2];
     int speed;
 
-    int price;//消耗钢铁
-	
-	int food;//人口占有
+    int cost;  //消耗钢铁
+	int population;  //人口占有
 };
 
 const Property kElementInfo[kElementTypes] = {};
@@ -162,7 +163,7 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     int team_num;  // 队伍号(0或1)
     int score[2];  // 两队当前积分
     int round;     // 当前总回合数
-	static int weather;//天气影响所有单位的视野，数值为单位视野的改变量
+	int weather;   //天气影响所有单位的视野，数值为单位视野的改变量
 	
     Map map;
 
