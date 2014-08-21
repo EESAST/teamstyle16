@@ -69,9 +69,9 @@ struct Formation
 };
 
 // Parse formation from type number
-bool ParseFormation(int type, Formation *formation);
+bool KindToFormation(int type, Formation *formation);
 // Make type number from struct Formation
-int MakeFormation(const Formation *Formation);
+int FormationToKind(const Formation *Formation);
 
 
 struct Position
@@ -81,7 +81,7 @@ struct Position
     int z;
 };
 
-struct Rectangle
+struct Size
 {
     int x_length;
     int y_length;
@@ -90,7 +90,7 @@ struct Rectangle
 struct Property
 {
     Unitlevel level;
-    Rectangle size;
+    Size size;
 
     int sight_range[3];
     int fire_range[3];
@@ -104,9 +104,8 @@ struct Property
     int defence[2];
     int speed;
 
-    int price;  //消耗钢铁
-	
-	int food;  //人口占有
+    int cost;  //消耗钢铁
+	int population;  //人口占有
 };
 
 const Property kElementInfo[kElementTypes] = {};
