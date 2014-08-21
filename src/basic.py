@@ -177,7 +177,7 @@ def modifiedAttack(distance, fire_range, attack):
 
 class Position(object):
     """三维坐标"""
-    def __init__(self, x, y, z):
+    def __init__(self, x, y, z=1):
         super(Position, self).__init__()
         self.x = x
         self.y = y
