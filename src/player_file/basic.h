@@ -98,6 +98,7 @@ struct Property
     int health_max;
     int fuel_max;
     int ammo_max;
+    int ammo_once;  // 单次攻击消耗弹药
     int metal_max;
 
     int attack[2];
@@ -105,7 +106,8 @@ struct Property
     int speed;
 
     int cost;  //消耗钢铁
-	int population;  //人口占有
+    int build_round;  // 生产所需回合数
+	int population;   //人口占有
 };
 
 const Property kElementInfo[kElementTypes] = {};
