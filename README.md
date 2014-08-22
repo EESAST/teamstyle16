@@ -1,10 +1,14 @@
 ﻿# 队式16 - Deep Blue
 
-欢迎来到队式16的开发仓库~
+欢迎来到队式16的开发仓库
 
+## 公告
+游戏规则及逻辑接口已经更新，请大家查看 rules.md 和 logic_api.md
+
+## 成员
 本仓库目前包括了逻辑组，平台组和界面组。
 
-目前入驻的暂时只有：
+目前入驻的有：
 
 **逻辑组**：郭一隆 (@Nuullll), 孙胜扬 (@ssydasheng), 杨幻睿 (@yanghr), 王殷豪 (@YacratesWyh)
 
@@ -12,18 +16,6 @@
 
 **界面组**：李文硕 (@Gaffey)，林梓楠 (@fjxmlzn)
 
-谁知道科协git肿么了……
-
-
-## 公告公告，大家看这里看这里~
-
-还没有学会git的，现在赶快去现学现卖~
-
-[Git教程](http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000) by 廖雪峰
-
-[Git简明指南](http://rogerdudler.github.io/git-guide/index.zh.html) by rogerdudler（据说是雨泽学长推荐）
-
-然后去学习一下一种[正确的分支姿势](http://www.ruanyifeng.com/blog/2012/07/git.html)，这次的开发的分支策略就是基于这个的。 ***真的很重要！！！***
 
 
 ## 当前任务
@@ -60,6 +52,12 @@
 * 提供 Markdown/LaTex 格式的选手文档
 
 ## 关于Git
+[Git教程](http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000) by 廖雪峰
+
+[Git简明指南](http://rogerdudler.github.io/git-guide/index.zh.html) by rogerdudler（据说是雨泽学长推荐）
+
+然后去学习一下一种[正确的分支姿势](http://www.ruanyifeng.com/blog/2012/07/git.html)，这次的开发的分支策略就是基于这个的。 ***真的很重要！！！***
+
 请大家 ***不要*** 使用中文文件名或目录名 = =
 
 请大家 ***不要*** 直接对 **master** 分支进行修改，而是将 **develop** 分支作为主要开发分支。（为了保险起见我还是把 **master** 设为protected了…Orz）
