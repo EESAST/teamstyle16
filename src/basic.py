@@ -84,10 +84,11 @@ FORMATION = 6   # 飞机编队(机群)
 
 
 # 飞机编队内飞机种类
-FIGHTER = 0     # 战斗机
+SCOUT = 0       # 侦察机
 TORPEDOER = 1   # 鱼雷机
 BOMBER = 2      # 轰炸机
-SCOUT = 3       # 侦察机
+FIGHTER = 3     # 战斗机
+
 
 
 # 建筑属性

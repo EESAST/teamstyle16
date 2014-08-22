@@ -56,10 +56,10 @@ const int kUnitTypes = 7;
 
 enum PlaneType  // 机种
 {
-    FIGHTER,    // 战斗机
+    SCOUT,      // 侦察机
     TORPEDOER,  // 鱼雷机
     BOMBER,     // 轰炸机
-    SCOUT,      // 侦察机
+    FIGHTER,    // 战斗机
     kMaxPlaneType
 };
 
