@@ -150,7 +150,7 @@ void Collect(int operand, int target);
 void Explode(int operand);
 void Fix(int operand, int target);
 void Produce(int operand, int kind);
-void Supply(int operand, int target, int metal, int ammo);
+void Supply(int operand, int target, int fuel, int metal, int ammo);
 void Cancel(int operand);
 
 
