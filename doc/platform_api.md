@@ -57,9 +57,9 @@
 | runtime_history()                        | [int[2]]             | 返回运行时间历史                 |
 | avg_runtime_history()                    | [int[2]]             | 返回平均运行时间历史             |
 | **运行/指令**                            |                      |                                  |
-| commands(team)                           | [Command]            | 返回该队伍当前的指令             |
+| commands(team)                           | [Command]            | 返回该队伍当前的指令集           |
 | status()                                 | int                  | 返回当前的游戏状态               |
-| next_round()                             | [Event]              | 进行一回合                       |
+| next_round()                             | [gamebody.Event]     | 进行一回合                       |
 | **配置**                                 |                      |                                  |
 | record_interval()                        | int                  | 返回统计间隔                     |
 | limit_mode()                             | int                  | 返回时限模式                     |
@@ -71,15 +71,15 @@
 
 ### Class AIBattle
 AI对战
+
 |                                               构造函数                                              |            描述            |
 |-----------------------------------------------------------------------------------------------------|----------------------------|
 | AIBattle(map, ai0_filename, ai1_filename, record_interval=... limit_mode=..., time_limit=..., **kw) | kw将被用作构造GameBody参数 |
 
-
-|       方法      | 返回值 |       描述       |
-|-----------------|--------|------------------|
-| get_commands()    | None   | 从AI获取指令     |
-| run_until_end() | None   | 运行直至比赛结束 |
+|       方法      | 返回值 |            描述            |
+|-----------------|--------|----------------------------|
+| feed_commands() | None   | 从AI获取指令，填充至指令集 |
+| run_until_end() | None   | 运行直至比赛结束           |
 
 
 ### Class HumanAIBattle
