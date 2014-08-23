@@ -305,14 +305,14 @@ TODO：游戏常量
 
 |                    构造函数                    |     描述     |
 |------------------------------------------------|--------------|
-| GameBody(map, team_names=None, max_polulation=MAX_POLULATION) | 构造游戏主体 |
+| GameBody(map, max_polulation=MAX_POLULATION) | 构造游戏主体 |
 
 
 |            方法            |        返回值        |                 描述                 |
 |----------------------------|----------------------|--------------------------------------|
-| map()                      | Map                  | 返回当前地图                         |
+| **基础信息**               |                      |                                      |
+| map()                      | Map                  | 返回当前使用的地图                   |
 | max_polulation()           | int                  | 返回最大人口数                       |
-| team_name(team)            | str                  | 返回队伍名                           |
 | **游戏状态**               |                      |                                      |
 | round()                    | int                  | 返回当前回合数                       |
 | score(team)                | int                  | 返回分数                             |
