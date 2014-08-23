@@ -25,6 +25,7 @@
         Battle
             AIBattle
             HumanAIBattle
+            Replayer
 
 异常继承关系
 
@@ -96,12 +97,21 @@ AI对战
 人机对战
 
 
-## Module replayer
+
+## Class Replayer
 回放器
+
+回放器的统计数据不会变化
+
+|     方法    | 返回值 |       描述       |
+|-------------|--------|------------------|
+| begin()     | int    | 返回回放开始回合 |
+| end()       | int    | 返回回放结束回合 |
+| togo(round) | int    | 前往指定回合     |
+
 
 
 # 平台组内部
-
 
 ## Module ai_proxy
 AI代理，处理游戏程序与AI间的通信
