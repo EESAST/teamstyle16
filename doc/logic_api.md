@@ -303,32 +303,33 @@ TODO：游戏常量
 ### Class GameBody
 游戏主体
 
-|                    构造函数                    |     描述     |
-|------------------------------------------------|--------------|
-| GameBody(map, max_polulation=MAX_POLULATION) | 构造游戏主体 |
+|                     构造函数                     |     描述     |
+|--------------------------------------------------|--------------|
+| GameBody(map, max_polulation=..., max_round=...) | 构造游戏主体 |
 
 
-|            方法            |        返回值        |                 描述                 |
-|----------------------------|----------------------|--------------------------------------|
-| **基础信息**               |                      |                                      |
-| map()                      | Map                  | 返回当前使用的地图                   |
-| max_polulation()           | int                  | 返回最大人口数                       |
-| **游戏状态**               |                      |                                      |
-| round()                    | int                  | 返回当前回合数                       |
-| score(team)                | int                  | 返回分数                             |
-| elements(perspective=GOD)  | [Element]            | 返回上帝/某队视角下的所有元素        |
-| production_list(team)      | [(kind, round_left)] | 返回生产列表                         |
-| population(team)           | int                  | 返回该队伍的人口数                   |
-| weather()                  | int                  | 返回当前的天气                       |
-| **运行相关**               |                      |                                      |
-| commands(team)             | [Command]            | 返回该队伍当前的指令                 |
-| set_command(team, command) | None                 | 为该队伍添加一条指令，并处理冲突     |
-| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件   |
-| status()                   | int                  | 返回当前的游戏状态                   |
-| **设置/保存相关**          |                      |                                      |
-| set_team_name(team, name)  | None                 | 设置队伍名                           |
-| save(filename)             | None                 | 保存当前游戏状态（包括地图）         |
-| saves()                    | str                  | 保存当前游戏状态（包括地图）至字符串 |
-| load(filename)             | None                 | 载入游戏状态（包括地图）             |
-| loads(s)                   | None                 | 从字符串中载入游戏状态（包括地图）   |
+|            方法            |        返回值        |                  描述                  |
+|----------------------------|----------------------|----------------------------------------|
+| **基础信息**               |                      |                                        |
+| map()                      | Map                  | 返回当前使用的地图                     |
+| max_polulation()           | int                  | 返回最大人口数                         |
+| max_round()                | int                  | 返回最大回合数                         |
+| **游戏状态**               |                      |                                        |
+| round()                    | int                  | 返回当前回合数                         |
+| score(team)                | int                  | 返回分数                               |
+| elements(perspective=GOD)  | [Element]            | 返回上帝/某队视角下的所有元素          |
+| production_list(team)      | [(kind, round_left)] | 返回生产列表                           |
+| population(team)           | int                  | 返回该队伍的人口数                     |
+| weather()                  | int                  | 返回当前的天气                         |
+| **运行相关**               |                      |                                        |
+| commands(team)             | [Command]            | 返回该队伍当前的指令                   |
+| set_command(team, command) | None                 | 为该队伍添加一条指令，并处理冲突       |
+| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件     |
+| status()                   | int                  | 返回当前的游戏状态                     |
+| **设置/保存相关**          |                      |                                        |
+| set_team_name(team, name)  | None                 | 设置队伍名                             |
+| save(filename)             | None                 | 保存当前游戏状态（不包括地图）         |
+| saves()                    | str                  | 保存当前游戏状态（不包括地图）至字符串 |
+| load(filename)             | None                 | 载入游戏状态（不包括地图）             |
+| loads(s)                   | None                 | 从字符串中载入游戏状态（不包括地图）   |
 
