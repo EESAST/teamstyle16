@@ -327,8 +327,8 @@ TODO：游戏常量
 | status()                   | int                  | 返回当前的游戏状态                   |
 | **设置/保存相关**          |                      |                                      |
 | set_team_name(team, name)  | None                 | 设置队伍名                           |
-| save(filename)             | None                 | 保存当前游戏状态（包括地图）         |
-| saves()                    | str                  | 保存当前游戏状态（包括地图）至字符串 |
-| load(filename)             | None                 | 载入游戏状态（包括地图）             |
-| loads(s)                   | None                 | 从字符串中载入游戏状态（包括地图）   |
+| save(filename)             | None                 | 保存当前游戏状态（不用包括地图）         |
+| saves()                    | str                  | 保存当前游戏状态（不用包括地图）至字符串 |
+| load(filename)             | None                 | 载入游戏状态（不用包括地图）             |
+| loads(s)                   | None                 | 从字符串中载入游戏状态（不用包括地图）   |
 
