@@ -26,6 +26,14 @@
             AIBattle
             HumanAIBattle
 
+异常继承关系
+
+    IOError
+        AIProxyError
+            AIFileError      AI文件错误
+            AIConnectError   AI连接错误
+            ParseError       指令解析错误
+
 |    属性   | 类型 |     描述     |
 |-----------|------|--------------|
 | ONCE_MODE | int  | 单次时限模式 |
@@ -72,14 +80,16 @@
 ### Class AIBattle
 AI对战
 
-|                                               构造函数                                              |            描述            |
-|-----------------------------------------------------------------------------------------------------|----------------------------|
-| AIBattle(map, ai0_filename, ai1_filename, record_interval=... limit_mode=..., time_limit=..., **kw) | kw将被用作构造GameBody参数 |
+|                                               构造函数                                              |                               描述                              |
+|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| AIBattle(map, ai0_filename, ai1_filename, record_interval=... limit_mode=..., time_limit=..., **kw) | kw将被用作构造GameBody参数，可能抛出AIFileError, AIConnectError |
 
 |       方法      | 返回值 |            描述            |
 |-----------------|--------|----------------------------|
 | feed_commands() | None   | 从AI获取指令，填充至指令集 |
 | run_until_end() | None   | 运行直至比赛结束           |
+
+上述两方法可能抛出 AIConnectError, ParseError
 
 
 ### Class HumanAIBattle
@@ -96,11 +106,12 @@ AI对战
 ## Module ai_proxy
 AI代理，处理游戏程序与AI间的通信
 
+
 ### Class AIProxy
 
-|           构造函数          | 描述 |
-|-----------------------------|------|
-| AIProxy(team_num, filename) |      |
+|           构造函数          |                       描述                       |
+|-----------------------------|--------------------------------------------------|
+| AIProxy(team_num, filename) | 运行该AI程序，并与其连接，获取队名，传递稳定信息。 |
 
 |               方法               |        返回值        |                         描述                         |
 |----------------------------------|----------------------|------------------------------------------------------|
