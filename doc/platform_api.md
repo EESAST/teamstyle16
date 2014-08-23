@@ -2,6 +2,7 @@
 平台组API
 
 ## Module platform
+包含平台的设置和少量功能
 
 |     属性    |  类型 |      描述      |
 |-------------|-------|----------------|
@@ -9,18 +10,18 @@
 | save_path   | str   | 存档文件夹路径 |
 | replay_path | str   | 回放文件夹路径 |
 
-|          方法         |        返回值        |          描述          |
-|-----------------------|----------------------|------------------------|
-| list_maps()           | [str]                | 返回可用地图的名称列表 |
-| load_map(map_name)    | (Map, brief, config) | 载入地图信息           |
-| load_replay(filename) | Replayer             | 载入回放文件           |
+|          方法         |        返回值        |               描述               |
+|-----------------------|----------------------|----------------------------------|
+| list_maps()           | [str]                | 返回map_path下可用地图的名称列表 |
+| load_map(map_name)    | (Map, brief, config) | 载入地图，简介及对应设置         |
+| load_game(filename)   | Battle               | 载入游戏，                         |
+| load_replay(filename) | Replayer             | 载入回放文件                     |
 
 ## Module battle
 
 类继承关系
 
     object
-        Statistic
         Battle
             AIBattle
             HumanAIBattle
@@ -30,23 +31,12 @@
 | ONCE_MODE | int  | 单次时限模式 |
 | AVG_MODE  | int  | 平均时限模式 |
 
-### Class Statistic
-游戏统计数据
-
-|     属性    |  类型  |     描述     |
-|-------------|--------|--------------|
-| round       | int    | 回合数       |
-| score       | int[2] | 积分         |
-| unit_num    | int[2] | 单位数目     |
-| runtime     | int[2] | 运行时间     |
-| avg_runtime | int[2] | 平均运行时间 |
-
 ### Class Battle
 对战
 
-|                        构造函数                        | 描述 |
-|--------------------------------------------------------|------|
-| Battle(map, limit_mode=AVG_MODE, time_limit=1.0, **kw) |      |
+|                                构造函数                               |            描述            |
+|-----------------------------------------------------------------------|----------------------------|
+| Battle(map, record_interval=... limit_mode=..., time_limit=..., **kw) | kw将被用作构造GameBody参数 |
 
 |                   方法                   |        返回值        |               描述               |
 |------------------------------------------|----------------------|----------------------------------|
@@ -54,7 +44,6 @@
 | map()                                    | Map                  | 返回当前使用的地图               |
 | max_polulation()                         | int                  | 返回最大人口数                   |
 | team_name(team)                          | str                  | 返回队伍名                       |
-|                                          |                      |                                  |
 | **游戏状态**                             |                      |                                  |
 | round()                                  | int                  | 返回当前回合数                   |
 | score(team)                              | int                  | 返回分数                         |
@@ -63,29 +52,45 @@
 | population(team)                         | int                  | 返回该队伍的人口数               |
 | weather()                                | int                  | 返回当前的天气                   |
 | **统计数据**                             |                      |                                  |
-| statistic()                              | [Statistic]          | 返回统计数据                     |
+| score_history()                          | [int[2]]             | 返回分数历史                     |
+| unit_num_history()                       | [int[2]]             | 返回单位数历史                   |
+| runtime_history()                        | [int[2]]             | 返回运行时间历史                 |
+| avg_runtime_history()                    | [int[2]]             | 返回平均运行时间历史             |
 | **运行/指令**                            |                      |                                  |
 | commands(team)                           | [Command]            | 返回该队伍当前的指令             |
 | status()                                 | int                  | 返回当前的游戏状态               |
 | next_round()                             | [Event]              | 进行一回合                       |
-| **设置/保存**                            |                      |                                  |
+| **配置**                                 |                      |                                  |
+| record_interval()                        | int                  | 返回统计间隔                     |
+| limit_mode()                             | int                  | 返回时限模式                     |
 | time_limit()                             | float                | 返回AI单回合运行时限             |
+| **保存/载入**                            |                      |                                  |
 | save_game(filename)                      | None                 | 保存游戏                         |
 | load_game(filename)                      | None                 | 载入游戏                         |
 | save_replay(filename, begin=0, end=None) | None                 | 保存[begin, end]回合的回放至文件 |
-|                                          |                      |                                  |
 
 ### Class AIBattle
 AI对战
-|                  构造函数                  | 描述 |
-|--------------------------------------------|------|
-| AIBattle(map, ai0_filename, ai1_filename, **kw) |      |
+|                                               构造函数                                              |            描述            |
+|-----------------------------------------------------------------------------------------------------|----------------------------|
+| AIBattle(map, ai0_filename, ai1_filename, record_interval=... limit_mode=..., time_limit=..., **kw) | kw将被用作构造GameBody参数 |
 
 
-
-| 方法            | 返回值 | 描述             |
+|       方法      | 返回值 |       描述       |
 |-----------------|--------|------------------|
+| get_commands()    | None   | 从AI获取指令     |
 | run_until_end() | None   | 运行直至比赛结束 |
+
+
+### Class HumanAIBattle
+人机对战
+
+
+## Module replayer
+回放器
+
+
+# 平台组内部
 
 
 ## Module ai_proxy
@@ -104,11 +109,5 @@ AI代理，处理游戏程序与AI间的通信
 | get_commands(Battle, time_limit) | ([Command], runtime) | 向选手传递信息，在时限内从选手AI获取指令，并记录耗时 |
 
 
-### Class HumanAIBattle
-人机对战
-
-
-## Module replayer
-回放器
 
 
