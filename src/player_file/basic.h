@@ -86,9 +86,9 @@ struct Property  // 属性
 
 struct State  // 状态
 {
-    int index;  // every element has a unique index
+    int index;  // 每个元素都有唯一的索引号
 
-    Position pos;  // Position of the upper-left corner
+    Position pos;  // 元素左上角的位置
     int type;
     int team;
     bool visible;
@@ -151,22 +151,22 @@ void Explode(int operand);
 void Fix(int operand, int target);
 void Produce(int operand, int kind);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
-void Cancel(int operand);
+void Cancel(int operand);  // 取消回合内此前对该单位下达的 Produce 外的所有指令
 
 
 // *********************** 辅助函数 ***********************
 
-// if kind is a basic type (is ElementType), 
-//    return a pointer pointing into kElementInfo
-// Else if kind can be parsed into Formation, generate the property of it.
-//     The returned value points to an internal object whose validity or value
-//     may be altered by any subsequent call to GetProperty.
-// Else, return NULL
+// 如果 kind 是基本类型，即取值为 [0, kElementTypes)
+//     返回指向 ElementType 内部的指针
+// 否则，如果 kind 可以被解析成机群，生成该机群的属性
+//     返回值指向一个内部对象，其有效性或值可能因随后对 GetProperty 的调用而改变
+// 否则，kind 取值无效，返回 NULL
+
 const Property * GetProperty(int type);
 
-// Parse formation from kind number
+// 从类型 kind 中解析机群组成
 bool KindToFormation(int kind, Formation *formation);
-// Make kind number from struct Formation
+// 由机群组成中计算 kind 值
 int FormationToKind(const Formation *Formation);
 
 #endif
