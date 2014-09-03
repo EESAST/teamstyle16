@@ -161,27 +161,16 @@ OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 8, 10]   # 其他机种视野
 FORMATION_TOTAL_PLANES = 30     # 一个机群最多30架飞机
 FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，伤害提升百分比
 
-# 各机种参数, 为保证仍然可采用 PLANES[HEALTH_MAX] 的方式获取数据, 
-# plane_property 格式与 property 格式保持一致
-""" plane_property = (sight_ranges, fire_ranges,
-                      health_max, fuel_max, ammo_max, ammo_once, metal_max,
-                      speed, population,
+# 各机种参数
+""" plane_property = (health_max, fuel_max, ammo_max, ammo_once, 
                       attacks, defences) """
-PLANES = [(None, None, 
-           5, 15, 2, 2, None, 
-           None, None, 
+PLANES = [(5, 15, 2, 2, 
            [1, 1], [0, INFINITY]),      # 单架侦察机
-          (None, None, 
-           8, 10, 4, 2, None, 
-           None, None, 
+          (8, 10, 4, 2, 
            [3, 0], [2, INFINITY]),      # 单架轰炸机
-          (None, None, 
-           6, 10, 4, 2, None, 
-           None, None, 
+          (6, 10, 4, 2, 
            [0, 2], [1, INFINITY]),      # 单架鱼雷机
-          (None, None, 
-           7, 10, 5, 1, None, 
-           None, None, 
+          (7, 10, 5, 1, 
            [2, 0], [1, INFINITY])]      # 单架战斗机
 
 
@@ -203,7 +192,7 @@ def modifiedAttack(distance, fire_range, attack):
 
 class Position(object):
     """三维坐标"""
-    def __init__(self, x, y, z=1):
+    def __init__(self, x, y, z = 1):
         super(Position, self).__init__()
         self.x = x
         self.y = y
@@ -286,7 +275,7 @@ class Mine(object):
     """矿场"""
     def __init__(self, kind, pos, metal):
         super(Mine, self).__init__()
-        self.kind = 'MINE'
+        self.kind = MINE
         self.pos = pos
         self.metal = metal
 
@@ -294,18 +283,19 @@ class Oilfield(object):
     """油田"""
     def __init__(self, kind, pos, fuel):
         super(Oilfield, self).__init__()
-        self.kind = 'OILFIELD'
+        self.kind = OILFIELD
         self.pos = pos
         self.fuel = fuel
         
         
 class UnitBase(object):
     """单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, health, fuel, ammo, 
+    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
+                 health, fuel, ammo, ammo_once, 
                  attacks, defences):
         super(UnitBase, self).__init__()
         self.team = team
-        self.kind = kind                    # 单位种类以字符串保存
+        self.kind = kind
         self.pos = pos                      # pos可以是一个点(Position类型), 
                                             # 也可以是矩形(Rectangle类型)
         self.sight_ranges = sight_ranges
@@ -313,6 +303,7 @@ class UnitBase(object):
         self.health = self.health_max = health
         self.fuel = self.fuel_max = fuel
         self.ammo = self.ammo_max = ammo
+        self.ammo_once = ammo_once
         self.attacks = attacks
         self.defences = defences
 
@@ -361,12 +352,12 @@ class UnitBase(object):
                 return
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
-    if giver.kind == 'BASE':
+    if giver.kind == BASE:
         fuel_supply_limit = ammo_supply_limit = 0
-    elif giver.kind == 'FORT':
+    elif giver.kind == FORT:
         fuel_supply_limit = 0
         ammo_supply_limit = SUPPLY_LIMIT
-    elif giver.kind == 'CARGO':
+    elif giver.kind == CARGO:
         fuel_supply_limit = SUPPLY_LIMIT
         ammo_supply_limit = 0
     else:
@@ -387,16 +378,16 @@ def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
 class Base(UnitBase):
     """基地, 继承自UnitBase"""
     def __init__(self, team, rectangle, metal):
-        super(Base, self).__init__(team, 'BASE', rectangle, 
-                                   *(BUILDINGS[BASE][:5] + BUILDINGS[BASE][-2:]))
+        super(Base, self).__init__(team, BASE, rectangle, 
+                                   *(PROPERTY[BASE][:AMMO_ONCE + 1] + PROPERTY[BASE][ATTACKS:]))
                                    # 从元组解析出数据后传入UnitBase.__init__()
-        self.metal = self.metal_max = BUILDINGS[BASE][5]
+        self.metal = self.metal_max = PROPERTY[BASE][METAL_MAX]
 
     def supply(self, our_unit):   # 补给操作
         """基地对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+        elif ((our_unit.kind == FORMATION and not our_unit.pos in self.pos.region(level = AIR, range = 0))
              or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1)):
             return -2   # 不在范围内
         else:
@@ -407,7 +398,7 @@ class Base(UnitBase):
         """维修, 对飞机的维修操作特殊"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif our_unit.kind == 'FORMATION':  
+        elif our_unit.kind == FORMATION:  
             if not our_unit.pos in self.pos.region(level = AIR, range = 0):  
                 return -2   # 不在范围内
             else:
@@ -434,14 +425,14 @@ class Base(UnitBase):
 class Fort(UnitBase):
     """据点, 继承自UnitBase"""
     def __init__(self, team, rectangle):
-        super(Fort, self).__init__(team, 'FORT', rectangle, 
-                                   *(BUILDINGS[FORT][:5] + BUILDINGS[FORT][-2:]))
+        super(Fort, self).__init__(team, FORT, rectangle, 
+                                   *(PROPERTY[FORT][:AMMO_ONCE + 1] + PROPERTY[FORT][ATTACKS:]))
 
     def supply(self, our_unit):
         """据点对周围单位补给燃料弹药"""  
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == 'FORMATION' and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+        elif ((our_unit.kind == FORMATION and not our_unit.pos in self.pos.region(level = AIR, range = 0))
               or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1)):
             return -2   # 不在范围内
         else:
@@ -452,55 +443,55 @@ class Fort(UnitBase):
 class Submarine(UnitBase):
     """潜艇"""
     def __init__(self, team, pos):
-        super(Submarine, self).__init__(team, 'SUBMARINE', pos, 
-                                        *(WATER_UNITS[SUBMARINE][:5] + WATER_UNITS[SUBMARINE][-2:]))
-        self.speed = WATER_UNITS[SUBMARINE][6]
+        super(Submarine, self).__init__(team, SUBMARINE, pos, 
+                                        *(PROPERTY[SUBMARINE][:AMMO_ONCE + 1] + PROPERTY[SUBMARINE][ATTACKS:]))
+        self.speed = PROPERTY[SUBMARINE][SPEED]
 
 
 class Destroyer(UnitBase):
     """驱逐舰"""
     def __init__(self, team, pos):
-        super(Destroyer, self).__init__(team, 'DESTROYER', pos, 
-                                        *(WATER_UNITS[DESTROYER][:5] + WATER_UNITS[DESTROYER][-2:]))
-        self.speed = WATER_UNITS[DESTROYER][6]
+        super(Destroyer, self).__init__(team, DESTROYER, pos, 
+                                        *(PROPERTY[DESTROYER][:AMMO_ONCE + 1] + PROPERTY[DESTROYER][ATTACKS:]))
+        self.speed = PROPERTY[DESTROYER][SPEED]
 
 
 class Cruiser(UnitBase):
     """巡洋舰"""
     def __init__(self, team, pos):
-        super(Cruiser, self).__init__(team, 'CRUISER', pos, 
-                                      *(WATER_UNITS[CRUISER][:5] + WATER_UNITS[CRUISER][-2:]))
-        self.speed = WATER_UNITS[CRUISER][6]
+        super(Cruiser, self).__init__(team, CRUISER, pos, 
+                                      *(PROPERTY[CRUISER][:AMMO_ONCE + 1] + PROPERTY[CRUISER][ATTACKS:]))
+        self.speed = PROPERTY[CRUISER][SPEED]
         
 
 class Battleship(UnitBase):
     """战舰"""
     def __init__(self, team, pos):
-        super(Battleship, self).__init__(team, 'BATTLESHIP', pos, 
-                                         *(WATER_UNITS[BATTLESHIP][:5] + WATER_UNITS[BATTLESHIP][-2:]))
-        self.speed = WATER_UNITS[BATTLESHIP][6]
+        super(Battleship, self).__init__(team, BATTLESHIP, pos, 
+                                         *(PROPERTY[BATTLESHIP][:AMMO_ONCE + 1] + PROPERTY[BATTLESHIP][ATTACKS:]))
+        self.speed = PROPERTY[BATTLESHIP][SPEED]
 
 
 class Carrier(UnitBase):
     """航母"""
     def __init__(self, team, pos, metal):
-        super(Carrier, self).__init__(team, 'CARRIER', pos, 
-                                      *(WATER_UNITS[CARRIER][:5] + WATER_UNITS[CARRIER][-2:]))
-        self.metal = self.metal_max = WATER_UNITS[CARRIER][5]
-        self.speed = WATER_UNITS[CARRIER][6]
+        super(Carrier, self).__init__(team, CARRIER, pos, 
+                                      *(PROPERTY[CARRIER][:AMMO_ONCE + 1] + PROPERTY[CARRIER][ATTACKS:]))
+        self.metal = self.metal_max = PROPERTY[CARRIER][METAL_MAX]
+        self.speed = PROPERTY[CARRIER][SPEED]
 
     def supply(self, our_unit):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == 'FORMATION' and not self.pos in our_unit.pos.region(level = AIR, range = 0))
+        elif ((our_unit.kind == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
               or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
              # our_unit可能是基地或据点, 即our_unit.pos可能是矩形, 因此改为判断self.pos 是否在our_unit.pos.region()内
              # 考虑是否可以将region()优化为distance(), 可以较好地兼容Position和Rectangle
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.kind == 'BASE' or our_unit.kind == 'CARGO' or our_unit.kind == 'CARRIER':
+            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
@@ -510,21 +501,21 @@ class Carrier(UnitBase):
 class Cargo(UnitBase):
     """运输舰"""
     def __init__(self, team, pos, metal):
-        super(Cargo, self).__init__(team, 'CARGO', pos, 
-                                    *(WATER_UNITS[CARGO][:5] + WATER_UNITS[CARGO][-2:]))
-        self.metal = self.metal_max = WATER_UNITS[CARGO][5]
-        self.speed = WATER_UNITS[CARGO][6]
+        super(Cargo, self).__init__(team, CARGO, pos, 
+                                    *(PROPERTY[CARGO][:AMMO_ONCE + 1] + PROPERTY[CARGO][ATTACKS:]))
+        self.metal = self.metal_max = PROPERTY[CARGO][METAL_MAX]
+        self.speed = PROPERTY[CARGO][SPEED]
 
     def supply(self, our_unit):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == 'FORMATION' and not self.pos in our_unit.pos.region(level = AIR, range = 0))
+        elif ((our_unit.kind == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
               or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.kind == 'BASE' or our_unit.kind == 'CARGO' or our_unit.kind == 'CARRIER':
+            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
@@ -532,11 +523,11 @@ class Cargo(UnitBase):
 
     def collect(self, resource):
         """运输舰从资源点采集资源"""
-        if resource.kind == 'MINE' and resource.metal > 0:
+        if resource.kind == MINE and resource.metal > 0:
             supply = min(self.metal_max - self.metal, resource.metal)
             self.metal += supply
             resource.metal -= supply
-        elif resource.kind == 'OILFIELD' and resource.fuel > 0:
+        elif resource.kind == OILFIELD and resource.fuel > 0:
             supply = min(self.fuel_max - self.fuel, resource.fuel)
             self.fuel += supply
             resource.fuel -= supply
@@ -550,7 +541,7 @@ def renum(formation):
     health_tank = formation.health
     max_nums = formation.plane_nums
     formation.plane_nums = [0, 0, 0, 0]
-    index = 0     # 战斗机
+    index = 0     # 侦察机
     while health_tank > 0 and index < 4:
         if formation.plane_nums[index] == max_nums[index]:
             index += 1
@@ -579,7 +570,7 @@ class Formation(UnitBase):
             attacks[1] += [PLANES[i][-2][j] * plane_nums[i] for j in xrange(2)][1]
             defences[0] += [PLANES[i][-1][j] * plane_nums[i] for j in xrange(2)][0]
             defences[1] += [PLANES[i][-1][j] * plane_nums[i] for j in xrange(2)][1]     # tested. result is good
-        super(Formation, self).__init__(team, 'FORMATION', pos, 
+        super(Formation, self).__init__(team, FORMATION, pos, 
                                         sight_ranges, FORMATION_FIRE_RANGES, 
                                         health, fuel, ammo, attacks, defences)
         self.plane_nums = plane_nums
