@@ -7,14 +7,14 @@
 # 模块名: lower_with_under
 # 函数或方法名: firstLowerCapWords()
 # 常量名: CAPS_WITH_UNDER
-# 其他变量,实例及函数形参: lower_with_under 
+# 其他变量, 实例及函数形参: lower_with_under 
 
 # 变量名开头加一个下划线(_)能对保护模块(protected)中的变量及函数提供一些支持(不会被 import * from 导入)
 # 在实例的变量和方法开头加两个下划线(__)能有效地帮助把该变量或方法变成类的私有内容(using name mangling)
 
 # 以下所有数据暂时并无理论依据...
 
-import random from random
+from random import random
 
 # 基础参数限制
 ROUND_MAX = 300     # 最大回合数
@@ -63,24 +63,21 @@ OCEAN = 0       # 海洋
 LAND = 1        # 陆地
 
 
+# ElementType (与basic.h保持一致)
 # 建筑
 BASE = 0        # 基地
 FORT = 1        # 据点
-
-
 # 资源点
-MINE = 0        # 矿场
-OILFIELD = 1    # 油田
-
-
-# 可移动单位(water_unit + formation)
-SUBMARINE = 0   # 潜艇
-DESTROYER = 1   # 驱逐舰
-CRUISER = 2     # 巡洋舰
-BATTLESHIP = 3  # 战舰
-CARRIER = 4     # 航母
-CARGO = 5       # 运输舰
-FORMATION = 6   # 飞机编队(机群)
+MINE = 2        # 矿场
+OILFIELD = 3    # 油田
+# 可移动单位(unit)
+SUBMARINE = 4   # 潜艇
+DESTROYER = 5   # 驱逐舰
+CRUISER = 6     # 巡洋舰
+BATTLESHIP = 7  # 战舰
+CARRIER = 8     # 航母
+CARGO = 9       # 运输舰
+FORMATION = 10  # 飞机编队(机群)
 
 
 # 飞机编队内飞机种类
@@ -90,75 +87,103 @@ BOMBER = 2      # 轰炸机
 FIGHTER = 3     # 战斗机
 
 
+# ElementProperty
+""" property = (sight_ranges, fire_ranges,
+                health_max, fuel_max, ammo_max, ammo_once, metal_max,
+                speed, population,
+                attacks, defences)
+    sight_ranges = [UNDERWATER, SURFACE, AIR]
+    fire_ranges = [UNDERWATER, SURFACE, AIR]
+    attacks = [FIRE, TORPEDO]
+    defences = [FIRE, TORPEDO] """
+# property枚举, 可简化属性的获取: 如基地的生命值上限为 PROPERTY[BASE][HEALTH_MAX]
+SIGHT_RANGES = 0
+FIRE_RANGES = 1
+HEALTH_MAX = 2
+FUEL_MAX = 3
+AMMO_MAX = 4
+AMMO_ONCE = 5
+METAL_MAX = 6
+SPEED = 7
+POPULATION = 8
+ATTACKS = 9
+DEFENCES = 10
 
-# 建筑属性
-""" building_property = (sight_ranges, fire_ranges, 
-                         health_max, fuel_max, ammo_max,ammo_once, metal_max, 
-                         attacks, defences)
-        其中 sight_ranges = [UNDERWATER, SURFACE, AIR]
-             fire_ranges = [UNDERWATER, SURFACE, AIR]
-             attacks = [FIRE, TORPEDO]
-             defences = [FIRE, TORPEDO] """
-BUILDINGS = [([4, 10, 8], [0, 7, 5], 
-              2000, 1000, INFINITY,6, 200, 
-              [40, 0], [30, INFINITY]),     # 基地
-             ([3, 8, 6], [0, 5, 4], 
-              800, 200, 300,4, 200, 
-              [25, 0], [12, INFINITY])]      # 据点
-
-
-# 可移动单位(除飞机)属性, 即水面及水下单位属性
-""" water_unit_property = (sight_ranges, fire_ranges,
-                           health_max, fuel_max, ammo_max,ammo_once, metal_max, 
-                           speed,food
-                           attacks, defences) """
-# 数据不可信...
-WATER_UNITS = [([6, 5, 3], [5, 5, 0],
-                35, 120, 20,2, 0,
-                6,2
-                [0, 40], [INFINITY, 5]),    # 潜艇
-               ([5, 10, 8], [4, 8, 6],
-                50, 150, 30,3, 0,
-                8,2
-                [13, 20], [10, 15]),          # 驱逐舰
-               ([5, 10, 8], [4, 8, 6],
-                70, 300, 30,3, 0,
-                7,3
-                [20, 10], [12, 13]),          # 巡洋舰
-               ([5, 10, 8], [4, 8, 6],
-                100, 200, 50,5, 0,
-                6,4
-                [30, 10], [20, 15]),          # 战舰
-               ([5, 10, 8], [4, 8, 6],
-                100, 400, 70,2, 80,
-                5,4
-                [15, 0], [16, 12]),          # 航母
-               ([5, 10, 8], [4, 8, 6],
-                60, 300, 50,0, 50,
-                7,1
-                [0, 0], [15, 10])]          # 运输舰
+PROPERTY = [([4, 10, 8], [0, 7, 5], 
+             2000, 1000, INFINITY, 6, 200, 
+             None, None, 
+             [40, 0], [30, INFINITY]),      # 基地
+            ([3, 8, 6], [0, 5, 4], 
+             800, 200, 300, 4, 200, 
+             None, None, 
+             [25, 0], [12, INFINITY]),      # 据点
+            (None, None,
+             INFINITY, None, None, None, 1000,
+             None, None, 
+             None, [INFINITY, INFINITY]),   # 矿场
+            (None, None,
+             INFINITY, 1000, None, None, None,
+             None, None,
+             None, [INFINITY, INFINITY]),   # 油田
+            ([6, 5, 3], [5, 5, 0], 
+             35, 120, 20, 2, None, 
+             6, 2,
+             [0, 40], [INFINITY, 5]),       # 潜艇
+            ([5, 10, 8], [4, 8, 6], 
+             50, 150, 30, 3, None, 
+             8, 2,
+             [13, 20], [10, 15]),           # 驱逐舰
+            ([5, 10, 8], [4, 8, 6], 
+             70, 300, 30, 3, None, 
+             7, 3,
+             [20, 10], [12, 13]),           # 巡洋舰
+            ([5, 10, 8], [4, 8, 6], 
+             100, 200, 50, 5, None, 
+             6, 4,
+             [30, 10], [20, 15]),           # 战舰
+            ([5, 10, 8], [4, 8, 6], 
+             100, 400, 70, 2, 80, 
+             5, 4,
+             [15, 0], [16, 12]),            # 航母
+            ([5, 10, 8], [4, 8, 6], 
+             60, 300, 50, 0, 50, 
+             7, 1,
+             None, [15, 10]),               # 运输舰
+            (None, [0, 0, 1],
+             None, None, None, None, None,
+             12, 1,
+             None, None)                    # 机群, 值为None的属性由机群具体构成动态决定
 
 
 # 飞机常量属性
 SCOUT_SIGHT_RANGES = [2, 12, 16]    # 侦察机视野
 OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 8, 10]   # 其他机种视野
-FORMATION_FIRE_RANGES = [0, 0, 1]
-FORMATION_SPEED = 12
-FORMATION_FOOD = 1
 FORMATION_TOTAL_PLANES = 30     # 一个机群最多30架飞机
-FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，属性提升百分比
+FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，伤害提升百分比
 
-# 各机种参数
-""" plane_property = (health_max, fuel_max, ammo_max,ammo_once
+# 各机种参数, 为保证仍然可采用 PLANES[HEALTH_MAX] 的方式获取数据, 
+# plane_property 格式与 property 格式保持一致
+""" plane_property = (sight_ranges, fire_ranges,
+                      health_max, fuel_max, ammo_max, ammo_once, metal_max,
+                      speed, population,
                       attacks, defences) """
-PLANES = [(7, 10, 5, 1
-           [2, 0], [1, INFINITY]),    # 单架战斗机
-          (6, 10, 4,2
-           [0, 2], [1, INFINITY]),    # 单架鱼雷机
-          (8, 10, 4,2
-           [3, 0], [2, INFINITY]),    # 单架轰炸机
-          (5, 15, 2,2
-           [1, 1], [0, INFINITY])]    # 单架侦察机
+PLANES = [(None, None, 
+           5, 15, 2, 2, None, 
+           None, None, 
+           [1, 1], [0, INFINITY]),      # 单架侦察机
+          (None, None, 
+           8, 10, 4, 2, None, 
+           None, None, 
+           [3, 0], [2, INFINITY]),      # 单架轰炸机
+          (None, None, 
+           6, 10, 4, 2, None, 
+           None, None, 
+           [0, 2], [1, INFINITY]),      # 单架鱼雷机
+          (None, None, 
+           7, 10, 5, 1, None, 
+           None, None, 
+           [2, 0], [1, INFINITY])]      # 单架战斗机
+
 
 # 命中率
 def isHit(distance, fire_range):
@@ -427,7 +452,7 @@ class Fort(UnitBase):
 class Submarine(UnitBase):
     """潜艇"""
     def __init__(self, team, pos):
-        super(Submarine, self).__init__(team, 'SUBMARINE', pos,
+        super(Submarine, self).__init__(team, 'SUBMARINE', pos, 
                                         *(WATER_UNITS[SUBMARINE][:5] + WATER_UNITS[SUBMARINE][-2:]))
         self.speed = WATER_UNITS[SUBMARINE][6]
 
@@ -435,7 +460,7 @@ class Submarine(UnitBase):
 class Destroyer(UnitBase):
     """驱逐舰"""
     def __init__(self, team, pos):
-        super(Destroyer, self).__init__(team, 'DESTROYER', pos,
+        super(Destroyer, self).__init__(team, 'DESTROYER', pos, 
                                         *(WATER_UNITS[DESTROYER][:5] + WATER_UNITS[DESTROYER][-2:]))
         self.speed = WATER_UNITS[DESTROYER][6]
 
@@ -443,7 +468,7 @@ class Destroyer(UnitBase):
 class Cruiser(UnitBase):
     """巡洋舰"""
     def __init__(self, team, pos):
-        super(Cruiser, self).__init__(team, 'CRUISER', pos,
+        super(Cruiser, self).__init__(team, 'CRUISER', pos, 
                                       *(WATER_UNITS[CRUISER][:5] + WATER_UNITS[CRUISER][-2:]))
         self.speed = WATER_UNITS[CRUISER][6]
         
@@ -451,7 +476,7 @@ class Cruiser(UnitBase):
 class Battleship(UnitBase):
     """战舰"""
     def __init__(self, team, pos):
-        super(Battleship, self).__init__(team, 'BATTLESHIP', pos,
+        super(Battleship, self).__init__(team, 'BATTLESHIP', pos, 
                                          *(WATER_UNITS[BATTLESHIP][:5] + WATER_UNITS[BATTLESHIP][-2:]))
         self.speed = WATER_UNITS[BATTLESHIP][6]
 
@@ -459,13 +484,13 @@ class Battleship(UnitBase):
 class Carrier(UnitBase):
     """航母"""
     def __init__(self, team, pos, metal):
-        super(Carrier, self).__init__(team, 'CARRIER', pos,
+        super(Carrier, self).__init__(team, 'CARRIER', pos, 
                                       *(WATER_UNITS[CARRIER][:5] + WATER_UNITS[CARRIER][-2:]))
         self.metal = self.metal_max = WATER_UNITS[CARRIER][5]
         self.speed = WATER_UNITS[CARRIER][6]
 
     def supply(self, our_unit):
-        """航母对周围单位补给燃料弹药, 可向基地,运输舰以及航母补充金属"""
+        """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
         elif ((our_unit.kind == 'FORMATION' and not self.pos in our_unit.pos.region(level = AIR, range = 0))
@@ -485,13 +510,13 @@ class Carrier(UnitBase):
 class Cargo(UnitBase):
     """运输舰"""
     def __init__(self, team, pos, metal):
-        super(Cargo, self).__init__(team, 'CARGO', pos,
+        super(Cargo, self).__init__(team, 'CARGO', pos, 
                                     *(WATER_UNITS[CARGO][:5] + WATER_UNITS[CARGO][-2:]))
         self.metal = self.metal_max = WATER_UNITS[CARGO][5]
         self.speed = WATER_UNITS[CARGO][6]
 
     def supply(self, our_unit):
-        """运输舰对周围单位补给燃料弹药, 可向基地,运输舰以及航母补充金属"""
+        """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
         elif ((our_unit.kind == 'FORMATION' and not self.pos in our_unit.pos.region(level = AIR, range = 0))
@@ -554,7 +579,7 @@ class Formation(UnitBase):
             attacks[1] += [PLANES[i][-2][j] * plane_nums[i] for j in xrange(2)][1]
             defences[0] += [PLANES[i][-1][j] * plane_nums[i] for j in xrange(2)][0]
             defences[1] += [PLANES[i][-1][j] * plane_nums[i] for j in xrange(2)][1]     # tested. result is good
-        super(Formation, self).__init__(team, 'FORMATION', pos,
+        super(Formation, self).__init__(team, 'FORMATION', pos, 
                                         sight_ranges, FORMATION_FIRE_RANGES, 
                                         health, fuel, ammo, attacks, defences)
         self.plane_nums = plane_nums
