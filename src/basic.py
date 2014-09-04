@@ -271,33 +271,37 @@ class Rectangle(object):
             return region_points
 
 
-class Mine(object):
+class Element(object):
+    """所有地图元素, 派生出资源类和作战单位(UnitBase)类"""
+    def __init__(self, type, pos):
+        super(Element, self).__init__()
+        self.type = type
+        self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
+
+class Resource(Element):
+    """资源类, 派生出矿场类和油田类"""
+    pass        
+
+class Mine(Resource):
     """矿场"""
-    def __init__(self, kind, pos, metal):
-        super(Mine, self).__init__()
-        self.kind = MINE
-        self.pos = pos
+    def __init__(self, type, pos, metal):
+        super(Mine, self).__init__(MINE, pos)
         self.metal = metal
 
-class Oilfield(object):
+class Oilfield(Resource):
     """油田"""
-    def __init__(self, kind, pos, fuel):
-        super(Oilfield, self).__init__()
-        self.kind = OILFIELD
-        self.pos = pos
+    def __init__(self, type, pos, fuel):
+        super(Oilfield, self).__init__(OILFIELD, pos)
         self.fuel = fuel
         
         
-class UnitBase(object):
-    """单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
+class UnitBase(Element):
+    """作战单位抽象, 派生出建筑类以及可移动单位类"""
+    def __init__(self, team, type, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, 
                  attacks, defences):
-        super(UnitBase, self).__init__()
+        super(UnitBase, self).__init__(type, pos)
         self.team = team
-        self.kind = kind
-        self.pos = pos                      # pos可以是一个点(Position类型), 
-                                            # 也可以是矩形(Rectangle类型)
         self.sight_ranges = sight_ranges
         self.fire_ranges = fire_ranges
         self.health = self.health_max = health
@@ -352,12 +356,12 @@ class UnitBase(object):
                 return
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
-    if giver.kind == BASE:
+    if giver.type == BASE:
         fuel_supply_limit = ammo_supply_limit = 0
-    elif giver.kind == FORT:
+    elif giver.type == FORT:
         fuel_supply_limit = 0
         ammo_supply_limit = SUPPLY_LIMIT
-    elif giver.kind == CARGO:
+    elif giver.type == CARGO:
         fuel_supply_limit = SUPPLY_LIMIT
         ammo_supply_limit = 0
     else:
@@ -373,32 +377,32 @@ def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
     receiver.ammo += provides[1]
 
 
-
-
-class Base(UnitBase):
-    """基地, 继承自UnitBase"""
-    def __init__(self, team, rectangle, metal):
-        super(Base, self).__init__(team, BASE, rectangle, 
-                                   *(PROPERTY[BASE][:AMMO_ONCE + 1] + PROPERTY[BASE][ATTACKS:]))
-                                   # 从元组解析出数据后传入UnitBase.__init__()
-        self.metal = self.metal_max = PROPERTY[BASE][METAL_MAX]
-
+class Building(UnitBase):
+    """建筑类"""
     def supply(self, our_unit):   # 补给操作
-        """基地对周围单位补给, 不对外提供金属"""
+        """建筑对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == FORMATION and not our_unit.pos in self.pos.region(level = AIR, range = 0))
+        elif ((our_unit.type == FORMATION and not our_unit.pos in self.pos.region(level = AIR, range = 0))
              or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1)):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
             return 0
 
-    def repair(self, our_unit, plane_nums = [3, 3, 3, 1]):  # 提供默认编队配置
+class Base(Building):
+    """基地, 继承自Building"""
+    def __init__(self, team, rectangle, metal):
+        super(Base, self).__init__(team, BASE, rectangle, 
+                                   *(PROPERTY[BASE][:AMMO_ONCE + 1] + PROPERTY[BASE][ATTACKS:]))
+                                   # 从元组解析出数据后传入 Building.__init__()
+        self.metal = self.metal_max = PROPERTY[BASE][METAL_MAX]
+
+    def repair(self, our_unit, plane_nums = [9, 9, 9, 3]):  # 提供默认编队配置
         """维修, 对飞机的维修操作特殊"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif our_unit.kind == FORMATION:  
+        elif our_unit.type == FORMATION:  
             if not our_unit.pos in self.pos.region(level = AIR, range = 0):  
                 return -2   # 不在范围内
             else:
@@ -417,38 +421,33 @@ class Base(UnitBase):
                 replenishFuelAmmo(self, our_unit)
                 return 0
 
-    def build(self, kind, plane_nums = [3, 3, 3, 1]):
+    def build(self, type, plane_nums = [3, 3, 3, 1]):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
         pass    ##
 
 
-class Fort(UnitBase):
-    """据点, 继承自UnitBase"""
+class Fort(Building):
+    """据点, 继承自Building"""
     def __init__(self, team, rectangle):
         super(Fort, self).__init__(team, FORT, rectangle, 
                                    *(PROPERTY[FORT][:AMMO_ONCE + 1] + PROPERTY[FORT][ATTACKS:]))
 
-    def supply(self, our_unit):
-        """据点对周围单位补给燃料弹药"""  
-        if not self.team == our_unit.team:
-            return -1   # 非友军
-        elif ((our_unit.kind == FORMATION and not our_unit.pos in self.pos.region(level = AIR, range = 0))
-              or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1)):
-            return -2   # 不在范围内
-        else:
-            replenishFuelAmmo(self, our_unit)
-            return 0
+class Unit(UnitBase):
+    """可移动单位"""
+    pass
 
 
-class Submarine(UnitBase):
+class Submarine(Unit):
     """潜艇"""
     def __init__(self, team, pos):
         super(Submarine, self).__init__(team, SUBMARINE, pos, 
                                         *(PROPERTY[SUBMARINE][:AMMO_ONCE + 1] + PROPERTY[SUBMARINE][ATTACKS:]))
         self.speed = PROPERTY[SUBMARINE][SPEED]
 
+class Ship(Unit):
+    """水面舰"""        
 
-class Destroyer(UnitBase):
+class Destroyer(Ship):
     """驱逐舰"""
     def __init__(self, team, pos):
         super(Destroyer, self).__init__(team, DESTROYER, pos, 
@@ -456,7 +455,7 @@ class Destroyer(UnitBase):
         self.speed = PROPERTY[DESTROYER][SPEED]
 
 
-class Cruiser(UnitBase):
+class Cruiser(Ship):
     """巡洋舰"""
     def __init__(self, team, pos):
         super(Cruiser, self).__init__(team, CRUISER, pos, 
@@ -464,7 +463,7 @@ class Cruiser(UnitBase):
         self.speed = PROPERTY[CRUISER][SPEED]
         
 
-class Battleship(UnitBase):
+class Battleship(Ship):
     """战舰"""
     def __init__(self, team, pos):
         super(Battleship, self).__init__(team, BATTLESHIP, pos, 
@@ -472,7 +471,7 @@ class Battleship(UnitBase):
         self.speed = PROPERTY[BATTLESHIP][SPEED]
 
 
-class Carrier(UnitBase):
+class Carrier(Ship):
     """航母"""
     def __init__(self, team, pos, metal):
         super(Carrier, self).__init__(team, CARRIER, pos, 
@@ -484,21 +483,21 @@ class Carrier(UnitBase):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
+        elif ((our_unit.type == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
               or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
              # our_unit可能是基地或据点, 即our_unit.pos可能是矩形, 因此改为判断self.pos 是否在our_unit.pos.region()内
              # 考虑是否可以将region()优化为distance(), 可以较好地兼容Position和Rectangle
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
+            if our_unit.type == BASE or our_unit.type == CARGO or our_unit.type == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
             return 0 
 
 
-class Cargo(UnitBase):
+class Cargo(Ship):
     """运输舰"""
     def __init__(self, team, pos, metal):
         super(Cargo, self).__init__(team, CARGO, pos, 
@@ -510,12 +509,12 @@ class Cargo(UnitBase):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
+        elif ((our_unit.type == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
               or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
+            if our_unit.type == BASE or our_unit.type == CARGO or our_unit.type == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
@@ -523,11 +522,11 @@ class Cargo(UnitBase):
 
     def collect(self, resource):
         """运输舰从资源点采集资源"""
-        if resource.kind == MINE and resource.metal > 0:
+        if resource.type == MINE and resource.metal > 0:
             supply = min(self.metal_max - self.metal, resource.metal)
             self.metal += supply
             resource.metal -= supply
-        elif resource.kind == OILFIELD and resource.fuel > 0:
+        elif resource.type == OILFIELD and resource.fuel > 0:
             supply = min(self.fuel_max - self.fuel, resource.fuel)
             self.fuel += supply
             resource.fuel -= supply
@@ -555,7 +554,7 @@ def renum(formation):
     return 
 
 
-class Formation(UnitBase):
+class Formation(Unit):
     """飞机编队"""
     def __init__(self, team, pos, plane_nums = [3, 3, 3, 1]):
         if sum(plane_nums) > FORMATION_TOTAL_PLANES:
