@@ -311,22 +311,9 @@ class UnitBase(Element):
         self.attacks = attacks
         self.defences = defences
 
-    def availableRegion(self, option = 'sight'):
-        """返回三维视野区域或可攻击区域(option == 'fire')"""
-        if option == 'sight':
-            ranges = self.sight_ranges
-        elif option == 'fire':
-            ranges = self.fire_ranges
-        else:
-            return -1   # unknown option
-        available_region = []
-        for z in xrange(3):
-            available_region += pos.region(z, ranges[z])
-        return available_region
-
     def view(self, target_pos):
         """查看目标点的状态"""
-        if target_pos not in self.availableRegion('sight'):
+        if self.pos.distance(target_pos) > self.sight_ranges[target_pos.level]:
             return -1   # 不在视野范围内, 不可见
         else:
             pass
@@ -346,9 +333,10 @@ class UnitBase(Element):
                 damage = 0  # miss
                 return
             else:
-                damage = self.attacks[attack_type]* scount
-                         - target_unit.defences[attack_type]*
-                score[self.team] += damage
+                damage = (modifiedAttack(distance, range, self.attacks[attack_type]) 
+                          - target_unit.defences[attack_type])
+                # scout influence required.
+                score[self.team] += damage * DAMAGE_SCORE
                 if damage >= target_unit.health:
                     target_unit.health = 0  # killed
                 else:
@@ -383,8 +371,8 @@ class Building(UnitBase):
         """建筑对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and not our_unit.pos in self.pos.region(level = AIR, range = 0))
-             or not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1)):
+        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+              or self.pos.distance(our_unit) > 1)
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
@@ -403,7 +391,7 @@ class Base(Building):
         if not self.team == our_unit.team:
             return -1   # 非友军
         elif our_unit.type == FORMATION:  
-            if not our_unit.pos in self.pos.region(level = AIR, range = 0):  
+            if self.pos.distance(our_unit) > 0:
                 return -2   # 不在范围内
             else:
                 ## 维修飞机至plane_nums配置, 如果金属不足, 则按侦察机->鱼雷机->轰炸机->战斗机的顺序依次维修
@@ -412,7 +400,7 @@ class Base(Building):
                 replenishFuelAmmo(self, our_unit)
                 return 0
         else:
-            if not our_unit.pos in self.pos.region(level = our_unit.pos.z, range = 1):
+            if self.pos.distance(our_unit) > 1:
                 return -2   # 不在范围内
             else:
                 provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
@@ -446,6 +434,7 @@ class Submarine(Unit):
 
 class Ship(Unit):
     """水面舰"""        
+    pass
 
 class Destroyer(Ship):
     """驱逐舰"""
@@ -483,10 +472,8 @@ class Carrier(Ship):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
-              or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
-             # our_unit可能是基地或据点, 即our_unit.pos可能是矩形, 因此改为判断self.pos 是否在our_unit.pos.region()内
-             # 考虑是否可以将region()优化为distance(), 可以较好地兼容Position和Rectangle
+        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+              or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
@@ -509,8 +496,8 @@ class Cargo(Ship):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and not self.pos in our_unit.pos.region(level = AIR, range = 0))
-              or not self.pos in our_unit.pos.region(level = self.pos.z, range = 1)):
+        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+              or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
