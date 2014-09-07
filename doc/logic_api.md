@@ -7,6 +7,7 @@
 
     object
         Position
+        Rectangle
         Element
             Resource
                 Mine
