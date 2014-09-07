@@ -276,6 +276,12 @@ class Rectangle(object):
 
 elements = []   # 地图上所有元素的列表
 
+def getElement(pos):
+    for element in elements:
+        if element.pos == pos:
+            return element
+    return None
+
 class Element(object):
     """所有地图元素, 派生出资源类和作战单位(UnitBase)类"""
     def __init__(self, type, pos):
@@ -328,17 +334,19 @@ class UnitBase(Element):
         if self.pos.distance(target_pos) > self.sight_ranges[target_pos.level]:
             return -1   # 不在视野范围内, 不可见
         else:
-            pass
-            ## 返回单位信息...
+            return getElement(target_pos)
 
-    def attack(self, target_unit):
-        """攻击(火力与鱼雷伤害叠加计算)某单位"""
-        distance = self.pos.distance(target_unit.pos)
-        range = self.fire_ranges[target_unit.pos.level]
+    def attack(self, target_pos):
+        """攻击(火力与鱼雷伤害叠加计算)某坐标(可能出现射程大于视野的情况)"""
+        distance = self.pos.distance(target_pos)
+        range = self.fire_ranges[target_pos.z]
+        target_unit = getElement(target_pos)
         if distance > range:
             return -1   # 不在攻击范围内
         elif self.ammo <= 0:
             return -2   # 无弹药
+        elif target_unit == None or target_unit.team == self.team:
+            self.ammo -= self.ammo_once     # 坐标不存在敌军单位, miss
         else:
             self.ammo -= self.ammo_once  # 减少弹药数目
             if not isHit(distance, range):
