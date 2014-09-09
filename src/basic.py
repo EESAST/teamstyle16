@@ -253,9 +253,10 @@ class Rectangle(object):
     def distance(self, target):
         """返回该矩形区域到target(点或矩形)的最小距离"""
         if isinstance(target, Position):
-            return min([point.distance(target) for point in self.bound()])
+            return (min([point.distance(target) for point in self.bound()])
+                    if not target in self.region(target.level) else 0)
         elif isinstance(target, Rectangle):
-            return min([self.distance(point) for point in target.bound()])
+            return min([self.distance(point) for point in target.bound()]) 
         else:
             return -1
 
@@ -274,10 +275,10 @@ class Rectangle(object):
                         region_points.append(pos)
             return region_points
 
-elements = []   # 地图上所有元素的列表
+ELEMENTS = []   # 地图上所有元素的列表
 
 def getElement(pos):
-    for element in elements:
+    for element in ELEMENTS:
         if element.pos == pos:
             return element
     return None
@@ -289,8 +290,8 @@ class Element(object):
         self.type = type
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
         self.size = (1, 1) if isinstance(pos, Position) else pos.size
-        elements.append(self)
-        self.index = elements.index(self)
+        ELEMENTS.append(self)
+        self.index = ELEMENTS.index(self)
         self.visible = False    # 每回合更新所有element的visible值
 
 class Resource(Element):
@@ -369,9 +370,9 @@ class UnitBase(Element):
 
     def destroy(self):
         """单位阵亡, 并更新其他所有元素的index"""
-        elements.remove(self)
-        for element in elements:
-            element.index = elements.index(element)
+        ELEMENTS.remove(self)
+        for element in ELEMENTS:
+            element.index = ELEMENTS.index(element)
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
