@@ -4,16 +4,17 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
-from ui_gameinfo1 import *
+from ui_mapmaker import *
 
 
-class InfoWidget1(QWidget, Ui_GameInfo1):
+class MapMaker(QWidget, Ui_Mapmaker):
 	def __init__(self, parent = None):
-		super(InfoWidget1, self).__init__(parent)
+		super(MapMaker, self).__init__(parent)
 		self.setupUi(self)
+
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
-	form = InfoWidget1()
+	form = MapMaker()
 	form.show()
 	app.exec_()
