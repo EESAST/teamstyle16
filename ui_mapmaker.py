@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Mapmaker.ui'
 #
-# Created: Tue Sep 16 20:14:43 2014
+# Created: Tue Sep 23 21:01:02 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_Mapmaker(object):
     def setupUi(self, Mapmaker):
         Mapmaker.setObjectName(_fromUtf8("Mapmaker"))
-        Mapmaker.resize(1344, 689)
+        Mapmaker.resize(1344, 889)
         self.UnitTabWidget = QtGui.QTabWidget(Mapmaker)
         self.UnitTabWidget.setGeometry(QtCore.QRect(1140, 30, 201, 481))
         self.UnitTabWidget.setObjectName(_fromUtf8("UnitTabWidget"))
@@ -172,7 +172,7 @@ class Ui_Mapmaker(object):
         self.RandomButton.setGeometry(QtCore.QRect(570, 10, 75, 23))
         self.RandomButton.setObjectName(_fromUtf8("RandomButton"))
         self.formLayoutWidget = QtGui.QWidget(Mapmaker)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 40, 1121, 641))
+        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 40, 1121, 830))
         self.formLayoutWidget.setObjectName(_fromUtf8("formLayoutWidget"))
         self.CenterLayout = QtGui.QFormLayout(self.formLayoutWidget)
         self.CenterLayout.setMargin(0)

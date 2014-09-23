@@ -19,6 +19,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.infoWidget = InfoWidget2(self)
 		self.dockWidget_2.setWidget(self.infoWidget)
 		self.dockWidget_2.setFeatures(QDockWidget.NoDockWidgetFeatures)
+		self.setupUi(self)
+		palette = QPalette()
+		palette.setBrush(QPalette.Window, QBrush(Qt.NoBrush))
+		self.setPalette(palette)
 
 
 if __name__ == "__main__":
