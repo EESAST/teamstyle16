@@ -343,16 +343,17 @@ class UnitBase(Element):
         range = self.fire_ranges[target_pos.z]
         target_unit = getElement(target_pos)
         if distance > range:
-            return -1   # 不在攻击范围内
+            return -1,0   # 不在攻击范围内
         elif self.ammo <= 0:
-            return -2   # 无弹药
+            return -2, 0   # 无弹药
         elif target_unit == None or target_unit.team == self.team:
-            self.ammo -= self.ammo_once     # 坐标不存在敌军单位, miss
+            self.ammo -= self.ammo_once
+            return -3, 0   # 坐标不存在敌军单位, miss
         else:
             self.ammo -= self.ammo_once  # 减少弹药数目
             if not isHit(distance, range):
                 damage = 0  # miss
-                return
+                return -4, 0
             else:
                 modified_attacks = modifiedAttacks(distance, range, self.attacks)
                 fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE]) 
@@ -366,13 +367,11 @@ class UnitBase(Element):
                     target_unit.destroy()
                 else:
                     target_unit.health -= damage
-                return
+                return True, damage
 
     def destroy(self):
-        """单位阵亡, 并更新其他所有元素的index"""
+        """单位阵亡"""
         ELEMENTS.remove(self)
-        for element in ELEMENTS:
-            element.index = ELEMENTS.index(element)
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
@@ -412,9 +411,13 @@ class Building(UnitBase):
 
 class Base(Building):
     """基地, 继承自Building"""
-    def __init__(self, team, rectangle, metal):
-        super(Base, self).__init__(team, BASE, rectangle, *(PROPERTY[BASE]))
+    def __init__(self, team, rectangle, metal, unitbase = None):
+        if unitbase == None:
+            super(Base, self).__init__(team, BASE, rectangle, *(PROPERTY[BASE]))
                                    # 从元组解析出数据后传入 Building.__init__()
+        else :
+            self.__dict__ = unitbase.__dict__.copy
+            self.type = BASE
 
     def repair(self, our_unit, plane_nums = DEFAULT_PLANE_NUMS):  # 提供默认编队配置
         """维修, 对飞机的维修操作特殊"""
@@ -446,51 +449,83 @@ class Base(Building):
 
 class Fort(Building):
     """据点, 继承自Building"""
-    def __init__(self, team, rectangle):
-        super(Fort, self).__init__(team, FORT, rectangle, *(PROPERTY[FORT]))
+    def __init__(self, team, rectangle, unitbase = None):
+        if unitbase == None:
+            super(Fort, self).__init__(team, FORT, rectangle, *(PROPERTY[FORT]))
+        else :
+            self.__dict__ = unitbase.__dict__.copy
+            self.type = FORT
 
 class Unit(UnitBase):
     """可移动单位"""
     def __init__(self, team, type, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
                  speed, population, 
-                 attacks, defences):
-        super(Unit, self).__init__(team, type, pos, sight_ranges, fire_ranges, 
-                                   health, fuel, ammo, ammo_once, metal, 
-                                   attacks, defences)
-        self.speed = speed
-        self.dest = self.pos    # 目的地(初始为自身位置)
-        self.cost = int(self.health_max * METAL_PER_HEALTH)
-        self.population = population
+                 attacks, defences, unitbase = None):
+        if unitbase == None:
+            super(Unit, self).__init__(team, type, pos, sight_ranges, fire_ranges, 
+                                       health, fuel, ammo, ammo_once, metal, 
+                                       attacks, defences)
+            self.speed = speed
+            self.dest = self.pos    # 目的地(初始为自身位置)
+            self.cost = int(self.health_max * METAL_PER_HEALTH)
+            self.population = population
+        else:
+            self.__dict__ = unitbase.__dict__.copy()
+            self.speed = speed
+            self.dest = self.pos    # 目的地(初始为自身位置)
+            self.cost = int(self.health_max * METAL_PER_HEALTH)
+            self.population = population
 
 class Submarine(Unit):
     """潜艇"""
-    def __init__(self, team, pos):
-        super(Submarine, self).__init__(team, SUBMARINE, pos, *(PROPERTY[SUBMARINE]))
+    def __init__(self, team, pos, unit = None):
+        if unit = None:
+            super(Submarine, self).__init__(team, SUBMARINE, pos, *(PROPERTY[SUBMARINE]))
+        else:
+            self.__dict__ = unit.__dict__.copy()
+            self.type = Submarine
 
 class Ship(Unit):
     """水面舰"""        
-    pass
+    def __init__(self, unit):
+        self.__dict__ = unit.__dict__.copy()
 
 class Destroyer(Ship):
     """驱逐舰"""
-    def __init__(self, team, pos):
-        super(Destroyer, self).__init__(team, DESTROYER, pos, *(PROPERTY[DESTROYER]))
+    def __init__(self, team, pos, ship = None):
+        if ship == None:
+            super(Destroyer, self).__init__(team, DESTROYER, pos, *(PROPERTY[DESTROYER]))
+        else:
+            self.__dict__ = ship.__dict__.copy()
+            self.type = Destroyer
 
 class Cruiser(Ship):
     """巡洋舰"""
-    def __init__(self, team, pos):
-        super(Cruiser, self).__init__(team, CRUISER, pos, *(PROPERTY[CRUISER]))
+    def __init__(self, team, pos, ship = None):
+        if ship == None:
+            super(Cruiser, self).__init__(team, CRUISER, pos, *(PROPERTY[CRUISER]))
+        else:
+            self.__dict__ = ship.__dict__.copy()
+            self.type = Cruiser
 
 class Battleship(Ship):
     """战舰"""
-    def __init__(self, team, pos):
-        super(Battleship, self).__init__(team, BATTLESHIP, pos, *(PROPERTY[BATTLESHIP]))
+    def __init__(self, team, pos, ship = None):
+        if ship == None:
+            super(Battleship, self).__init__(team, BATTLESHIP, pos, *(PROPERTY[BATTLESHIP]))
+        else:
+            self.__dict__ = ship.__dict__.copy()
+            self.type = Battleship
 
 class Carrier(Ship):
     """航母"""
-    def __init__(self, team, pos):
-        super(Carrier, self).__init__(team, CARRIER, pos, *(PROPERTY[CARRIER]))
+    def __init__(self, team, pos, ship = None):
+        if ship == None:
+            super(Carrier, self).__init__(team, CARRIER, pos, *(PROPERTY[CARRIER]))
+        else:
+            self.__dict__ = ship.__dict__.copy()
+            self.type = Carrier
 
     def supply(self, our_unit):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
@@ -510,8 +545,12 @@ class Carrier(Ship):
 
 class Cargo(Ship):
     """运输舰"""
-    def __init__(self, team, pos):
-        super(Cargo, self).__init__(team, CARGO, pos, *(PROPERTY[CARGO]))
+    def __init__(self, team, pos, ship = None):
+        if ship == None:
+            super(Cargo, self).__init__(team, CARGO, pos, *(PROPERTY[CARGO]))
+        else:
+            self.__dict__ = ship.__dict__.copy()
+            self.type = Cargo
 
     def supply(self, our_unit):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
@@ -563,12 +602,18 @@ def renum(formation):
 
 class Formation(Unit):
     """飞机编队"""
-    def __init__(self, team, pos, plane_nums = DEFAULT_PLANE_NUMS):
-        if sum(plane_nums) > FORMATION_TOTAL_PLANES:
-            return -1   # 飞机数超出编队容量
-        super(Formation, self).__init__(team, FORMATION, pos, *(PROPERTY[FORMATION]))
-        self.plane_nums = plane_nums
-        self.update()
+    def __init__(self, team, pos, plane_nums = DEFAULT_PLANE_NUMS, unit = None):
+        if unit == None:
+            if sum(plane_nums) > FORMATION_TOTAL_PLANES:
+                return -1   # 飞机数超出编队容量
+            super(Formation, self).__init__(team, FORMATION, pos, *(PROPERTY[FORMATION]))
+            self.plane_nums = plane_nums
+            self.update()
+        else :
+            self.__dict__ = ship.__dict__.copy()
+            self.type = Formation
+            self.plane_nums = plane_nums
+            self.update()
 
     def update(self):
         """飞机的参数随plane_nums动态变化, update函数用于更新机群参数"""

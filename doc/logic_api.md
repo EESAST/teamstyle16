@@ -197,7 +197,7 @@ TODO：游戏常量
             AddProductionEntry
             Attack
             Crash
-            Suppl
+            Supply
             Fix
             Collect
             ChangeDest
