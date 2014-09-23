@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'AIReplayer.ui'
 #
-# Created: Tue Sep 23 21:00:05 2014
+# Created: Tue Sep 23 21:16:06 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,9 +26,9 @@ except AttributeError:
 class Ui_AIReplayer(object):
     def setupUi(self, AIReplayer):
         AIReplayer.setObjectName(_fromUtf8("AIReplayer"))
-        AIReplayer.resize(1347, 889)
+        AIReplayer.resize(1347, 768)
         self.formLayoutWidget = QtGui.QWidget(AIReplayer)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(280, 10, 811, 820))
+        self.formLayoutWidget.setGeometry(QtCore.QRect(280, 10, 811, 700))
         self.formLayoutWidget.setObjectName(_fromUtf8("formLayoutWidget"))
         self.CenterLayout = QtGui.QFormLayout(self.formLayoutWidget)
         self.CenterLayout.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)
@@ -47,7 +47,7 @@ class Ui_AIReplayer(object):
         self.AILabel2.setGeometry(QtCore.QRect(1100, 60, 54, 12))
         self.AILabel2.setObjectName(_fromUtf8("AILabel2"))
         self.layoutWidget = QtGui.QWidget(AIReplayer)
-        self.layoutWidget.setGeometry(QtCore.QRect(290, 840, 781, 40))
+        self.layoutWidget.setGeometry(QtCore.QRect(290, 720, 781, 44))
         self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setMargin(0)
