@@ -304,41 +304,33 @@ TODO：游戏常量
 
 |      属性      | 类型 |             描述             |
 |----------------|------|------------------------------|
-| GOD            | int  | 值不为0或1，表示上帝视角     |
 | STATE_CONTINUE | int  | 值不为0或1，表示游戏应当继续 |
 | STATE_TIE      | int  | 值不为0或1，表示平局         |
-
-|      方法      |  返回值  |        描述        |
-|----------------|----------|--------------------|
-| load(filename) | GameBody | 载入游戏           |
-| loads(s)       | GameBody | 从字符串中载入游戏 |
 
 
 ### Class GameBody
 游戏主体
 
-|                     构造函数                     |     描述     |
-|--------------------------------------------------|--------------|
-| GameBody(map, max_polulation=..., max_round=...) | 构造游戏主体 |
+|      构造函数     |     描述     |
+|-------------------|--------------|
+| GameBody(map_info) | 构造游戏主体 |
 
-|            方法            |        返回值        |                描述                |
-|----------------------------|----------------------|------------------------------------|
-| map()                      | Map                  | 返回当前地图                       |
-| max_polulation()           | int                  | 返回最大人口数                     |
-| team_name(team)            | str                  | 返回队伍名                         |
-| **游戏状态**               |                      |                                    |
-| round()                    | int                  | 返回当前回合数                     |
-| score(team)                | int                  | 返回分数                           |
-| elements(perspective=GOD)  | [Element]            | 返回上帝/某队视角下的所有元素      |
-| production_list(team)      | [(kind, round_left)] | 返回生产列表                       |
-| population(team)           | int                  | 返回该队伍的人口数                 |
-| weather()                  | int                  | 返回当前的天气                     |
-| **运行相关**               |                      |                                    |
-| commands(team)             | [Command]            | 返回该队伍当前的指令               |
-| set_command(team, command) | None                 | 为该队伍添加一条指令，并处理冲突   |
-| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件 |
-| status()                   | int                  | 返回当前的游戏状态                 |
-| **设置/保存相关**          |                      |                                    |
-| set_team_name(team, name)  | None                 | 设置队伍名                         |
-| save(filename)             | None                 | 保存游戏（包括地图）               |
-| saves()                    | str                  | 保存游戏（包括地图）至字符串       |
+|            方法            |        返回值        |                 描述                 |
+|----------------------------|----------------------|--------------------------------------|
+| **基本信息**               |                      |                                      |
+| map_info()                 | MapInfo              | 当前地图信息                         |
+| team_name(team)            | str                  | 队伍名                               |
+| **游戏状态**               |                      |                                      |
+| round()                    | int                  | 当前回合数                           |
+| status()                   | int                  | 当前的游戏状态                       |
+| score(team)                | int                  | 分数                                 |
+| elements(perspective)      | [Element]            | 某队视角下的所有元素                 |
+| production_list(team)      | [(kind, round_left)] | 生产列表                             |
+| population(team)           | int                  | 该队伍的人口数                       |
+| **运行相关**               |                      |                                      |
+| commands(team)             | [Command]            | 返回该队伍当前的指令集               |
+| set_command(team, command) | None                 | 为该队伍添加一条指令，并更新指令列表 |
+| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件   |
+| **设置/保存相关**          |                      |                                      |
+| set_team_name(team, name)  | None                 | 设置队伍名                           |
+| save()                     | MapInfo              | 保存游戏状态至MapInfo对象            |
