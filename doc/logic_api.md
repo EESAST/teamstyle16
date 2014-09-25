@@ -97,29 +97,43 @@ TODO：游戏常量
 | plane_nums | int[4] | 4机种的数目 |
 
 
-## Module map
-定义地图及相关的函数
+## Module map_info
+定义地图信息及相关的函数
 
 类继承关系
 
     object
-        Map
+        MapInfo
 
-|         方法        | 返回值 |        描述        |
-|---------------------|--------|--------------------|
-| save(map, filename) | None   | 保存地图至文件     |
-| saves(Map)          | str    | 保存地图至字符串   |
-| load(filename)      | Map    | 从文件中载入地图   |
-| loads(s)            | Map    | 从字符串中载入地图 |
+|      方法      | 返回值  |        描述        |
+|----------------|---------|--------------------|
+| load(filename) | MapInfo | 从文件中载入地图   |
+| loads(s)       | MapInfo | 从字符串中载入地图 |
 
-### Class Map
+### Class MapInfo
+地图信息, 代表可作为游戏开始初始状态的地图 (如普通地图, 战役, 游戏存档等) 以及相应配置
 
-|      方法      |      返回值              |           描述                  |
-|----------------|--------------------------|---------------------------------|
-| row()          | int                      | 返回地图行数                    |
-| col()          | int                      | 返回地图列数                    |
-| map_type(x, y) | int                      | 返回(x, y)处的地形              |
-| elements()     | [(int, Position, index)] | 返回所有元素的类型,位置和索引号 |
+|                                             构造函数                                            |    描述    |
+|-------------------------------------------------------------------------------------------------|------------|
+| MapInfo(x_max, y_max, max_population=..., record_interval=..., time_per_round=..., weather=...) | 构造空地图 |
+
+|       属性      |    类型   |       描述       |
+|-----------------|-----------|------------------|
+| elements        | [Element] | 地图上所有元素   |
+| max_polulation  | int       | 人口上限         |
+| record_interval | int       | 统计数据记录间隔 |
+| time_per_round  | float     | 每回合时间       |
+| weather         | int       | 天气             |
+
+|             方法             | 返回值 |        描述        |
+|------------------------------|--------|--------------------|
+| x_max()                      | int    | 地图行数           |
+| y_max()                      | int    | 地图列数           |
+| map_type(x, y)               | int    | 查询地形           |
+| set_map_type(x, y, map_type) | None   | 设置地形           |
+| save(filename)               | None   | 保存地图信息至文件 |
+| saves()                      | str    | 保存地图至字符串   |
+
 
 
 ## Module command
