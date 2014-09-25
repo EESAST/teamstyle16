@@ -172,6 +172,10 @@ TODO：游戏常量
 |--------------------------|------|
 | Collect(operand, target) | 收集 |
 
+### Class Fix
+|               构造函数               |            描述           |
+|--------------------------------------|---------------------------|
+| Fix(operand, target, new_kind=Nonde) | 维修 (对飞机可指定新组成) |
 
 ### Class ChangeDest
 |          构造函数         |    描述    |
@@ -253,12 +257,13 @@ TODO：游戏常量
 | ammo  | int  | 补给的弹药量       |
 
 ### Class Fix
-|       属性      | 类型 |        描述        |
-|-----------------|------|--------------------|
-| index           | int  | 维修发起方的索引号 |
-| target          | int  | 维修接受方的索引号 |
-| metal           | int  | 维修消耗的金属     |
-| health_increase | int  | 生命值增量         |
+|       属性      |   类型   |        描述        |
+|-----------------|----------|--------------------|
+| index           | int      | 维修发起方的索引号 |
+| target          | int      | 维修接受方的索引号 |
+| metal           | int      | 维修消耗的金属     |
+| health_increase | int      | 生命值增量         |
+| new_type        | int/None | 机群新类型         |
 
 ### Class Collect
 |  属性  | 类型 |      描述      |
