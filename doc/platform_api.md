@@ -4,18 +4,10 @@
 ## Module platform
 包含平台的设置和少量功能
 
-|     属性    |  类型 |      描述      |
-|-------------|-------|----------------|
-| map_path    | [str] | 地图文件夹路径 |
-| save_path   | str   | 存档文件夹路径 |
-| replay_path | str   | 回放文件夹路径 |
-
-|          方法         |        返回值        |               描述               |
-|-----------------------|----------------------|----------------------------------|
-| list_maps()           | [str]                | 返回map_path下可用地图的名称列表 |
-| load_map(map_name)    | (Map, brief, config) | 载入地图，简介及对应设置         |
-| load_game(filename)   | Battle               | 载入游戏，                         |
-| load_replay(filename) | Replayer             | 载入回放文件                     |
+|          方法         |  返回值  |     描述     |
+|-----------------------|----------|--------------|
+| load_game(filename)   | Battle   | 载入游戏     |
+| load_replay(filename) | Replayer | 载入回放文件 |
 
 ## Module battle
 
