@@ -201,7 +201,6 @@ TODO：游戏常量
     object
         Event
             AddProductionEntry
-            Crash
             AttackPos
             AttackUnit
             Supply
@@ -239,13 +238,6 @@ TODO：游戏常量
 | target | int  | 被攻击者索引号 |
 | hit    | bool | 是否命中       |
 | damage | int  | 造成的伤害     |
-
-### Class Crash
-|  属性  | 类型 |                  描述                  |
-|--------|------|----------------------------------------|
-| index  | int  | 坠毁单位索引号                         |
-| target | int  | 受到坠机伤害的单位索引（没有时为None） |
-| damage | int  | 受到的坠机伤害                         |
 
 ### Class Supply
 |  属性 | 类型 |        描述        |
