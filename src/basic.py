@@ -17,17 +17,19 @@
 from random import random
 
 # 基础参数限制
-ROUND_MAX = 300     # 最大回合数
-MAP_SIZE_MAX = 80   # 地图最大边长
-FORT_NUM_MAX = 6    # 据点最大数量
-MINE_NUM_MAX = 8    # 矿场最大数量
-OILFIELD_NUM_MAX = 8    # 油田最大数量
-MOVEABLE_UNIT_NUM_MAX = 30      # 每方最大可移动单位数
+ROUND_MAX = 1000     # 最大回合数
+MAP_SIZE_MAX = 150   # 地图最大边长
+FORT_NUM_MAX = 10    # 据点最大数量
+MINE_NUM_MAX = 12   # 矿场最大数量
+OILFIELD_NUM_MAX = 12    # 油田最大数量
+POPULATION_MAX = 60    #单方最大人口数
 COMMAND_NUM_MAX = 1 + FORT_NUM_MAX + MOVEABLE_UNIT_NUM_MAX    # 每方单回合最大总指令数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 
 score = [0, 0]      # 两队积分
+
+WEATHER = 0         # 天气
 
 #积分规则
 FORT_SCORE = 1      # 占领据点每回合奖励积分
