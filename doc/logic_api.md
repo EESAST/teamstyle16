@@ -143,7 +143,8 @@ TODO：游戏常量
 
     object
         Command
-            Attack
+            AttackPos
+            AttackUnit
             ChangeDest
             Collect
             Fix
@@ -159,15 +160,16 @@ TODO：游戏常量
 |   属性  | 类型 |      描述      |
 |---------|------|----------------|
 | operand | int  | 操作对象索引号 |
+### Class AttackPos
+|              构造函数             |           描述           |
+|-----------------------------------|--------------------------|
+| AttackPos(operand, pos, hit=None) | 攻击坐标, 可指定是否命中 |
 
-### Class Attack/Collect/Fix
-|       构造函数       |      描述      |
-|----------------------|----------------|
-| XXX(operand, target) | 攻击/收集/维修 |
+### Class AttackUnit
+|               构造函数               |           描述           |
+|--------------------------------------|--------------------------|
+| AttackPos(operand, target, hit=None) | 攻击单位, 可指定是否命中 |
 
-|  属性  | 类型 |       描述       |
-|--------|------|------------------|
-| target | int  | 指令目标的索引号 |
 
 ### Class ChangeDest
 |          构造函数         |    描述    |
@@ -209,8 +211,9 @@ TODO：游戏常量
     object
         Event
             AddProductionEntry
-            Attack
             Crash
+            AttackPos
+            AttackUnit
             Supply
             Fix
             Collect
@@ -231,7 +234,15 @@ TODO：游戏常量
 | team | int  | 添加生产条目的队伍 |
 | kind | int  | 要生产单位的类型   |
 
-### Class Attack
+### Class AttackPos
+|  属性  |   类型   |     描述     |
+|--------|----------|--------------|
+| index  | int      | 攻击者索引号 |
+| target | Position | 攻击目标     |
+| hit    | bool     | 是否命中     |
+| damage | int      | 造成的伤害   |
+
+### Class AttackUnit
 |  属性  | 类型 |      描述      |
 |--------|------|----------------|
 | index  | int  | 攻击者索引号   |
