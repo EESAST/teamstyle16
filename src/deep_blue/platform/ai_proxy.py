@@ -4,17 +4,22 @@ class AIProxy(object):
     """Proxy for AI"""
     def __init__(self, team_num, file_name):
         super(AIProxy, self).__init__()
-        self.team_num = team_num
-        self.file_name = file_name
+        self.__team_num = team_num
+        self.__file_name = file_name
+        self.__team_name = None
 
         self.__start_ai_file()
 
-    def send_info(self, battle):
-        """send infos to the AI"""
-        pass
+    def team_num(self):
+        """Getter"""
+        return self.__team_num
 
-    def accept_commands(self, time_limit):
-        """Accept commands under the time limit"""
+    def team_name(self):
+        """Getter"""
+        return self.__team_name
+
+    def get_commands(self, time_limit):
+        """Send info to AI, accept commands under the time limit"""
         pass
 
 
