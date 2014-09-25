@@ -97,29 +97,43 @@ TODO：游戏常量
 | plane_nums | int[4] | 4机种的数目 |
 
 
-## Module map
-定义地图及相关的函数
+## Module map_info
+定义地图信息及相关的函数
 
 类继承关系
 
     object
-        Map
+        MapInfo
 
-|         方法        | 返回值 |        描述        |
-|---------------------|--------|--------------------|
-| save(map, filename) | None   | 保存地图至文件     |
-| saves(Map)          | str    | 保存地图至字符串   |
-| load(filename)      | Map    | 从文件中载入地图   |
-| loads(s)            | Map    | 从字符串中载入地图 |
+|      方法      | 返回值  |        描述        |
+|----------------|---------|--------------------|
+| load(filename) | MapInfo | 从文件中载入地图   |
+| loads(s)       | MapInfo | 从字符串中载入地图 |
 
-### Class Map
+### Class MapInfo
+地图信息, 代表可作为游戏开始初始状态的地图 (如普通地图, 战役, 游戏存档等) 以及相应配置
 
-|      方法      |      返回值              |           描述                  |
-|----------------|--------------------------|---------------------------------|
-| row()          | int                      | 返回地图行数                    |
-| col()          | int                      | 返回地图列数                    |
-| map_type(x, y) | int                      | 返回(x, y)处的地形              |
-| elements()     | [(int, Position, index)] | 返回所有元素的类型,位置和索引号 |
+|                                             构造函数                                            |    描述    |
+|-------------------------------------------------------------------------------------------------|------------|
+| MapInfo(x_max, y_max, max_population=..., record_interval=..., time_per_round=..., weather=...) | 构造空地图 |
+
+|       属性      |    类型   |       描述       |
+|-----------------|-----------|------------------|
+| elements        | [Element] | 地图上所有元素   |
+| max_polulation  | int       | 人口上限         |
+| record_interval | int       | 统计数据记录间隔 |
+| time_per_round  | float     | 每回合时间       |
+| weather         | int       | 天气             |
+
+|             方法             | 返回值 |        描述        |
+|------------------------------|--------|--------------------|
+| x_max()                      | int    | 地图行数           |
+| y_max()                      | int    | 地图列数           |
+| map_type(x, y)               | int    | 查询地形           |
+| set_map_type(x, y, map_type) | None   | 设置地形           |
+| save(filename)               | None   | 保存地图信息至文件 |
+| saves()                      | str    | 保存地图至字符串   |
+
 
 
 ## Module command
@@ -129,7 +143,8 @@ TODO：游戏常量
 
     object
         Command
-            Attack
+            AttackPos
+            AttackUnit
             ChangeDest
             Collect
             Fix
@@ -140,51 +155,42 @@ TODO：游戏常量
 ### Class Command
 |     构造函数     | 描述 |
 |------------------|------|
-| Command(operand) | 指令 |
+| Command(operand) | 指令, operand为操作对象索引号 |
 
-|   属性  | 类型 |      描述      |
-|---------|------|----------------|
-| operand | int  | 操作对象索引号 |
+### Class AttackPos
+|              构造函数             |           描述           |
+|-----------------------------------|--------------------------|
+| AttackPos(operand, pos, hit=None) | 攻击坐标, 可指定是否命中 |
 
-### Class Attack/Collect/Fix
-|       构造函数       |      描述      |
-|----------------------|----------------|
-| XXX(operand, target) | 攻击/收集/维修 |
+### Class AttackUnit
+|               构造函数               |           描述           |
+|--------------------------------------|--------------------------|
+| AttackPos(operand, target, hit=None) | 攻击单位, 可指定是否命中 |
 
-|  属性  | 类型 |       描述       |
-|--------|------|------------------|
-| target | int  | 指令目标的索引号 |
+### Class Collect
+|         构造函数         | 描述 |
+|--------------------------|------|
+| Collect(operand, target) | 收集 |
+
+### Class Fix
+|               构造函数               |            描述           |
+|--------------------------------------|---------------------------|
+| Fix(operand, target, new_kind=Nonde) | 维修 (对飞机可指定新组成) |
 
 ### Class ChangeDest
 |          构造函数         |    描述    |
 |---------------------------|------------|
 | ChangeDest(operand, dest) | 更改目的地 |
 
-| 属性 |   类型   |      描述      |
-|------|----------|----------------|
-| dest | Position | 新目的地的坐标 |
-
 ### Class Produce
 |        构造函数        | 描述 |
 |------------------------|------|
 | Produce(operand, kind) | 生产 |
 
-| 属性 | 类型 |        描述        |
-|------|------|--------------------|
-| kind | int  | 要生产的对象的类型 |
-
 ### Class Supply
-
-|                       构造函数                      | 描述 |
-|-----------------------------------------------------|------|
-| Supply(operand, target, fuel=-1, metal=-1, ammo=-1) | 补给 |
-
-|  属性  | 类型 |              描述              |
-|--------|------|--------------------------------|
-| target | int  | 补给对象的索引号               |
-| fuel   | int  | 要补给的燃料量，为负则尽力补给 |
-| metal  | int  | 要补给的金属量，为负则尽力补给 |
-| ammo   | int  | 要补给的弹药量，为负则尽力补给 |
+|                       构造函数                      |          描述          |
+|-----------------------------------------------------|------------------------|
+| Supply(operand, target, fuel=-1, metal=-1, ammo=-1) | 补给, 量为负则尽力补给 |
 
 
 ## Module event
@@ -195,8 +201,8 @@ TODO：游戏常量
     object
         Event
             AddProductionEntry
-            Attack
-            Crash
+            AttackPos
+            AttackUnit
             Supply
             Fix
             Collect
@@ -217,20 +223,21 @@ TODO：游戏常量
 | team | int  | 添加生产条目的队伍 |
 | kind | int  | 要生产单位的类型   |
 
-### Class Attack
+### Class AttackPos
+|  属性  |   类型   |     描述     |
+|--------|----------|--------------|
+| index  | int      | 攻击者索引号 |
+| target | Position | 攻击目标     |
+| hit    | bool     | 是否命中     |
+| damage | int      | 造成的伤害   |
+
+### Class AttackUnit
 |  属性  | 类型 |      描述      |
 |--------|------|----------------|
 | index  | int  | 攻击者索引号   |
 | target | int  | 被攻击者索引号 |
 | hit    | bool | 是否命中       |
 | damage | int  | 造成的伤害     |
-
-### Class Crash
-|  属性  | 类型 |                  描述                  |
-|--------|------|----------------------------------------|
-| index  | int  | 坠毁单位索引号                         |
-| target | int  | 受到坠机伤害的单位索引（没有时为None） |
-| damage | int  | 受到的坠机伤害                         |
 
 ### Class Supply
 |  属性 | 类型 |        描述        |
@@ -242,12 +249,13 @@ TODO：游戏常量
 | ammo  | int  | 补给的弹药量       |
 
 ### Class Fix
-|       属性      | 类型 |        描述        |
-|-----------------|------|--------------------|
-| index           | int  | 维修发起方的索引号 |
-| target          | int  | 维修接受方的索引号 |
-| metal           | int  | 维修消耗的金属     |
-| health_increase | int  | 生命值增量         |
+|       属性      |   类型   |        描述        |
+|-----------------|----------|--------------------|
+| index           | int      | 维修发起方的索引号 |
+| target          | int      | 维修接受方的索引号 |
+| metal           | int      | 维修消耗的金属     |
+| health_increase | int      | 生命值增量         |
+| new_type        | int/None | 机群新类型         |
 
 ### Class Collect
 |  属性  | 类型 |      描述      |
@@ -264,11 +272,11 @@ TODO：游戏常量
 | dest  | int  | 新目的地   |
 
 ### Class Move
-|  属性 |   类型   |    描述    |
-|-------|----------|------------|
-| index | int      | 单位索引号 |
-| from  | Position | 移动前位置 |
-| to    | Position | 移动后位置 |
+|  属性  |   类型   |    描述    |
+|--------|----------|------------|
+| index  | int      | 单位索引号 |
+| before | Position | 移动前位置 |
+| after  | Position | 移动后位置 |
 
 ### Class Create
 |  属性 | 类型 |    描述    |
@@ -296,41 +304,33 @@ TODO：游戏常量
 
 |      属性      | 类型 |             描述             |
 |----------------|------|------------------------------|
-| GOD            | int  | 值不为0或1，表示上帝视角     |
 | STATE_CONTINUE | int  | 值不为0或1，表示游戏应当继续 |
 | STATE_TIE      | int  | 值不为0或1，表示平局         |
-
-|      方法      |  返回值  |        描述        |
-|----------------|----------|--------------------|
-| load(filename) | GameBody | 载入游戏           |
-| loads(s)       | GameBody | 从字符串中载入游戏 |
 
 
 ### Class GameBody
 游戏主体
 
-|                     构造函数                     |     描述     |
-|--------------------------------------------------|--------------|
-| GameBody(map, max_polulation=..., max_round=...) | 构造游戏主体 |
+|      构造函数     |     描述     |
+|-------------------|--------------|
+| GameBody(map_info) | 构造游戏主体 |
 
-|            方法            |        返回值        |                描述                |
-|----------------------------|----------------------|------------------------------------|
-| map()                      | Map                  | 返回当前地图                       |
-| max_polulation()           | int                  | 返回最大人口数                     |
-| team_name(team)            | str                  | 返回队伍名                         |
-| **游戏状态**               |                      |                                    |
-| round()                    | int                  | 返回当前回合数                     |
-| score(team)                | int                  | 返回分数                           |
-| elements(perspective=GOD)  | [Element]            | 返回上帝/某队视角下的所有元素      |
-| production_list(team)      | [(kind, round_left)] | 返回生产列表                       |
-| population(team)           | int                  | 返回该队伍的人口数                 |
-| weather()                  | int                  | 返回当前的天气                     |
-| **运行相关**               |                      |                                    |
-| commands(team)             | [Command]            | 返回该队伍当前的指令               |
-| set_command(team, command) | None                 | 为该队伍添加一条指令，并处理冲突   |
-| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件 |
-| status()                   | int                  | 返回当前的游戏状态                 |
-| **设置/保存相关**          |                      |                                    |
-| set_team_name(team, name)  | None                 | 设置队伍名                         |
-| save(filename)             | None                 | 保存游戏（包括地图）               |
-| saves()                    | str                  | 保存游戏（包括地图）至字符串       |
+|            方法            |        返回值        |                 描述                 |
+|----------------------------|----------------------|--------------------------------------|
+| **基本信息**               |                      |                                      |
+| map_info()                 | MapInfo              | 当前地图信息                         |
+| team_name(team)            | str                  | 队伍名                               |
+| **游戏状态**               |                      |                                      |
+| round()                    | int                  | 当前回合数                           |
+| status()                   | int                  | 当前的游戏状态                       |
+| score(team)                | int                  | 分数                                 |
+| elements(perspective)      | [Element]            | 某队视角下的所有元素                 |
+| production_list(team)      | [(kind, round_left)] | 生产列表                             |
+| population(team)           | int                  | 该队伍的人口数                       |
+| **运行相关**               |                      |                                      |
+| commands(team)             | [Command]            | 返回该队伍当前的指令集               |
+| set_command(team, command) | None                 | 为该队伍添加一条指令，并更新指令列表 |
+| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件   |
+| **设置/保存相关**          |                      |                                      |
+| set_team_name(team, name)  | None                 | 设置队伍名                           |
+| save()                     | MapInfo              | 保存游戏状态至MapInfo对象            |
