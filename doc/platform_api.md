@@ -138,7 +138,3 @@ AI代理，处理游戏程序与AI间的通信
 | team_num()                       | int                  | 返回队伍编号                                         |
 | team_name()                      | str                  | 返回队伍名称                                         |
 | get_commands(Battle, time_limit) | ([Command], runtime) | 向选手传递信息，在时限内从选手AI获取指令，并记录耗时 |
-
-
-
-

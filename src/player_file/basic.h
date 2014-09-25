@@ -1,5 +1,8 @@
-#ifndef  BASIC_H
-#define  BASIC_H
+#ifndef TEAMSTYLE16_BASIC_H
+#define TEAMSTYLE16_BASIC_H
+
+namespace teamstyle16
+{
 
 // *********************** 游戏常量 ***********************
 const int kMaxRound = 300;      // 最大回合数
@@ -169,4 +172,7 @@ bool KindToFormation(int kind, Formation *formation);
 // 由机群组成中计算 kind 值
 int FormationToKind(const Formation *Formation);
 
-#endif
+
+}  // namespace teamstyle16
+
+#endif  // TEAMSTYLE16_BASIC_H
