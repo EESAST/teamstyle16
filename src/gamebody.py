@@ -3,13 +3,16 @@
 from basic import *
 import map
 import json
+import event
+
+#GOD STATE_CONTINUE STATUS_TIE这些东西要怎么定义
 
 class TeamInfo(object):
     """team info"""
-    def __init__(self, name):
+    def __init__(self, team, name):
         self.name = name
         self.score = 0
-        self.elements = [Base(team, rectangle(team), metal)]
+        self.elements = [Base(self.team, rectangle(team))]
         base = self.elements[0]
         self.vision = []
         for i in range(3):
@@ -17,9 +20,10 @@ class TeamInfo(object):
         self.production_list = []
         self.commands = []
         
-    def saves():
+    def saves(self):
         """save TeamInfo to string"""
         #save score
+        team_str = ''
         team_str += json.dumps(self.score)
         team_str += '&\t'
         #save name
@@ -52,21 +56,21 @@ def dictPos(dct):
         return Position(dct['x'], dct['y'], dct['z'])
     else :
         return Rectangle(dictPos(dct['upper_left']), level = dct['level'], \
-                                     dictPos(dct['lower_right']),size = dct['size'])
+                                     dictPos(dct['lower_right']), size = dct['size'])
     
-def dictUnitbase(dct):
+def dictUnitBase(dct):
     """return UnitBase object from dict"""
     return UnitBase(team = dct['team'], type = dct['type'], pos = dictPos(dct['pos']),\
                         sight_ranges = dct['sight_ranges'], fire_ranges = dct['fire_ranges'],\
                         health = dct['health'], fuel = dct['fuel'], ammo = dct['ammo'],\
-                        ammo_once = dct['ammo_once'], metal = dct[metal], attacks = dct['attacks'],\
+                        ammo_once = dct['ammo_once'], metal = dct['metal'], attacks = dct['attacks'],\
                         defences = dct['defences'])
 
 def dictUnit(dct):
     """return Unit object from dict"""
     return Unit(None, None, None, None, None, None, None, None, None, None,\
-                    speed = dct['speed'], population = dct['population'],\
-                    None, None, unitbase = dictUnitBase(dct['UnitBase']),\
+                None, None, None, dictUnitBase(dct['UnitBase']),
+                speed = dct['speed'], population = dct['population'], \
                     cost = dct['cost'], dest = dictPos(dct['pos']))
 
 def dictElement(dct):
@@ -121,14 +125,14 @@ def Load(team_str):
     #load production_list
     part3 = parts[4].spilt('@\t')
     Production_list = []
-    for production  in production_list :
+    for production  in part3 :
         Production_list.append(json.loads(production, \
                                    object_hook = dictElement))
     #load commands
     part4 = parts[5].spilt('@\t')
     Commands = []
-    for Command  in commands:
-        Commands.append(json.loads(command, \
+    for Command  in part4:
+        Commands.append(json.loads(Command, \
                                    object_hook = dictElement))
     return TeamInfo(score = Score, name = Name, elements = Elements, \
                     vision = Vision, production_list = Production_list, \
@@ -136,66 +140,68 @@ def Load(team_str):
 
 class GameBody(object):
     """docstring for GameBody"""
-    def __init__(self, map, max_population = , max_round = , weather = , team_name):
+    def __init__(self, map, max_population, max_round, team_name):
         self.map = map
         self.max_population = max_population
         self.max_round = max_round
+        # self.weather = [- randint(0,3), - randint(0,3), - randint(0,3)]
+        #basic 里没有定义weather， 我也感觉weather的意义不大
         self.round = 0
         self.Team = []
         for i in [0,1]:
             self.Team.append(TeamInfo(team_name[i]))
-    def map():
+    def map(self):
         """return map"""
         return self.map
 
-    def max_population():
+    def max_population(self):
         """return current max_population"""
         return self.max_population
 
-    def team_name(team):
+    def team_name(self, team):
         """return name of the team"""
         return self.Team[team].name
 
-    def round():
+    def round(self):
         """return current round"""
         return self.round
 
-    def score(team):
+    def score(self, team):
         """return score of the team"""
         self.Team[team].score
 
-    def elements(perspective = GOD):
+    def elements(self, perspective = GOD):
         """return all the elements in GOD/team vision"""
         if perspective == GOD:
             map.update()
             return ELEMENTS
         else:
             elements = []
-            for element in ElEMENTS and element.pos in \
-                self.Team[perspective].vision[element.pos.z]:
+            for element in ELEMENTS:
+                if element.pos in self.Team[perspective].vision[element.pos.z]:
                     elements.append(element)
             return elements
 
-    def production_list(team):
+    def production_list(self, team):
         """return current production list of the team"""
         return  self.Team[team].production_list
 
-    def population(team):
+    def population(self, team):
         """return population of the team"""
         population = 0
         for element in self.Team[team].elements:
             population += element.population
         return population
 
-    def weather():
+    def weather(self):
         """return weather currently"""
         return self.weather
 
-    def commands(team):
+    def commands(self, team):
         """return commands of the team"""
         return self.Team[team].commands
 
-    def set_command(team, command):
+    def set_command(self, team, command):
         """add a command and resolve conflicts"""
         flag = 0
         for Command in self.Team[team].commands:
@@ -206,7 +212,7 @@ class GameBody(object):
         if flag == 0:
             self.Team[team].commands.append(command)
         
-    def status():
+    def status(self):
         """return current status of the game"""
         for team in [0,1]:
             self.Team[team].elements[0].health <= 0
@@ -219,35 +225,35 @@ class GameBody(object):
         else:
             return STATE_CONTINUE
     
-    def run():
+    def run(self):
         """run one round and return the event taked place"""
-        self.round ++
+        self.round = self.round + 1
         pos = []
-        for Element in ElEMENTS:
+        for Element in ELEMENTS:
             if isinstance(Element, Unit):
                 pos.append(Element, Element.pos)
         Event = []
         for team in [0,1]:
-            for command in commands(team):
+            for command in self.commands(team):
                 Event.extend(command.result_event())
         i=0
-        for Element in ElEMENTS:
+        for Element in ELEMENTS:
             if isinstance(Element, Unit):
                 for element, Pos in pos[i:]:
                     if Element.index == element.index and Pos != Element.pos:
-                        Event.append(event.Move("Move", Element.index, Pos, Element.pos)
-                    i ++
+                        Event.append(event.Move("Move", Element.index, Pos, Element.pos))
+                    i = i + 1
         return Event
                                      
-    def set_team_name(team, name):
+    def set_team_name(self, team, name):
         """set name of the team"""
         self.Team[team].name = name
                                      
-    def save(filename):
+    def save(self, filename):
         """Save game to file"""
-        game_str = saves()
+        game_str = self.saves()
         open(filename).write(game_str)
-    def saves():
+    def saves(self):
         """Save game to string"""
         game_str = ''
         #save map
