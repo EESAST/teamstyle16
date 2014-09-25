@@ -56,6 +56,7 @@ AIR = 2         # 空中
     飞机不能受到鱼雷伤害 """
 FIRE = 0        # 火力伤害
 TORPEDO = 1     # 鱼雷伤害
+CRASH_RATIO = 0.3 #坠机伤害
 
 
 # 地形
@@ -152,7 +153,7 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
             (None, [0, 0, 1],
              None, None, None, None, None,
              12, 1,
-             None, None)                    # 机群, 值为None的属性由机群具体构成动态决定
+             None, None)]                    # 机群, 值为None的属性由机群具体构成动态决定
 
 
 # 飞机常量属性
@@ -211,7 +212,7 @@ class Position(object):
     def distance(self, target):
         """返回该位置到target(点或矩形)的(最小)距离"""
         if isinstance(target, Position):
-            return abs(target_pos.x - self.x) + abs(target_pos.y - self.y)
+            return abs(target.x - self.x) + abs(target.y - self.y)
         elif isinstance(target, Rectangle):
             return target.distance(self)    # 调用Rectangle.distance()
         else:
@@ -403,7 +404,7 @@ class Building(UnitBase):
         if not self.team == our_unit.team:
             return -1   # 非友军
         elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
-              or self.pos.distance(our_unit) > 1)
+              or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
@@ -411,7 +412,7 @@ class Building(UnitBase):
 
 class Base(Building):
     """基地, 继承自Building"""
-    def __init__(self, team, rectangle, metal, unitbase = None):
+    def __init__(self, team, rectangle, unitbase = None):
         if unitbase == None:
             super(Base, self).__init__(team, BASE, rectangle, *(PROPERTY[BASE]))
                                    # 从元组解析出数据后传入 Building.__init__()
@@ -480,7 +481,7 @@ class Unit(UnitBase):
 class Submarine(Unit):
     """潜艇"""
     def __init__(self, team, pos, unit = None):
-        if unit = None:
+        if unit == None:
             super(Submarine, self).__init__(team, SUBMARINE, pos, *(PROPERTY[SUBMARINE]))
         else:
             self.__dict__ = unit.__dict__.copy()
@@ -610,10 +611,13 @@ class Formation(Unit):
             self.plane_nums = plane_nums
             self.update()
         else :
-            self.__dict__ = ship.__dict__.copy()
+            self.__dict__ = unit.__dict__.copy()
             self.type = Formation
             self.plane_nums = plane_nums
             self.update()
+
+    def crash_damage(self):
+        return int(CRASH_RATIO * self.fuel)
 
     def update(self):
         """飞机的参数随plane_nums动态变化, update函数用于更新机群参数"""
@@ -622,7 +626,7 @@ class Formation(Unit):
         self.health_max = sum([PLANES[i][0] * self.plane_nums[i] for i in xrange(4)])
         self.fuel_max = sum([PLANES[i][1] * self.plane_nums[i] for i in xrange(4)])
         self.ammo_max = sum([PLANES[i][2] * self.plane_nums[i] for i in xrange(4)])
-        self.ammo_once = sum([PLANES[i][3] * plane_nums[i] for i in xrange(4)])
+        self.ammo_once = sum([PLANES[i][3] * self.plane_nums[i] for i in xrange(4)])
         attacks = defences = [0, 0]
         for i in xrange(4):
             attacks[0] += [PLANES[i][-2][j] * self.plane_nums[i] for j in xrange(2)][0]

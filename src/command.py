@@ -2,7 +2,8 @@
 # command.py
 from basic import *
 import event
-from gamebody import *
+import map
+
 
 class Command(object):
     """指令"""
@@ -37,8 +38,8 @@ class Attack(Command):
                     else:
                         victim = map.element(Target.pos)
                         Event.append(event.Crash("Crash", self.target,\
-                                                 victim.index, #Crash_damage))
-                        if victim.health - #Crash_damage <=0:
+                                                 victim.index, Target.crash_damage()))
+                        if victim.health - Target.crash_damage() <=0:
                             Event.append(event.Destroy("Destroy", victim.index))
         return Event
 class Collect(Command):
@@ -57,11 +58,11 @@ class Collect(Command):
         elif Target.type == MINE:
             supply = Operand.metal - metal
             Event.append(event.Collect("Collect", self.operand,\
-                                       self.target, 0, supply)
+                                       self.target, 0, supply))
         else:
             supply = Operand.fuel - fuel
             Event.append(event.Collect("Collect", self.operand,\
-                                       self.target, supply, 0)
+                                       self.target, supply, 0))
         return Event
 class Fix(Command):
     """维修"""
@@ -79,7 +80,7 @@ class Fix(Command):
             provide_metal = metal - Operand.metal
             add_health = provide_metal / METAL_PER_HEALTH
             Event.append(event.Fix("Fix", self.operand, self.target, \
-                                   provide_metal, add_health)
+                                   provide_metal, add_health))
         return Event
 class ChangeDest(Command):
     """更改目的地"""
@@ -88,7 +89,7 @@ class ChangeDest(Command):
         self.dest = dest
     def result_event(self):
         Event = []
-        Event.append(event.ChangeDest("ChangeDest", self.operand, self.dest)
+        Event.append(event.ChangeDest("ChangeDest", self.operand, self.dest))
         return Event
 class Produce(Command):
     """生产"""
@@ -99,7 +100,7 @@ class Produce(Command):
         Operand = ELEMENTS[self.operand]
         Event = []
         Event.append(event.AddProductionEntry("AddProductionEntry", \
-                                              Operand.team, self.kind)
+                                              Operand.team, self.kind))
         return Event
 class Supply(Command):
     """补给"""
@@ -112,7 +113,7 @@ class Supply(Command):
     def result_event(self):
         Event = []
         Event.append(event.Supply("Supply", self.operand, self.target, \
-                                  self.fuel, self.metal, self.ammo)
+                                  self.fuel, self.metal, self.ammo))
         return Event
 class Cancel(Command):
     """取消"""

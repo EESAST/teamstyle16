@@ -6,8 +6,8 @@ from basic import *
 class Event(object):
     def __init__(self, description):
         self.description = description
-    def description():
-        return description
+    def description(self):
+        return self.description
 
 class AddProductionEntry(Event):
     """添加生产条目"""
@@ -68,7 +68,7 @@ class ChangeDest(Event):
         self.index = index
         self.dest = dest
 
-class Movet(Event):
+class Move(Event):
     """移动"""
     def __init__(self, index, from, to):
         super(Move, self).__init__('Move')
