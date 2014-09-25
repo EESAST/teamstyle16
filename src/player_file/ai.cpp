@@ -1,5 +1,7 @@
 #include "basic.h"
 
+using namespace DS16;
+
 const char * GetTeamName()
 {
     return "";  // 队伍名

@@ -1,6 +1,8 @@
 #ifndef  BASIC_H
 #define  BASIC_H
 
+namespace DS16 {
+
 // *********************** 游戏常量 ***********************
 const int kMaxRound = 300;      // 最大回合数
 const int kMaxMapSize = 80;     // 地图最大边长
@@ -116,7 +118,7 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
 
     int population;  // 当前人口
     int max_polulation;  // 人口上限
-    
+
     int x_max;
     int y_max;
 
@@ -169,5 +171,8 @@ const Property * GetProperty(int type);
 bool KindToFormation(int kind, Formation *formation);
 // 由机群组成中计算 kind 值
 int FormationToKind(const Formation *Formation);
+
+
+}  // namespace DS16
 
 #endif
