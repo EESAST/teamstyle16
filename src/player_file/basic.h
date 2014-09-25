@@ -152,7 +152,7 @@ void Fix(int operand, int target);
 void Fix(int operand, int target_formation, int new_type);
 void Produce(int operand, int kind);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
-void Cancel(int operand);  // 取消回合内此前对该单位下达的 Produce 外的所有指令
+void Cancel();  // 取消回合内此前下达的 Produce 外的所有指令
 
 
 // *********************** 辅助函数 ***********************
