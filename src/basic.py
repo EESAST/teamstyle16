@@ -14,7 +14,7 @@
 
 # 以下所有数据暂时并无理论依据...
 
-from random import random
+from random import random, choice
 
 # 基础参数限制
 ROUND_MAX = 1000     # 最大回合数
@@ -277,10 +277,18 @@ class Rectangle(object):
                         region_points.append(pos)
             return region_points
 
-ELEMENTS = []   # 地图上所有元素的列表
+ELEMENTS = {}   # 地图上所有元素的字典 { int:Element }
+
+def appendElement(new_element):
+    """向ELEMENTS字典中加入新element, 返回新element的索引号(随机生成索引号, 防止选手根据索引号推测对方生产的单位数)"""
+    index = choice(xrange(1000))    # 随机范围1000以内
+    while index in ELEMENTS.keys(): # 是否与已有index冲突
+        index += 1
+    ELEMENTS[index] = new_element
+    return index
 
 def getElement(pos):
-    for element in ELEMENTS:
+    for element in ELEMENTS.values():
         if element.pos == pos:
             return element
     return None
@@ -292,8 +300,7 @@ class Element(object):
         self.kind = kind
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
         self.size = (1, 1) if isinstance(pos, Position) else pos.size
-        ELEMENTS.append(self)
-        self.index = ELEMENTS.index(self)
+        self.index = appendElement(self)
         self.visible = False    # 每回合更新所有element的visible值
 
 class Resource(Element):
