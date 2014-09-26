@@ -22,12 +22,12 @@ MAP_SIZE_MAX = 150   # 地图最大边长
 FORT_NUM_MAX = 10    # 据点最大数量
 MINE_NUM_MAX = 12   # 矿场最大数量
 OILFIELD_NUM_MAX = 12    # 油田最大数量
-POPULATION_MAX = 60    #单方最大人口数
+POPULATION_MAX = 60    # 单方最大人口数
 COMMAND_NUM_MAX = 1 + FORT_NUM_MAX + MOVEABLE_UNIT_NUM_MAX    # 每方单回合最大总指令数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 
-score = [0, 0]      # 两队积分
+SCORE = [0, 0]      # 两队积分
 
 WEATHER = 0         # 天气
 
@@ -83,10 +83,10 @@ FORMATION = 10  # 飞机编队(机群)
 
 
 # 飞机编队内飞机种类
-SCOUT = 0       # 侦察机
+FIGHTER = 0       # 战斗机
 TORPEDOER = 1   # 鱼雷机
 BOMBER = 2      # 轰炸机
-FIGHTER = 3     # 战斗机
+SCOUT = 3     # 侦察机
 
 
 # ElementProperty
@@ -129,9 +129,9 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
              None, [INFINITY, INFINITY]),   # 油田
             ([6, 5, 3], [5, 5, 0], 
              35, 120, 20, 2, None, 
-             6, 2,
+             5, 2,
              [0, 40], [INFINITY, 5]),       # 潜艇
-            ([5, 10, 8], [4, 8, 6], 
+            ([5, 10, 8], [4, 9, 7], 
              50, 150, 30, 3, None, 
              8, 2,
              [13, 20], [10, 15]),           # 驱逐舰
@@ -152,7 +152,7 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
              7, 1,
              None, [15, 10]),               # 运输舰
             (None, [0, 0, 1],
-             None, None, None, None, None,
+             None, None, None, 3, None,
              12, 1,
              None, None)                    # 机群, 值为None的属性由机群具体构成动态决定
 
@@ -160,22 +160,22 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
 # 飞机常量属性
 SCOUT_SIGHT_RANGES = [2, 12, 16]    # 侦察机视野
 OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 8, 10]   # 其他机种视野
-FORMATION_TOTAL_PLANES = 30     # 一个机群最多30架飞机
+FORMATION_TOTAL_PLANES = 10     # 一个机群最多30架飞机
 FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，伤害提升百分比
 
 # 各机种参数
-""" plane_property = (health_max, fuel_max, ammo_max, ammo_once, 
+""" plane_property = (health_max, fuel_max, ammo_max, 
                       attacks, defences) """
-PLANES = [(5, 15, 2, 2, 
+PLANES = [(5, 15, 2,  
            [1, 1], [0, INFINITY]),      # 单架侦察机
-          (8, 10, 4, 2, 
+          (8, 10, 4,  
            [3, 0], [2, INFINITY]),      # 单架轰炸机
-          (6, 10, 4, 2, 
+          (6, 10, 4,  
            [0, 2], [1, INFINITY]),      # 单架鱼雷机
-          (7, 10, 5, 1, 
+          (7, 10, 5,  
            [2, 0], [1, INFINITY])]      # 单架战斗机
 
-DEFAULT_PLANE_NUMS = [3, 9, 9, 9]             # 机群默认配置, 总数 = FORMATION_TOTAL_PLANES
+DEFAULT_PLANE_NUMS = [1, 3, 3, 3]             # 机群默认配置, 总数 = FORMATION_TOTAL_PLANES
 
 # 命中率
 def isHit(distance, fire_range):
@@ -362,7 +362,7 @@ class UnitBase(Element):
                 torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
                 damage = fire_damage + torpedo_damage
                 # scout influence required.
-                score[self.team] += damage * DAMAGE_SCORE
+                SCORE[self.team] += damage * DAMAGE_SCORE
                 if damage >= target_unit.health:
                     target_unit.health = 0  # killed
                     target_unit.destroy()
