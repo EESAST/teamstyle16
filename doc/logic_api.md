@@ -272,11 +272,10 @@ TODO：游戏常量
 | dest  | int  | 新目的地   |
 
 ### Class Move
-|  属性  |   类型   |    描述    |
-|--------|----------|------------|
-| index  | int      | 单位索引号 |
-| before | Position | 移动前位置 |
-| after  | Position | 移动后位置 |
+|  属性 |    类型    |       描述       |
+|-------|------------|------------------|
+| index | int        | 单位索引号       |
+| nodes | [Position] | 移动路径上的拐点 |
 
 ### Class Create
 |  属性 | 类型 |    描述    |
