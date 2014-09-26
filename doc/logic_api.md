@@ -121,6 +121,7 @@ TODO：游戏常量
 |-----------------|-----------|------------------|
 | elements        | [Element] | 地图上所有元素   |
 | max_polulation  | int       | 人口上限         |
+| max_round       | int       | 最大回合数       |
 | record_interval | int       | 统计数据记录间隔 |
 | time_per_round  | float     | 每回合时间       |
 | weather         | int       | 天气             |
