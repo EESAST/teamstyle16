@@ -16,7 +16,7 @@ const int kFortScore = 1;       // 占领据点每回合奖励的积分
 const int kDamageScore = 1;     // 造成一点伤害奖励的积分
 const int kCollectScore = 1;    // 收集一单位资源奖励的积分
 
-typedef std::int32_t Type;
+typedef int Type;
 
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
@@ -148,11 +148,8 @@ const int ScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的�
 const int NonScoutSightRange[3] = {0, 1, 2};     // 编队内无侦察机时的视野范围
 
 
-const GameInfo * info();  // 获取游戏信息
-
-MapType GetMapType(int x, int y, int z);
-int GetElement(int x, int y, int z);
-
+const GameInfo * Info();  // 获取游戏信息
+MapType Map(int x, int y);
 
 void Attack(int operand, int target);
 void ChangeDest(int operand, const Position *dest);

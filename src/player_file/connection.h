@@ -2,7 +2,6 @@
 #define TEAMSTYLE16_CONNECTION_H_
 
 #include <string>
-#include <thread>
 
 #include <boost/asio.hpp>
 #include <boost/utility.hpp>
@@ -11,42 +10,36 @@
 
 namespace teamstyle16 {
 
+using boost::asio::ip::tcp;
+
 const std::string default_host("localhost");
-const unsigned short default_port = 8067;
+const std::string default_port("8067");
 
 class Connection : boost::noncopyable
 {
  public:
-    void Connect(const std::string &host = default_host,
-                 unsigned short port = default_port);
-
-
+    void Connect(const std::string &host, const std::string &port);
     void Send(const std::string &message);
+
+    // accessors
+    boost::asio::io_service & io_service() { return io_service_; }
+    const GameInfo * game_info() { return &game_info_; }
+    MapType map(int x, int y) { return map_[y * game_info_.x_max + x]; }
 
     static Connection * Instance();
 
  private:
     Connection();
-    ~Connection();
+    ~Connection() {};
 
-    void ReadStableHeader();
-    void DecodeStableHeader();
-    void ReadStableBody();
-
-    void ReadRoundHeader();
-    void DecodeRoundHeader();
-    void ReadRoundBody();
-    void DecodeRoundBody();
+    void ReadStableInfo();
+    void ReadRoundInfo();
 
     boost::asio::io_service io_service_;
     boost::asio::ip::tcp::socket socket_;
-    std::thread io_service_thread_;
-
-    std::vector<char> header_buffer_;
-    std::vector<char> body_buffer_;
 
     GameInfo game_info_;
-    std::vector<int> map_;
+    std::vector<MapType> map_;
 };
 
 }  // namespace teamstyle16
