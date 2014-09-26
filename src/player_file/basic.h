@@ -16,7 +16,7 @@ const int kFortScore = 1;       // 占领据点每回合奖励的积分
 const int kDamageScore = 1;     // 造成一点伤害奖励的积分
 const int kCollectScore = 1;    // 收集一单位资源奖励的积分
 
-typedef std::int_least32_t Type;
+typedef std::int32_t Type;
 
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
@@ -119,7 +119,7 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     int x_max;
     int y_max;
 
-    int max_polulation;  // 人口上限
+    int max_population;  // 人口上限
     int max_round;
     float time_per_round;
     int weather;  // 天气影响所有单位的视野，数值为单位视野的改变量
