@@ -119,15 +119,16 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     int x_max;
     int y_max;
 
-    int weather;  // 天气影响所有单位的视野，数值为单位视野的改变量
+    int max_polulation;  // 人口上限
+    int max_round;
     float time_per_round;
+    int weather;  // 天气影响所有单位的视野，数值为单位视野的改变量
 
     int team_num;  // 队伍号(0或1)
     int score[2];  // 两队当前积分
     int round;     // 当前总回合数
 
     int population;  // 当前人口
-    int max_polulation;  // 人口上限
 
     int element_num;
     State elements[kMaxElementNum];
