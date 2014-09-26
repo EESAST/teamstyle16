@@ -18,8 +18,12 @@ const std::string default_port("8067");
 class Connection : boost::noncopyable
 {
  public:
-    void Connect(const std::string &host, const std::string &port);
+    void Connect(const std::string &host = default_host,
+                 const std::string &port = default_port);
     void Send(const std::string &message);
+    void FirstUpdate();
+    int Update();  // update to latest, return rounds passed
+    int TryUpdate();  // the same, does not block
 
     // accessors
     boost::asio::io_service & io_service() { return io_service_; }

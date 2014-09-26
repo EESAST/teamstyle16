@@ -4,6 +4,8 @@
 
 namespace teamstyle16 {
 
+const char * GetTeamName();
+
 struct StableHeader
 {
     int x_max;
@@ -31,7 +33,9 @@ void Connection::Connect(const std::string &host, const std::string &port)
     tcp::resolver resolver(io_service_);
     auto endpoint_iterator = resolver.resolve({host, port});
     boost::asio::connect(socket_, endpoint_iterator);
-
+    // send back team name
+    boost::asio::write(socket_,
+                       boost::asio::buffer(std::string(GetTeamName())));
     BOOST_LOG_TRIVIAL(info) << "Connection established";
 }
 
@@ -41,6 +45,35 @@ void Connection::Send(const std::string &message)
     BOOST_LOG_TRIVIAL(info) << "Sending message (" + message + ") to host";
     boost::asio::write(socket_, boost::asio::buffer(message));
     BOOST_LOG_TRIVIAL(info) << "Message sent";
+}
+
+void Connection::FirstUpdate()
+{
+    ReadStableInfo();
+    ReadRoundInfo();
+}
+
+int Connection::Update()
+{
+    int round_passed = 0;
+    do
+    {
+        ReadRoundInfo();
+        round_passed++;
+    } while (socket_.available());
+
+    return round_passed;
+}
+
+int Connection::TryUpdate()
+{
+    int round_passed = 0;
+    while (socket_.available())
+    {
+        ReadRoundInfo();
+        round_passed++;
+    }
+    return round_passed;
 }
 
 void Connection::ReadStableInfo()
@@ -127,8 +160,8 @@ Connection * Connection::Instance()
 Connection::Connection()
         : io_service_(),
           socket_(io_service_),
-          game_info_(),
-          map_()
+          game_info_({0}),
+          map_({0})
 {
 }
 

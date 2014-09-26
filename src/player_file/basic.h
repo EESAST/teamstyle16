@@ -143,22 +143,20 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
 const Property kElementInfo[kElementTypes] = {};
 const Property kPlaneInfo[4] = {};
 
-
-const int ScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
-const int NonScoutSightRange[3] = {0, 1, 2};     // 编队内无侦察机时的视野范围
+const int kScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
 
 
 const GameInfo * Info();  // 获取游戏信息
 MapType Map(int x, int y);
 
-void Attack(int operand, int target);
+void AttackPos(int operand, const Position *target);
+void AttackUnit(int operand, int target);
 void ChangeDest(int operand, const Position *dest);
 void Collect(int operand, int target);
-void Explode(int operand);
 void Fix(int operand, int target);
 void Produce(int operand, Type type);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
-void Cancel(int operand);  // 取消回合内此前对该单位下达的 Produce 外的所有指令
+void Cancel();  // 取消回合内此前对该单位下达的 Produce 外的所有指令
 
 
 // *********************** 辅助函数 ***********************
