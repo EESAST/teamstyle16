@@ -1,7 +1,10 @@
-#ifndef  BASIC_H
-#define  BASIC_H
+#ifndef TEAMSTYLE16_BASIC_H
+#define TEAMSTYLE16_BASIC_H
 
-namespace DS16 {
+#include <cstdint>
+
+namespace teamstyle16
+{
 
 // *********************** 游戏常量 ***********************
 const int kMaxRound = 300;      // 最大回合数
@@ -12,6 +15,8 @@ const int kMaxProductionNum = 200;  // 生产列表大小
 const int kFortScore = 1;       // 占领据点每回合奖励的积分
 const int kDamageScore = 1;     // 造成一点伤害奖励的积分
 const int kCollectScore = 1;    // 收集一单位资源奖励的积分
+
+typedef int Type;
 
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
@@ -91,7 +96,7 @@ struct State  // 状态
     int index;  // 每个元素都有唯一的索引号
 
     Position pos;  // 元素左上角的位置
-    int type;
+    Type type;
     int team;
     bool visible;
 
@@ -105,22 +110,25 @@ struct State  // 状态
 
 struct ProductionEntry
 {
-    int unit_type;
+    Type unit_type;
     int round_left;
 };
 
 struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的信息
 {
+    int x_max;
+    int y_max;
+
+    int max_population;  // 人口上限
+    int max_round;
+    float time_per_round;
+    int weather;  // 天气影响所有单位的视野，数值为单位视野的改变量
+
     int team_num;  // 队伍号(0或1)
     int score[2];  // 两队当前积分
     int round;     // 当前总回合数
-    int weather;   // 天气影响所有单位的视野，数值为单位视野的改变量
 
     int population;  // 当前人口
-    int max_polulation;  // 人口上限
-
-    int x_max;
-    int y_max;
 
     int element_num;
     State elements[kMaxElementNum];
@@ -135,44 +143,40 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
 const Property kElementInfo[kElementTypes] = {};
 const Property kPlaneInfo[4] = {};
 
-
-const int ScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
-const int NonScoutSightRange[3] = {0, 1, 2};     // 编队内无侦察机时的视野范围
+const int kScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
 
 
-const GameInfo * info();  // 获取游戏信息
+const GameInfo * Info();  // 获取游戏信息
+MapType Map(int x, int y);
+int Update();
+int TryUpdate();
 
-MapType GetMapType(int x, int y, int z);
-int GetElement(int x, int y, int z);
-
-
-void Attack(int operand, int target);
+void AttackPos(int operand, const Position *target);
+void AttackUnit(int operand, int target);
 void ChangeDest(int operand, const Position *dest);
 void Collect(int operand, int target);
-void Explode(int operand);
-void Fix(int operand, int target);
 void Fix(int operand, int target_formation, int new_type);
-void Produce(int operand, int kind);
+void Produce(int operand, Type type);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
 void Cancel();  // 取消回合内此前下达的 Produce 外的所有指令
 
 
 // *********************** 辅助函数 ***********************
 
-// 如果 kind 是基本类型，即取值为 [0, kElementTypes)
+// 如果 type 是基本类型，即取值为 [0, kElementTypes)
 //     返回指向 ElementType 内部的指针
-// 否则，如果 kind 可以被解析成机群，生成该机群的属性
+// 否则，如果 type 可以被解析成机群，生成该机群的属性
 //     返回值指向一个内部对象，其有效性或值可能因随后对 GetProperty 的调用而改变
-// 否则，kind 取值无效，返回 NULL
+// 否则，type 取值无效，返回 NULL
 
 const Property * GetProperty(int type);
 
-// 从类型 kind 中解析机群组成
-bool KindToFormation(int kind, Formation *formation);
-// 由机群组成中计算 kind 值
-int FormationToKind(const Formation *Formation);
+// 从类型 type 中解析机群组成
+bool TypeToFormation(int type, Formation *formation);
+// 由机群组成中计算 type 值
+int FormationToType(const Formation *Formation);
 
 
-}  // namespace DS16
+}  // namespace teamstyle16
 
-#endif
+#endif  // TEAMSTYLE16_BASIC_H
