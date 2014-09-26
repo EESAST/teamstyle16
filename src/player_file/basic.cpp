@@ -96,7 +96,7 @@ void Cancel(int operand)
 const Property * GetProperty(int type)
 {
     static Property property;
-    
+
     if (type < 0)
         return NULL;
     if (type < kElementTypes)

@@ -84,7 +84,7 @@ void Connection::ReadStableInfo()
     BOOST_LOG_TRIVIAL(debug) << "Reading stable header from host";
     boost::asio::read(socket_, boost::asio::buffer(buffer));
     BOOST_LOG_TRIVIAL(debug) << "Stable header read";
-    
+
     const StableHeader * header =
         reinterpret_cast<const StableHeader *>(buffer.data());
 
@@ -137,7 +137,7 @@ void Connection::ReadRoundInfo()
     BOOST_LOG_TRIVIAL(debug) << "Production list read (" +
                                 std::to_string(game_info_.production_num) +
                                 " entry(s))";
-    
+
     // states
     BOOST_LOG_TRIVIAL(debug) << "Reading states from host";
     boost::asio::read(
@@ -147,7 +147,7 @@ void Connection::ReadRoundInfo()
     BOOST_LOG_TRIVIAL(debug) << "States read (" +
                                 std::to_string(game_info_.element_num) +
                                 " entry(s))";
-    
+
     BOOST_LOG_TRIVIAL(info) << "Round infomation read";
 }
 
