@@ -2,9 +2,9 @@
 #include <boost/log/trivial.hpp>
 #include "connection.h"
 
-namespace teamstyle16 {
-
 const char * GetTeamName();
+
+namespace teamstyle16 {
 
 struct StableHeader
 {

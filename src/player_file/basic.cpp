@@ -15,6 +15,16 @@ MapType Map(int x, int y)
     return Connection::Instance()->map(x, y);
 }
 
+int Update()
+{
+    return Connection::Instance()->Update();
+}
+
+int TryUpdate()
+{
+    return Connection::Instance()->Update();
+}
+
 void AttackPos(int operand, const Position *target)
 {
     using std::to_string;
@@ -132,13 +142,14 @@ const Property * GetProperty(int type)
 bool TypeToFormation(int type, Formation *formation)
 {
     // TODO
+    return true;
 }
 
 int FormationToType(const Formation *Formation)
 {
     // TODO
+    return -1;
 }
 
 
 }  // namespace teamstyle16
-

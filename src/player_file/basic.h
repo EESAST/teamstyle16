@@ -148,6 +148,8 @@ const int kScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的
 
 const GameInfo * Info();  // 获取游戏信息
 MapType Map(int x, int y);
+int Update();
+int TryUpdate();
 
 void AttackPos(int operand, const Position *target);
 void AttackUnit(int operand, int target);
