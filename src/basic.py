@@ -287,9 +287,9 @@ def getElement(pos):
 
 class Element(object):
     """所有地图元素, 派生出资源类和作战单位(UnitBase)类"""
-    def __init__(self, type, pos):
+    def __init__(self, kind, pos):
         super(Element, self).__init__()
-        self.type = type
+        self.kind = kind
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
         self.size = (1, 1) if isinstance(pos, Position) else pos.size
         ELEMENTS.append(self)
@@ -302,14 +302,14 @@ class Resource(Element):
 
 class Mine(Resource):
     """矿场"""
-    def __init__(self, type, pos, metal):
+    def __init__(self, kind, pos, metal):
         super(Mine, self).__init__(MINE, pos)
         self.metal = metal
         self.visible = True
 
 class Oilfield(Resource):
     """油田"""
-    def __init__(self, type, pos, fuel):
+    def __init__(self, kind, pos, fuel):
         super(Oilfield, self).__init__(OILFIELD, pos)
         self.fuel = fuel
         self.visible = True
@@ -317,10 +317,10 @@ class Oilfield(Resource):
         
 class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, team, type, pos, sight_ranges, fire_ranges, 
+    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
                  attacks, defences):
-        super(UnitBase, self).__init__(type, pos)
+        super(UnitBase, self).__init__(kind, pos)
         self.team = team
         self.sight_ranges = sight_ranges
         self.fire_ranges = fire_ranges
@@ -378,12 +378,12 @@ class UnitBase(Element):
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
-    if giver.type == BASE:
+    if giver.kind == BASE:
         fuel_supply_limit = ammo_supply_limit = 0
-    elif giver.type == FORT:
+    elif giver.kind == FORT:
         fuel_supply_limit = 0
         ammo_supply_limit = SUPPLY_LIMIT
-    elif giver.type == CARGO:
+    elif giver.kind == CARGO:
         fuel_supply_limit = SUPPLY_LIMIT
         ammo_supply_limit = 0
     else:
@@ -405,7 +405,7 @@ class Building(UnitBase):
         """建筑对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1)
             return -2   # 不在范围内
         else:
@@ -422,7 +422,7 @@ class Base(Building):
         """维修, 对飞机的维修操作特殊"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif our_unit.type == FORMATION:  
+        elif our_unit.kind == FORMATION:  
             if self.pos.distance(our_unit) > 0:
                 return -2   # 不在范围内
             else:
@@ -441,7 +441,7 @@ class Base(Building):
                 replenishFuelAmmo(self, our_unit)
                 return 0
 
-    def build(self, type, plane_nums = DEFAULT_PLANE_NUMS):
+    def build(self, kind, plane_nums = DEFAULT_PLANE_NUMS):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
         pass    ##
 
@@ -453,11 +453,11 @@ class Fort(Building):
 
 class Unit(UnitBase):
     """可移动单位"""
-    def __init__(self, team, type, pos, sight_ranges, fire_ranges, 
+    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
                  speed, population, 
                  attacks, defences):
-        super(Unit, self).__init__(team, type, pos, sight_ranges, fire_ranges, 
+        super(Unit, self).__init__(team, kind, pos, sight_ranges, fire_ranges, 
                                    health, fuel, ammo, ammo_once, metal, 
                                    attacks, defences)
         self.speed = speed
@@ -498,12 +498,12 @@ class Carrier(Ship):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.type == BASE or our_unit.type == CARGO or our_unit.type == CARRIER:
+            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
@@ -519,12 +519,12 @@ class Cargo(Ship):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.type == BASE or our_unit.type == CARGO or our_unit.type == CARRIER:
+            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
@@ -532,11 +532,11 @@ class Cargo(Ship):
 
     def collect(self, resource):
         """运输舰从资源点采集资源"""
-        if resource.type == MINE and resource.metal > 0:
+        if resource.kind == MINE and resource.metal > 0:
             supply = min(self.metal_max - self.metal, resource.metal)
             self.metal += supply
             resource.metal -= supply
-        elif resource.type == OILFIELD and resource.fuel > 0:
+        elif resource.kind == OILFIELD and resource.fuel > 0:
             supply = min(self.fuel_max - self.fuel, resource.fuel)
             self.fuel += supply
             resource.fuel -= supply
