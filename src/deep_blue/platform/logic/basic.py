@@ -14,7 +14,7 @@
 
 # 以下所有数据暂时并无理论依据...
 
-from random import random
+from random import random, choice
 
 # 基础参数限制
 ROUND_MAX = 1000     # 最大回合数
@@ -22,12 +22,12 @@ MAP_SIZE_MAX = 150   # 地图最大边长
 FORT_NUM_MAX = 10    # 据点最大数量
 MINE_NUM_MAX = 12   # 矿场最大数量
 OILFIELD_NUM_MAX = 12    # 油田最大数量
-POPULATION_MAX = 60    #单方最大人口数
+POPULATION_MAX = 60    # 单方最大人口数
 COMMAND_NUM_MAX = 1 + FORT_NUM_MAX + MOVEABLE_UNIT_NUM_MAX    # 每方单回合最大总指令数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 
-score = [0, 0]      # 两队积分
+SCORE = [0, 0]      # 两队积分
 
 WEATHER = 0         # 天气
 
@@ -84,10 +84,10 @@ FORMATION = 10  # 飞机编队(机群)
 
 
 # 飞机编队内飞机种类
-SCOUT = 0       # 侦察机
+FIGHTER = 0       # 战斗机
 TORPEDOER = 1   # 鱼雷机
 BOMBER = 2      # 轰炸机
-FIGHTER = 3     # 战斗机
+SCOUT = 3     # 侦察机
 
 
 # ElementProperty
@@ -132,51 +132,51 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
              35, 120, 20, 2, None, 
              6, 2,
              [0, 40], [INFINITY, 5]),       # 潜艇
-            ([5, 10, 8], [4, 8, 6], 
+            ([5, 10, 8], [4, 9, 7], 
              50, 150, 30, 3, None, 
              8, 2,
-             [13, 20], [10, 15]),           # 驱逐舰
-            ([5, 10, 8], [4, 8, 6], 
-             70, 300, 30, 3, None, 
+             [13, 20], [10, 12]),           # 驱逐舰
+            ([3, 8, 8], [3, 7, 8], 
+             70, 150, 36, 3, None, 
              7, 3,
-             [20, 10], [12, 13]),           # 巡洋舰
-            ([5, 10, 8], [4, 8, 6], 
-             100, 200, 50, 5, None, 
+             [24, 14], [12, 14]),           # 巡洋舰
+            ([2, 7, 6], [0, 6, 4], 
+             100, 150, 50, 5, None, 
              6, 4,
-             [30, 10], [20, 15]),           # 战舰
-            ([5, 10, 8], [4, 8, 6], 
-             100, 400, 70, 2, 80, 
+             [30, 0], [16, 16]),           # 战舰
+            ([4, 9, 9], [0, 8, 6], 
+             120, 200, 70, 2, None, 
              5, 4,
-             [15, 0], [16, 12]),            # 航母
-            ([5, 10, 8], [4, 8, 6], 
-             60, 300, 50, 0, 50, 
+             [15, 0], [20, 8]),            # 航母
+            ([3, 7, 6], None, 
+             60, 300, 120, None, 50, 
              7, 1,
              None, [15, 10]),               # 运输舰
-            (None, [0, 0, 1],
-             None, None, None, None, None,
-             12, 1,
-             None, None)]                    # 机群, 值为None的属性由机群具体构成动态决定
+            (None, [0, 3, 4],
+             None, None, None, 3, None,
+             10, 3,
+             None, None)                    # 机群, 值为None的属性由机群具体构成动态决定
 
 
 # 飞机常量属性
 SCOUT_SIGHT_RANGES = [2, 12, 16]    # 侦察机视野
-OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 8, 10]   # 其他机种视野
-FORMATION_TOTAL_PLANES = 30     # 一个机群最多30架飞机
+OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 9, 10]   # 其他机种视野
+FORMATION_TOTAL_PLANES = 10     # 一个机群最多30架飞机
 FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，伤害提升百分比
 
 # 各机种参数
-""" plane_property = (health_max, fuel_max, ammo_max, ammo_once, 
+""" plane_property = (health_max, fuel_max, ammo_max, 
                       attacks, defences) """
-PLANES = [(5, 15, 2, 2, 
-           [1, 1], [0, INFINITY]),      # 单架侦察机
-          (8, 10, 4, 2, 
-           [3, 0], [2, INFINITY]),      # 单架轰炸机
-          (6, 10, 4, 2, 
-           [0, 2], [1, INFINITY]),      # 单架鱼雷机
-          (7, 10, 5, 1, 
+PLANES = [(7, 10, 5,  
            [2, 0], [1, INFINITY])]      # 单架战斗机
+          (6, 10, 4,  
+           [0, 2], [1, INFINITY]),      # 单架鱼雷机
+          (8, 10, 4,  
+           [3, 0], [2, INFINITY]),      # 单架轰炸机
+          (5, 15, 2,  
+           [1, 1], [0, INFINITY]),      # 单架侦察机
 
-DEFAULT_PLANE_NUMS = [3, 9, 9, 9]             # 机群默认配置, 总数 = FORMATION_TOTAL_PLANES
+DEFAULT_PLANE_NUMS = [1, 3, 3, 3]             # 机群默认配置, 总数 = FORMATION_TOTAL_PLANES
 
 # 命中率
 def isHit(distance, fire_range):
@@ -278,23 +278,30 @@ class Rectangle(object):
                         region_points.append(pos)
             return region_points
 
-ELEMENTS = []   # 地图上所有元素的列表
+ELEMENTS = {}   # 地图上所有元素的字典 { int:Element }
+
+def appendElement(new_element):
+    """向ELEMENTS字典中加入新element, 返回新element的索引号(随机生成索引号, 防止选手根据索引号推测对方生产的单位数)"""
+    index = choice(xrange(1000))    # 随机范围1000以内
+    while index in ELEMENTS.keys(): # 是否与已有index冲突
+        index += 1
+    ELEMENTS[index] = new_element
+    return index
 
 def getElement(pos):
-    for element in ELEMENTS:
+    for element in ELEMENTS.values():
         if element.pos == pos:
             return element
     return None
 
 class Element(object):
     """所有地图元素, 派生出资源类和作战单位(UnitBase)类"""
-    def __init__(self, type, pos):
+    def __init__(self, kind, pos):
         super(Element, self).__init__()
-        self.type = type
+        self.kind = kind
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
         self.size = (1, 1) if isinstance(pos, Position) else pos.size
-        ELEMENTS.append(self)
-        self.index = ELEMENTS.index(self)
+        self.index = appendElement(self)
         self.visible = False    # 每回合更新所有element的visible值
 
 class Resource(Element):
@@ -303,14 +310,14 @@ class Resource(Element):
 
 class Mine(Resource):
     """矿场"""
-    def __init__(self, type, pos, metal):
+    def __init__(self, kind, pos, metal):
         super(Mine, self).__init__(MINE, pos)
         self.metal = metal
         self.visible = True
 
 class Oilfield(Resource):
     """油田"""
-    def __init__(self, type, pos, fuel):
+    def __init__(self, kind, pos, fuel):
         super(Oilfield, self).__init__(OILFIELD, pos)
         self.fuel = fuel
         self.visible = True
@@ -318,10 +325,10 @@ class Oilfield(Resource):
         
 class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, team, type, pos, sight_ranges, fire_ranges, 
+    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
                  attacks, defences):
-        super(UnitBase, self).__init__(type, pos)
+        super(UnitBase, self).__init__(kind, pos)
         self.team = team
         self.sight_ranges = sight_ranges
         self.fire_ranges = fire_ranges
@@ -364,7 +371,7 @@ class UnitBase(Element):
                 torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
                 damage = fire_damage + torpedo_damage
                 # scout influence required.
-                score[self.team] += damage * DAMAGE_SCORE
+                SCORE[self.team] += damage * DAMAGE_SCORE
                 if damage >= target_unit.health:
                     target_unit.health = 0  # killed
                     target_unit.destroy()
@@ -378,12 +385,12 @@ class UnitBase(Element):
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
-    if giver.type == BASE:
+    if giver.kind == BASE:
         fuel_supply_limit = ammo_supply_limit = 0
-    elif giver.type == FORT:
+    elif giver.kind == FORT:
         fuel_supply_limit = 0
         ammo_supply_limit = SUPPLY_LIMIT
-    elif giver.type == CARGO:
+    elif giver.kind == CARGO:
         fuel_supply_limit = SUPPLY_LIMIT
         ammo_supply_limit = 0
     else:
@@ -426,7 +433,7 @@ class Base(Building):
         """维修, 对飞机的维修操作特殊"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif our_unit.type == FORMATION:  
+        elif our_unit.kind == FORMATION:  
             if self.pos.distance(our_unit) > 0:
                 return -2   # 不在范围内
             else:
@@ -445,7 +452,7 @@ class Base(Building):
                 replenishFuelAmmo(self, our_unit)
                 return 0
 
-    def build(self, type, plane_nums = DEFAULT_PLANE_NUMS):
+    def build(self, kind, plane_nums = DEFAULT_PLANE_NUMS):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
         pass    ##
 
@@ -461,7 +468,7 @@ class Fort(Building):
 
 class Unit(UnitBase):
     """可移动单位"""
-    def __init__(self, team, type, pos, sight_ranges, fire_ranges, 
+    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
                  speed, population, 
                  attacks, defences, unitbase = None):
@@ -534,12 +541,12 @@ class Carrier(Ship):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.type == BASE or our_unit.type == CARGO or our_unit.type == CARRIER:
+            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
@@ -559,12 +566,12 @@ class Cargo(Ship):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
             replenishFuelAmmo(self, our_unit)
-            if our_unit.type == BASE or our_unit.type == CARGO or our_unit.type == CARRIER:
+            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
@@ -572,11 +579,11 @@ class Cargo(Ship):
 
     def collect(self, resource):
         """运输舰从资源点采集资源"""
-        if resource.type == MINE and resource.metal > 0:
+        if resource.kind == MINE and resource.metal > 0:
             supply = min(self.metal_max - self.metal, resource.metal)
             self.metal += supply
             resource.metal -= supply
-        elif resource.type == OILFIELD and resource.fuel > 0:
+        elif resource.kind == OILFIELD and resource.fuel > 0:
             supply = min(self.fuel_max - self.fuel, resource.fuel)
             self.fuel += supply
             resource.fuel -= supply
