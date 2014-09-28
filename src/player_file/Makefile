@@ -1,22 +1,22 @@
 CXX = g++
 CXXFLAGS = -c -std=c++11 -Wall -Wextra
-OJBS = ai.o basic.o connection.o main.o
+OJBS = obj/ai.o obj/basic.o obj/connection.o obj/main.o
 LIBFLAGS = -lboost_system
 MKDIR = mkdir
 
 bin/empty_ai: $(OJBS) | bin
 	$(CXX) -o $@ $^ $(LIBFLAGS)
 
-ai.o: ai.cpp basic.h
+obj/ai.o: ai.cpp basic.h | obj
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
-basic.o: basic.cpp basic.h connection.h
+obj/basic.o: basic.cpp basic.h connection.h | obj
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
-connection.o: connection.cpp connection.h
+obj/connection.o: connection.cpp connection.h | obj
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
-main.o: main.cpp connection.h
+obj/main.o: main.cpp connection.h | obj
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
 connection.h: basic.h
@@ -24,5 +24,8 @@ connection.h: basic.h
 bin:
 	$(MKDIR) bin
 
+obj:
+	$(MKDIR) obj
+
 clean:
-	-rm *.o
+	-rm obj/*.o
