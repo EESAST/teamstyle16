@@ -49,8 +49,8 @@ class ConnectionTest : public ::testing::Test
               buffer_(256, 0)
     {
         std::thread acceptor_thread(&ConnectionTest::AcceptAI, this);
-        acceptor_thread.detach();
         Connection::Instance()->Connect("localhost", std::to_string(port));
+        acceptor_thread.join();
     }
 
     void AcceptAI()
@@ -190,24 +190,24 @@ TEST_F(ConnectionTest, RoundInfoReceived)
         boost::asio::write(socket_, buffer(production_list));
         boost::asio::write(socket_, buffer(states));
         info_num++;
+
         // receive
         int choice = generator_() % 9;
         if (choice < 3)
         {
-            EXPECT_EQ(info_num, Update());
-            EXPECT_EQ(0, TryUpdate());
-            info_num = 0;
+            int round_passed = Update();
+            EXPECT_GE(info_num, round_passed);
+            info_num -= round_passed;
         }
         else if (choice < 6)
         {
-            EXPECT_EQ(info_num, TryUpdate());
-            EXPECT_EQ(0, TryUpdate());
-            info_num = 0;
+            int round_passed = TryUpdate();
+            EXPECT_GE(info_num, round_passed);
+            info_num -= round_passed;
         }
-        else
-        {
+
+        if (info_num != 0)  // some data haven't been transferred
             continue;
-        }
 
         EXPECT_EQ(header.round, Info()->round);
         EXPECT_EQ(header.element_num, Info()->element_num);
