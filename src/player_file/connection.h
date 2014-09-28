@@ -21,7 +21,8 @@ class Connection : boost::noncopyable
     void Connect(const std::string &host = default_host,
                  const std::string &port = default_port);
     void Send(const std::string &message);
-    void FirstUpdate();
+
+    void PrepareWork();
     int Update();  // update to latest, return rounds passed
     int TryUpdate();  // the same, does not block
 

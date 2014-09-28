@@ -34,8 +34,9 @@ void Connection::Connect(const std::string &host, const std::string &port)
     auto endpoint_iterator = resolver.resolve({host, port});
     boost::asio::connect(socket_, endpoint_iterator);
     // send back team name
-    boost::asio::write(socket_,
-                       boost::asio::buffer(std::string(GetTeamName())));
+    std::string team_name = GetTeamName();
+    team_name.resize(kMaxTeamNameSize, ' ');
+    boost::asio::write(socket_, boost::asio::buffer(team_name));
     std::clog << "Connection established\n";
 }
 
@@ -47,14 +48,14 @@ void Connection::Send(const std::string &message)
     std::clog << "Message sent\n";
 }
 
-void Connection::FirstUpdate()
+void Connection::PrepareWork()
 {
     ReadStableInfo();
-    ReadRoundInfo();
 }
 
 int Connection::Update()
 {
+    std::clog << "Force update\n";
     int round_passed = 0;
     do
     {
@@ -62,17 +63,22 @@ int Connection::Update()
         round_passed++;
     } while (socket_.available());
 
+    std::clog << round_passed << " round(s) passed\n";
     return round_passed;
 }
 
 int Connection::TryUpdate()
 {
+    std::clog << "Try update\n";
+
     int round_passed = 0;
     while (socket_.available())
     {
         ReadRoundInfo();
         round_passed++;
     }
+
+    std::clog << round_passed << " round(s) passed\n";
     return round_passed;
 }
 
@@ -100,7 +106,8 @@ void Connection::ReadStableInfo()
 
     // read body (map)
     map_.resize(game_info_.x_max * game_info_.y_max);
-    std::clog << "Reading map\n";
+    std::clog << "Reading map (" << game_info_.x_max << " * "
+                                 << game_info_.y_max << ")\n";
     boost::asio::read(socket_, boost::asio::buffer(map_));
     std::clog << "Map read\n";
     std::clog << "Stable infomation read\n";
