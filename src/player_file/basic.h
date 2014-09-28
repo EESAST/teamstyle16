@@ -7,6 +7,8 @@ namespace teamstyle16
 {
 
 // *********************** 游戏常量 ***********************
+
+const int kMaxTeamNameSize = 20;
 const int kMaxRound = 300;      // 最大回合数
 const int kMaxMapSize = 80;     // 地图最大边长
 const int kMaxElementNum = 200;     // 最大元素个数
@@ -151,10 +153,10 @@ MapType Map(int x, int y);
 int Update();
 int TryUpdate();
 
-void AttackPos(int operand, const Position *target);
+void AttackPos(int operand, Position target);
 void AttackUnit(int operand, int target);
-void ChangeDest(int operand, const Position *dest);
-void Fix(int operand, int target_formation, int new_type);
+void ChangeDest(int operand, Position dest);
+void Fix(int operand, int target_formation);
 void Produce(int operand, Type type);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
 void Cancel();  // 取消回合内此前下达的 Produce 外的所有指令
