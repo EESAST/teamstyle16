@@ -53,14 +53,6 @@ void ChangeDest(int operand, const Position *dest)
                                         to_string(dest->z) + ',');
 }
 
-void Collect(int operand, int target)
-{
-    using std::to_string;
-
-    Connection::Instance()->Send("cl" + to_string(operand) + ' ' +
-                                        to_string(target) + ',');
-}
-
 void Fix(int operand, int target)
 {
     using std::to_string;

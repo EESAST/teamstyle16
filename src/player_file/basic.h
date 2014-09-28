@@ -154,7 +154,6 @@ int TryUpdate();
 void AttackPos(int operand, const Position *target);
 void AttackUnit(int operand, int target);
 void ChangeDest(int operand, const Position *dest);
-void Collect(int operand, int target);
 void Fix(int operand, int target_formation, int new_type);
 void Produce(int operand, Type type);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
