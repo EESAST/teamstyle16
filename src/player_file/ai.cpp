@@ -1,6 +1,7 @@
 #include "basic.h"
 
-using namespace DS16;
+// Remove this line if you konw C++, and don't want a dirty namespace
+using namespace teamstyle16;
 
 const char * GetTeamName()
 {
