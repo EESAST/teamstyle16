@@ -1,5 +1,5 @@
+#include <iostream>
 #include <cstdint>
-#include <boost/log/trivial.hpp>
 #include "connection.h"
 
 const char * GetTeamName();
@@ -28,33 +28,34 @@ struct RoundHeader
 
 void Connection::Connect(const std::string &host, const std::string &port)
 {
-    BOOST_LOG_TRIVIAL(info) << "Connecting to " << host << ':' << port;
+    std::clog << "Connecting to " << host << ':' << port << std::endl;
 
     tcp::resolver resolver(io_service_);
     auto endpoint_iterator = resolver.resolve({host, port});
     boost::asio::connect(socket_, endpoint_iterator);
     // send back team name
-    boost::asio::write(socket_,
-                       boost::asio::buffer(std::string(GetTeamName())));
-    BOOST_LOG_TRIVIAL(info) << "Connection established";
+    std::string team_name = GetTeamName();
+    team_name.resize(kMaxTeamNameSize, ' ');
+    boost::asio::write(socket_, boost::asio::buffer(team_name));
+    std::clog << "Connection established\n";
 }
 
 
 void Connection::Send(const std::string &message)
 {
-    BOOST_LOG_TRIVIAL(info) << "Sending message (" + message + ") to host";
+    std::clog << "Sending message (" + message + ") to host\n";
     boost::asio::write(socket_, boost::asio::buffer(message));
-    BOOST_LOG_TRIVIAL(info) << "Message sent";
+    std::clog << "Message sent\n";
 }
 
-void Connection::FirstUpdate()
+void Connection::PrepareWork()
 {
     ReadStableInfo();
-    ReadRoundInfo();
 }
 
 int Connection::Update()
 {
+    std::clog << "Force update\n";
     int round_passed = 0;
     do
     {
@@ -62,33 +63,38 @@ int Connection::Update()
         round_passed++;
     } while (socket_.available());
 
+    std::clog << round_passed << " round(s) passed\n";
     return round_passed;
 }
 
 int Connection::TryUpdate()
 {
+    std::clog << "Try update\n";
+
     int round_passed = 0;
     while (socket_.available())
     {
         ReadRoundInfo();
         round_passed++;
     }
+
+    std::clog << round_passed << " round(s) passed\n";
     return round_passed;
 }
 
 void Connection::ReadStableInfo()
 {
-    BOOST_LOG_TRIVIAL(info) << "Reading stable infomation from host";
+    std::clog << "Reading stable infomation from host\n";
     // read header
     std::vector<char> buffer(sizeof(StableHeader));
-    BOOST_LOG_TRIVIAL(debug) << "Reading stable header from host";
+    std::clog << "Reading stable header from host\n";
     boost::asio::read(socket_, boost::asio::buffer(buffer));
-    BOOST_LOG_TRIVIAL(debug) << "Stable header read";
+    std::clog << "Stable header read\n";
 
     const StableHeader * header =
         reinterpret_cast<const StableHeader *>(buffer.data());
 
-    BOOST_LOG_TRIVIAL(debug) << "Decoding stable info header";
+    std::clog << "Decoding stable info header\n";
     game_info_.x_max = header->x_max;
     game_info_.y_max = header->y_max;
     game_info_.weather = header->weather;
@@ -96,59 +102,60 @@ void Connection::ReadStableInfo()
     game_info_.max_population = header->max_population;
     game_info_.max_round = header->max_round;
     game_info_.time_per_round = header->time_per_round;
-    BOOST_LOG_TRIVIAL(debug) << "Decode completed";
+    std::clog << "Decode completed\n";
 
     // read body (map)
     map_.resize(game_info_.x_max * game_info_.y_max);
-    BOOST_LOG_TRIVIAL(debug) << "Reading map";
+    std::clog << "Reading map (" << game_info_.x_max << " * "
+                                 << game_info_.y_max << ")\n";
     boost::asio::read(socket_, boost::asio::buffer(map_));
-    BOOST_LOG_TRIVIAL(debug) << "Map read";
-    BOOST_LOG_TRIVIAL(info) << "Stable infomation read";
+    std::clog << "Map read\n";
+    std::clog << "Stable infomation read\n";
 }
 
 void Connection::ReadRoundInfo()
 {
-    BOOST_LOG_TRIVIAL(info) << "Reading round infomation from host";
+    std::clog << "Reading round infomation from host\n";
     // read header
     std::vector<char> buffer(sizeof(RoundHeader));
-    BOOST_LOG_TRIVIAL(debug) << "Reading round header from host";
+    std::clog << "Reading round header from host\n";
     boost::asio::read(socket_, boost::asio::buffer(buffer));
-    BOOST_LOG_TRIVIAL(debug) << "Round header read";
+    std::clog << "Round header read\n";
 
     const RoundHeader * header =
         reinterpret_cast<const RoundHeader *>(buffer.data());
 
-    BOOST_LOG_TRIVIAL(debug) << "Decoding stable info header";
+    std::clog << "Decoding stable info header\n";
     game_info_.round = header->round;
     game_info_.element_num = header->element_num;
     game_info_.population = header->population;
     game_info_.production_num = header->production_num;
     game_info_.score[0] = header->score[0];
     game_info_.score[1] = header->score[1];
-    BOOST_LOG_TRIVIAL(debug) << "Decode completed";
+    std::clog << "Decode completed\n";
 
     // read body
     // production list
-    BOOST_LOG_TRIVIAL(debug) << "Reading production list from host";
+    std::clog << "Reading production list from host\n";
     boost::asio::read(
         socket_,
         boost::asio::buffer(game_info_.production_list,
                             game_info_.production_num * sizeof(ProductionEntry)));
-    BOOST_LOG_TRIVIAL(debug) << "Production list read (" +
-                                std::to_string(game_info_.production_num) +
-                                " entry(s))";
+    std::clog << "Production list read (" +
+                 std::to_string(game_info_.production_num) +
+                 " entry(s))\n";
 
     // states
-    BOOST_LOG_TRIVIAL(debug) << "Reading states from host";
+    std::clog << "Reading states from host\n";
     boost::asio::read(
         socket_,
         boost::asio::buffer(game_info_.elements,
                             game_info_.element_num * sizeof(State)));
-    BOOST_LOG_TRIVIAL(debug) << "States read (" +
-                                std::to_string(game_info_.element_num) +
-                                " entry(s))";
+    std::clog << "States read (" +
+                 std::to_string(game_info_.element_num) +
+                 " entry(s))\n";
 
-    BOOST_LOG_TRIVIAL(info) << "Round infomation read";
+    std::clog << "Round infomation read\n";
 }
 
 Connection * Connection::Instance()
@@ -160,8 +167,8 @@ Connection * Connection::Instance()
 Connection::Connection()
         : io_service_(),
           socket_(io_service_),
-          game_info_({0}),
-          map_({0})
+          game_info_({0, 0, 0, 0, 0.0f, 0, 0, {0, 0}, 0, 0, 0, {}, 0, {}}),
+          map_()
 {
 }
 

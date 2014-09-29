@@ -1,10 +1,11 @@
 #include "basic.h"
 
-using namespace DS16;
+// Remove this line if you konw C++, and don't want a dirty namespace
+using namespace teamstyle16;
 
 const char * GetTeamName()
 {
-    return "";  // 队伍名
+    return "0xFFFFFF";  // 队伍名
 }
 
 void AIMain()
