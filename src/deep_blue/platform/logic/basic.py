@@ -23,7 +23,6 @@ FORT_NUM_MAX = 10    # 据点最大数量
 MINE_NUM_MAX = 12   # 矿场最大数量
 OILFIELD_NUM_MAX = 12    # 油田最大数量
 POPULATION_MAX = 60    # 单方最大人口数
-COMMAND_NUM_MAX = 1 + FORT_NUM_MAX + MOVEABLE_UNIT_NUM_MAX    # 每方单回合最大总指令数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 
@@ -155,7 +154,7 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
             (None, [0, 3, 4],
              None, None, None, 3, None,
              10, 3,
-             None, None)                    # 机群, 值为None的属性由机群具体构成动态决定
+             None, None)]                   # 机群, 值为None的属性由机群具体构成动态决定
 
 
 # 飞机常量属性
@@ -168,13 +167,13 @@ FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，伤害提升百分
 """ plane_property = (health_max, fuel_max, ammo_max, 
                       attacks, defences) """
 PLANES = [(7, 10, 5,  
-           [2, 0], [1, INFINITY])]      # 单架战斗机
+           [2, 0], [1, INFINITY]),      # 单架战斗机
           (6, 10, 4,  
            [0, 2], [1, INFINITY]),      # 单架鱼雷机
           (8, 10, 4,  
            [3, 0], [2, INFINITY]),      # 单架轰炸机
           (5, 15, 2,  
-           [1, 1], [0, INFINITY]),      # 单架侦察机
+           [1, 1], [0, INFINITY])]      # 单架侦察机
 
 DEFAULT_PLANE_NUMS = [1, 3, 3, 3]             # 机群默认配置, 总数 = FORMATION_TOTAL_PLANES
 
