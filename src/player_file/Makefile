@@ -17,13 +17,13 @@ MKDIR = mkdir
 .PHONY: ai test clean
 
 ai: bin/empty_ai
-test: bin/all_test
+test: bin/test_all
 	./$^
 
 bin/empty_ai: $(ALL_OBJS) | bin
 	$(CXX) -o $@ $^ $(LIBS)
 
-bin/all_test: $(TEST_OBJS) $(OBJS) | bin
+bin/test_all: $(TEST_OBJS) $(OBJS) | bin
 	$(CXX) -o $@ $^ -L$(GTEST_LIB_DIR) $(GTEST_LIB) $(LIBS)
 
 obj/ai.o: ai.cpp basic.h | obj
