@@ -76,8 +76,8 @@ struct Property  // 属性
     Level level;
     Size size;
 
-    int sight_range[3];
-    int fire_range[3];
+    int sight_ranges[3];
+    int fire_ranges[3];
 
     int health_max;
     int fuel_max;
@@ -85,8 +85,8 @@ struct Property  // 属性
     int ammo_once;  // 单次攻击消耗弹药
     int metal_max;
 
-    int attack[2];
-    int defence[2];
+    int attacks[2];
+    int defences[2];
     int speed;
 
     int cost;  //消耗钢铁
@@ -128,7 +128,7 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     int weather;  // 天气影响所有单位的视野，数值为单位视野的改变量
 
     int team_num;  // 队伍号(0或1)
-    int score[2];  // 两队当前积分
+    int scores[2];  // 两队当前积分
     int round;     // 当前总回合数
 
     int population;  // 当前人口
@@ -143,10 +143,10 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
 
 // *********************** 游戏数据 ***********************
 
-const Property kElementInfo[kElementTypes] = {};
-const Property kPlaneInfo[4] = {};
+const Property kElementInfos[kElementTypes] = {};
+const Property kPlaneInfos[4] = {};
 
-const int kScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
+const int kScoutSightRanges[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
 
 
 const GameInfo * Info();  // 获取游戏信息

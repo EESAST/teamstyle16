@@ -50,7 +50,7 @@ TEST_F(BasicTest, CheckProperties)
 void BasicTest::CheckProperty(int type, const std::string &name)
 {
     ptree element_pt = pt_.get_child("property." + name);
-    const teamstyle16::Property &element_info = teamstyle16::kElementInfo[type];
+    const teamstyle16::Property &element_info = teamstyle16::kElementInfos[type];
 
     EXPECT_EQ(element_pt.get("level", -1),
               element_info.level) << "Element type: " << name;

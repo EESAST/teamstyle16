@@ -92,34 +92,34 @@ const Property * GetProperty(int type)
     if (type < 0)
         return NULL;
     if (type < kElementTypes)
-        return &kElementInfo[type];
+        return &kElementInfos[type];
 
     // might be formation
     Formation formation;
     if (TypeToFormation(type, &formation))
     {
         // initialize to default
-        property = kElementInfo[FORMATION];
+        property = kElementInfos[FORMATION];
 
         if (formation[SCOUT])
-            std::memcpy(property.sight_range,
-                        kScoutSightRange,
-                        sizeof(property.sight_range));
+            std::memcpy(property.sight_ranges,
+                        kScoutSightRanges,
+                        sizeof(property.sight_ranges));
 
         for (int i = 0; i < kMaxPlaneTypes; i++)
         {
             int num = formation[i];
-            const Property &plane = kPlaneInfo[i];
+            const Property &plane = kPlaneInfos[i];
 
             property.health_max += plane.health_max * num;
             property.fuel_max += plane.fuel_max * num;
             property.ammo_max += plane.ammo_max * num;
             property.ammo_once += plane.ammo_once * num;
             property.metal_max += plane.metal_max * num;
-            property.attack[0] += plane.attack[0] * num;
-            property.attack[1] += plane.attack[1] * num;
-            property.defence[0] += plane.defence[0] * num;
-            property.defence[1] += plane.defence[1] * num;
+            property.attacks[0] += plane.attacks[0] * num;
+            property.attacks[1] += plane.attacks[1] * num;
+            property.defences[0] += plane.defences[0] * num;
+            property.defences[1] += plane.defences[1] * num;
             property.cost += plane.cost * num;
             property.build_round += plane.build_round * num;
             property.population += plane.population * num;

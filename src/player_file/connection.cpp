@@ -23,7 +23,7 @@ struct RoundHeader
     int element_num;
     int population;
     int production_num;
-    int score[2];
+    int scores[2];
 };
 
 void Connection::Connect(const std::string &host, const std::string &port)
@@ -130,8 +130,8 @@ void Connection::ReadRoundInfo()
     game_info_.element_num = header->element_num;
     game_info_.population = header->population;
     game_info_.production_num = header->production_num;
-    game_info_.score[0] = header->score[0];
-    game_info_.score[1] = header->score[1];
+    game_info_.scores[0] = header->scores[0];
+    game_info_.scores[1] = header->scores[1];
     std::clog << "Decode completed\n";
 
     // read body
