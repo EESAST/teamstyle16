@@ -5,7 +5,7 @@ from basic import *
 
 class Map(object):
     """地图"""
-    def __init__(self, types, elements = []):
+    def __init__(self, types, elements = ELEMENTS):
         self.types = types            
         self.row = len(types)
         self.col = len(types[0])
@@ -36,12 +36,7 @@ class Map(object):
 
     def update(self):
         """Update self.elements from basic.ELEMENTS"""
-        self.elements = []
-        for element in ELEMENTS:
-            if isinstance(element.pos, Position):
-                self.elements.append((element.type, element.pos, element.index))
-            else:
-                self.elements.append((element.type, element.upper_left, element.index))
+        self.elements = ELEMENTS
 
 def save(map, filename):
     """Save map to file"""
