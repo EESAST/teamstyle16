@@ -61,7 +61,7 @@ void Fix(int operand, int target)
                                         to_string(target) + ',');
 }
 
-void Produce(int operand, Type type)
+void Produce(int operand, int type)
 {
     using std::to_string;
 

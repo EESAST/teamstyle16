@@ -18,8 +18,6 @@ const int kFortScore = 1;       // 占领据点每回合奖励的积分
 const int kDamageScore = 1;     // 造成一点伤害奖励的积分
 const int kCollectScore = 1;    // 收集一单位资源奖励的积分
 
-typedef int Type;
-
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
 enum AttackType { FIRE, TORPEDO };  // 攻击类型
@@ -98,7 +96,7 @@ struct State  // 状态
     int index;  // 每个元素都有唯一的索引号
 
     Position pos;  // 元素左上角的位置
-    Type type;
+    int type;
     int team;
     bool visible;
 
@@ -112,7 +110,7 @@ struct State  // 状态
 
 struct ProductionEntry
 {
-    Type unit_type;
+    int unit_type;
     int round_left;
 };
 
@@ -157,7 +155,7 @@ void AttackPos(int operand, Position target);
 void AttackUnit(int operand, int target);
 void ChangeDest(int operand, Position dest);
 void Fix(int operand, int target_formation);
-void Produce(int operand, Type type);
+void Produce(int operand, int type);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
 void Cancel();  // 取消回合内此前下达的 Produce 外的所有指令
 
