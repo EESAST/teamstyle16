@@ -1,4 +1,4 @@
-import threading, time, socket
+import threading, socket
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
@@ -43,18 +43,22 @@ class AIProxy(threading.Thread):
 
     def send_info(self, battle):
         """Send infomations to AI"""
-        pass
+        if battle.GameBody.round() == 0:
+            self.__send_stable_info()
+            self.__send_round_info()
+        else:
+            self.__send_round_info()
 
     def __run_ai(self):
         pass
 
     def __send_stable_info(self, battle):
         """Send infos that do not change over rounds to the AI"""
-        pass
+        self.sock_AI.send(self.__encode_stable_info(battle))
 
     def __send_round_info(self, battle):
         """Send infos that change over rounds to the AI"""
-        pass
+        self.sock_AI.send(self.__encode_round_info(battle))
 
     def __decode_commands(self, data):
         """Decode incoming data into list of commands"""
@@ -66,25 +70,4 @@ class AIProxy(threading.Thread):
 
     def __encode_round_info(self, battle):
         """Encode round information of battle into str"""
-        pass
-
-class AIBattle(Battle):
-    def __init__(self, map_info, ai0_filename, ai1_filename, port_AI, port):
-        self.battle = Battle(map_info)
-        self.AI_0 = AIProxy(1, ai0_filename, port_AI)
-        self.AI_1 = AIProxy(2, ai1_filename, port_AI)
-
-    def feed_ai_commands():
-        time.sleep(10)  #can be switched
-        ai0_cmds = self.AI_0.get_commands()
-        ai1_cmds = self.AI_1.get_commands()
-
-    def run_until_end():
-        try:
-            self.AI_0.start()
-            self.AI_1.start()   #I don't know how to call send_stable_info or send_round_info here
-            #if game is over:
-                #AI_0.stop()
-                #AI_1.stop()
-        except:
-            raise ...
+        pass        
