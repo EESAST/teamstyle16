@@ -268,14 +268,14 @@ class Resource(Element):
 
 class Mine(Resource):
     """矿场"""
-    def __init__(self, kind, pos, metal):
+    def __init__(self, kind, pos, metal = PROPERTY[MINE][METAL_MAX]):
         super(Mine, self).__init__(MINE, pos)
         self.metal = metal
         self.visible = True
 
 class Oilfield(Resource):
     """油田"""
-    def __init__(self, kind, pos, fuel):
+    def __init__(self, kind, pos, fuel = PROPERTY[OILFIELD][FUEL_MAX]):
         super(Oilfield, self).__init__(OILFIELD, pos)
         self.fuel = fuel
         self.visible = True
