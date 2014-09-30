@@ -3,7 +3,7 @@
 import sys
 from basic import *
 
-class Map(object):
+class MapInfo(object):
     """地图"""
     def __init__(self, types, elements = ELEMENTS):
         self.types = types            
