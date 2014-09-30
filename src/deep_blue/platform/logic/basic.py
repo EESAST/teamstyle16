@@ -75,18 +75,10 @@ OILFIELD = 3    # 油田
 # 可移动单位(unit)
 SUBMARINE = 4   # 潜艇
 DESTROYER = 5   # 驱逐舰
-CRUISER = 6     # 巡洋舰
-BATTLESHIP = 7  # 战舰
-CARRIER = 8     # 航母
-CARGO = 9       # 运输舰
-FORMATION = 10  # 飞机编队(机群)
-
-
-# 飞机编队内飞机种类
-FIGHTER = 0       # 战斗机
-TORPEDOER = 1   # 鱼雷机
-BOMBER = 2      # 轰炸机
-SCOUT = 3     # 侦察机
+CARRIER = 6     # 航母
+CARGO = 7       # 运输舰
+FIGHTER = 8     # 战斗机
+SCOUT = 9       # 侦察机
 
 
 # ElementProperty
@@ -114,7 +106,7 @@ DEFENCES = 10
 PROPERTY = [([4, 10, 8], [0, 7, 5], 
              2000, 1000, INFINITY, 6, 200, 
              None, None, 
-             [40, 0], [30, INFINITY]),      # 基地
+             [40, 0], [15, INFINITY]),      # 基地
             ([3, 8, 6], [0, 5, 4], 
              800, 200, 300, 4, 200, 
              None, None, 
@@ -130,61 +122,27 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
             ([6, 5, 3], [5, 5, 0], 
              35, 120, 20, 2, None, 
              6, 2,
-             [0, 40], [INFINITY, 5]),       # 潜艇
-            ([5, 10, 8], [4, 9, 7], 
-             50, 150, 30, 3, None, 
-             8, 2,
-             [13, 20], [10, 12]),           # 驱逐舰
-            ([3, 8, 8], [3, 7, 8], 
-             70, 150, 36, 3, None, 
+             [0, 40], [INFINITY, 7]),       # 潜艇
+            ([4, 9, 7], [2, 8, 6], 
+             70, 150, 40, 4, None, 
              7, 3,
-             [24, 14], [12, 14]),           # 巡洋舰
-            ([2, 7, 6], [0, 6, 4], 
-             100, 150, 50, 5, None, 
-             6, 4,
-             [30, 0], [16, 16]),           # 战舰
+             [22, 11], [13, 10]),           # 驱逐舰
             ([4, 9, 9], [0, 8, 6], 
              120, 200, 70, 2, None, 
              5, 4,
-             [15, 0], [20, 8]),            # 航母
+             [18, 0], [16, 10]),             # 航母
             ([3, 7, 6], None, 
              60, 300, 120, None, 50, 
              7, 1,
-             None, [15, 10]),               # 运输舰
-            (None, [0, 3, 4],
-             None, None, None, 3, None,
-             10, 3,
-             None, None)]                   # 机群, 值为None的属性由机群具体构成动态决定
-
-
-# 飞机常量属性
-SCOUT_SIGHT_RANGES = [2, 12, 16]    # 侦察机视野
-OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 9, 10]   # 其他机种视野
-FORMATION_TOTAL_PLANES = 10     # 一个机群最多30架飞机
-FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，伤害提升百分比
-
-# 各机种参数
-""" plane_property = (health_max, fuel_max, ammo_max, 
-                      attacks, defences) """
-PLANES = [(7, 10, 5,  
-           [2, 0], [1, INFINITY]),      # 单架战斗机
-          (6, 10, 4,  
-           [0, 2], [1, INFINITY]),      # 单架鱼雷机
-          (8, 10, 4,  
-           [3, 0], [2, INFINITY]),      # 单架轰炸机
-          (5, 15, 2,  
-           [1, 1], [0, INFINITY])]      # 单架侦察机
-
-DEFAULT_PLANE_NUMS = [1, 3, 3, 3]             # 机群默认配置, 总数 = FORMATION_TOTAL_PLANES
-
-# 命中率
-def isHit(distance, fire_range):
-    """与双方距离, 攻方射程有关的命中率, 返回是否命中"""
-    if distance > fire_range:
-        accuracy = 0
-    else:
-        accuracy = 1 - float(distance) *(distance - 1) /(fire_range + 1) / (fire_range + 1)
-    return random() < accuracy
+             None, [15, 8]),               # 运输舰
+            ([0, 9, 10], [0, 3, 4],
+             70, 100, 21, 3, None,
+             9, 3,
+             [30, 10], [10, INFINITY]),     # 战斗机
+            ([2, 12, 16], [1, 3, 4],
+             50, 120, 5, 1, None,
+             10, 2,
+             [10, 5], [7, INFINITY])]       # 侦察机
 
 # 攻击修正
 def modifiedAttacks(distance, fire_range, attacks):
