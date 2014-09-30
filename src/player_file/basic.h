@@ -9,8 +9,11 @@ namespace teamstyle16
 // *********************** 游戏常量 ***********************
 
 const int kMaxTeamNameSize = 20;
-const int kMaxRound = 300;      // 最大回合数
+
 const int kMaxMapSize = 80;     // 地图最大边长
+const int kMaxRoundLimit = 300;      // 最大回合数
+const int kMaxPopulationLimit = 300;
+
 const int kMaxElementNum = 200;     // 最大元素个数
 const int kMaxProductionNum = 200;  // 生产列表大小
 
@@ -119,8 +122,8 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     int x_max;
     int y_max;
 
-    int max_population;  // 人口上限
-    int max_round;
+    int population_limit;  // 人口上限
+    int round_limit;
     float time_per_round;
     int weather;  // 天气影响所有单位的视野，数值为单位视野的改变量
 

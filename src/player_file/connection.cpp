@@ -12,8 +12,8 @@ struct StableHeader
     int y_max;
     int weather;
     int team_num;
-    int max_population;
-    int max_round;
+    int population_limit;
+    int round_limit;
     float time_per_round;
 };
 
@@ -99,8 +99,8 @@ void Connection::ReadStableInfo()
     game_info_.y_max = header->y_max;
     game_info_.weather = header->weather;
     game_info_.team_num = header->team_num;
-    game_info_.max_population = header->max_population;
-    game_info_.max_round = header->max_round;
+    game_info_.population_limit = header->population_limit;
+    game_info_.round_limit = header->round_limit;
     game_info_.time_per_round = header->time_per_round;
     std::clog << "Decode completed\n";
 

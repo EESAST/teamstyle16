@@ -23,8 +23,8 @@ struct StableHeader
     int y_max;
     int weather;
     int team_num;
-    int max_population;
-    int max_round;
+    int population_limit;
+    int round_limit;
     float time_per_round;
 };
 
@@ -138,8 +138,8 @@ TEST_F(ConnectionTest, StableInfoReceived)
     EXPECT_EQ(header.y_max, Info()->y_max);
     EXPECT_EQ(header.weather, Info()->weather);
     EXPECT_EQ(header.team_num, Info()->team_num);
-    EXPECT_EQ(header.max_population, Info()->max_population);
-    EXPECT_EQ(header.max_round, Info()->max_round);
+    EXPECT_EQ(header.population_limit, Info()->population_limit);
+    EXPECT_EQ(header.round_limit, Info()->round_limit);
     EXPECT_EQ(header.time_per_round, Info()->time_per_round);
 
 
