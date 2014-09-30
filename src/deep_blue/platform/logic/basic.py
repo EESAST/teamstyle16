@@ -18,8 +18,8 @@ from copy import copy
 from random import random, choice
 
 # 基础参数限制
-ROUND_MAX = 1000     # 最大回合数
-MAP_SIZE_MAX = 150   # 地图最大边长
+ROUND_MAX = 500     # 最大回合数
+MAP_SIZE_MAX = 100   # 地图最大边长
 FORT_NUM_MAX = 10    # 据点最大数量
 MINE_NUM_MAX = 12   # 矿场最大数量
 OILFIELD_NUM_MAX = 12    # 油田最大数量
