@@ -110,7 +110,8 @@ TODO：游戏常量
 | MapInfo(x_max, y_max, max_population=..., record_interval=..., time_per_round=..., weather=...) | 构造空地图 |
 
 |       属性      |    类型   |       描述       |
-|-----------------|-----------|------------------|
+| --------------- | --------- | ---------------- |
+| types           | [[int]]   | 地形二维数组     |
 | elements        | [Element] | 地图上所有元素   |
 | max_polulation  | int       | 人口上限         |
 | max_round       | int       | 最大回合数       |
