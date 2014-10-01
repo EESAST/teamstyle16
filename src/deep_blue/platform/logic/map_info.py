@@ -72,22 +72,8 @@ class MapInfo(object):
 
 def load(filename):
     """Read map from file"""
-    map_str = open(filename).read()
-    return loads(map_str)
+    return loads(open(filename).read())
 
 def loads(map_str):
     """Read map from string"""
-    parts = map_str.split('#\n')
-    types = []
-    for line in parts[0].split():
-        types.append([int(type) for type in line])
-    elements_info = parts[1].split()
-    elements = []
-    k = 0
-    while k < len(elements_info):
-        tuple = (int(elements_info[k]))
-        tuple += (Position(int(elements_info[k+1]), int(elements_info[k+2]), int(elements_info[k+3])))
-        tuple += (int(elements_info[k+4]))
-        elements.append(tuple)
-        k += 5
-    return Map(types, elements)
+    pass
