@@ -48,13 +48,13 @@ TODO：游戏常量
 
 例如，可能Element类和对象里没有kind和size属性，而Unit却有类属性size（Unit都是1x1），Submarine有类属性kind（潜艇的类型是常量）
 
-|   属性  |         类型         |      描述      |
-|---------|----------------------|----------------|
-| index   | int                  | 元素的索引号   |
-| kind    | int                  | 元素类型       |
-| pos     | Position             | 该元素的位置   |
-| size    | (x_length, y_length) | 该元素的大小   |
-| visible | bool                 | 该元素是否可见 |
+|   属性   |         类型         |      描述      |
+| -------- | -------------------- | -------------- |
+| index    | int                  | 元素的索引号   |
+| kind     | int                  | 元素类型       |
+| position | Position             | 该元素的位置   |
+| size     | (x_length, y_length) | 该元素的大小   |
+| visible  | bool                 | 该元素是否可见 |
 
 ### Class Resource
 |    属性    | 类型 |   描述   |
@@ -245,7 +245,6 @@ TODO：游戏常量
 | target          | int      | 维修接受方的索引号 |
 | metal           | int      | 维修消耗的金属     |
 | health_increase | int      | 生命值增量         |
-| new_type        | int/None | 机群新类型         |
 
 ### Class Collect
 |  属性  | 类型 |      描述      |
