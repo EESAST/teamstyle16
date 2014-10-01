@@ -1,61 +1,74 @@
 # -*- coding: UTF-8 -*-
 # map.py
 import sys
+import json
 from basic import *
 
 class MapInfo(object):
     """地图"""
-    def __init__(self, types, elements = ELEMENTS):
-        self.types = types            
-        self.row = len(types)
-        self.col = len(types[0])
-        self.elements = elements
+    def __init__(self, x_max, y_max, max_population, record_interval, time_per_round, weather):
+        """Create an empty map"""
+        self.types = [[0] * x_max] * y_max     ## 空地图全海洋       
+        self.elements = {}
+        self.max_population = max_population
+        self.record_interval = record_interval
+        self.time_per_round = time_per_round
+        self.weather = weather
 
-    def row(self):
-        """Return row number of the map"""
-        return self.row
+    @property
+    def x_max(self):
+        return len(self.types[0])
+
+    @property
+    def y_max(self):
+        return len(self.types)
     
-    def col(self):
-        """Return column number of the map"""
-        return self.col
-    
-    def type(self, x, y): 
+    def map_type(self, x, y): 
         """Return map type(OCEAN or LAND) on (x, y)"""
         return self.types[x][y]
+
+    def set_map_type(self, x, y, map_type = LAND):
+        """Set type on (x, y) to map_type"""
+        if x >= self.x_max or y >= self.y_max:
+            return False
+        else:
+            self.types[x][y] = LAND if map_type != OCEAN else OCEAN      # in case map_type = 2, 3, etc..
+            return True
 
     def element(self, pos):
         """Return element at pos"""
         for element in self.elements:
-            if element.pos.distance(pos) == 0:
+            if element.pos.distance(pos) == 0:  # in case isinstance(element.pos, Rectangle), distance() is ok.
                 return element
         return None
 
-    def elements(self):
-        """Return all elements"""
-        return self.elements
+    def add_element(self, new_element):
+        """Add a new element to current map"""
+        for point in new_element.pos.region(level = 0, range = 0):
+            if point.x >= self.x_max or point.y >= self.y_max:
+                return False                    # 位置无效
+            elif self.element(point) != None:
+                return False                    # 位置被占用
+        index = choice(xrange(10000))           # 10000以内随机生成index
+        while index in self.elements.keys():    # 检查是否与已有index冲突
+            index += 10000                      # 尝试解决冲突
+        new_element.index = index
+        self.elements[index] = new_element
+        return True
 
-    def update(self):
-        """Update self.elements from basic.ELEMENTS"""
-        self.elements = ELEMENTS
+    def save(self, filename):
+        """Save map to file"""
+        open(filename).write(saves(self))
 
-def save(map, filename):
-    """Save map to file"""
-    map_str = saves(map)
-    open(filename).write(map_str)
+    def saves(self):
+        """Save map to string"""
+        pass
 
-def saves(map):
-    """Save map to string"""
-    # save map_type
-    map_str = ''
-    for line in map.types:
-        for type in line:
-            map_str += str(type)
-        map_str += '\n'
-    map_str += '#\n'
-    # save elements
-    for tuple in map.elements():
-        map_str += '%d %d %d %d %d\n' % (tuple[0], tuple[1].x, tuple[1].y, tuple[1].z, tuple[2])
-    return map_str
+    def saves_elements(self):
+        """Save elements to string"""
+        pass
+
+        
 
 def load(filename):
     """Read map from file"""
