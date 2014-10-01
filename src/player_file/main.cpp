@@ -21,10 +21,10 @@ int main(int argc, char const *argv[])
         std::exit(EXIT_FAILURE);
     }
 
-    // connection->PrepareWork();
+    connection->PrepareWork();
     while (true)
     {
-        // connection->Update();
+        connection->Update();
         AIMain();
     }
 

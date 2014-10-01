@@ -102,7 +102,6 @@ class AIProxy(threading.Thread):
             self.__send_round_info()
 
     def __run_ai(self, file_name, port):
-        pass
         self.ai_program = subprocess.Popen([file_name, 'localhost', str(port)],
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT)
