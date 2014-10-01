@@ -80,9 +80,11 @@ void Supply(int operand, int target, int fuel, int metal, int ammo)
                                         to_string(ammo) + ',');
 }
 
-void Cancel()
+void Cancel(int operand)
 {
-    Connection::Instance()->Send("cc,");
+    using std::to_string;
+
+    Connection::Instance()->Send("cc" + to_string(operand) + ',');
 }
 
 const Property * GetProperty(int type)

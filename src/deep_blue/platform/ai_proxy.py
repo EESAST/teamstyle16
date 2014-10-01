@@ -2,6 +2,7 @@ import threading, socket
 import subprocess
 import struct
 from logic import basic
+from logic import command
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
@@ -81,20 +82,20 @@ class AIProxy(threading.Thread):
             name, args = cmd_str[:2], cmd_str[2:].split()
             args = map(int, args)  # map to ints
 
-            if name == 'ap':
-                cmd = basic.AttackPos(args[0], basic.Position(*args[1:]))
-            elif name == 'au':
-                cmd = basic.AttackUnit(*args)
+            # if name == 'ap':
+            #     cmd = command.AttackPos(args[0], basic.Position(*args[1:]))
+            if name == 'au':
+                cmd = command.Attack(*args)
             elif name == 'cd':
-                cmd = basic.ChangeDest(args[0], basic.Position(*args[1:]))
+                cmd = command.ChangeDest(args[0], basic.Position(*args[1:]))
             elif name == 'fx':
-                cmd = basic.Fix(*args)
+                cmd = command.Fix(*args)
             elif name == 'pd':
-                cmd = basic.Produce(*args)
+                cmd = command.Produce(*args)
             elif name == 'sp':
-                cmd = basic.Supply(*args)
+                cmd = command.Supply(*args)
             elif name == 'cc':
-                cmd = basic.Cancel()
+                cmd = command.Cancel(*args)
 
             cmds.append(cmd)
 
