@@ -118,15 +118,16 @@ TODO：游戏常量
 | time_per_round  | float     | 每回合时间       |
 | weather         | int       | 天气             |
 
-|             方法             | 返回值 |         描述         |
-| ---------------------------- | ------ | -------------------- |
-| x_max()                      | int    | 地图行数             |
-| y_max()                      | int    | 地图列数             |
-| map_type(x, y)               | int    | 查询地形             |
-| set_map_type(x, y, map_type) | None   | 设置地形             |
-| save(filename)               | None   | 保存地图信息至文件   |
-| saves()                      | str    | 保存地图至字符串     |
-| saves_elements()             | str    | 保存单位状态至字符串 |
+|             方法             | 返回值 |                        描述                       |
+|------------------------------|--------|---------------------------------------------------|
+| x_max()                      | int    | 地图行数                                          |
+| y_max()                      | int    | 地图列数                                          |
+| map_type(x, y)               | int    | 查询地形                                          |
+| set_map_type(x, y, map_type) | None   | 设置地形                                          |
+| add_element(element)         | bool   | 添加元素并设置索引, 若位置无效或被占用则返回false |
+| save(filename)               | None   | 保存地图信息至文件                                |
+| saves()                      | str    | 保存地图至字符串                                  |
+| saves_elements()             | str    | 保存单位状态至字符串                              |
 
 
 
