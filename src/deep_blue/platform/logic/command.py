@@ -10,11 +10,34 @@ class Command(object):
     def __init__(self, operand):
         self.operand = operand
 
-class Attack(Command):
+class AttackPos(Command):
     """攻击"""
-    def __init__(self, operand, target):
+    def __init__(self, operand, pos, hit = None):
+        super(Attack, self).__init__(operand)
+        self.pos = pos
+        self.hit = hit
+    def result_event(self):
+        Operand = ELEMENTS[self.operand]
+        Target = grtElement(self.pos)
+        Event = []
+        hit_damage = Operand.attack(self.pos) 
+        if hit_damage == -3:
+            Event.append(event.AttackPos("AttackPos", self.operand, self.pos, False, 0))
+        elif hit_damage >= 0:
+            Event.append(event.AttackPos("AttackPos", self.operand, self.target, True, hit_damage))
+            if Target.health <= 0:
+                if Target.type == FORT:
+                    Event.append(event.Capture("Capture", self.target, Operand.team))
+                else:
+                    Event.append(event.Destroy("Destroy", self.target))
+        return Event
+                
+class AttackUnit(Command):########
+    """攻击"""
+    def __init__(self, operand, target, hit = None):
         super(Attack, self).__init__(operand)
         self.target = target
+        self.hit = None
     def result_event(self):
         Operand = ELEMENTS[self.operand]
         Target = ELEMENTS[self.target]
@@ -42,7 +65,8 @@ class Attack(Command):
                         if victim.health - Target.crash_damage() <=0:
                             Event.append(event.Destroy("Destroy", victim.index))
         return Event
-class Collect(Command):
+
+class Collect(Command):######
     """收集"""
     def __init__(self, operand, target):
         super(Collect, self).__init__(operand)
@@ -64,11 +88,13 @@ class Collect(Command):
             Event.append(event.Collect("Collect", self.operand,\
                                        self.target, supply, 0))
         return Event
+    
 class Fix(Command):
     """维修"""
-    def __init__(self, operand, target):
+    def __init__(self, operand, target, new_kind = None):
         super(Fix, self).__init__(operand)
         self.target = target
+        self.new_kind = new_kind
     def result_event(self):
         Operand = ELEMENTS[self.operand]
         Target = ELEMENTS[self.target]

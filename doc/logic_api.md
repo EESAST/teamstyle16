@@ -163,7 +163,7 @@ TODO：游戏常量
 ### Class Fix
 |               构造函数               |            描述           |
 |--------------------------------------|---------------------------|
-| Fix(operand, target, new_kind=Nonde) | 维修 (对飞机可指定新组成) |
+| Fix(operand, target, new_kind=None) | 维修 (对飞机可指定新组成) |
 
 ### Class ChangeDest
 |          构造函数         |    描述    |

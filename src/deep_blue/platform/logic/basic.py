@@ -391,7 +391,6 @@ class Base(Building):
             if self.pos.distance(our_unit) > 0:
                 return -2   # 不在范围内
             else:
-                ## 维修飞机至plane_nums配置, 如果金属不足, 则按侦察机->鱼雷机->轰炸机->战斗机的顺序依次维修
                 while self.metal >= METAL_PER_HEALTH:
                     pass
                 replenishFuelAmmo(self, our_unit)
