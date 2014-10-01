@@ -366,7 +366,7 @@ class Building(UnitBase):
         """建筑对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
@@ -383,11 +383,11 @@ class Base(Building):
             self.__dict__ = unitbase.__dict__.copy
             self.kind = BASE
 
-    def repair(self, our_unit, plane_nums = DEFAULT_PLANE_NUMS):  # 提供默认编队配置
+    def repair(self, our_unit):  # 提供默认编队配置
         """维修, 对飞机的维修操作特殊"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif our_unit.kind == FORMATION:  
+        elif isinstance(our_unit, Plane):  
             if self.pos.distance(our_unit) > 0:
                 return -2   # 不在范围内
             else:
@@ -406,7 +406,7 @@ class Base(Building):
                 replenishFuelAmmo(self, our_unit)
                 return 0
 
-    def build(self, kind, plane_nums = DEFAULT_PLANE_NUMS):
+    def build(self, kind):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
         pass    ##
 
@@ -474,7 +474,7 @@ class Carrier(Ship):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
@@ -498,7 +498,7 @@ class Cargo(Ship):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
