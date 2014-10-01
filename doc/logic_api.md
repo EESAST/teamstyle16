@@ -19,19 +19,15 @@
                 Unit
                     Submarine
                     Ship
-                        Battleship
                         Cargo
                         Carrier
-                        Cruiser
                         Destroyer
-                    Formation
+                    Plane
+                        Fighter
+                        Scout
 
 TODO：游戏常量
 
-|            方法           | 返回值 |       描述       |
-|---------------------------|--------|------------------|
-| kind_to_formation(kind)   | int[4] | 类型值->机群组成 |
-| formation_to_kind(int[4]) | int    | 机群组成->类型值 |
 
 ### Class Position
 
@@ -61,9 +57,9 @@ TODO：游戏常量
 | visible | bool                 | 该元素是否可见 |
 
 ### Class Resource
-|  属性  | 类型 |   描述   |
-|--------|------|----------|
-| remain | int  | 剩余资源 |
+|    属性    | 类型 |   描述   |
+| ---------- | ---- | -------- |
+| metal/fuel | int  | 剩余资源 |
 
 ### Class UnitBase
 |     属性    |  类型  |       描述       |
@@ -84,17 +80,13 @@ TODO：游戏常量
 | defences    | int[2] | 防御             |
 
 ### Class Unit
-|    属性    |   类型   |     描述     |
-|------------|----------|--------------|
-| speed      | int      | 移动速度     |
-| dest       | Position | 当前目的地   |
-| cost       | int      | 生产所需金属 |
-| population | int      | 占有人口数   |
-
-### Class Formation
-|    属性    |  类型  |     描述    |
-|------------|--------|-------------|
-| plane_nums | int[4] | 4机种的数目 |
+|     属性    |   类型   |      描述      |
+| ----------- | -------- | -------------- |
+| speed       | int      | 移动速度       |
+| dest        | Position | 当前目的地     |
+| cost        | int      | 生产所需金属   |
+| population  | int      | 占有人口数     |
+| build_round | int      | 生产所需回合数 |
 
 
 ## Module map_info
@@ -126,14 +118,16 @@ TODO：游戏常量
 | time_per_round  | float     | 每回合时间       |
 | weather         | int       | 天气             |
 
-|             方法             | 返回值 |        描述        |
-|------------------------------|--------|--------------------|
-| x_max()                      | int    | 地图行数           |
-| y_max()                      | int    | 地图列数           |
-| map_type(x, y)               | int    | 查询地形           |
-| set_map_type(x, y, map_type) | None   | 设置地形           |
-| save(filename)               | None   | 保存地图信息至文件 |
-| saves()                      | str    | 保存地图至字符串   |
+|             方法             | 返回值 |         描述         |
+| ---------------------------- | ------ | -------------------- |
+| x_max()                      | int    | 地图行数             |
+| y_max()                      | int    | 地图列数             |
+| map_type(x, y)               | int    | 查询地形             |
+| set_map_type(x, y, map_type) | None   | 设置地形             |
+| save(filename)               | None   | 保存地图信息至文件   |
+| saves()                      | str    | 保存地图至字符串     |
+| saves_elements()             | str    | 保存单位状态至字符串 |
+
 
 
 ## Module command
@@ -146,7 +140,6 @@ TODO：游戏常量
             AttackPos
             AttackUnit
             ChangeDest
-            Collect
             Fix
             Produce
             Supply
@@ -166,11 +159,6 @@ TODO：游戏常量
 |               构造函数               |           描述           |
 |--------------------------------------|--------------------------|
 | AttackPos(operand, target, hit=None) | 攻击单位, 可指定是否命中 |
-
-### Class Collect
-|         构造函数         | 描述 |
-|--------------------------|------|
-| Collect(operand, target) | 收集 |
 
 ### Class Fix
 |               构造函数               |            描述           |
@@ -240,13 +228,13 @@ TODO：游戏常量
 | damage | int  | 造成的伤害     |
 
 ### Class Supply
-|  属性 | 类型 |        描述        |
-|-------|------|--------------------|
-| index | int  | 补给发起方的索引号 |
+|  属性  | 类型 |        描述        |
+| ------ | ---- | ------------------ |
+| index  | int  | 补给发起方的索引号 |
 | target | int  | 补给接受方的索引号 |
-| fuel  | int  | 补给的燃料量       |
-| metal | int  | 补给的金属量       |
-| ammo  | int  | 补给的弹药量       |
+| fuel   | int  | 补给的燃料量       |
+| metal  | int  | 补给的金属量       |
+| ammo   | int  | 补给的弹药量       |
 
 ### Class Fix
 |       属性      |   类型   |        描述        |
@@ -310,8 +298,8 @@ TODO：游戏常量
 ### Class GameBody
 游戏主体
 
-|      构造函数     |     描述     |
-|-------------------|--------------|
+|      构造函数      |     描述     |
+| ------------------ | ------------ |
 | GameBody(map_info) | 构造游戏主体 |
 
 |            方法            |        返回值        |                 描述                 |
@@ -332,4 +320,3 @@ TODO：游戏常量
 | run()                      | [Event]              | 运行一回合，返回该回合内发生的事件   |
 | **设置/保存相关**          |                      |                                      |
 | set_team_name(team, name)  | None                 | 设置队伍名                           |
-| save()                     | MapInfo              | 保存游戏状态至MapInfo对象            |

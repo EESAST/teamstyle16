@@ -14,11 +14,12 @@
 
 # 以下所有数据暂时并无理论依据...
 
+from copy import copy
 from random import random, choice
 
 # 基础参数限制
-ROUND_MAX = 1000     # 最大回合数
-MAP_SIZE_MAX = 150   # 地图最大边长
+ROUND_MAX = 500     # 最大回合数
+MAP_SIZE_MAX = 100   # 地图最大边长
 FORT_NUM_MAX = 10    # 据点最大数量
 MINE_NUM_MAX = 12   # 矿场最大数量
 OILFIELD_NUM_MAX = 12    # 油田最大数量
@@ -57,7 +58,6 @@ AIR = 2         # 空中
     飞机不能受到鱼雷伤害 """
 FIRE = 0        # 火力伤害
 TORPEDO = 1     # 鱼雷伤害
-CRASH_RATIO = 0.3 #坠机伤害
 
 
 # 地形
@@ -75,18 +75,10 @@ OILFIELD = 3    # 油田
 # 可移动单位(unit)
 SUBMARINE = 4   # 潜艇
 DESTROYER = 5   # 驱逐舰
-CRUISER = 6     # 巡洋舰
-BATTLESHIP = 7  # 战舰
-CARRIER = 8     # 航母
-CARGO = 9       # 运输舰
-FORMATION = 10  # 飞机编队(机群)
-
-
-# 飞机编队内飞机种类
-FIGHTER = 0       # 战斗机
-TORPEDOER = 1   # 鱼雷机
-BOMBER = 2      # 轰炸机
-SCOUT = 3     # 侦察机
+CARRIER = 6     # 航母
+CARGO = 7       # 运输舰
+FIGHTER = 8     # 战斗机
+SCOUT = 9       # 侦察机
 
 
 # ElementProperty
@@ -114,7 +106,7 @@ DEFENCES = 10
 PROPERTY = [([4, 10, 8], [0, 7, 5], 
              2000, 1000, INFINITY, 6, 200, 
              None, None, 
-             [40, 0], [30, INFINITY]),      # 基地
+             [40, 0], [15, INFINITY]),      # 基地
             ([3, 8, 6], [0, 5, 4], 
              800, 200, 300, 4, 200, 
              None, None, 
@@ -130,66 +122,32 @@ PROPERTY = [([4, 10, 8], [0, 7, 5],
             ([6, 5, 3], [5, 5, 0], 
              35, 120, 20, 2, None, 
              6, 2,
-             [0, 40], [INFINITY, 5]),       # 潜艇
-            ([5, 10, 8], [4, 9, 7], 
-             50, 150, 30, 3, None, 
-             8, 2,
-             [13, 20], [10, 12]),           # 驱逐舰
-            ([3, 8, 8], [3, 7, 8], 
-             70, 150, 36, 3, None, 
+             [0, 40], [INFINITY, 7]),       # 潜艇
+            ([4, 9, 7], [2, 8, 6], 
+             70, 150, 40, 4, None, 
              7, 3,
-             [24, 14], [12, 14]),           # 巡洋舰
-            ([2, 7, 6], [0, 6, 4], 
-             100, 150, 50, 5, None, 
-             6, 4,
-             [30, 0], [16, 16]),           # 战舰
+             [22, 11], [13, 10]),           # 驱逐舰
             ([4, 9, 9], [0, 8, 6], 
              120, 200, 70, 2, None, 
              5, 4,
-             [15, 0], [20, 8]),            # 航母
+             [18, 0], [16, 10]),             # 航母
             ([3, 7, 6], None, 
              60, 300, 120, None, 50, 
-             7, 1,
-             None, [15, 10]),               # 运输舰
-            (None, [0, 3, 4],
-             None, None, None, 3, None,
-             10, 3,
-             None, None)]                   # 机群, 值为None的属性由机群具体构成动态决定
-
-
-# 飞机常量属性
-SCOUT_SIGHT_RANGES = [2, 12, 16]    # 侦察机视野
-OTHER_SIGHT_RANGES_WITHOUT_SCOUT = [0, 9, 10]   # 其他机种视野
-FORMATION_TOTAL_PLANES = 10     # 一个机群最多30架飞机
-FORMATION_SCOUNTADD = 0.1   #附近每有一处有侦察机，伤害提升百分比
-
-# 各机种参数
-""" plane_property = (health_max, fuel_max, ammo_max, 
-                      attacks, defences) """
-PLANES = [(7, 10, 5,  
-           [2, 0], [1, INFINITY]),      # 单架战斗机
-          (6, 10, 4,  
-           [0, 2], [1, INFINITY]),      # 单架鱼雷机
-          (8, 10, 4,  
-           [3, 0], [2, INFINITY]),      # 单架轰炸机
-          (5, 15, 2,  
-           [1, 1], [0, INFINITY])]      # 单架侦察机
-
-DEFAULT_PLANE_NUMS = [1, 3, 3, 3]             # 机群默认配置, 总数 = FORMATION_TOTAL_PLANES
-
-# 命中率
-def isHit(distance, fire_range):
-    """与双方距离, 攻方射程有关的命中率, 返回是否命中"""
-    if distance > fire_range:
-        accuracy = 0
-    else:
-        accuracy = 1 - float(distance) *(distance - 1) /(fire_range + 1) / (fire_range + 1)
-    return random() < accuracy
+             8, 1,
+             None, [15, 8]),                # 运输舰
+            ([0, 9, 10], [0, 3, 4],
+             70, 100, 21, 3, None,
+             9, 3,
+             [30, 10], [10, INFINITY]),     # 战斗机
+            ([2, 12, 16], [1, 3, 4],
+             50, 120, 5, 1, None,
+             10, 1,
+             [10, 5], [7, INFINITY])]       # 侦察机
 
 # 攻击修正
 def modifiedAttacks(distance, fire_range, attacks):
     """返回距离修正后的火力和鱼雷攻击力"""
-    return [int((1 - float(distance - 1) / (fire_range + 1)) * attack) 
+    return [int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack) 
             for attack in attacks]    # 可能大于attack
 
 # 对象
@@ -299,6 +257,7 @@ class Element(object):
         super(Element, self).__init__()
         self.kind = kind
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
+        self.level = pos.level
         self.size = (1, 1) if isinstance(pos, Position) else pos.size
         self.index = appendElement(self)
         self.visible = False    # 每回合更新所有element的visible值
@@ -309,14 +268,14 @@ class Resource(Element):
 
 class Mine(Resource):
     """矿场"""
-    def __init__(self, kind, pos, metal):
+    def __init__(self, kind, pos, metal = PROPERTY[MINE][METAL_MAX]):
         super(Mine, self).__init__(MINE, pos)
         self.metal = metal
         self.visible = True
 
 class Oilfield(Resource):
     """油田"""
-    def __init__(self, kind, pos, fuel):
+    def __init__(self, kind, pos, fuel = PROPERTY[OILFIELD][FUEL_MAX]):
         super(Oilfield, self).__init__(OILFIELD, pos)
         self.fuel = fuel
         self.visible = True
@@ -352,35 +311,31 @@ class UnitBase(Element):
         range = self.fire_ranges[target_pos.z]
         target_unit = getElement(target_pos)
         if distance > range:
-            return -1,0   # 不在攻击范围内
+            return -1   # 不在攻击范围内
         elif self.ammo <= 0:
-            return -2, 0   # 无弹药
+            return -2    # 无弹药
         elif target_unit == None or target_unit.team == self.team:
             self.ammo -= self.ammo_once
-            return -3, 0   # 坐标不存在敌军单位, miss
+            return -3    # 坐标不存在敌军单位, miss
         else:
             self.ammo -= self.ammo_once  # 减少弹药数目
-            if not isHit(distance, range):
-                damage = 0  # miss
-                return -4, 0
+            modified_attacks = modifiedAttacks(distance, range, self.attacks)
+            fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE]) 
+            # 考虑到 defence = INFINITY 可能无法破防
+            torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
+            damage = fire_damage + torpedo_damage
+            # scout influence required.
+            SCORE[self.team] += damage * DAMAGE_SCORE
+            if damage >= target_unit.health:
+                target_unit.health = 0  # killed
+                target_unit.destroy()
             else:
-                modified_attacks = modifiedAttacks(distance, range, self.attacks)
-                fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE]) 
-                # 考虑到 defence = INFINITY 可能无法破防
-                torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
-                damage = fire_damage + torpedo_damage
-                # scout influence required.
-                SCORE[self.team] += damage * DAMAGE_SCORE
-                if damage >= target_unit.health:
-                    target_unit.health = 0  # killed
-                    target_unit.destroy()
-                else:
-                    target_unit.health -= damage
-                return True, damage
+                target_unit.health -= damage
+            return damage
 
     def destroy(self):
         """单位阵亡"""
-        ELEMENTS.remove(self)
+        del ELEMENTS[self.index]
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
@@ -411,7 +366,7 @@ class Building(UnitBase):
         """建筑对周围单位补给, 不对外提供金属"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif ((our_unit.type == FORMATION and self.pos.distance(our_unit) > 0)
+        elif ((our_unit.kind == FORMATION and self.pos.distance(our_unit) > 0)
               or self.pos.distance(our_unit) > 1):
             return -2   # 不在范围内
         else:
@@ -422,11 +377,11 @@ class Base(Building):
     """基地, 继承自Building"""
     def __init__(self, team, rectangle, unitbase = None):
         if unitbase == None:
-            super(Base, self).__init__(team, BASE, rectangle, *(PROPERTY[BASE]))
+            super(Base, self).__init__(team, BASE, rectangle, *PROPERTY[BASE])
                                    # 从元组解析出数据后传入 Building.__init__()
         else :
             self.__dict__ = unitbase.__dict__.copy
-            self.type = BASE
+            self.kind = BASE
 
     def repair(self, our_unit, plane_nums = DEFAULT_PLANE_NUMS):  # 提供默认编队配置
         """维修, 对飞机的维修操作特殊"""
@@ -460,10 +415,10 @@ class Fort(Building):
     """据点, 继承自Building"""
     def __init__(self, team, rectangle, unitbase = None):
         if unitbase == None:
-            super(Fort, self).__init__(team, FORT, rectangle, *(PROPERTY[FORT]))
+            super(Fort, self).__init__(team, FORT, rectangle, *PROPERTY[FORT])
         else :
             self.__dict__ = unitbase.__dict__.copy
-            self.type = FORT
+            self.kind = FORT
 
 class Unit(UnitBase):
     """可移动单位"""
@@ -472,28 +427,25 @@ class Unit(UnitBase):
                  speed, population, 
                  attacks, defences, unitbase = None):
         if unitbase == None:
-            super(Unit, self).__init__(team, type, pos, sight_ranges, fire_ranges, 
+            super(Unit, self).__init__(team, kind, pos, sight_ranges, fire_ranges, 
                                        health, fuel, ammo, ammo_once, metal, 
                                        attacks, defences)
-            self.speed = speed
-            self.dest = self.pos    # 目的地(初始为自身位置)
-            self.cost = int(self.health_max * METAL_PER_HEALTH)
-            self.population = population
         else:
             self.__dict__ = unitbase.__dict__.copy()
-            self.speed = speed
-            self.dest = self.pos    # 目的地(初始为自身位置)
-            self.cost = int(self.health_max * METAL_PER_HEALTH)
-            self.population = population
+        self.speed = speed
+        self.dest = self.pos    # 目的地(初始为自身位置)
+        self.cost = int(self.health_max * METAL_PER_HEALTH)
+        self.build_round = self.cost / 10
+        self.population = population
 
 class Submarine(Unit):
     """潜艇"""
     def __init__(self, team, pos, unit = None):
         if unit == None:
-            super(Submarine, self).__init__(team, SUBMARINE, pos, *(PROPERTY[SUBMARINE]))
+            super(Submarine, self).__init__(team, SUBMARINE, pos, *PROPERTY[SUBMARINE])
         else:
             self.__dict__ = unit.__dict__.copy()
-            self.type = Submarine
+            self.kind = SUBMARINE
 
 class Ship(Unit):
     """水面舰"""        
@@ -504,37 +456,19 @@ class Destroyer(Ship):
     """驱逐舰"""
     def __init__(self, team, pos, ship = None):
         if ship == None:
-            super(Destroyer, self).__init__(team, DESTROYER, pos, *(PROPERTY[DESTROYER]))
+            super(Destroyer, self).__init__(team, DESTROYER, pos, *PROPERTY[DESTROYER])
         else:
             self.__dict__ = ship.__dict__.copy()
-            self.type = Destroyer
-
-class Cruiser(Ship):
-    """巡洋舰"""
-    def __init__(self, team, pos, ship = None):
-        if ship == None:
-            super(Cruiser, self).__init__(team, CRUISER, pos, *(PROPERTY[CRUISER]))
-        else:
-            self.__dict__ = ship.__dict__.copy()
-            self.type = Cruiser
-
-class Battleship(Ship):
-    """战舰"""
-    def __init__(self, team, pos, ship = None):
-        if ship == None:
-            super(Battleship, self).__init__(team, BATTLESHIP, pos, *(PROPERTY[BATTLESHIP]))
-        else:
-            self.__dict__ = ship.__dict__.copy()
-            self.type = Battleship
+            self.kind = DESTROYER
 
 class Carrier(Ship):
     """航母"""
     def __init__(self, team, pos, ship = None):
         if ship == None:
-            super(Carrier, self).__init__(team, CARRIER, pos, *(PROPERTY[CARRIER]))
+            super(Carrier, self).__init__(team, CARRIER, pos, *PROPERTY[CARRIER])
         else:
             self.__dict__ = ship.__dict__.copy()
-            self.type = Carrier
+            self.kind = CARRIER
 
     def supply(self, our_unit):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
@@ -551,15 +485,14 @@ class Carrier(Ship):
                 our_unit.metal += provide_metal
             return 0 
 
-
 class Cargo(Ship):
     """运输舰"""
     def __init__(self, team, pos, ship = None):
         if ship == None:
-            super(Cargo, self).__init__(team, CARGO, pos, *(PROPERTY[CARGO]))
+            super(Cargo, self).__init__(team, CARGO, pos, *PROPERTY[CARGO])
         else:
             self.__dict__ = ship.__dict__.copy()
-            self.type = Cargo
+            self.kind = CARGO
 
     def supply(self, our_unit):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
@@ -589,56 +522,25 @@ class Cargo(Ship):
         else:
             return -1
 
+class Plane(Unit):
+    """飞机"""
+    def __init__(self, unit):
+        self.__dict__ = unit.__dict__.copy()
 
-
-def renum(formation):
-    """根据飞机编队的剩余health重置"""
-    health_tank = formation.health
-    max_nums = formation.plane_nums
-    formation.plane_nums = [0, 0, 0, 0]
-    index = 0     # 侦察机
-    while health_tank > 0 and index < 4:
-        if formation.plane_nums[index] == max_nums[index]:
-            index += 1
-            continue
-        elif health_tank >= PLANES[index][0]:
-            health_tank -= PLANES[index][0]
-            formation.plane_nums[index] += 1
+class Fighter(Plane):
+    """战斗机"""
+    def __init__(self, team, pos, plane = None):
+        if plane = None:
+            super(Fighter, self).__init__(team, FIGHTER, pos, *PROPERTY[FIGHTER])
         else:
-            formation.plane_nums[index] += 1    # 残血
-            break
-    return 
+            self.__dict__ = plane.__dict__.copy()
+            self.kind = FIGHTER
 
-class Formation(Unit):
-    """飞机编队"""
-    def __init__(self, team, pos, plane_nums = DEFAULT_PLANE_NUMS, unit = None):
-        if unit == None:
-            if sum(plane_nums) > FORMATION_TOTAL_PLANES:
-                return -1   # 飞机数超出编队容量
-            super(Formation, self).__init__(team, FORMATION, pos, *(PROPERTY[FORMATION]))
-            self.plane_nums = plane_nums
-            self.update()
-        else :
-            self.__dict__ = unit.__dict__.copy()
-            self.type = Formation
-            self.plane_nums = plane_nums
-            self.update()
-
-    def crash_damage(self):
-        return int(CRASH_RATIO * self.fuel)
-
-    def update(self):
-        """飞机的参数随plane_nums动态变化, update函数用于更新机群参数"""
-        renum(self)
-        self.sight_ranges = (SCOUT_SIGHT_RANGES if self.plane_nums[3] > 0 else OTHER_SIGHT_RANGES_WITHOUT_SCOUT)
-        self.health_max = sum([PLANES[i][0] * self.plane_nums[i] for i in xrange(4)])
-        self.fuel_max = sum([PLANES[i][1] * self.plane_nums[i] for i in xrange(4)])
-        self.ammo_max = sum([PLANES[i][2] * self.plane_nums[i] for i in xrange(4)])
-        self.ammo_once = sum([PLANES[i][3] * self.plane_nums[i] for i in xrange(4)])
-        attacks = defences = [0, 0]
-        for i in xrange(4):
-            attacks[0] += [PLANES[i][-2][j] * self.plane_nums[i] for j in xrange(2)][0]
-            attacks[1] += [PLANES[i][-2][j] * self.plane_nums[i] for j in xrange(2)][1]
-            defences[0] += [PLANES[i][-1][j] * self.plane_nums[i] for j in xrange(2)][0]
-            defences[1] += [PLANES[i][-1][j] * self.plane_nums[i] for j in xrange(2)][1]
-
+class Scout(Plane):
+    """侦察机"""
+    def __init__(self, team, pos, plane = None):
+        if plane = None:
+            super(Scout, self).__init__(team, SCOUT, pos, *PROPERTY[SCOUT])
+        else:
+            self.__dict__ = plane.__dict__.copy()
+            self.kind = SCOUT

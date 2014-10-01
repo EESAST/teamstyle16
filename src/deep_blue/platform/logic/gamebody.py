@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # gamebody.py
 from basic import *
-import map
+import map_info
 import json
 import event
 

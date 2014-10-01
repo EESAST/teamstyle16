@@ -36,26 +36,15 @@ enum ElementType  // 元素类型
     // Units
     SUBMARINE,   // 潜艇
     DESTROYER,   // 驱逐舰
-    CRUISER,     // 巡洋舰
-    BATTLESHIP,  // 战舰
     CARRIER,     // 航母
     CARGO,       // 运输舰
-    FORMATION,   // 机群（飞机编队）
+    FIGHTER,     // 战斗机
+    SCOUT,       // 侦察机
     kElementTypes
-};
-
-enum PlaneType  // 机种
-{
-    SCOUT,      // 侦察机
-    TORPEDOER,  // 鱼雷机
-    BOMBER,     // 轰炸机
-    FIGHTER,    // 战斗机
-    kMaxPlaneTypes
 };
 
 
 // *********************** 相关类型 ***********************
-typedef int Formation[kMaxPlaneTypes];  // 表示机群内各机种的数目
 
 struct Position
 {
@@ -143,10 +132,6 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
 // *********************** 游戏数据 ***********************
 
 const Property kElementInfo[kElementTypes] = {};
-const Property kPlaneInfo[4] = {};
-
-const int kScoutSightRange[3] = {1, 3, 4};        // 编队内有侦察机时的视野范围
-
 
 const GameInfo * Info();  // 获取游戏信息
 MapType Map(int x, int y);
@@ -171,12 +156,6 @@ void Cancel();  // 取消回合内此前下达的 Produce 外的所有指令
 // 否则，type 取值无效，返回 NULL
 
 const Property * GetProperty(int type);
-
-// 从类型 type 中解析机群组成
-bool TypeToFormation(int type, Formation *formation);
-// 由机群组成中计算 type 值
-int FormationToType(const Formation *Formation);
-
 
 }  // namespace teamstyle16
 

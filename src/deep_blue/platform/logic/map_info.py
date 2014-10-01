@@ -43,7 +43,6 @@ def save(map, filename):
     map_str = saves(map)
     open(filename).write(map_str)
 
-
 def saves(map):
     """Save map to string"""
     # save map_type

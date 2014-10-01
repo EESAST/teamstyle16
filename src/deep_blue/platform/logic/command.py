@@ -2,7 +2,7 @@
 # command.py
 from basic import *
 import event
-import map
+import map_info
 
 
 class Command(object):
