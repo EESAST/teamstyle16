@@ -114,11 +114,11 @@ class AIProxy(threading.Thread):
 
     def __send_stable_info(self, battle):
         """Send infos that do not change over rounds to the AI"""
-        self.sock.send(self.__encode_stable_info(battle))
+        self.conn.send(self.__encode_stable_info(battle))
 
     def __send_round_info(self, battle):
         """Send infos that change over rounds to the AI"""
-        self.sock.send(self.__encode_round_info(battle))
+        self.conn.send(self.__encode_round_info(battle))
 
     def __decode_commands(self, data):
         """Decode incoming data into list of commands"""
