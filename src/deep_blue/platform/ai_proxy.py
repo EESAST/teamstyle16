@@ -1,9 +1,11 @@
 import threading, socket
 import subprocess
 import struct
+import logging
 from logic import basic
 from logic import command
 
+logging.basicConfig(level=logging.INFO)
 
 class AIError(IOError):
     """Describe error caused by AI"""
@@ -28,42 +30,65 @@ class ParseError(AIError):
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
-    def __init__(self, team_num, file_name, port_AI):
+    def __init__(self, team_num, file_name, port):
         threading.Thread.__init__(self)
         self.lock = threading.RLock()
         self.team_num = team_num
-        self.file_name = file_name
         self.commands = []
-        self.sock_AI = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock_AI.bind(('', port_AI))
-        self.sock_AI.listen(5)
-        self.sock_AI.settimeout(10)
         self.stop_flag = False
 
+        self.logger = logging.getLogger('%s.ai%d' % (__name__, team_num))
+
+        # build the socket
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.bind(('', port))
+        self.sock.listen(1)
+
+        # start AI and connect
         self.ai_program = None
-        self.__run_ai()
-        self.conn, self.addr = self.sock_AI.accept()
+        self.logger.info('Starting AI (%s)', file_name)
+        self.__run_ai(file_name, port)
+        self.logger.info('AI started, waiting for connection')
+        self.conn, self.addr = self.sock.accept()
+        self.logger.info('AI connected, getting team name')
         self.team_name = self.__get_team_name()
+        self.logger.info('AI team name read: %s', self.team_name)
 
     def stop(self):
         self.stop_flag = True
 
     def run(self):
-        count = 0
+        self.logger.info('Begin loop for receiving commands for AI')
         while not self.stop_flag:
             try:
+                self.logger.debug('Receiving commands from AI')
                 data = self.conn.recv(1024)
-                cmd = self.__decode_commands(data.decode())
+
+                if len(data) == 0:
+                    if self.ai_program.poll() is not None:
+                        self.logger.info('AI has been terminated')
+                        return
+                    else:
+                        self.logger.error('Cannot get data from AI')
+                        raise AIConnectError('Connection to AI %d seems broken'
+                                             % self.team_num)
+
+
+                self.logger.debug('Data received from AI (size: %d)', len(data))
+                cmds = self.__decode_commands(data.decode())
+                self.logger.info('%d command(s) decoded from AI', len(cmds))
+
                 self.lock.acquire()
-                self.commands.extend(cmd)
+                self.commands.extend(cmds)
                 self.lock.release()
             except socket.timeout:
+                self.logger.debug('Receiving timeout, continue to next loop')
                 continue
 
     def get_commands(self):
         """Get accepted commands"""
-        commands = self.commands[:]
         self.lock.acquire()
+        commands = self.commands[:]
         self.commands = []
         self.lock.release()
         return commands
@@ -76,8 +101,9 @@ class AIProxy(threading.Thread):
         else:
             self.__send_round_info()
 
-    def __run_ai(self):
-        self.ai_program = subprocess.Popen(self.file_name,
+    def __run_ai(self, file_name, port):
+        pass
+        self.ai_program = subprocess.Popen([file_name, 'localhost', str(port)],
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT)
 
@@ -87,11 +113,11 @@ class AIProxy(threading.Thread):
 
     def __send_stable_info(self, battle):
         """Send infos that do not change over rounds to the AI"""
-        self.sock_AI.send(self.__encode_stable_info(battle))
+        self.sock.send(self.__encode_stable_info(battle))
 
     def __send_round_info(self, battle):
         """Send infos that change over rounds to the AI"""
-        self.sock_AI.send(self.__encode_round_info(battle))
+        self.sock.send(self.__encode_round_info(battle))
 
     def __decode_commands(self, data):
         """Decode incoming data into list of commands"""

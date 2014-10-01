@@ -22,7 +22,7 @@
 异常继承关系
 
     IOError
-        AIProxyError
+        AIError
             AIFileError      AI文件错误
             AIConnectError   AI连接错误
             ParseError       指令解析错误
