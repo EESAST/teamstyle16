@@ -9,16 +9,17 @@ namespace teamstyle16
 // *********************** 游戏常量 ***********************
 
 const int kMaxTeamNameSize = 20;
-const int kMaxRound = 300;      // 最大回合数
+
 const int kMaxMapSize = 80;     // 地图最大边长
+const int kMaxRoundLimit = 300;      // 最大回合数
+const int kMaxPopulationLimit = 300;
+
 const int kMaxElementNum = 200;     // 最大元素个数
 const int kMaxProductionNum = 200;  // 生产列表大小
 
 const int kFortScore = 1;       // 占领据点每回合奖励的积分
 const int kDamageScore = 1;     // 造成一点伤害奖励的积分
 const int kCollectScore = 1;    // 收集一单位资源奖励的积分
-
-typedef int Type;
 
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
@@ -64,8 +65,8 @@ struct Property  // 属性
     Level level;
     Size size;
 
-    int sight_range[3];
-    int fire_range[3];
+    int sight_ranges[3];
+    int fire_ranges[3];
 
     int health_max;
     int fuel_max;
@@ -73,8 +74,8 @@ struct Property  // 属性
     int ammo_once;  // 单次攻击消耗弹药
     int metal_max;
 
-    int attack[2];
-    int defence[2];
+    int attacks[2];
+    int defences[2];
     int speed;
 
     int cost;  //消耗钢铁
@@ -87,7 +88,7 @@ struct State  // 状态
     int index;  // 每个元素都有唯一的索引号
 
     Position pos;  // 元素左上角的位置
-    Type type;
+    int type;
     int team;
     bool visible;
 
@@ -101,7 +102,7 @@ struct State  // 状态
 
 struct ProductionEntry
 {
-    Type unit_type;
+    int unit_type;
     int round_left;
 };
 
@@ -110,13 +111,13 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     int x_max;
     int y_max;
 
-    int max_population;  // 人口上限
-    int max_round;
+    int population_limit;  // 人口上限
+    int round_limit;
     float time_per_round;
     int weather;  // 天气影响所有单位的视野，数值为单位视野的改变量
 
     int team_num;  // 队伍号(0或1)
-    int score[2];  // 两队当前积分
+    int scores[2];  // 两队当前积分
     int round;     // 当前总回合数
 
     int population;  // 当前人口
@@ -131,7 +132,7 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
 
 // *********************** 游戏数据 ***********************
 
-const Property kElementInfo[kElementTypes] = {};
+const Property kElementInfos[kElementTypes] = {};
 
 const GameInfo * Info();  // 获取游戏信息
 MapType Map(int x, int y);
@@ -142,7 +143,7 @@ void AttackPos(int operand, Position target);
 void AttackUnit(int operand, int target);
 void ChangeDest(int operand, Position dest);
 void Fix(int operand, int target_formation);
-void Produce(int operand, Type type);
+void Produce(int operand, int type);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
 void Cancel();  // 取消回合内此前下达的 Produce 外的所有指令
 

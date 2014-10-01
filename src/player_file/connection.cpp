@@ -12,8 +12,8 @@ struct StableHeader
     int y_max;
     int weather;
     int team_num;
-    int max_population;
-    int max_round;
+    int population_limit;
+    int round_limit;
     float time_per_round;
 };
 
@@ -23,7 +23,7 @@ struct RoundHeader
     int element_num;
     int population;
     int production_num;
-    int score[2];
+    int scores[2];
 };
 
 void Connection::Connect(const std::string &host, const std::string &port)
@@ -99,8 +99,8 @@ void Connection::ReadStableInfo()
     game_info_.y_max = header->y_max;
     game_info_.weather = header->weather;
     game_info_.team_num = header->team_num;
-    game_info_.max_population = header->max_population;
-    game_info_.max_round = header->max_round;
+    game_info_.population_limit = header->population_limit;
+    game_info_.round_limit = header->round_limit;
     game_info_.time_per_round = header->time_per_round;
     std::clog << "Decode completed\n";
 
@@ -130,8 +130,8 @@ void Connection::ReadRoundInfo()
     game_info_.element_num = header->element_num;
     game_info_.population = header->population;
     game_info_.production_num = header->production_num;
-    game_info_.score[0] = header->score[0];
-    game_info_.score[1] = header->score[1];
+    game_info_.scores[0] = header->scores[0];
+    game_info_.scores[1] = header->scores[1];
     std::clog << "Decode completed\n";
 
     // read body

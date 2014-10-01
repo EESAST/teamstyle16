@@ -23,8 +23,8 @@ struct StableHeader
     int y_max;
     int weather;
     int team_num;
-    int max_population;
-    int max_round;
+    int population_limit;
+    int round_limit;
     float time_per_round;
 };
 
@@ -34,7 +34,7 @@ struct RoundHeader
     int element_num;
     int population;
     int production_num;
-    int score[2];
+    int scores[2];
 };
 
 }  // namespace
@@ -138,8 +138,8 @@ TEST_F(ConnectionTest, StableInfoReceived)
     EXPECT_EQ(header.y_max, Info()->y_max);
     EXPECT_EQ(header.weather, Info()->weather);
     EXPECT_EQ(header.team_num, Info()->team_num);
-    EXPECT_EQ(header.max_population, Info()->max_population);
-    EXPECT_EQ(header.max_round, Info()->max_round);
+    EXPECT_EQ(header.population_limit, Info()->population_limit);
+    EXPECT_EQ(header.round_limit, Info()->round_limit);
     EXPECT_EQ(header.time_per_round, Info()->time_per_round);
 
 
@@ -169,8 +169,8 @@ TEST_F(ConnectionTest, RoundInfoReceived)
         header.element_num = generator_() % 100;
         header.population = generator_() % 1000;
         header.production_num = generator_() % 50;
-        header.score[0] = generator_() % 10000000;
-        header.score[1] = generator_() % 10000000;
+        header.scores[0] = generator_() % 10000000;
+        header.scores[1] = generator_() % 10000000;
 
         std::vector<ProductionEntry> production_list(header.production_num);
         for (auto &entry : production_list)
@@ -213,8 +213,8 @@ TEST_F(ConnectionTest, RoundInfoReceived)
         EXPECT_EQ(header.element_num, Info()->element_num);
         EXPECT_EQ(header.population, Info()->population);
         EXPECT_EQ(header.production_num, Info()->production_num);
-        EXPECT_EQ(header.score[0], Info()->score[0]);
-        EXPECT_EQ(header.score[1], Info()->score[1]);
+        EXPECT_EQ(header.scores[0], Info()->scores[0]);
+        EXPECT_EQ(header.scores[1], Info()->scores[1]);
         EXPECT_EQ(0, std::memcmp(production_list.data(),
                                  Info()->production_list,
                                  sizeof(ProductionEntry) * header.production_num));

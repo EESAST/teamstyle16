@@ -45,6 +45,7 @@ obj/main.o: main.cpp connection.h | obj
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
 connection.h: basic.h
+	touch connection.h
 
 bin:
 	$(MKDIR) bin
