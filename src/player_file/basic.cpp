@@ -87,61 +87,14 @@ void Cancel()
 
 const Property * GetProperty(int type)
 {
-    static Property property;
-
     if (type < 0)
         return NULL;
     if (type < kElementTypes)
         return &kElementInfos[type];
 
-    // might be formation
-    Formation formation;
-    if (TypeToFormation(type, &formation))
-    {
-        // initialize to default
-        property = kElementInfos[FORMATION];
-
-        if (formation[SCOUT])
-            std::memcpy(property.sight_ranges,
-                        kScoutSightRanges,
-                        sizeof(property.sight_ranges));
-
-        for (int i = 0; i < kMaxPlaneTypes; i++)
-        {
-            int num = formation[i];
-            const Property &plane = kPlaneInfos[i];
-
-            property.health_max += plane.health_max * num;
-            property.fuel_max += plane.fuel_max * num;
-            property.ammo_max += plane.ammo_max * num;
-            property.ammo_once += plane.ammo_once * num;
-            property.metal_max += plane.metal_max * num;
-            property.attacks[0] += plane.attacks[0] * num;
-            property.attacks[1] += plane.attacks[1] * num;
-            property.defences[0] += plane.defences[0] * num;
-            property.defences[1] += plane.defences[1] * num;
-            property.cost += plane.cost * num;
-            property.build_round += plane.build_round * num;
-            property.population += plane.population * num;
-        }
-        return &property;
-    }
+    // may need to calculate property for planes
 
     return NULL;
 }
-
-
-bool TypeToFormation(int type, Formation *formation)
-{
-    // TODO
-    return true;
-}
-
-int FormationToType(const Formation *Formation)
-{
-    // TODO
-    return -1;
-}
-
 
 }  // namespace teamstyle16

@@ -142,7 +142,7 @@ int TryUpdate();
 void AttackPos(int operand, Position target);
 void AttackUnit(int operand, int target);
 void ChangeDest(int operand, Position dest);
-void Fix(int operand, int target_formation);
+void Fix(int operand, int target);
 void Produce(int operand, int type);
 void Supply(int operand, int target, int fuel, int metal, int ammo);
 void Cancel();  // 取消回合内此前下达的 Produce 外的所有指令

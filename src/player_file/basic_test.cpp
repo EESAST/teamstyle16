@@ -41,10 +41,10 @@ TEST_F(BasicTest, CheckProperties)
     CheckProperty(OILFIELD, "oilfield");
     CheckProperty(SUBMARINE, "submarine");
     CheckProperty(DESTROYER, "destroyer");
-    CheckProperty(CRUISER, "cruiser");
-    CheckProperty(BATTLESHIP, "battleship");
     CheckProperty(CARRIER, "carrier");
     CheckProperty(CARGO, "cargo");
+    CheckProperty(FIGHTER, "cruiser");
+    CheckProperty(SCOUT, "battleship");
 }
 
 void BasicTest::CheckProperty(int type, const std::string &name)
