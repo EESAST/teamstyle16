@@ -30,7 +30,7 @@ class ParseError(AIError):
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
-    def __init__(self, team_num, file_name, port):
+    def __init__(self, team_num, port, file_name=None):
         threading.Thread.__init__(self)
         self.lock = threading.RLock()
         self.team_num = team_num
@@ -44,11 +44,14 @@ class AIProxy(threading.Thread):
         self.sock.bind(('', port))
         self.sock.listen(1)
 
-        # start AI and connect
+        # start AI (if needed) and connect
         self.ai_program = None
-        self.logger.info('Starting AI (%s)', file_name)
-        self.__run_ai(file_name, port)
-        self.logger.info('AI started, waiting for connection')
+        if file_name is not None:
+            self.logger.info('Starting AI (%s)', file_name)
+            self.__run_ai(file_name, port)
+            self.logger.info('AI started')
+
+        self.logger.info('Waiting for connection')
         self.conn, self.addr = self.sock.accept()
         self.logger.info('AI connected, getting team name')
         self.team_name = self.__get_team_name()
@@ -58,21 +61,20 @@ class AIProxy(threading.Thread):
         self.stop_flag = True
 
     def run(self):
-        self.logger.info('Begin loop for receiving commands for AI')
+        self.logger.info('Starting loop for receiving commands from AI')
         while not self.stop_flag:
             try:
                 self.logger.debug('Receiving commands from AI')
                 data = self.conn.recv(1024)
 
                 if len(data) == 0:
-                    if self.ai_program.poll() is not None:
+                    if self.ai_program and self.ai_program.poll() is not None:
                         self.logger.info('AI has been terminated')
                         return
                     else:
                         self.logger.error('Cannot get data from AI')
                         raise AIConnectError('Connection to AI %d seems broken'
                                              % self.team_num)
-
 
                 self.logger.debug('Data received from AI (size: %d)', len(data))
                 cmds = self.__decode_commands(data.decode())
