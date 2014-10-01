@@ -4,6 +4,28 @@ import struct
 from logic import basic
 from logic import command
 
+
+class AIError(IOError):
+    """Describe error caused by AI"""
+    def __init__(self, what):
+        super(AIError, self).__init__(what)
+
+class AIFileError(AIError):
+    """Failed to run AI file"""
+    def __init__(self, what):
+        super(AIFileError, self).__init__(what)
+
+class AIConnectError(AIError):
+    """Connection closed unexpectly"""
+    def __init__(self, what):
+        super(AIConnectError, self).__init__(what)
+
+class ParseError(AIError):
+    """Failed to parse commands sent by AI"""
+    def __init__(self, what):
+        super(ParseError, self).__init__(what)
+
+
 class AIProxy(threading.Thread):
     """Proxy for AI"""
     def __init__(self, team_num, file_name, port_AI):
