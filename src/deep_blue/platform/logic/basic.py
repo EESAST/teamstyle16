@@ -530,7 +530,7 @@ class Plane(Unit):
 class Fighter(Plane):
     """战斗机"""
     def __init__(self, team, pos, plane = None):
-        if plane = None:
+        if plane == None:
             super(Fighter, self).__init__(team, FIGHTER, pos, *PROPERTY[FIGHTER])
         else:
             self.__dict__ = plane.__dict__.copy()
@@ -539,7 +539,7 @@ class Fighter(Plane):
 class Scout(Plane):
     """侦察机"""
     def __init__(self, team, pos, plane = None):
-        if plane = None:
+        if plane == None:
             super(Scout, self).__init__(team, SCOUT, pos, *PROPERTY[SCOUT])
         else:
             self.__dict__ = plane.__dict__.copy()
