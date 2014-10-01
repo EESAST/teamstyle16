@@ -1,6 +1,7 @@
 import threading, socket
 import subprocess
 import struct
+from logic import basic
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
@@ -33,7 +34,7 @@ class AIProxy(threading.Thread):
                 self.lock.acquire()
                 self.commands.extend(cmd)
                 self.lock.release()
-            except timeout:
+            except socket.timeout:
                 continue
 
     def get_commands(self):
@@ -77,7 +78,7 @@ class AIProxy(threading.Thread):
 
         cmds = []
         for cmd_str in cmd_strs:
-            name, args = cmd_strs[:2], cmd_strs[2:].split()
+            name, args = cmd_str[:2], cmd_str[2:].split()
             args = map(int, args)  # map to ints
 
             if name == 'ap':
@@ -158,5 +159,6 @@ class AIProxy(threading.Thread):
                 fuel = element.fuel
             dest = pos
 
-        return struct.pack('6i?7i', index, *pos, kind, team, visible,
-                                    health, fuel, ammo, metal, *dest)
+        return struct.pack('6i?7i', index, pos.x, pos.y, pos.z, kind, team,
+                                    visible, health, fuel, ammo, metal,
+                                    dest.x, dest.y, dest.z)
