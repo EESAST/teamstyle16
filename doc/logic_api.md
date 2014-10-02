@@ -110,7 +110,10 @@ TODO：游戏常量
 | MapInfo(x_max, y_max, max_population=..., record_interval=..., time_per_round=..., weather=...) | 构造空地图 |
 
 |       属性      |    类型   |       描述       |
-|-----------------|-----------|------------------|
+| --------------- | --------- | ---------------- |
+| types           | [[int]]   | 地形二维数组     |
+| x_max           | int       | 地图行数         |
+| y_max           | int       | 地图列数         |
 | elements        | [Element] | 地图上所有元素   |
 | max_polulation  | int       | 人口上限         |
 | max_round       | int       | 最大回合数       |
@@ -118,16 +121,15 @@ TODO：游戏常量
 | time_per_round  | float     | 每回合时间       |
 | weather         | int       | 天气             |
 
-|             方法             | 返回值 |                        描述                       |
-|------------------------------|--------|---------------------------------------------------|
-| x_max()                      | int    | 地图行数                                          |
-| y_max()                      | int    | 地图列数                                          |
-| map_type(x, y)               | int    | 查询地形                                          |
-| set_map_type(x, y, map_type) | None   | 设置地形                                          |
-| add_element(element)         | bool   | 添加元素并设置索引, 若位置无效或被占用则返回false |
-| save(filename)               | None   | 保存地图信息至文件                                |
-| saves()                      | str    | 保存地图至字符串                                  |
-| saves_elements()             | str    | 保存单位状态至字符串                              |
+|             方法             | 返回值  |                        描述                       |
+| ---------------------------- | ------- | ------------------------------------------------- |
+| map_type(x, y)               | int     | 查询地形                                          |
+| set_map_type(x, y, map_type) | bool    | 设置地形                                          |
+| element(pos)                 | Element | 返回pos位置的元素, 若无元素则返回None             |
+| add_element(element)         | bool    | 添加元素并设置索引, 若位置无效或被占用则返回false |
+| save(filename)               | None    | 保存地图信息至文件                                |
+| saves()                      | str     | 保存地图至字符串                                  |
+| saves_elements()             | str     | 保存单位状态至字符串                              |
 
 
 
@@ -157,10 +159,10 @@ TODO：游戏常量
 | AttackPos(operand, pos) | 攻击坐标 |
 
 ### Class AttackUnit
-|          构造函数          |   描述   |
-|                            |          |
-|----------------------------|----------|
-| AttackPos(operand, target) | 攻击单位 |
+|           构造函数          |   描述   |
+|-----------------------------|----------|
+| AttackUnit(operand, target) | 攻击单位 |
+
 
 ### Class ChangeDest
 |          构造函数         |    描述    |

@@ -14,6 +14,7 @@
 
 # 以下所有数据暂时并无理论依据...
 
+import json
 from copy import copy
 from random import random, choice
 
@@ -28,7 +29,7 @@ INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 
 SCORE = [0, 0]      # 两队积分
-
+COMMANDS = [[], []] #两队指令
 WEATHER = 0         # 天气
 
 #积分规则
@@ -281,7 +282,7 @@ class Element(object):
         super(Element, self).__init__()
         self.kind = kind
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
-        self.index = appendElement(self)
+        self.index = None       # 调用MapInfo.addElement()才会赋予相应的index值
         self.visible = False    # 每回合更新所有element的visible值
 
     @property
@@ -425,7 +426,6 @@ class Base(Building):
             if self.pos.distance(our_unit) > 0:
                 return -2   # 不在范围内
             else:
-                ## 维修飞机至plane_nums配置, 如果金属不足, 则按侦察机->鱼雷机->轰炸机->战斗机的顺序依次维修
                 while self.metal >= METAL_PER_HEALTH:
                     pass
                 replenishFuelAmmo(self, our_unit)
