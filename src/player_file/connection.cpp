@@ -1,5 +1,6 @@
-#include <iostream>
 #include <cstdint>
+#include <cstdlib>
+#include <iostream>
 #include "connection.h"
 
 const char * GetTeamName();
@@ -28,11 +29,17 @@ struct RoundHeader
 
 void Connection::Connect(const std::string &host, const std::string &port)
 {
-    std::clog << "Connecting to " << host << ':' << port << std::endl;
-
     tcp::resolver resolver(io_service_);
-    auto endpoint_iterator = resolver.resolve({host, port});
-    boost::asio::connect(socket_, endpoint_iterator);
+    try
+    {
+        std::clog << "Connecting to " << host << ':' << port << std::endl;
+        boost::asio::connect(socket_, resolver.resolve({host, port}));
+    }
+    catch (const boost::system::system_error &e)
+    {
+        std::clog << "Connection failed\n";
+        std::exit(EXIT_FAILURE);
+    }
     // send back team name
     std::string team_name = GetTeamName();
     team_name.resize(kMaxTeamNameSize, ' ');
