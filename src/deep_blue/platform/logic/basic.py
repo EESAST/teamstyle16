@@ -14,7 +14,6 @@
 
 # 以下所有数据暂时并无理论依据...
 
-import json
 from copy import copy
 from random import random, choice
 
@@ -278,9 +277,9 @@ def getElement(pos):
 
 class Element(object):
     """所有地图元素, 派生出资源类和作战单位(UnitBase)类"""
-    def __init__(self, kind, pos):
+    kind = None     # 类属性
+    def __init__(self, pos):
         super(Element, self).__init__()
-        self.kind = kind
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
         self.index = None       # 调用MapInfo.addElement()才会赋予相应的index值
         self.visible = False    # 每回合更新所有element的visible值
@@ -303,25 +302,27 @@ class Resource(Element):
 
 class Mine(Resource):
     """矿场"""
+    kind = MINE
     def __init__(self, pos, metal = PROPERTY[MINE][METAL_MAX]):
-        super(Mine, self).__init__(MINE, pos)
+        super(Mine, self).__init__(pos)
         self.metal = metal
         self.visible = True
 
 class Oilfield(Resource):
     """油田"""
+    kind = OILFIELD
     def __init__(self, pos, fuel = PROPERTY[OILFIELD][FUEL_MAX]):
-        super(Oilfield, self).__init__(OILFIELD, pos)
+        super(Oilfield, self).__init__(pos)
         self.fuel = fuel
         self.visible = True
         
         
 class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
+    def __init__(self, team, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
                  attacks, defences):
-        super(UnitBase, self).__init__(kind, pos)
+        super(UnitBase, self).__init__(pos)
         self.team = team
         self.sight_ranges = sight_ranges
         self.fire_ranges = fire_ranges
@@ -410,16 +411,16 @@ class Building(UnitBase):
 
 class Base(Building):
     """基地, 继承自Building"""
-    def __init__(self, team, rectangle, unitbase = None):
+    kind = BASE
+    def __init__(self, team, pos, unitbase = None):
         if unitbase == None:
-            super(Base, self).__init__(team, BASE, rectangle, *PROPERTY[BASE])
+            super(Base, self).__init__(team, pos, *PROPERTY[BASE])
                                    # 从元组解析出数据后传入 Building.__init__()
         else :
             self.__dict__ = unitbase.__dict__.copy
-            self.kind = BASE
 
-    def repair(self, our_unit):  # 提供默认编队配置
-        """维修, 对飞机的维修操作特殊"""
+    def repair(self, our_unit):  
+        """维修"""
         if not self.team == our_unit.team:
             return -1   # 非友军
         elif isinstance(our_unit, Plane):  
@@ -447,21 +448,20 @@ class Base(Building):
 
 class Fort(Building):
     """据点, 继承自Building"""
-    def __init__(self, team, rectangle, unitbase = None):
+    def __init__(self, team, pos, unitbase = None):
         if unitbase == None:
-            super(Fort, self).__init__(team, FORT, rectangle, *PROPERTY[FORT])
+            super(Fort, self).__init__(team, pos, *PROPERTY[FORT])
         else :
-            self.__dict__ = unitbase.__dict__.copy
-            self.kind = FORT
+            self.__dict__ = unitbase.__dict__.copy()
 
 class Unit(UnitBase):
     """可移动单位"""
-    def __init__(self, team, kind, pos, sight_ranges, fire_ranges, 
+    def __init__(self, team, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
                  speed, population, 
                  attacks, defences, unitbase = None):
         if unitbase == None:
-            super(Unit, self).__init__(team, kind, pos, sight_ranges, fire_ranges, 
+            super(Unit, self).__init__(team, pos, sight_ranges, fire_ranges, 
                                        health, fuel, ammo, ammo_once, metal, 
                                        attacks, defences)
         else:
@@ -474,12 +474,12 @@ class Unit(UnitBase):
 
 class Submarine(Unit):
     """潜艇"""
+    kind = SUBMARINE
     def __init__(self, team, pos, unit = None):
         if unit == None:
-            super(Submarine, self).__init__(team, SUBMARINE, pos, *PROPERTY[SUBMARINE])
+            super(Submarine, self).__init__(team, pos, *PROPERTY[SUBMARINE])
         else:
             self.__dict__ = unit.__dict__.copy()
-            self.kind = SUBMARINE
 
 class Ship(Unit):
     """水面舰"""        
@@ -488,21 +488,21 @@ class Ship(Unit):
 
 class Destroyer(Ship):
     """驱逐舰"""
+    kind = DESTROYER
     def __init__(self, team, pos, ship = None):
         if ship == None:
-            super(Destroyer, self).__init__(team, DESTROYER, pos, *PROPERTY[DESTROYER])
+            super(Destroyer, self).__init__(team, pos, *PROPERTY[DESTROYER])
         else:
             self.__dict__ = ship.__dict__.copy()
-            self.kind = DESTROYER
 
 class Carrier(Ship):
     """航母"""
+    kind = CARRIER
     def __init__(self, team, pos, ship = None):
         if ship == None:
-            super(Carrier, self).__init__(team, CARRIER, pos, *PROPERTY[CARRIER])
+            super(Carrier, self).__init__(team, pos, *PROPERTY[CARRIER])
         else:
             self.__dict__ = ship.__dict__.copy()
-            self.kind = CARRIER
 
     def supply(self, our_unit):
         """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
@@ -521,12 +521,12 @@ class Carrier(Ship):
 
 class Cargo(Ship):
     """运输舰"""
+    kind = CARGO
     def __init__(self, team, pos, ship = None):
         if ship == None:
-            super(Cargo, self).__init__(team, CARGO, pos, *PROPERTY[CARGO])
+            super(Cargo, self).__init__(team, pos, *PROPERTY[CARGO])
         else:
             self.__dict__ = ship.__dict__.copy()
-            self.kind = CARGO
 
     def supply(self, our_unit):
         """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
@@ -563,18 +563,18 @@ class Plane(Unit):
 
 class Fighter(Plane):
     """战斗机"""
+    kind = FIGHTER
     def __init__(self, team, pos, plane = None):
         if plane == None:
-            super(Fighter, self).__init__(team, FIGHTER, pos, *PROPERTY[FIGHTER])
+            super(Fighter, self).__init__(team, pos, *PROPERTY[FIGHTER])
         else:
             self.__dict__ = plane.__dict__.copy()
-            self.kind = FIGHTER
 
 class Scout(Plane):
     """侦察机"""
+    kind = SCOUT
     def __init__(self, team, pos, plane = None):
         if plane == None:
-            super(Scout, self).__init__(team, SCOUT, pos, *PROPERTY[SCOUT])
+            super(Scout, self).__init__(team, pos, *PROPERTY[SCOUT])
         else:
             self.__dict__ = plane.__dict__.copy()
-            self.kind = SCOUT
