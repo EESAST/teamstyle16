@@ -22,10 +22,8 @@ class FakeMapInfo(object):
         self.max_round = 100
         self.time_per_round = 1.0
         self.elements = [FakeElement()]
-    def x_max(self):
-        return 70
-    def y_max(self):
-        return 60
+        self.x_max = 70
+        self.y_max = 60
     def map_type(self, x, y):
         if (x + y) % 5 == 0:
             return 1

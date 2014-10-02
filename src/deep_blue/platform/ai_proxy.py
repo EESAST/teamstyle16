@@ -149,8 +149,8 @@ class AIProxy(threading.Thread):
     def __encode_stable_info(self, battle):
         """Encode stable information of battle into str"""
         map_info = battle.map_info()
-        header = struct.pack('6if', map_info.x_max(),
-                                    map_info.y_max(),
+        header = struct.pack('6if', map_info.x_max,
+                                    map_info.y_max,
                                     map_info.weather,
                                     self.team_num,
                                     map_info.max_population,
@@ -158,8 +158,8 @@ class AIProxy(threading.Thread):
                                     map_info.time_per_round)
         # serialize map
         map_array = []
-        for x in xrange(map_info.x_max()):
-            for y in xrange(map_info.y_max()):
+        for x in xrange(map_info.x_max):
+            for y in xrange(map_info.y_max):
                 map_array.append(map_info.map_type(x, y))
         body = struct.pack(str(len(map_array)) + 'i', *map_array)
 
