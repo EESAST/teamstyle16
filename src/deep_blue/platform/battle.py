@@ -5,46 +5,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class AIBattle(Battle):
-    def __init__(self, map_info, ai0_filename, ai1_filename, port):
-        Battle.__init__(map_info)
-
-        # build the socket
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.bind(('', port))
-        sock.listen(2)
-
-        logger.info('Building proxies for AIs')
-        self.AI_0 = ai_proxy.AIProxy(0, sock, ai0_filename)
-        self.AI_1 = ai_proxy.AIProxy(1, sock, ai1_filename)
-        logger.info('Proxies built')
-
-        self.game_body.set_team_name(0, self.AI_0.team_name)
-        self.game_body.set_team_name(1, self.AI_1.team_name)
-        # Battle has been started, so send infos to AIs
-        AI_0.send_info(self)
-        AI_1.send_info(self)
-
-    def feed_ai_commands(self):
-        time.sleep(self.map_info().time_per_round)
-        ai0_cmds = self.AI_0.get_commands()
-        ai1_cmds = self.AI_1.get_commands()
-        for cmd in ai0_cmds:
-            self.game_body.set_command(self.AI_0.team_name, cmd)
-        for cmd in ai1_cmds:
-            self.game_body.set_command(self.AI_1.team_name, cmd)
-
-    def run_until_end(self):
-        while self.gamebody.state() == gamebody.STATE_CONTINUE:
-            self.feed_ai_commands()
-            self.next_round()
-
-    def next_round(self):
-        events = Battle.next_round(self)
-        AI_0.send_info(self)
-        AI_1.send_info(self)
-        return events
-
 class Battle(object):
     def __init__(self, map_info):
         self.game_body = GameBody(map_info)
@@ -133,6 +93,47 @@ class Battle(object):
                                   self.game_body.commands(1)])
         if self.round() % self.record_interval == 0:
             self.replay_info.append(self.map_info().saves_elements())
+
+
+class AIBattle(Battle):
+    def __init__(self, map_info, ai0_filename, ai1_filename, port):
+        Battle.__init__(map_info)
+
+        # build the socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.bind(('', port))
+        sock.listen(2)
+
+        logger.info('Building proxies for AIs')
+        self.AI_0 = ai_proxy.AIProxy(0, sock, ai0_filename)
+        self.AI_1 = ai_proxy.AIProxy(1, sock, ai1_filename)
+        logger.info('Proxies built')
+
+        self.game_body.set_team_name(0, self.AI_0.team_name)
+        self.game_body.set_team_name(1, self.AI_1.team_name)
+        # Battle has been started, so send infos to AIs
+        AI_0.send_info(self)
+        AI_1.send_info(self)
+
+    def feed_ai_commands(self):
+        time.sleep(self.map_info().time_per_round)
+        ai0_cmds = self.AI_0.get_commands()
+        ai1_cmds = self.AI_1.get_commands()
+        for cmd in ai0_cmds:
+            self.game_body.set_command(self.AI_0.team_name, cmd)
+        for cmd in ai1_cmds:
+            self.game_body.set_command(self.AI_1.team_name, cmd)
+
+    def run_until_end(self):
+        while self.gamebody.state() == gamebody.STATE_CONTINUE:
+            self.feed_ai_commands()
+            self.next_round()
+
+    def next_round(self):
+        events = Battle.next_round(self)
+        AI_0.send_info(self)
+        AI_1.send_info(self)
+        return events
 
 
 class Replayer(Battle):
