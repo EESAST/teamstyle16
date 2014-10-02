@@ -448,6 +448,7 @@ class Base(Building):
 
 class Fort(Building):
     """据点, 继承自Building"""
+    kind = FORT
     def __init__(self, team, pos, unitbase = None):
         if unitbase == None:
             super(Fort, self).__init__(team, pos, *PROPERTY[FORT])
