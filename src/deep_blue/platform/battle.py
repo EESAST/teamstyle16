@@ -1,4 +1,5 @@
-import time, gamebody, ai_proxy, map_info
+import time, gamebody, ai_proxy
+from logic import map_info
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,10 +21,12 @@ class AIBattle(Battle):
 
         self.game_body.set_team_name(0, self.AI_0.team_name)
         self.game_body.set_team_name(1, self.AI_1.team_name)
-        self.first_time_flag = True
+        # Battle has been started, so send infos to AIs
+        AI_0.send_info(self)
+        AI_1.send_info(self)
 
     def feed_ai_commands(self):
-        time.sleep(10)  #can be switched
+        time.sleep(self.map_info().time_per_round)
         ai0_cmds = self.AI_0.get_commands()
         ai1_cmds = self.AI_1.get_commands()
         for cmd in ai0_cmds:
@@ -32,18 +35,15 @@ class AIBattle(Battle):
             self.game_body.set_command(self.AI_1.team_name, cmd)
 
     def run_until_end(self):
-        while self.gamebody.STATE_CONTINUE:
+        while self.gamebody.state() == gamebody.STATE_CONTINUE:
             self.feed_ai_commands()
             self.next_round()
 
     def next_round(self):
-        if self.first_time_flag:
-            AI_0.send_info(self)
-            AI_1.send_info(self)
-            self.first_time_flag = False
-        Battle.next_round(self)
+        events = Battle.next_round(self)
         AI_0.send_info(self)
         AI_1.send_info(self)
+        return events
 
 class Battle(object):
     def __init__(self, map_info):
@@ -96,14 +96,8 @@ class Battle(object):
         return self.game_body.commands(team)
 
     def next_round(self):
-        event = self.game_body.run()
-        self.score_list.append([score(0), score(1)])
-        #self.unit_num_list.append(...)
-        self.population_list.append([population(0), population(1)])
-        self.command_list.append([commands(0), commands(1)])
-        if self.round() % self.record_interval == 0:
-            self.replay_info.append(self.map_info().saves_elements())
-        return event
+        self.record_info()
+        return self.game_body.run()
 
     def save_game(filename):
         save_file = open(filename, 'w')
@@ -129,6 +123,18 @@ class Battle(object):
         #Such as by @, and func of loading could be load_file.read().split('@')...
         #Also we may use some other way as alternative, this part will be further revised later.
 
+    def record_info(self):
+        self.score_list.append([self.game_body.score(0),
+                                self.game_body.score(1)])
+        #self.unit_num_list.append(...)
+        self.population_list.append([self.game_body.population(0),
+                                     self.game_body.population(1)])
+        self.command_list.append([self.game_body.commands(0),
+                                  self.game_body.commands(1)])
+        if self.round() % self.record_interval == 0:
+            self.replay_info.append(self.map_info().saves_elements())
+
+
 class Replayer(Battle):
     def __init__(self):
         Battle.__init__(self)
@@ -141,7 +147,7 @@ class Replayer(Battle):
             self.game_body.set_command(1, cmd)
         return self.game_body.run()
 
-    def go_to_round(self, round):          
+    def go_to_round(self, round):
         try:
             self.game_body = GameBody(map_info.loads_elements(self.replay_info[round // self.record_interval]))  #here a func which can translate the str returned by saves_elements() to map_info object, I call it loads_elements(str)
             for i in range(round % self.record_interval):
@@ -156,7 +162,7 @@ class Replayer(Battle):
 
     def end(self):
         self.game_body = GameBody(map_info.loads_elements(self.replay_info[-1]))
-        while not END_OF_GAME:      #don't know how to detect the end ouf game here
+        while self.gamebody.state() == gamebody.STATE_CONTINUE:
             self.game_body.run()
 
 def load_replayer(filename):
