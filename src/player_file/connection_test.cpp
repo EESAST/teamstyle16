@@ -250,7 +250,7 @@ TEST_F(ConnectionTest, CommandSentCorrectly)
     teamstyle16::Supply(50702, 49810, 500, -1, 450);
     EXPECT_EQ("sp50702 49810 500 -1 450", ReadUntil(buf, is, ','));
 
-    teamstyle16::Cancel();
-    EXPECT_EQ("cc", ReadUntil(buf, is, ','));
+    teamstyle16::Cancel(386);
+    EXPECT_EQ("cc386", ReadUntil(buf, is, ','));
 }
 
