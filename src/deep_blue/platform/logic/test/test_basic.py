@@ -56,6 +56,18 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(5, pos.y)
         self.assertEqual(8, pos.z)
 
+    def test_rectangle(self):
+        pos1 = basic.Position(6, 10, 0)
+        pos2 = basic.Position(122, 15, 0)
+        rec = basic.Rectangle(pos1, pos2)
+
+        self.assertEqual(pos1, rec.upper_left)
+        self.assertEqual(pos2, rec.lower_right)
+        self.assertEqual(6, rec.x)
+        self.assertEqual(10, rec.y)
+        self.assertEqual(0, rec.z)
+        self.assertEqual((116, 5), rec.size)
+
     def test_element_init(self):
         pos1 = basic.Position(9, 10, 0)
         pos2 = basic.Position(12, 15, 0)
