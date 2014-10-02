@@ -18,6 +18,7 @@ class TestCommand(unittest.TestCase):
 
     def test_constructor(self):
         pos = basic.Position(3, 4, 5)
+
         cmd = command.AttackPos(2, pos)
         self.assertEqual(2, cmd.operand)
         self.assertEqual(pos, cmd.pos)

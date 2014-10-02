@@ -294,7 +294,7 @@ class Element(object):
 
     @property
     def size(self):
-        return pos.size
+        return self.pos.size
 
 class Resource(Element):
     """资源类, 派生出矿场类和油田类"""

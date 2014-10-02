@@ -1,8 +1,8 @@
 from .. import basic
 import unittest
 
-class TestMapInfo(unittest.TestCase):
-    """Test case for MapInfo"""
+class TestBasic(unittest.TestCase):
+    """Test case for Basic"""
 
     def test_class_inherit(self):
         """Test class relationships based on API"""
@@ -44,10 +44,10 @@ class TestMapInfo(unittest.TestCase):
 
     def test_position(self):
         # test initialize
-        pos = basic.Position(31, 45, 67)
+        pos = basic.Position(31, 45, 2)
         self.assertEqual(31, pos.x)
         self.assertEqual(45, pos.y)
-        self.assertEqual(67, pos.z)
+        self.assertEqual(2, pos.z)
         # test modify
         pos.x = 2
         pos.y = 5
@@ -56,8 +56,67 @@ class TestMapInfo(unittest.TestCase):
         self.assertEqual(5, pos.y)
         self.assertEqual(8, pos.z)
 
-    def test_element(self):
-        pass
+    def test_rectangle(self):
+        pos1 = basic.Position(6, 10, 0)
+        pos2 = basic.Position(122, 15, 0)
+        rec = basic.Rectangle(pos1, pos2)
+
+        self.assertEqual(pos1, rec.upper_left)
+        self.assertEqual(pos2, rec.lower_right)
+        self.assertEqual(6, rec.x)
+        self.assertEqual(10, rec.y)
+        self.assertEqual(0, rec.z)
+        self.assertEqual((116, 5), rec.size)
+
+    def test_element_init(self):
+        pos1 = basic.Position(9, 10, 0)
+        pos2 = basic.Position(12, 15, 0)
+        rec = basic.Rectangle(pos1, pos2)
+
+        base = basic.Base(0, rec)
+        fort = basic.Fort(1, rec)
+        mine = basic.Mine(rec)
+        oilfield = basic.Oilfield(rec)
+        submarine = basic.Submarine(1, pos1)
+        destroyer = basic.Destroyer(1, pos2)
+        carrier = basic.Carrier(1, pos2)
+        cargo = basic.Cargo(1, pos2)
+        fighter = basic.Fighter(1, pos2)
+        scout = basic.Scout(1, pos2)
+
+        elements = [base, fort, mine, oilfield, submarine,
+                   destroyer, carrier, cargo, fighter, scout]
+        unit_bases = [base, fort, submarine, destroyer,
+                     carrier, cargo, fighter, scout]
+        units = [submarine, destroyer, carrier, cargo, fighter, scout]
+
+        # Check attributes
+        for element in elements:
+            self.assertTrue(hasattr(element, 'index'))
+            self.assertTrue(hasattr(element, 'pos'))
+            self.assertTrue(hasattr(element, 'size'))
+            self.assertTrue(hasattr(element, 'visible'))
+        for element in unit_bases:
+            self.assertTrue(hasattr(element, 'team'))
+            self.assertTrue(hasattr(element, 'sight_ranges'))
+            self.assertTrue(hasattr(element, 'fire_ranges'))
+            self.assertTrue(hasattr(element, 'health'))
+            self.assertTrue(hasattr(element, 'health_max'))
+            self.assertTrue(hasattr(element, 'fuel'))
+            self.assertTrue(hasattr(element, 'fuel_max'))
+            self.assertTrue(hasattr(element, 'ammo'))
+            self.assertTrue(hasattr(element, 'ammo_once'))
+            self.assertTrue(hasattr(element, 'ammo_max'))
+            self.assertTrue(hasattr(element, 'metal'))
+            self.assertTrue(hasattr(element, 'metal_max'))
+            self.assertTrue(hasattr(element, 'attacks'))
+            self.assertTrue(hasattr(element, 'defences'))
+        for element in units:
+            self.assertTrue(hasattr(element, 'speed'))
+            self.assertTrue(hasattr(element, 'dest'))
+            self.assertTrue(hasattr(element, 'cost'))
+            self.assertTrue(hasattr(element, 'population'))
+            self.assertTrue(hasattr(element, 'build_round'))
 
 
 if __name__ == '__main__':
