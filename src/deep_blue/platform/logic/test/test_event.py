@@ -8,20 +8,20 @@ class TestEvent(unittest.TestCase):
     def test_class_inherit(self):
         """Test class relationships based on API"""
         self.assertTrue(issubclass(event.Event, object))
-        self.assertTrue(issubclass(AddProductionEntry, event.Event))
-        self.assertTrue(issubclass(AttackPos, event.Event))
-        self.assertTrue(issubclass(AttackUnit, event.Event))
-        self.assertTrue(issubclass(Supply, event.Event))
-        self.assertTrue(issubclass(Fix, event.Event))
-        self.assertTrue(issubclass(Collect, event.Event))
-        self.assertTrue(issubclass(ChangeDest, event.Event))
-        self.assertTrue(issubclass(Move, event.Event))
-        self.assertTrue(issubclass(Create, event.Event))
-        self.assertTrue(issubclass(Destroy, event.Event))
-        self.assertTrue(issubclass(Capture, event.Event))
+        self.assertTrue(issubclass(event.AddProductionEntry, event.Event))
+        self.assertTrue(issubclass(event.AttackPos, event.Event))
+        self.assertTrue(issubclass(event.AttackUnit, event.Event))
+        self.assertTrue(issubclass(event.Supply, event.Event))
+        self.assertTrue(issubclass(event.Fix, event.Event))
+        self.assertTrue(issubclass(event.Collect, event.Event))
+        self.assertTrue(issubclass(event.ChangeDest, event.Event))
+        self.assertTrue(issubclass(event.Move, event.Event))
+        self.assertTrue(issubclass(event.Create, event.Event))
+        self.assertTrue(issubclass(event.Destroy, event.Event))
+        self.assertTrue(issubclass(event.Capture, event.Event))
 
     def test_constructor(self):
-        
+        pass
  
 if __name__ == '__main__':
     unittest.main()
