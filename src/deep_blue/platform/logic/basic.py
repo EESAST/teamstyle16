@@ -321,6 +321,7 @@ class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
     def __init__(self, team, pos, sight_ranges, fire_ranges, 
                  health, fuel, ammo, ammo_once, metal, 
+                 speed, population, 
                  attacks, defences):
         super(UnitBase, self).__init__(pos)
         self.team = team
@@ -463,6 +464,7 @@ class Unit(UnitBase):
         if unitbase == None:
             super(Unit, self).__init__(team, pos, sight_ranges, fire_ranges, 
                                        health, fuel, ammo, ammo_once, metal, 
+                                       speed, population, 
                                        attacks, defences)
         else:
             self.__dict__ = unitbase.__dict__.copy()
@@ -483,8 +485,7 @@ class Submarine(Unit):
 
 class Ship(Unit):
     """水面舰"""        
-    def __init__(self, unit):
-        self.__dict__ = unit.__dict__.copy()
+    pass
 
 class Destroyer(Ship):
     """驱逐舰"""
@@ -558,8 +559,7 @@ class Cargo(Ship):
 
 class Plane(Unit):
     """飞机"""
-    def __init__(self, unit):
-        self.__dict__ = unit.__dict__.copy()
+    pass
 
 class Fighter(Plane):
     """战斗机"""
