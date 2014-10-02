@@ -4,8 +4,8 @@ import unittest
 class TestBasic(unittest.TestCase):
     """Test case for Basic"""
 
-    def test_class_inherit(self):
-        """Test class relationships based on API"""
+    def test_class_inheritance(self):
+        """Test Element inheritance"""
         self.assertTrue(issubclass(basic.Position, object))
         self.assertTrue(issubclass(basic.Rectangle, object))
         self.assertTrue(issubclass(basic.Element, object))
@@ -31,6 +31,7 @@ class TestBasic(unittest.TestCase):
         self.assertTrue(issubclass(basic.Scout, basic.Plane))
 
     def test_element_kind(self):
+        """Test kind number of elements"""
         self.assertEqual(0, basic.Base.kind)
         self.assertEqual(1, basic.Fort.kind)
         self.assertEqual(2, basic.Mine.kind)
@@ -43,6 +44,7 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(9, basic.Scout.kind)
 
     def test_position(self):
+        """Test class basic.Position"""
         # test initialize
         pos = basic.Position(31, 45, 2)
         self.assertEqual(31, pos.x)
@@ -57,6 +59,7 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(8, pos.z)
 
     def test_rectangle(self):
+        """Test class basic.Rectangle"""
         pos1 = basic.Position(6, 10, 0)
         pos2 = basic.Position(122, 15, 0)
         rec = basic.Rectangle(pos1, pos2)
@@ -68,7 +71,8 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(0, rec.z)
         self.assertEqual((116, 5), rec.size)
 
-    def test_element_init(self):
+    def test_element(self):
+        """Test initialization & attributes of Elements"""
         pos1 = basic.Position(9, 10, 0)
         pos2 = basic.Position(12, 15, 0)
         rec = basic.Rectangle(pos1, pos2)
