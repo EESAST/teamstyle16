@@ -29,7 +29,7 @@ INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 
 SCORE = [0, 0]      # 两队积分
-
+COMMANDS = [[], []] #两队指令
 WEATHER = 0         # 天气
 
 #积分规则

@@ -16,21 +16,22 @@ class AddProductionEntry(Event):
         self.team = team
         self.kind = kind
 
-class Attack(Event):
+class AttackPos(Event):
     """攻击"""
     def __init__(self, index, target, hit, damage):
         super(Attack, self).__init__('Attack')
         self.index = index
-        self.target = target
+        self.target = target  #position
         self.hit = hit
         self.damage = damage
 
-class Crash(Event):
-    """坠毁"""
-    def __init__(self, index, target, damage):
-        super(Crash, self).__init__('Crash')
+class AttackUnit(Event):
+    """攻击"""
+    def __init__(self, index, target, hit, damage):
+        super(Attack, self).__init__('Attack')
         self.index = index
-        self.target = target
+        self.target = target  #索引号
+        self.hit = hit
         self.damage = damage
 
 class Supply(Event):
@@ -45,12 +46,13 @@ class Supply(Event):
 
 class Fix(Event):
     """修理"""
-    def __init__(self, index, target, metal, health_increase):
+    def __init__(self, index, target, metal, health_increase, new_type):
         super(Fix, self).__init__('Fix')
         self.index = index
         self.target = target
         self.metal = metal
         self.health_increase = health_increase
+        self.new_type = new_type
 
 class Collect(Event):
     """收集"""
@@ -70,11 +72,10 @@ class ChangeDest(Event):
 
 class Move(Event):
     """移动"""
-    def __init__(self, index, from, to):
+    def __init__(self, index, nodes): ##nodes 为移动路径上的拐点
         super(Move, self).__init__('Move')
         self.index = index
-        self.from = from
-        self.to = to
+        self.nodes = nodes
 
 class Create(Event):
     """生产"""

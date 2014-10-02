@@ -5,8 +5,6 @@ import map_info
 import json
 import event
 
-#GOD STATE_CONTINUE STATUS_TIE这些东西要怎么定义
-
 class TeamInfo(object):
     """team info"""
     def __init__(self, team, name):
@@ -144,8 +142,7 @@ class GameBody(object):
         self.map = map
         self.max_population = max_population
         self.max_round = max_round
-        # self.weather = [- randint(0,3), - randint(0,3), - randint(0,3)]
-        #basic 里没有定义weather， 我也感觉weather的意义不大
+        self.weather = weather
         self.round = 0
         self.Team = []
         for i in [0,1]:
@@ -228,21 +225,10 @@ class GameBody(object):
     def run(self):
         """run one round and return the event taked place"""
         self.round = self.round + 1
-        pos = []
-        for Element in ELEMENTS:
-            if isinstance(Element, Unit):
-                pos.append(Element, Element.pos)
         Event = []
         for team in [0,1]:
             for command in self.commands(team):
-                Event.extend(command.result_event())
-        i=0
-        for Element in ELEMENTS:
-            if isinstance(Element, Unit):
-                for element, Pos in pos[i:]:
-                    if Element.index == element.index and Pos != Element.pos:
-                        Event.append(event.Move("Move", Element.index, Pos, Element.pos))
-                    i = i + 1
+                Event.append(command.result_event())
         return Event
                                      
     def set_team_name(self, team, name):
