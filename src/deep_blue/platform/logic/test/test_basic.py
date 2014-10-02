@@ -75,8 +75,8 @@ class TestBasic(unittest.TestCase):
 
         base = basic.Base(0, rec)
         fort = basic.Fort(1, rec)
-        mine = basic.Mine(0, rec)
-        oilfield = basic.Oilfield(1, rec)
+        mine = basic.Mine(rec)
+        oilfield = basic.Oilfield(rec)
         submarine = basic.Submarine(1, pos1)
         destroyer = basic.Destroyer(1, pos2)
         carrier = basic.Carrier(1, pos2)
@@ -92,7 +92,6 @@ class TestBasic(unittest.TestCase):
 
         # Check attributes
         for element in elements:
-            print element
             self.assertTrue(hasattr(element, 'index'))
             self.assertTrue(hasattr(element, 'pos'))
             self.assertTrue(hasattr(element, 'size'))
