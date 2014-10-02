@@ -109,17 +109,17 @@ TODO：游戏常量
 | --------------------------------------------------------------------------------------------------------- | -------- |
 | MapInfo(x_max, y_max, max_population=..., record_interval=..., time_per_round=..., weather=..., **kwargs) | 构造地图 |
 
-|       属性      |    类型   |       描述       |
-| --------------- | --------- | ---------------- |
-| types           | [[int]]   | 地形二维数组     |
-| x_max           | int       | 地图行数         |
-| y_max           | int       | 地图列数         |
-| elements        | [Element] | 地图上所有元素   |
-| max_polulation  | int       | 人口上限         |
-| max_round       | int       | 最大回合数       |
-| record_interval | int       | 统计数据记录间隔 |
-| time_per_round  | float     | 每回合时间       |
-| weather         | int       | 天气             |
+|       属性      |      类型     |       描述       |
+| --------------- | ------------- | ---------------- |
+| types           | [[int]]       | 地形二维数组     |
+| x_max           | int           | 地图行数         |
+| y_max           | int           | 地图列数         |
+| elements        | {int:Element} | 地图上所有元素   |
+| max_polulation  | int           | 人口上限         |
+| max_round       | int           | 最大回合数       |
+| record_interval | int           | 统计数据记录间隔 |
+| time_per_round  | float         | 每回合时间       |
+| weather         | int           | 天气             |
 
 |             方法             | 返回值  |                        描述                       |
 | ---------------------------- | ------- | ------------------------------------------------- |
@@ -306,7 +306,7 @@ TODO：游戏常量
 | GameBody(map_info) | 构造游戏主体 |
 
 |            方法            |        返回值        |                 描述                 |
-|----------------------------|----------------------|--------------------------------------|
+| -------------------------- | -------------------- | ------------------------------------ |
 | **基本信息**               |                      |                                      |
 | map_info()                 | MapInfo              | 当前地图信息                         |
 | team_name(team)            | str                  | 队伍名                               |
@@ -314,7 +314,7 @@ TODO：游戏常量
 | round()                    | int                  | 当前回合数                           |
 | status()                   | int                  | 当前的游戏状态                       |
 | score(team)                | int                  | 分数                                 |
-| elements(perspective)      | [Element]            | 某队视角下的所有元素                 |
+| elements(perspective)      | {int:Element}        | 某队视角下的所有元素                 |
 | production_list(team)      | [(kind, round_left)] | 生产列表                             |
 | population(team)           | int                  | 该队伍的人口数                       |
 | **运行相关**               |                      |                                      |
