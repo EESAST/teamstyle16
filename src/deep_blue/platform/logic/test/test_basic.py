@@ -36,9 +36,9 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(2, basic.Mine.kind)
         self.assertEqual(3, basic.Oilfield.kind)
         self.assertEqual(4, basic.Submarine.kind)
-        self.assertEqual(5, basic.Cargo.kind)
+        self.assertEqual(5, basic.Destroyer.kind)
         self.assertEqual(6, basic.Carrier.kind)
-        self.assertEqual(7, basic.Destroyer.kind)
+        self.assertEqual(7, basic.Cargo.kind)
         self.assertEqual(8, basic.Fighter.kind)
         self.assertEqual(9, basic.Scout.kind)
 
