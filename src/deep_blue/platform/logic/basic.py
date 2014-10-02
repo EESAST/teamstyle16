@@ -286,11 +286,11 @@ class Element(object):
 
     @property
     def level(self):
-        return pos.level
+        return self.pos.level
 
     @property
     def position(self):
-        return pos if isinstance(pos, Position) else pos.upper_left
+        return self.pos if isinstance(self.pos, Position) else self.pos.upper_left
 
     @property
     def size(self):
