@@ -1,10 +1,23 @@
 import time, gamebody, ai_proxy, map_info
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class AIBattle(Battle):
-    def __init__(self, map_info, ai0_filename, ai1_filename, port_AI):
+    def __init__(self, map_info, ai0_filename, ai1_filename, port):
         Battle.__init__(map_info)
-        self.AI_0 = AIProxy(1, ai0_filename, port_AI)
-        self.AI_1 = AIProxy(2, ai1_filename, port_AI)
+
+        # build the socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.bind(('', port))
+        sock.listen(2)
+
+        logger.info('Building proxies for AIs')
+        self.AI_0 = ai_proxy.AIProxy(0, sock, ai0_filename)
+        self.AI_1 = ai_proxy.AIProxy(1, sock, ai1_filename)
+        logger.info('Proxies built')
+
         self.game_body.set_team_name(0, self.AI_0.team_name)
         self.game_body.set_team_name(1, self.AI_1.team_name)
         self.first_time_flag = True

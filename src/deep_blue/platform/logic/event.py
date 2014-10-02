@@ -70,11 +70,11 @@ class ChangeDest(Event):
 
 class Move(Event):
     """移动"""
-    def __init__(self, index, from, to):
+    def __init__(self, index, begin, end):
         super(Move, self).__init__('Move')
         self.index = index
-        self.from = from
-        self.to = to
+        self.begin = begin
+        self.end = end
 
 class Create(Event):
     """生产"""
