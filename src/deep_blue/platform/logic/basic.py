@@ -14,6 +14,7 @@
 
 # 以下所有数据暂时并无理论依据...
 
+import json
 from copy import copy
 from random import random, choice
 
@@ -159,7 +160,6 @@ class Position(object):
         self.x = x
         self.y = y
         self.z = z
-        self.level = z      
 
     def __eq__(self, other):
         """判断两Position实例相等"""
@@ -167,6 +167,14 @@ class Position(object):
             return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
         else:
             return False
+
+    @property
+    def level(self):
+        return self.z
+
+    @property
+    def size(self):
+        return (1, 1)
 
     def distance(self, target):
         """返回该位置到target(点或矩形)的(最小)距离"""
@@ -193,11 +201,28 @@ class Rectangle(object):
     def __init__(self, upper_left, lower_right):
         super(Rectangle, self).__init__()
         self.upper_left = upper_left
+        lower_right.z = upper_left.z
         self.lower_right = lower_right
-        self.level = upper_left.z   # 转化为upper_left所在平面
-        self.lower_right.z = self.level
-        self.size = (abs(upper_left.x - lower_right.x),
-                     abs(upper_left.y - lower_right.y))
+
+    @property
+    def size(self):
+        return (abs(self.upper_left.x - self.lower_right.x), abs(self.upper_left.y - self.lower_right.y))
+
+    @property
+    def x(self):
+        return self.upper_left.x
+
+    @property
+    def y(self):
+        return self.upper_left.y
+
+    @property
+    def z(self):
+        return self.upper_left.z
+
+    @property
+    def level(self):
+        return self.upper_left.level
 
     def bound(self):
         """返回矩形区域的边界点集list"""
@@ -257,10 +282,20 @@ class Element(object):
         super(Element, self).__init__()
         self.kind = kind
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
-        self.level = pos.level
-        self.size = (1, 1) if isinstance(pos, Position) else pos.size
-        self.index = appendElement(self)
+        self.index = None       # 调用MapInfo.addElement()才会赋予相应的index值
         self.visible = False    # 每回合更新所有element的visible值
+
+    @property
+    def level(self):
+        return pos.level
+
+    @property
+    def position(self):
+        return pos if isinstance(pos, Position) else pos.upper_left
+
+    @property
+    def size(self):
+        return pos.size
 
 class Resource(Element):
     """资源类, 派生出矿场类和油田类"""
@@ -268,14 +303,14 @@ class Resource(Element):
 
 class Mine(Resource):
     """矿场"""
-    def __init__(self, kind, pos, metal = PROPERTY[MINE][METAL_MAX]):
+    def __init__(self, pos, metal = PROPERTY[MINE][METAL_MAX]):
         super(Mine, self).__init__(MINE, pos)
         self.metal = metal
         self.visible = True
 
 class Oilfield(Resource):
     """油田"""
-    def __init__(self, kind, pos, fuel = PROPERTY[OILFIELD][FUEL_MAX]):
+    def __init__(self, pos, fuel = PROPERTY[OILFIELD][FUEL_MAX]):
         super(Oilfield, self).__init__(OILFIELD, pos)
         self.fuel = fuel
         self.visible = True

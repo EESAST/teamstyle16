@@ -46,15 +46,15 @@ TODO：游戏常量
 
 注意：下面所有的属性，只代表可以在其末端基类中访问到这些属性，并且可能是类属性
 
-例如，可能Element类和对象里没有kind和size属性，而Unit却有类属性size（Unit都是1x1），Submarine有类属性kind（潜艇的类型是常量），Formation有实例属性kind（Formation的类型不确定）
+例如，可能Element类和对象里没有kind和size属性，而Unit却有类属性size（Unit都是1x1），Submarine有类属性kind（潜艇的类型是常量）
 
-|   属性  |         类型         |      描述      |
-|---------|----------------------|----------------|
-| index   | int                  | 元素的索引号   |
-| kind    | int                  | 元素类型       |
-| pos     | Position             | 该元素的位置   |
-| size    | (x_length, y_length) | 该元素的大小   |
-| visible | bool                 | 该元素是否可见 |
+|   属性   |         类型         |      描述      |
+| -------- | -------------------- | -------------- |
+| index    | int                  | 元素的索引号   |
+| kind     | int                  | 元素类型       |
+| position | Position             | 该元素的位置   |
+| size     | (x_length, y_length) | 该元素的大小   |
+| visible  | bool                 | 该元素是否可见 |
 
 ### Class Resource
 |    属性    | 类型 |   描述   |
@@ -110,7 +110,10 @@ TODO：游戏常量
 | MapInfo(x_max, y_max, max_population=..., record_interval=..., time_per_round=..., weather=...) | 构造空地图 |
 
 |       属性      |    类型   |       描述       |
-|-----------------|-----------|------------------|
+| --------------- | --------- | ---------------- |
+| types           | [[int]]   | 地形二维数组     |
+| x_max           | int       | 地图行数         |
+| y_max           | int       | 地图列数         |
 | elements        | [Element] | 地图上所有元素   |
 | max_polulation  | int       | 人口上限         |
 | max_round       | int       | 最大回合数       |
@@ -118,15 +121,15 @@ TODO：游戏常量
 | time_per_round  | float     | 每回合时间       |
 | weather         | int       | 天气             |
 
-|             方法             | 返回值 |         描述         |
-| ---------------------------- | ------ | -------------------- |
-| x_max()                      | int    | 地图行数             |
-| y_max()                      | int    | 地图列数             |
-| map_type(x, y)               | int    | 查询地形             |
-| set_map_type(x, y, map_type) | None   | 设置地形             |
-| save(filename)               | None   | 保存地图信息至文件   |
-| saves()                      | str    | 保存地图至字符串     |
-| saves_elements()             | str    | 保存单位状态至字符串 |
+|             方法             | 返回值  |                        描述                       |
+| ---------------------------- | ------- | ------------------------------------------------- |
+| map_type(x, y)               | int     | 查询地形                                          |
+| set_map_type(x, y, map_type) | bool    | 设置地形                                          |
+| element(pos)                 | Element | 返回pos位置的元素, 若无元素则返回None             |
+| add_element(element)         | bool    | 添加元素并设置索引, 若位置无效或被占用则返回false |
+| save(filename)               | None    | 保存地图信息至文件                                |
+| saves()                      | str     | 保存地图至字符串                                  |
+| saves_elements()             | str     | 保存单位状态至字符串                              |
 
 
 
@@ -146,16 +149,17 @@ TODO：游戏常量
             Cancel
 
 ### Class Command
-|     构造函数     | 描述 |
-|------------------|------|
+|     构造函数     |              描述             |
+|------------------|-------------------------------|
 | Command(operand) | 指令, operand为操作对象索引号 |
 
 ### Class AttackPos
-|              构造函数             |           描述           |
-|-----------------------------------|--------------------------|
-| AttackPos(operand, pos, hit=None) | 攻击坐标, 可指定是否命中 |
+|         构造函数        |   描述   |
+|-------------------------|----------|
+| AttackPos(operand, pos) | 攻击坐标 |
 
 ### Class AttackUnit
+<<<<<<< HEAD
 |               构造函数               |           描述           |
 |--------------------------------------|--------------------------|
 | AttackPos(operand, target, hit=None) | 攻击单位, 可指定是否命中 |
@@ -164,11 +168,22 @@ TODO：游戏常量
 |               构造函数               |            描述           |
 |--------------------------------------|---------------------------|
 | Fix(operand, target, new_kind=None) | 维修 (对飞机可指定新组成) |
+=======
+|          构造函数          |   描述   |
+|                            |          |
+|----------------------------|----------|
+| AttackPos(operand, target) | 攻击单位 |
+>>>>>>> e3357463d8b9b65e55fd59a4d903f1b4008504ed
 
 ### Class ChangeDest
 |          构造函数         |    描述    |
 |---------------------------|------------|
 | ChangeDest(operand, dest) | 更改目的地 |
+
+### Class Fix
+|       构造函数       | 描述 |
+|----------------------|------|
+| Fix(operand, target) | 维修 |
 
 ### Class Produce
 |        构造函数        | 描述 |
@@ -243,7 +258,6 @@ TODO：游戏常量
 | target          | int      | 维修接受方的索引号 |
 | metal           | int      | 维修消耗的金属     |
 | health_increase | int      | 生命值增量         |
-| new_type        | int/None | 机群新类型         |
 
 ### Class Collect
 |  属性  | 类型 |      描述      |
