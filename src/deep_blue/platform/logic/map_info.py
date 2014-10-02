@@ -6,22 +6,21 @@ from basic import *
 
 class MapInfo(object):
     """地图"""
-    def __init__(self, x_max, y_max, max_population, record_interval, time_per_round, weather):
-        """Create an empty map"""
-        self.types = [[0] * x_max] * y_max     ## 空地图全海洋       
-        self.elements = {}
+    def __init__(self, x_max, y_max, max_population, record_interval, time_per_round, weather, types = None, elements = {}):
+        """Create a map"""
+        if types == None:
+            self.x_max = x_max
+            self.y_max = y_max
+            self.types = [[0] * x_max] * y_max 
+        else:
+            self.types = types
+            self.x_max = len(types[0])
+            self.y_max = len(types)
+        self.elements = elements
         self.max_population = max_population
         self.record_interval = record_interval
         self.time_per_round = time_per_round
         self.weather = weather
-
-    @property
-    def x_max(self):
-        return len(self.types[0])
-
-    @property
-    def y_max(self):
-        return len(self.types)
     
     def map_type(self, x, y): 
         """Return map type(OCEAN or LAND) on (x, y)"""
