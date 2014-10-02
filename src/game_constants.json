@@ -3,7 +3,6 @@
     "max_round_limit": 1000,
     "max_population_limit": 60,
 
-    // Scores
     "fort_score": 1,
     "damage_score": 1,
     "collect_score": 1,
@@ -21,10 +20,6 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
         },
         "fort": {
             "level": 1,
@@ -38,44 +33,14 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
         },
         "mine": {
             "level": 1,
             "size": [1, 1],
-            "sight_ranges": [4, 10, 8],
-            "fire_ranges": [0, 7, 5],
-            "health_max": 2000,
-            "fuel_max": 1000,
-            "ammo_max": null,
-            "ammo_once": 6,
-            "metal_max": 200,
-            "attacks": [40, 0],
-            "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
         },
         "oilfield": {
             "level": 1,
             "size": [1, 1],
-            "sight_ranges": [4, 10, 8],
-            "fire_ranges": [0, 7, 5],
-            "health_max": 2000,
-            "fuel_max": 1000,
-            "ammo_max": null,
-            "ammo_once": 6,
-            "metal_max": 200,
-            "attacks": [40, 0],
-            "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
         },
         "submarine": {
             "level": 1,
@@ -89,10 +54,10 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
+            "speed": 1,
+            "cost": 1,
+            "build_round": 1,
+            "population": 1
         },
         "destroyer": {
             "level": 1,
@@ -106,10 +71,10 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
+            "speed": 1,
+            "cost": 1,
+            "build_round": 1,
+            "population": 1
         },
         "cruiser": {
             "level": 1,
@@ -123,10 +88,10 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
+            "speed": 1,
+            "cost": 1,
+            "build_round": 1,
+            "population": 1
         },
         "battleship": {
             "level": 1,
@@ -140,10 +105,10 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
+            "speed": 1,
+            "cost": 1,
+            "build_round": 1,
+            "population": 1
         },
         "carrier": {
             "level": 1,
@@ -157,10 +122,10 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
+            "speed": 1,
+            "cost": 1,
+            "build_round": 1,
+            "population": 1
         },
         "cargo": {
             "level": 1,
@@ -174,10 +139,10 @@
             "metal_max": 200,
             "attacks": [40, 0],
             "defences":[30, null],
-            "speed": null,
-            "cost": null,
-            "build_round": null,
-            "population": null
+            "speed": 1,
+            "cost": 1,
+            "build_round": 1,
+            "population": 1
         }
     }
 }
