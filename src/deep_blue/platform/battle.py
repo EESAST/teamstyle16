@@ -57,6 +57,7 @@ class Battle(object):
 
     def next_round(self):
         self.record_info()
+        logger.info('Moving to the next round')
         return self.game_body.run()
 
     def save_game(filename):
@@ -104,18 +105,21 @@ class AIBattle(Battle):
         sock.bind(('', port))
         sock.listen(2)
 
-        logger.info('Building proxies for AIs')
+        logger.debug('Building proxies for AIs')
         self.AI_0 = ai_proxy.AIProxy(0, sock, ai0_filename)
         self.AI_1 = ai_proxy.AIProxy(1, sock, ai1_filename)
-        logger.info('Proxies built')
+        logger.debug('Proxies built')
 
         self.game_body.set_team_name(0, self.AI_0.team_name)
         self.game_body.set_team_name(1, self.AI_1.team_name)
         # Battle has been started, so send infos to AIs
+        logger.debug('Sending infos of round 0 to AIs')
         AI_0.send_info(self)
         AI_1.send_info(self)
+        logger.debug('Infos sent')
 
     def feed_ai_commands(self):
+        logger.info('Feeding commands')
         time.sleep(self.map_info().time_per_round)
         ai0_cmds = self.AI_0.get_commands()
         ai1_cmds = self.AI_1.get_commands()

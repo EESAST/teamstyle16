@@ -93,10 +93,11 @@ class AIProxy(threading.Thread):
     def send_info(self, battle):
         """Send infomations to AI"""
         if battle.round() == 0:
+            self.logger.info('Sending stable info to AI')
             self.__send_stable_info(battle)
-            self.__send_round_info(battle)
-        else:
-            self.__send_round_info(battle)
+        self.logger.info('Sending round info to AI')
+        self.__send_round_info(battle)
+        self.logger.info('Info sent')
 
     def __run_ai(self, file_name, port):
         self.ai_program = subprocess.Popen([file_name, 'localhost', str(port)],
