@@ -2,24 +2,13 @@
 #define TEAMSTYLE16_BASIC_H
 
 #include <cstdint>
+#include <cstddef>
 
 namespace teamstyle16
 {
 
-// *********************** 游戏常量 ***********************
-
-const int kMaxTeamNameSize = 20;
-
-const int kMaxMapSize = 80;     // 地图最大边长
-const int kMaxRoundLimit = 300;      // 最大回合数
-const int kMaxPopulationLimit = 300;
-
 const int kMaxElementNum = 200;     // 最大元素个数
 const int kMaxProductionNum = 200;  // 生产列表大小
-
-const int kFortScore = 1;       // 占领据点每回合奖励的积分
-const int kDamageScore = 1;     // 造成一点伤害奖励的积分
-const int kCollectScore = 1;    // 收集一单位资源奖励的积分
 
 enum { NO_TEAM = 2 };
 enum Level { UNDERWATER, SURFACE, AIR };  // 层次
@@ -44,8 +33,6 @@ enum ElementType  // 元素类型
     kElementTypes
 };
 
-
-// *********************** 相关类型 ***********************
 
 struct Position
 {
@@ -129,10 +116,20 @@ struct GameInfo  // 游戏信息结构体，每回合选手从中获取必要的
     ProductionEntry production_list[kMaxProductionNum];
 };
 
+// *********************** 游戏常量 ***********************
 
-// *********************** 游戏数据 ***********************
+extern const std::size_t kMaxTeamNameSize;
 
-const Property kElementInfos[kElementTypes] = {};
+extern const int kMaxMapSize;          // 地图最大边长
+extern const int kMaxRoundLimit;       // 最大回合数上限
+extern const int kMaxPopulationLimit;  // 最大人口上限
+
+extern const int kFortScore;       // 占领据点每回合奖励的积分
+extern const int kDamageScore;     // 造成一点伤害奖励的积分
+extern const int kCollectScore;    // 收集一单位资源奖励的积分
+
+extern const Property kElementInfos[kElementTypes];
+
 
 const GameInfo * Info();  // 获取游戏信息
 MapType Map(int x, int y);

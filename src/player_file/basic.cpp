@@ -5,6 +5,19 @@
 
 namespace teamstyle16 {
 
+extern const std::size_t kMaxTeamNameSize = 32;
+
+extern const int kMaxMapSize = 80;
+extern const int kMaxRoundLimit = 300;
+extern const int kMaxPopulationLimit = 300;
+
+extern const int kFortScore = 1;
+extern const int kDamageScore = 1;
+extern const int kCollectScore = 1;
+
+extern const Property kElementInfos[kElementTypes] = {};
+
+
 const GameInfo * Info()
 {
     return Connection::Instance()->game_info();
