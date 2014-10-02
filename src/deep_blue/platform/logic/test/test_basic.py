@@ -74,13 +74,49 @@ class TestBasic(unittest.TestCase):
         rec = basic.Rectangle(pos1, pos2)
 
         base = basic.Base(0, rec)
-        fort = basic.Fort(0, rec)
+        fort = basic.Fort(1, rec)
+        mine = basic.Mine(0, rec)
+        oilfield = basic.Oilfield(1, rec)
         submarine = basic.Submarine(1, pos1)
         destroyer = basic.Destroyer(1, pos2)
         carrier = basic.Carrier(1, pos2)
         cargo = basic.Cargo(1, pos2)
         fighter = basic.Fighter(1, pos2)
         scout = basic.Scout(1, pos2)
+
+        elements = [base, fort, mine, oilfield, submarine,
+                   destroyer, carrier, cargo, fighter, scout]
+        unit_bases = [base, fort, submarine, destroyer,
+                     carrier, cargo, fighter, scout]
+        units = [submarine, destroyer, carrier, cargo, fighter, scout]
+
+        # Check attributes
+        for element in elements:
+            self.assertTrue(hasattr(element, 'index'))
+            self.assertTrue(hasattr(element, 'pos'))
+            self.assertTrue(hasattr(element, 'size'))
+            self.assertTrue(hasattr(element, 'visible'))
+        for element in unit_bases:
+            self.assertTrue(hasattr(element, 'team'))
+            self.assertTrue(hasattr(element, 'sight_range'))
+            self.assertTrue(hasattr(element, 'fire_range'))
+            self.assertTrue(hasattr(element, 'health'))
+            self.assertTrue(hasattr(element, 'health_max'))
+            self.assertTrue(hasattr(element, 'fuel'))
+            self.assertTrue(hasattr(element, 'fuel_max'))
+            self.assertTrue(hasattr(element, 'ammo'))
+            self.assertTrue(hasattr(element, 'ammo_once'))
+            self.assertTrue(hasattr(element, 'ammo_max'))
+            self.assertTrue(hasattr(element, 'metal'))
+            self.assertTrue(hasattr(element, 'metal_max'))
+            self.assertTrue(hasattr(element, 'attacks'))
+            self.assertTrue(hasattr(element, 'defences'))
+        for element in units:
+            self.assertTrue(hasattr(element, 'speed'))
+            self.assertTrue(hasattr(element, 'dest'))
+            self.assertTrue(hasattr(element, 'cost'))
+            self.assertTrue(hasattr(element, 'population'))
+            self.assertTrue(hasattr(element, 'build_round'))
 
 
 if __name__ == '__main__':
