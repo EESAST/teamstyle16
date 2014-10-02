@@ -19,7 +19,7 @@
             "ammo_once": 6,
             "metal_max": 200,
             "attacks": [40, 0],
-            "defences":[30, null],
+            "defences":[30, null]
         },
         "fort": {
             "level": 1,
@@ -32,15 +32,15 @@
             "ammo_once": 6,
             "metal_max": 200,
             "attacks": [40, 0],
-            "defences":[30, null],
+            "defences":[30, null]
         },
         "mine": {
             "level": 1,
-            "size": [1, 1],
+            "size": [1, 1]
         },
         "oilfield": {
             "level": 1,
-            "size": [1, 1],
+            "size": [1, 1]
         },
         "submarine": {
             "level": 1,
