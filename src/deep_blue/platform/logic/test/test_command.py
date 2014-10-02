@@ -6,7 +6,7 @@ class TestCommand(unittest.TestCase):
     """Test case for Command"""
 
     def test_class_inherit(self):
-        """Test class relationships based on API"""
+        """Test Command inheritance"""
         self.assertTrue(issubclass(command.Command, object))
         self.assertTrue(issubclass(command.AttackPos, command.Command))
         self.assertTrue(issubclass(command.AttackUnit, command.Command))
@@ -17,6 +17,7 @@ class TestCommand(unittest.TestCase):
         self.assertTrue(issubclass(command.Cancel, command.Command))
 
     def test_constructor(self):
+        """Test contruction of Command"""
         pos = basic.Position(3, 4, 5)
 
         cmd = command.AttackPos(2, pos)

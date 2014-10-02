@@ -5,8 +5,8 @@ from .. import event
 class TestEvent(unittest.TestCase):
     """Test case for Event"""
 
-    def test_class_inherit(self):
-        """Test class relationships based on API"""
+    def test_class_inheritance(self):
+        """Test Event inheritance"""
         self.assertTrue(issubclass(event.Event, object))
         self.assertTrue(issubclass(event.AddProductionEntry, event.Event))
         self.assertTrue(issubclass(event.AttackPos, event.Event))

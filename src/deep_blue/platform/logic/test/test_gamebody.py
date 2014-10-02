@@ -6,8 +6,6 @@ class TestGameBody(unittest.TestCase):
 
     def test_constants(self):
         """Test constants in module gamebody"""
-        self.assertTrue(hasattr(gamebody, STATE_CONTINUE))
-        self.assertTrue(hasattr(gamebody, STATE_TIE))
         self.assertNotEqual(STATE_CONTINUE, 0)
         self.assertNotEqual(STATE_CONTINUE, 1)
         self.assertNotEqual(STATE_TIE, 0)
