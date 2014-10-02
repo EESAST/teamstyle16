@@ -30,7 +30,7 @@ class ParseError(AIError):
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
-    def __init__(self, team_num, port, file_name=None):
+    def __init__(self, team_num, sock, file_name=None):
         threading.Thread.__init__(self)
         self.lock = threading.RLock()
         self.team_num = team_num
@@ -38,11 +38,6 @@ class AIProxy(threading.Thread):
         self.stop_flag = False
 
         self.logger = logging.getLogger('%s.ai%d' % (__name__, team_num))
-
-        # build the socket
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.bind(('', port))
-        self.sock.listen(1)
 
         # start AI (if needed) and connect
         self.ai_program = None
@@ -52,19 +47,19 @@ class AIProxy(threading.Thread):
             self.logger.info('AI started')
 
         self.logger.info('Waiting for connection')
-        self.conn, self.addr = self.sock.accept()
+        self.conn, self.addr = sock.accept()
         self.logger.info('AI connected, getting team name')
         self.team_name = self.__get_team_name()
-        self.logger.info('AI team name read: %s', self.team_name)
+        self.logger.info('Team name read: %s', self.team_name)
 
     def stop(self):
         self.stop_flag = True
 
     def run(self):
-        self.logger.info('Starting loop for receiving commands from AI')
+        self.logger.info('Starting loop for receiving commands')
         while not self.stop_flag:
             try:
-                self.logger.debug('Receiving commands from AI')
+                self.logger.debug('Receiving commands')
                 data = self.conn.recv(1024)
 
                 if len(data) == 0:
@@ -76,9 +71,9 @@ class AIProxy(threading.Thread):
                         raise AIConnectError('Connection to AI %d seems broken'
                                              % self.team_num)
 
-                self.logger.debug('Data received from AI (size: %d)', len(data))
+                self.logger.debug('Data received (size: %d)', len(data))
                 cmds = self.__decode_commands(data.decode())
-                self.logger.info('%d command(s) decoded from AI', len(cmds))
+                self.logger.info('%d command(s) decoded', len(cmds))
 
                 self.lock.acquire()
                 self.commands.extend(cmds)
