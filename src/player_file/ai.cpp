@@ -5,11 +5,10 @@ using namespace teamstyle16;
 
 const char * GetTeamName()
 {
-    return "0xFFFFFF";  // 队伍名
+    return "0xFFFFFF";  // team name
 }
 
 void AIMain()
 {
-    // AI代码写在这里
+    // Your codes here
 }
-

@@ -60,10 +60,10 @@ class ConnectionTest : public ::testing::Test
 
     std::string ReadTeamName()
     {
-        size_t size = teamstyle16::kMaxTeamNameSize;
-        boost::asio::read(socket_, buffer(buffer_, size));
+        std::size_t max_size = teamstyle16::kMaxTeamNameSize;
+        std::size_t size = socket_.read_some(buffer(buffer_, max_size));
 
-        return boost::trim_right_copy(
+        return boost::trim_copy(
             std::string(buffer_.begin(), buffer_.begin() + size));
     }
 

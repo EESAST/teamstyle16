@@ -42,7 +42,8 @@ void Connection::Connect(const std::string &host, const std::string &port)
     }
     // send back team name
     std::string team_name = GetTeamName();
-    team_name.resize(kMaxTeamNameSize, ' ');
+    if (team_name.size() > kMaxTeamNameSize)
+        team_name.resize(kMaxTeamNameSize);
     boost::asio::write(socket_, boost::asio::buffer(team_name));
     std::clog << "Connection established\n";
 }
