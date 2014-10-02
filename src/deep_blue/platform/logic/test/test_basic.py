@@ -92,14 +92,15 @@ class TestBasic(unittest.TestCase):
 
         # Check attributes
         for element in elements:
+            print element
             self.assertTrue(hasattr(element, 'index'))
             self.assertTrue(hasattr(element, 'pos'))
             self.assertTrue(hasattr(element, 'size'))
             self.assertTrue(hasattr(element, 'visible'))
         for element in unit_bases:
             self.assertTrue(hasattr(element, 'team'))
-            self.assertTrue(hasattr(element, 'sight_range'))
-            self.assertTrue(hasattr(element, 'fire_range'))
+            self.assertTrue(hasattr(element, 'sight_ranges'))
+            self.assertTrue(hasattr(element, 'fire_ranges'))
             self.assertTrue(hasattr(element, 'health'))
             self.assertTrue(hasattr(element, 'health_max'))
             self.assertTrue(hasattr(element, 'fuel'))

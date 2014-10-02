@@ -62,22 +62,22 @@ TODO：游戏常量
 | metal/fuel | int  | 剩余资源 |
 
 ### Class UnitBase
-|     属性    |  类型  |       描述       |
-|-------------|--------|------------------|
-| team        | int    | 所属队伍         |
-| sight_range | int[3] | 视野范围         |
-| fire_range  | int[3] | 攻击范围         |
-| health      | int    | 生命值           |
-| health_max  | int    | 生命值上限       |
-| fuel        | int    | 燃料             |
-| fuel_max    | int    | 燃料上限         |
-| ammo        | int    | 弹药             |
-| ammo_once   | int    | 单次攻击消耗弹药 |
-| ammo_max    | int    | 弹药上限         |
-| metal       | int    | 金属             |
-| metal_max   | int    | 金属上限         |
-| attacks     | int[2] | 攻击             |
-| defences    | int[2] | 防御             |
+|     属性     |  类型  |       描述       |
+|--------------|--------|------------------|
+| team         | int    | 所属队伍         |
+| sight_ranges | int[3] | 视野范围         |
+| fire_ranges  | int[3] | 攻击范围         |
+| health       | int    | 生命值           |
+| health_max   | int    | 生命值上限       |
+| fuel         | int    | 燃料             |
+| fuel_max     | int    | 燃料上限         |
+| ammo         | int    | 弹药             |
+| ammo_once    | int    | 单次攻击消耗弹药 |
+| ammo_max     | int    | 弹药上限         |
+| metal        | int    | 金属             |
+| metal_max    | int    | 金属上限         |
+| attacks      | int[2] | 攻击             |
+| defences     | int[2] | 防御             |
 
 ### Class Unit
 |     属性    |   类型   |      描述      |
