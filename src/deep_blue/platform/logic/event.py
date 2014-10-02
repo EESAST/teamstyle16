@@ -46,13 +46,12 @@ class Supply(Event):
 
 class Fix(Event):
     """修理"""
-    def __init__(self, index, target, metal, health_increase, new_type):
+    def __init__(self, index, target, metal, health_increase):
         super(Fix, self).__init__('Fix')
         self.index = index
         self.target = target
         self.metal = metal
         self.health_increase = health_increase
-        self.new_type = new_type
 
 class Collect(Event):
     """收集"""

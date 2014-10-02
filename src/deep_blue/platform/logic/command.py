@@ -57,10 +57,9 @@ class AttackUnit(Command):########
 
 class Fix(Command):
     """维修"""
-    def __init__(self, operand, target, new_kind = None):
+    def __init__(self, operand, target):
         super(Fix, self).__init__(operand)
         self.target = target
-        self.new_kind = new_kind
     def result_event(self):
         Operand = ELEMENTS[self.operand]
         Target = ELEMENTS[self.target]
@@ -72,7 +71,7 @@ class Fix(Command):
             provide_metal = metal - Operand.metal
             add_health = provide_metal / METAL_PER_HEALTH
             Event.append(event.Fix("Fix", self.operand, self.target, \
-                                   provide_metal, add_health, self.new_kind))
+                                   provide_metal, add_health))
         return Event
 class ChangeDest(Command):
     """更改目的地"""
@@ -179,4 +178,3 @@ class Cancel(Command):
             if command.operand == self.operand:
                 COMMANDS[Operand.team].pop(command)
         return Event
-        
