@@ -259,30 +259,14 @@ class Rectangle(object):
                         region_points.append(pos)
             return region_points
 
-ELEMENTS = {}   # 地图上所有元素的字典 { int:Element }
-
-def appendElement(new_element):
-    """向ELEMENTS字典中加入新element, 返回新element的索引号(随机生成索引号, 防止选手根据索引号推测对方生产的单位数)"""
-    index = choice(xrange(1000))    # 随机范围1000以内
-    while index in ELEMENTS.keys(): # 是否与已有index冲突
-        index += 1
-    ELEMENTS[index] = new_element
-    return index
-
-def getElement(pos):
-    for element in ELEMENTS.values():
-        if element.pos == pos:
-            return element
-    return None
-
 class Element(object):
     """所有地图元素, 派生出资源类和作战单位(UnitBase)类"""
     kind = None     # 类属性
-    def __init__(self, pos):
+    def __init__(self, pos, index = None, visible = False):
         super(Element, self).__init__()
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
-        self.index = None       # 调用MapInfo.addElement()才会赋予相应的index值
-        self.visible = False    # 每回合更新所有element的visible值
+        self.index = index       # 调用MapInfo.addElement()才会赋予相应的index值
+        self.visible = visible    # 每回合更新所有element的visible值
 
     @property
     def level(self):
@@ -306,16 +290,13 @@ class Mine(Resource):
     def __init__(self, pos, metal = PROPERTY[MINE][METAL_MAX]):
         super(Mine, self).__init__(pos)
         self.metal = metal
-        self.visible = True
 
 class Oilfield(Resource):
     """油田"""
     kind = OILFIELD
     def __init__(self, pos, fuel = PROPERTY[OILFIELD][FUEL_MAX]):
         super(Oilfield, self).__init__(pos)
-        self.fuel = fuel
-        self.visible = True
-        
+        self.fuel = fuel        
         
 class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
@@ -372,7 +353,7 @@ class UnitBase(Element):
 
     def destroy(self):
         """单位阵亡"""
-        del ELEMENTS[self.index]
+        pass
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药

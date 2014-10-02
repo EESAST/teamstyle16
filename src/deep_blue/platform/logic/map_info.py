@@ -6,17 +6,12 @@ from basic import *
 
 class MapInfo(object):
     """地图"""
-    def __init__(self, x_max, y_max, max_population, record_interval, time_per_round, weather, types = None, elements = {}):
-        """Create a map"""
-        if types == None:
-            self.x_max = x_max
-            self.y_max = y_max
-            self.types = [[0] * x_max] * y_max 
-        else:
-            self.types = types
-            self.x_max = len(types[0])
-            self.y_max = len(types)
-        self.elements = elements
+    def __init__(self, x_max, y_max, max_population, record_interval, time_per_round, weather, **kwargs):
+        """Create an empty map"""
+        self.x_max = x_max
+        self.y_max = y_max
+        self.types = kwargs['types'] if 'types' in kwargs else [[0 for x in xrange(x_max)] for x in xrange(y_max)]
+        self.elements = kwargs['elements'] if 'elements' in kwargs else {}
         self.max_population = max_population
         self.record_interval = record_interval
         self.time_per_round = time_per_round
@@ -31,7 +26,7 @@ class MapInfo(object):
         if x >= self.x_max or y >= self.y_max:
             return False
         else:
-            self.types[x][y] = LAND if map_type != OCEAN else OCEAN      # in case map_type = 2, 3, etc..
+            self.types[x][y] = min(map_type, LAND)      # in case map_type = 2, 3, etc..
             return True
 
     def element(self, pos):
