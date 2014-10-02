@@ -12,10 +12,9 @@ class Command(object):
 
 class AttackPos(Command):
     """攻击"""
-    def __init__(self, operand, pos, hit = None):
+    def __init__(self, operand, pos):
         super(Attack, self).__init__(operand)
         self.pos = pos
-        self.hit = hit
     def result_event(self):
         Operand = ELEMENTS[self.operand]
         Target = getElement(self.pos)
@@ -34,10 +33,9 @@ class AttackPos(Command):
                 
 class AttackUnit(Command):########
     """攻击"""
-    def __init__(self, operand, target, hit = None):
+    def __init__(self, operand, target):
         super(Attack, self).__init__(operand)
         self.target = target
-        self.hit = None
     def result_event(self):
         Operand = ELEMENTS[self.operand]
         Target = ELEMENTS[self.target]
