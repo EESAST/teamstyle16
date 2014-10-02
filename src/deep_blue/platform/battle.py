@@ -112,6 +112,9 @@ class Battle(object):
         replayer_file = open(filename, 'w')
         replayer_file.write(self.init_map_info().saves() + '\n' + str(self.replay_info) + '\n' + str(self.score_history()) + '\n' + str(self.unit_num_history()) + '\n' + str(self.population_history()) + '\n' + str(self.command_history()))
         replayer_file.close()   #remember the sequence here is init_map_info -> replay_info -> score -> unit_num -> population -> commands, each occupying a line
+        #But because of the unawareness of which form is saves() going to return in(may contain \n itself), so we could also use some other sep to separate informations
+        #Such as by @, and func of loading could be load_file.read().split('@')...
+        #Also we may use some other way as alternative, this part will be further revised later.
 
 class Replayer(Battle):
     def __init__(self):
@@ -124,6 +127,24 @@ class Replayer(Battle):
         for cmd in commands_to_execute[1]:
             self.game_body.set_command(1, cmd)
         return self.game_body.run()
+
+    def go_to_round(self, round):          
+        try:
+            self.game_body = GameBody(map_info.loads_elements(self.replay_info[round // self.record_interval]))  #here a func which can translate the str returned by saves_elements() to map_info object, I call it loads_elements(str)
+            for i in range(round % self.record_interval):
+                self.game_body.run()
+        except IndexError:
+            #here may assert an error, to notify Replayer that go_to_round() failed because of round out of range.
+        except:
+            #here may assert another error, to notify Replayer that go_to_round() failed because of some unknown reason.
+
+    def begin(self):
+        self.game_body = GameBody(self.init_map_info)
+
+    def end(self):
+        self.game_body = GameBody(map_info.loads_elements(self.replay_info[-1]))
+        while not END_OF_GAME:      #don't know how to detect the end ouf game here
+            self.game_body.run()
 
 def load_replayer(filename):
     load_file = open(filename, 'r')
