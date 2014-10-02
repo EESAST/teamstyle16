@@ -133,9 +133,16 @@ extern const Property kElementInfos[kElementTypes];
 
 const GameInfo * Info();  // 获取游戏信息
 MapType Map(int x, int y);
+
+// Move to the next round, or the latest round if possible
+// Return rounds actually passed
 int Update();
+
+// Trying to move to the latest round, won't block
+// Return rounds actually passed
 int TryUpdate();
 
+// Commands
 void AttackPos(int operand, Position target);
 void AttackUnit(int operand, int target);
 void ChangeDest(int operand, Position dest);
