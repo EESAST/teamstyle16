@@ -92,11 +92,11 @@ class AIProxy(threading.Thread):
 
     def send_info(self, battle):
         """Send infomations to AI"""
-        if battle.GameBody.round() == 0:
-            self.__send_stable_info()
-            self.__send_round_info()
+        if battle.round() == 0:
+            self.__send_stable_info(battle)
+            self.__send_round_info(battle)
         else:
-            self.__send_round_info()
+            self.__send_round_info(battle)
 
     def __run_ai(self, file_name, port):
         self.ai_program = subprocess.Popen([file_name, 'localhost', str(port)],
@@ -168,8 +168,10 @@ class AIProxy(threading.Thread):
         """Encode round information of battle into str"""
         map_info = battle.map_info()
         production_list = battle.production_list(self.team_num)
+        elements = battle.elements(self.team_num)
+
         header = struct.pack('6i', battle.round(),
-                                   len(map_info.element),
+                                   len(elements),
                                    battle.population(self.team_num),
                                    len(production_list),
                                    battle.score(0),
@@ -177,8 +179,8 @@ class AIProxy(threading.Thread):
 
         body = ''
         for entry in production_list:
-            body = body + struct.pack('2i', entry.kind, entry.round_left)
-        for element in battle.elements(self.team_num):
+            body = body + struct.pack('2i', entry[0], entry[1])
+        for element in elements:
             body = body + self.__serialize_element(element)
 
         return header + body
