@@ -13,7 +13,7 @@ class Command(object):
 class AttackPos(Command):
     """攻击"""
     def __init__(self, operand, pos):
-        super(Attack, self).__init__(operand)
+        super(AttackPos, self).__init__(operand)
         self.pos = pos
     def result_event(self):
         Operand = ELEMENTS[self.operand]
@@ -34,7 +34,7 @@ class AttackPos(Command):
 class AttackUnit(Command):########
     """攻击"""
     def __init__(self, operand, target):
-        super(Attack, self).__init__(operand)
+        super(AttackUnit, self).__init__(operand)
         self.target = target
     def result_event(self):
         Operand = ELEMENTS[self.operand]
@@ -45,7 +45,7 @@ class AttackUnit(Command):########
             pass  ##打单位没打中的话产生什么event
         else:
             hit = True
-            Event.append(event.Attack("Attack", self.operand, self.target, hit, damage))
+            Event.append(event.AttackUnit("AttackUnit", self.operand, self.target, hit, damage))
             if Target.health <= 0:
                 if Target.type == FORT:
                     Event.append(event.Capture("Capture", self.target, Operand.team))

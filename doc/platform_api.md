@@ -101,23 +101,3 @@ AI对战
 | begin()     | int    | 返回回放开始回合 |
 | end()       | int    | 返回回放结束回合 |
 | goto(round) | int    | 前往指定回合     |
-
-
-# 平台组内部
-
-## Module ai_proxy
-AI代理，处理游戏程序与AI间的通信
-
-### Class AIProxy
-
-|           构造函数          |                        描述                        |
-|-----------------------------|----------------------------------------------------|
-| AIProxy(team_num, filename) | 运行该AI程序，并与其连接，获取队名，传递稳定信息。 |
-
-|               方法               |  返回值   |                     描述                     |
-|----------------------------------|-----------|----------------------------------------------|
-| team_num()                       | int       | 返回队伍编号                                 |
-| team_name()                      | str       | 返回队伍名称                                 |
-| get_commands(Battle, time_limit) | [Command] | 向选手传递回合信息，在时限内从选手AI获取指令 |
-| __send_stable_info(Battle)       | None      | 传递稳定信息                                 |
-| __send_turn_info(Battle)         | None      | 传递回合信息                                 |
