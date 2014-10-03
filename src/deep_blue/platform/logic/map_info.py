@@ -53,7 +53,7 @@ class MapInfo(object):
 
     def save(self, filename):
         """Save map to file"""
-        open(filename).write(saves(self))
+        open(filename, 'w').write(self.saves())
 
     def saves(self):
         """Save map to string"""
