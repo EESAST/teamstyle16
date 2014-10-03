@@ -288,39 +288,84 @@ TODO：游戏常量
 ## Module gamebody
 提供游戏主体
 
-类继承关系
-
-    object
-        GameBody
-
 |      属性      | 类型 |           描述           |
 | -------------- | ---- | ------------------------ |
 | STATE_CONTINUE | int  | 值为-1，表示游戏应当继续 |
 | STATE_TIE      | int  | 值为2，表示平局          |
 
+|           方法           |  返回值  |         描述         |
+| ------------------------ | -------- | -------------------- |
+| load_team_info(team_str) | TeamInfo | 从字符串读取队伍信息 |
+| load_game(filename)      | GameBody | 从文件读取游戏主体   |
+| loads_game(game_str)     | GameBody | 从字符串读取游戏主体 |
+
+类继承关系
+
+    object
+        TeamInfo
+        GameBody
+
+### Class TeamInfo
+队伍信息
+
+|             构造函数            |     描述     |
+| ------------------------------- | ------------ |
+| TeamInfo(index, name, **kwargs) | 构造队伍信息 |
+
+|       属性      |         类型         |                             描述                            |
+| --------------- | -------------------- | ----------------------------------------------------------- |
+| **attr**        |                      |                                                             |
+| index           | int                  | 队伍索引, 0或1                                              |
+| name            | str                  | 队伍名                                                      |
+| score           | int                  | 本队当前积分                                                |
+| elements        | {int:Element}        | 本队所有单位                                                |
+| production_list | [(kind, round_left)] | 本队生产列表                                                |
+| commands        | [Command]            | 本队当前所有指令                                            |
+| **property**    |                      | 没有真正保存, 但可以通过object.property的方式调用(不加括号) |
+| vision          | [[Position]]         | 本队共享三层视野                                            |
+| population      | int                  | 本队当前总人口                                              |
+
+|   方法  | 返回值 |           描述           |
+| ------- | ------ | ------------------------ |
+| saves() | str    | 保存当前队伍信息至字符串 |
+
 
 ### Class GameBody
 游戏主体
 
-|          构造函数         |     描述     |
-| ------------------------- | ------------ |
-| GameBody(map_info, teams) | 构造游戏主体 |
+|            构造函数            |     描述     |
+| ------------------------------ | ------------ |
+| GameBody(map_info, team_names) | 构造游戏主体 |
 
-|            方法            |        返回值        |                 描述                 |
-| -------------------------- | -------------------- | ------------------------------------ |
-| **基本信息**               |                      |                                      |
-| map_info()                 | MapInfo              | 当前地图信息                         |
-| team_name(team)            | str                  | 队伍名                               |
-| **游戏状态**               |                      |                                      |
-| round()                    | int                  | 当前回合数                           |
-| status()                   | int                  | 当前的游戏状态                       |
-| score(team)                | int                  | 分数                                 |
-| elements(perspective)      | {int:Element}        | 某队视角下的所有元素                 |
-| production_list(team)      | [(kind, round_left)] | 生产列表                             |
-| population(team)           | int                  | 该队伍的人口数                       |
-| **运行相关**               |                      |                                      |
-| commands(team)             | [Command]            | 返回该队伍当前的指令集               |
-| set_command(team, command) | None                 | 为该队伍添加一条指令，并更新指令列表 |
-| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件   |
-| **设置/保存相关**          |                      |                                      |
-| set_team_name(team, name)  | None                 | 设置队伍名                           |
+|       属性      |      类型     |         描述        |
+| --------------- | ------------- | ------------------- |
+| **attr**        |               |                     |
+| map_info        | MapInfo       | 地图信息            |
+| round           | int           | 当前回合数, 从0开始 |
+| teams_info      | [TeamInfo]    | 两队信息            |
+| **property**    |               |                     |
+| map             | [[int]]       | 地形图              |
+| elements        | {int:Element} | 所有单位            |
+| max_population  | int           | 人口上限            |
+| record_interval | int           | 统计数据记录间隔    |
+| time_per_round  | float         | 每回合时间          |
+| weather         | int           | 天气                |
+
+|            方法            |        返回值        |                            描述                           |
+| -------------------------- | -------------------- | --------------------------------------------------------- |
+| **基本信息**               |                      |                                                           |
+| team_name(team)            | str                  | 队伍名                                                    |
+| **游戏状态**               |                      |                                                           |
+| status()                   | int                  | 当前的游戏状态                                            |
+| score(team)                | int                  | 分数                                                      |
+| elements(perspective)      | {int:Element}        | 某队视角下的所有元素                                      |
+| production_list(team)      | [(kind, round_left)] | 生产列表                                                  |
+| population(team)           | int                  | 该队伍的人口数                                            |
+| **运行相关**               |                      |                                                           |
+| commands(team)             | [Command]            | 返回该队伍当前的指令集                                    |
+| set_command(team, command) | bool                 | 为该队伍添加一条指令，并更新指令列表, 指令无效则返回False |
+| run()                      | [Event]              | 运行一回合，返回该回合内发生的事件                        |
+| **设置/保存相关**          |                      |                                                           |
+| set_team_name(team, name)  | None                 | 设置队伍名                                                |
+| save(filename)             | None                 | 保存当前游戏状态至文件                                    |
+| saves()                    | str                  | 保存当前游戏状态至字符串                                  |
