@@ -130,6 +130,7 @@ TODO：游戏常量
 | save(filename)               | None    | 保存地图信息至文件                                |
 | saves()                      | str     | 保存地图至字符串                                  |
 | saves_elements()             | str     | 保存单位状态至字符串                              |
+| loads_elements(str)          | None    | 从字符串读取elements信息, 并更新当前地图          |
 
 
 
