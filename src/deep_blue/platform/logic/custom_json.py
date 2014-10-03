@@ -3,6 +3,7 @@
 # MyEncoder, MyDecoder for custom classes.
 
 import json
+import importlib
 from basic import *
 
 class MyEncoder(json.JSONEncoder):
@@ -20,7 +21,7 @@ class MyDecoder(json.JSONDecoder):
         if '__class__' in d:
             class_name = d.pop('__class__')
             module_name = d.pop('__module__')
-            module = __import__(module_name)
+            module = importlib.import_module(module_name)
             class_ = getattr(module, class_name)
             args = dict((key.encode('ascii'), value) for key, value in d.items())
             inst = class_(**args)
