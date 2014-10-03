@@ -325,7 +325,7 @@ class UnitBase(Element):
         for kw in ['health', 'fuel', 'ammo', 'metal']:
             if kw in kwargs:
                 maximum = getattr(self, kw + '_max')
-                setattr(self, kw, min(kwargs[kw], maximum))
+                setattr(self, kw, min(max(0, kwargs[kw]), maximum))     # in case health < 0 or health > health_max
 
     def view(self, target_pos):
         """查看目标点的状态"""
@@ -450,17 +450,13 @@ class Fort(Building):
 class Unit(UnitBase):
     """可移动单位"""
     def __init__(self, team, pos, sight_ranges, fire_ranges, 
-                 health, fuel, ammo, ammo_once, metal, 
+                 health_max, fuel_max, ammo_max, ammo_once, metal_max, 
                  speed, population, 
                  attacks, defences, **kwargs):
-        super(Unit, self).__init__(team, pos,
-                                   sight_ranges = sight_ranges,
-                                   fire_ranges = fire_ranges,
-                                   health = health, fuel = fuel, ammo = ammo,
-                                   ammo_once = ammo_once, metal = metal,
-                                   speed = speed, population = population,
-                                   attacks = attacks, defences = defences,
-                                   **kwargs)
+        super(Unit, self).__init__(team, pos, sight_ranges, fire_ranges, 
+                                   health_max, fuel_max, ammo_max, ammo_once, metal_max, 
+                                   speed, population, 
+                                   attacks, defences, **kwargs)
         self.dest = kwargs['dest'] if 'dest' in kwargs else self.pos    # 目的地(初始为自身位置)
 
     @property
