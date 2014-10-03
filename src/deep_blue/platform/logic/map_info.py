@@ -11,7 +11,7 @@ class MapInfo(object):
         """Create an empty map"""
         self.x_max = x_max
         self.y_max = y_max
-        self.types = kwargs['types'] if 'types' in kwargs else [[0 for x in xrange(x_max)] for x in xrange(y_max)]
+        self.types = kwargs['types'] if 'types' in kwargs else [[0 for y in xrange(y_max)] for x in xrange(x_max)]
         self.elements = kwargs['elements'] if 'elements' in kwargs else {}
         self.max_population = max_population
         self.record_interval = record_interval
