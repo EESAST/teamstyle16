@@ -7,12 +7,13 @@ from custom_json import *
 
 class MapInfo(object):
     """地图"""
-    def __init__(self, x_max, y_max, max_population, record_interval, time_per_round, weather, **kwargs):
+    def __init__(self, x_max, y_max, max_population, max_round, record_interval, time_per_round, weather, **kwargs):
         """Create an empty map"""
         self.x_max = x_max
         self.y_max = y_max
         self.types = kwargs['types'] if 'types' in kwargs else [[0 for y in xrange(y_max)] for x in xrange(x_max)]
         self.elements = kwargs['elements'] if 'elements' in kwargs else {}
+        self.max_round = max_round
         self.max_population = max_population
         self.record_interval = record_interval
         self.time_per_round = time_per_round
