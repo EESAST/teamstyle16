@@ -325,7 +325,7 @@ class UnitBase(Element):
         for kw in ['health', 'fuel', 'ammo', 'metal']:
             if kw in kwargs:
                 maximum = getattr(self, kw + '_max')
-                setattr(self, kw, min(kwargs[kw], maximum)
+                setattr(self, kw, min(kwargs[kw], maximum))
 
     def view(self, target_pos):
         """查看目标点的状态"""
