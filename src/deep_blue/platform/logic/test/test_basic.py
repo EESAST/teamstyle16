@@ -69,7 +69,7 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(6, rec.x)
         self.assertEqual(10, rec.y)
         self.assertEqual(0, rec.z)
-        self.assertEqual((116, 5), rec.size)
+        self.assertEqual((117, 6), rec.size)
 
     def test_element(self):
         """Test initialization & attributes of Elements"""
@@ -77,16 +77,16 @@ class TestBasic(unittest.TestCase):
         pos2 = basic.Position(12, 15, 0)
         rec = basic.Rectangle(pos1, pos2)
 
-        base = basic.Base(0, rec)
+        base = basic.Base(0, rec, health = 8)
         fort = basic.Fort(1, rec)
         mine = basic.Mine(rec)
         oilfield = basic.Oilfield(rec)
-        submarine = basic.Submarine(1, pos1)
-        destroyer = basic.Destroyer(1, pos2)
-        carrier = basic.Carrier(1, pos2)
-        cargo = basic.Cargo(1, pos2)
-        fighter = basic.Fighter(1, pos2)
-        scout = basic.Scout(1, pos2)
+        submarine = basic.Submarine(1, pos1, health = 100, fuel = 200, ammo = 300, metal = 400)
+        destroyer = basic.Destroyer(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
+        carrier = basic.Carrier(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
+        cargo = basic.Cargo(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
+        fighter = basic.Fighter(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
+        scout = basic.Scout(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
 
         elements = [base, fort, mine, oilfield, submarine,
                    destroyer, carrier, cargo, fighter, scout]

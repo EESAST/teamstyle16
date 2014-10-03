@@ -452,10 +452,14 @@ class Unit(UnitBase):
                  health, fuel, ammo, ammo_once, metal, 
                  speed, population, 
                  attacks, defences, **kwargs):
-        super(Unit, self).__init__(team, pos, sight_ranges, fire_ranges, 
-                                   health, fuel, ammo, ammo_once, metal, 
-                                   speed, population, 
-                                   attacks, defences, **kwargs)
+        super(Unit, self).__init__(team, pos,
+                                   sight_ranges = sight_ranges,
+                                   fire_ranges = fire_ranges,
+                                   health = health, fuel = fuel, ammo = ammo,
+                                   ammo_once = ammo_once, metal = metal,
+                                   speed = speed, population = population,
+                                   attacks = attacks, defences = defences,
+                                   **kwargs)
         self.dest = kwargs['dest'] if 'dest' in kwargs else self.pos    # 目的地(初始为自身位置)
 
     @property
