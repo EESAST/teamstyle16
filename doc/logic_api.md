@@ -337,19 +337,20 @@ TODO：游戏常量
 | ------------------------------ | ------------ |
 | GameBody(map_info, team_names) | 构造游戏主体 |
 
-|       属性      |      类型     |         描述        |
-| --------------- | ------------- | ------------------- |
-| **attr**        |               |                     |
-| map_info        | MapInfo       | 地图信息            |
-| round           | int           | 当前回合数, 从0开始 |
-| teams_info      | [TeamInfo]    | 两队信息            |
-| **property**    |               |                     |
-| map             | [[int]]       | 地形图              |
-| elements        | {int:Element} | 所有单位            |
-| max_population  | int           | 人口上限            |
-| record_interval | int           | 统计数据记录间隔    |
-| time_per_round  | float         | 每回合时间          |
-| weather         | int           | 天气                |
+|       属性      |      类型     |                           描述                          |
+| --------------- | ------------- | ------------------------------------------------------- |
+| **attr**        |               |                                                         |
+| map_info        | MapInfo       | 地图信息                                                |
+| round           | int           | 当前回合数, 从0开始                                     |
+| teams_info      | [TeamInfo]    | 两队信息                                                |
+| **property**    |               |                                                         |
+| map             | [[int]]       | 地形图                                                  |
+| elements        | {int:Element} | 所有单位                                                |
+| max_population  | int           | 人口上限                                                |
+| record_interval | int           | 统计数据记录间隔                                        |
+| time_per_round  | float         | 每回合时间                                              |
+| weather         | int           | 天气                                                    |
+| status          | int           | 当前游戏状态, 0或1表示该队伍胜利, -1仍未分出胜负, 2平局 |
 
 |            方法            |        返回值        |                            描述                           |
 | -------------------------- | -------------------- | --------------------------------------------------------- |
