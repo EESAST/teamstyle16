@@ -4,6 +4,29 @@ import unittest
 class TestBasic(unittest.TestCase):
     """Test case for Basic"""
 
+    def setUp(self):
+        """Build Elements for testing"""
+        self.pos1 = basic.Position(9, 10, 0)
+        self.pos2 = basic.Position(12, 15, 0)
+        self.rec = basic.Rectangle(self.pos1, self.pos2)
+
+        base = basic.Base(0, self.rec)
+        fort = basic.Fort(1, self.rec)
+        mine = basic.Mine(self.rec)
+        oilfield = basic.Oilfield(self.rec)
+        submarine = basic.Submarine(1, self.pos1, health=100, fuel=200, ammo=300, metal=400)
+        destroyer = basic.Destroyer(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
+        carrier = basic.Carrier(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
+        cargo = basic.Cargo(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
+        fighter = basic.Fighter(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
+        scout = basic.Scout(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
+
+        self.elements = [base, fort, mine, oilfield, submarine,
+                   destroyer, carrier, cargo, fighter, scout]
+        self.unit_bases = [base, fort, submarine, destroyer,
+                     carrier, cargo, fighter, scout]
+        self.units = [submarine, destroyer, carrier, cargo, fighter, scout]
+
     def test_class_inheritance(self):
         """Test Element inheritance"""
         self.assertTrue(issubclass(basic.Position, object))
@@ -45,82 +68,59 @@ class TestBasic(unittest.TestCase):
 
     def test_position(self):
         """Test class basic.Position"""
-        # test initialize
-        pos = basic.Position(31, 45, 2)
-        self.assertEqual(31, pos.x)
-        self.assertEqual(45, pos.y)
-        self.assertEqual(2, pos.z)
-        # test modify
-        pos.x = 2
-        pos.y = 5
-        pos.z = 8
-        self.assertEqual(2, pos.x)
-        self.assertEqual(5, pos.y)
-        self.assertEqual(8, pos.z)
+        self.pos1.x = 2
+        self.pos1.y = 5
+        self.pos1.z = 8
+        self.assertEqual(2, self.pos1.x)
+        self.assertEqual(5, self.pos1.y)
+        self.assertEqual(8, self.pos1.z)
 
     def test_rectangle(self):
         """Test class basic.Rectangle"""
-        pos1 = basic.Position(6, 10, 0)
-        pos2 = basic.Position(122, 15, 0)
-        rec = basic.Rectangle(pos1, pos2)
+        self.assertEqual(self.pos1, self.rec.upper_left)
+        self.assertEqual(self.pos2, self.rec.lower_right)
+        self.assertEqual(self.pos1.x, self.rec.x)
+        self.assertEqual(self.pos1.y, self.rec.y)
+        self.assertEqual(self.pos1.z, self.rec.z)
+        self.assertEqual((self.pos2.x - self.pos1.x + 1,
+                          self.pos2.y - self.pos1.y + 1), self.rec.size)
 
-        self.assertEqual(pos1, rec.upper_left)
-        self.assertEqual(pos2, rec.lower_right)
-        self.assertEqual(6, rec.x)
-        self.assertEqual(10, rec.y)
-        self.assertEqual(0, rec.z)
-        self.assertEqual((117, 6), rec.size)
+    def test_element_attr(self):
+        """Test attributes of Elements"""
 
-    def test_element(self):
-        """Test initialization & attributes of Elements"""
-        pos1 = basic.Position(9, 10, 0)
-        pos2 = basic.Position(12, 15, 0)
-        rec = basic.Rectangle(pos1, pos2)
-
-        base = basic.Base(0, rec, health = 8)
-        fort = basic.Fort(1, rec)
-        mine = basic.Mine(rec)
-        oilfield = basic.Oilfield(rec)
-        submarine = basic.Submarine(1, pos1, health = 100, fuel = 200, ammo = 300, metal = 400)
-        destroyer = basic.Destroyer(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
-        carrier = basic.Carrier(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
-        cargo = basic.Cargo(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
-        fighter = basic.Fighter(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
-        scout = basic.Scout(1, pos2, health = 100, fuel = 200, ammo = 300, metal = 400)
-
-        elements = [base, fort, mine, oilfield, submarine,
-                   destroyer, carrier, cargo, fighter, scout]
-        unit_bases = [base, fort, submarine, destroyer,
-                     carrier, cargo, fighter, scout]
-        units = [submarine, destroyer, carrier, cargo, fighter, scout]
+        element_attrs = ['index', 'pos', 'size', 'visible']
+        unit_base_attrs = ['team', 'sight_ranges', 'fire_ranges', 'health',
+                         'health_max', 'fuel', 'fuel_max', 'ammo', 'ammo_once',
+                         'ammo_max', 'metal', 'metal_max', 'attacks', 'defences']
+        unit_attrs = ['speed', 'dest', 'cost', 'population', 'build_round']
 
         # Check attributes
-        for element in elements:
-            self.assertTrue(hasattr(element, 'index'))
-            self.assertTrue(hasattr(element, 'pos'))
-            self.assertTrue(hasattr(element, 'size'))
-            self.assertTrue(hasattr(element, 'visible'))
-        for element in unit_bases:
-            self.assertTrue(hasattr(element, 'team'))
-            self.assertTrue(hasattr(element, 'sight_ranges'))
-            self.assertTrue(hasattr(element, 'fire_ranges'))
-            self.assertTrue(hasattr(element, 'health'))
-            self.assertTrue(hasattr(element, 'health_max'))
-            self.assertTrue(hasattr(element, 'fuel'))
-            self.assertTrue(hasattr(element, 'fuel_max'))
-            self.assertTrue(hasattr(element, 'ammo'))
-            self.assertTrue(hasattr(element, 'ammo_once'))
-            self.assertTrue(hasattr(element, 'ammo_max'))
-            self.assertTrue(hasattr(element, 'metal'))
-            self.assertTrue(hasattr(element, 'metal_max'))
-            self.assertTrue(hasattr(element, 'attacks'))
-            self.assertTrue(hasattr(element, 'defences'))
-        for element in units:
-            self.assertTrue(hasattr(element, 'speed'))
-            self.assertTrue(hasattr(element, 'dest'))
-            self.assertTrue(hasattr(element, 'cost'))
-            self.assertTrue(hasattr(element, 'population'))
-            self.assertTrue(hasattr(element, 'build_round'))
+        for element in self.elements:
+            for attr in element_attrs:
+                self.assertTrue(hasattr(element, attr))
+
+        for element in self.unit_bases:
+            for attr in unit_base_attrs:
+                self.assertTrue(hasattr(element, attr))
+
+        for element in self.units:
+            for attr in unit_attrs:
+                self.assertTrue(hasattr(element, attr))
+
+    def test_element_default_init(self):
+        """Test behavior of default initialization of Elements"""
+        for element in self.elements:
+            prop = basic.PROPERTY[element.kind]  # get const attrs
+            # test constants
+            for attr, value in prop.items():
+                if (hasattr(element, attr)):
+                    self.assertEqual(value, getattr(element, attr))
+            # test default state
+            if isinstance(element, basic.UnitBase):
+                for attr in ['health', 'fuel', 'ammo', 'metal']:
+                    self.assertEqual(prop[attr + '_max'], getattr(element, attr))
+
+
 
 
 if __name__ == '__main__':
