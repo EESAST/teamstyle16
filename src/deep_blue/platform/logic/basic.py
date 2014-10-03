@@ -322,9 +322,10 @@ class UnitBase(Element):
         self.population = population
         self.attacks = attacks
         self.defences = defences
-        for kw in ['team', 'health', 'fuel', 'ammo', 'metal']:
+        for kw in ['health', 'fuel', 'ammo', 'metal']:
             if kw in kwargs:
-                setattr(self, kw, kwargs[kw])
+                maximum = getattr(self, kw + '_max')
+                setattr(self, kw, min(kwargs[kw], maximum)
 
     def view(self, target_pos):
         """查看目标点的状态"""
