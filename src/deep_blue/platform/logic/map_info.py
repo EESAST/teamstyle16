@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
 # map.py
-import sys
-import json
+
+from copy import copy
 from basic import *
+from custom_json import *
 
 class MapInfo(object):
     """地图"""
@@ -56,13 +57,19 @@ class MapInfo(object):
 
     def saves(self):
         """Save map to string"""
-        pass
+        tmp = copy(self)
+        tmp.elements = {str(index): element for index, element in tmp.elements.items()}     # json does not allow int as a dict key
+        return MyEncoder().encode(tmp)
 
     def saves_elements(self):
         """Save elements to string"""
-        pass
+        tmp = {str(index): element for index, element in self.elements.items()}
+        return MyEncoder().encode(tmp)
 
-        
+    def loads_elements(self, string):
+        """Load elements to current map from string"""
+        tmp = MyDecoder().decode(string)
+        self.elements = {int(index_str): element for index_str, element in tmp.items()}
 
 def load(filename):
     """Read map from file"""
@@ -70,4 +77,6 @@ def load(filename):
 
 def loads(map_str):
     """Read map from string"""
-    pass
+    map_info = MyDecoder().decode(map_str)
+    map_info.elements = {int(index_str): element for index_str, element in map_info.elements.items()}
+    return map_info
