@@ -14,12 +14,12 @@ class TestBasic(unittest.TestCase):
         fort = basic.Fort(1, self.rec)
         mine = basic.Mine(self.rec)
         oilfield = basic.Oilfield(self.rec)
-        submarine = basic.Submarine(1, self.pos1, health=100, fuel=200, ammo=300, metal=400)
-        destroyer = basic.Destroyer(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
-        carrier = basic.Carrier(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
-        cargo = basic.Cargo(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
-        fighter = basic.Fighter(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
-        scout = basic.Scout(1, self.pos2, health=100, fuel=200, ammo=300, metal=400)
+        submarine = basic.Submarine(1, self.pos1)
+        destroyer = basic.Destroyer(1, self.pos2)
+        carrier = basic.Carrier(1, self.pos2)
+        cargo = basic.Cargo(1, self.pos2)
+        fighter = basic.Fighter(1, self.pos2)
+        scout = basic.Scout(1, self.pos2)
 
         self.elements = [base, fort, mine, oilfield, submarine,
                    destroyer, carrier, cargo, fighter, scout]
@@ -120,8 +120,29 @@ class TestBasic(unittest.TestCase):
                 for attr in ['health', 'fuel', 'ammo', 'metal']:
                     self.assertEqual(prop[attr + '_max'], getattr(element, attr))
 
+    def test_element_complete_init(self):
+        """Test behavior of complete initialization of Elements"""
+        classes = ['Base', 'Fort', 'Mine', 'Oilfield', 'Submarine', 'Cargo',
+                   'Carrier', 'Destroyer', 'Fighter', 'Scout']
 
+        attrs = {'sight_ranges': [11, 12, 13], 'fire_ranges': [34, 35, 36],
+                 'health': 200, 'health_max': 100,  # overloaded
+                 'fuel': 200, 'fuel_max': 250,      # not full
+                 'ammo': basic.INFINITY, 'ammo_max': basic.INFINITY,  # infinity
+                 'metal': 100, 'metal_max': 100,    # normal
+                 'speed': 42, 'population': 43,
+                 'attacks': [88, 88], 'defences': [77, 77]}
 
+        for cls in classes:
+            element = getattr(basic, cls)(team=1, pos=self.pos1, **attrs)
+            if isinstance(element, basic.Mine):
+                self.assertEqual(attrs['metal'], element.metal)
+            elif isinstance(element, basic.Oilfield):
+                self.assertEqual(attrs['fuel'], element.fuel)
+            else:  # UnitBase
+                for attr, value in attrs.items():
+                    value = min(value, attrs.get(attr + '_max', value))
+                    self.assertEqual(value, getattr(element, attr))
 
 if __name__ == '__main__':
     unittest.main()
