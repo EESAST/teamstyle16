@@ -163,7 +163,7 @@ class Position(object):
         super(Position, self).__init__()
         self.x = max(0, x)
         self.y = max(0, y)
-        self.z = min(max(-1, z), 1)
+        self.z = min(max(0, z), 2)
 
     def __eq__(self, other):
         """判断两Position实例相等"""
