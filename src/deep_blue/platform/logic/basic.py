@@ -161,9 +161,9 @@ class Position(object):
     """三维坐标"""
     def __init__(self, x, y, z = 1):
         super(Position, self).__init__()
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x = max(0, x)
+        self.y = max(0, y)
+        self.z = min(max(-1, z), 1)
 
     def __eq__(self, other):
         """判断两Position实例相等"""
