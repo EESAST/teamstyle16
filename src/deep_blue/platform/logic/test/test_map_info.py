@@ -1,4 +1,5 @@
 from .. import map_info
+from .. import basic
 import unittest
 import random
 
@@ -12,6 +13,7 @@ class TestMapInfo(unittest.TestCase):
             "x_max": random.randint(50, 150),
             "y_max": random.randint(50, 150),
             "max_population": random.randint(50, 500),
+            "max_round": 1000,
             "record_interval":3,
             "time_per_round": 0.8,
             "weather":-1,
@@ -20,12 +22,26 @@ class TestMapInfo(unittest.TestCase):
                                                           self.paras['y_max'],
                                                           random.random())
 
+        elements = []
+        classes = ['Base', 'Fort', 'Mine', 'Oilfield', 'Submarine', 'Cargo',
+                   'Carrier', 'Destroyer', 'Fighter', 'Scout']
+
         self.map_info = map_info.MapInfo(types=self.map_2d_array,
                                          **self.paras)
+        i = 0
+        for cls in classes:
+            pos = basic.Position(i, i, 1)
+            element = getattr(basic, cls)(team=1, pos=pos,
+                                          health=100, health_max=150,
+                                          ammo=float('inf'), ammo_max=float('inf'),
+                                          fuel=0, fuel_max=50,
+                                          metal=400, metal_max=400)
+            self.assertTrue(self.map_info.add_element(element))
+            i += 1  # move to next position
 
     def test_axes(self):
         """Test the direction of axes (x go down, y go right)"""
-        tmp_map_info = map_info.MapInfo(10, 20, 0, 0, 0, 0)
+        tmp_map_info = map_info.MapInfo(10, 20, 0, 0, 0, 0, 0)
         self.assertEqual(10, len(tmp_map_info.types))
         self.assertEqual(20, len(tmp_map_info.types[0]))
 
@@ -37,6 +53,13 @@ class TestMapInfo(unittest.TestCase):
             for y in xrange(self.paras['y_max']):
                 self.assertEqual(self.map_2d_array[x][y],
                                  self.map_info.map_type(x, y))
+
+    def test_position_conflict(self):
+        base = basic.Base(team=0, pos=basic.Position(0, 0, 1))
+        size_before = len(self.map_info.elements)
+
+        self.assertFalse(self.map_info.add_element(base))
+        self.assertEqual(size_before, len(self.map_info.elements))
 
     def test_set_map_type(self):
         """Test setting map_types"""
