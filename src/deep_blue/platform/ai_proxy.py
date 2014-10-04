@@ -195,7 +195,7 @@ class AIProxy(threading.Thread):
             team = element.team
             health = element.health
             fuel = element.fuel
-            ammo = element.ammo
+            ammo = element.ammo if element.ammo != basic.INFINITY else -1
             metal = element.metal
             dest = element.dest if isinstance(element, basic.Unit) else pos
         else:
