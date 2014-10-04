@@ -172,6 +172,9 @@ class Position(object):
         else:
             return False
 
+    def __hash__(self):
+        return hash((Position, self.x, self.y, self.z))
+
     @property
     def level(self):
         return self.z
