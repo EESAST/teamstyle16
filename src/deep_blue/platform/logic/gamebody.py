@@ -10,8 +10,8 @@ STATE_TIE = 2
 
 class TeamInfo(object):
     """team info"""
-    def __init__(self, index, name, **kwargs):
-        self.index = index  # 0 or 1
+    def __init__(self, team_index, name, **kwargs):
+        self.team_index = team_index  # 0 or 1
         self.name = name 
         self.score = 0
         self.elements = {}
