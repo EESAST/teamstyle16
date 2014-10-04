@@ -18,8 +18,8 @@ class MapInfo(object):
         self.record_interval = record_interval
         self.time_per_round = time_per_round
         self.weather = weather
-    
-    def map_type(self, x, y): 
+
+    def map_type(self, x, y):
         """Return map type(OCEAN or LAND) on (x, y)"""
         return self.types[x][y]
 

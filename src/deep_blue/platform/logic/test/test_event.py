@@ -19,6 +19,6 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(issubclass(event.Create, event.Event))
         self.assertTrue(issubclass(event.Destroy, event.Event))
         self.assertTrue(issubclass(event.Capture, event.Event))
- 
+
 if __name__ == '__main__':
     unittest.main()

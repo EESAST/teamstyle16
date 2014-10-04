@@ -19,7 +19,7 @@ class AttackPos(Command):
         Operand = ELEMENTS[self.operand]
         Target = getElement(self.pos)
         Event = []
-        hit_damage = Operand.AttackPos(self.pos) 
+        hit_damage = Operand.AttackPos(self.pos)
         if hit_damage == -3:
             Event.append(event.AttackPos("AttackPos", self.operand, self.pos, False, 0))
         elif hit_damage >= 0:
@@ -30,7 +30,7 @@ class AttackPos(Command):
                 else:
                     Event.append(event.Destroy("Destroy", self.target))
         return Event
-                
+
 class AttackUnit(Command):########
     """攻击"""
     def __init__(self, operand, target):
@@ -130,9 +130,9 @@ class ChangeDest(Command):
                         break
                 if fuel_collected and metal_collected:
                     break
-                                 
+
         return Event
-    
+
 class Produce(Command):
     """生产"""
     def __init__(self, operand, kind):
@@ -145,7 +145,7 @@ class Produce(Command):
         Event.append(event.AddProductionEntry("AddProductionEntry", \
                                               Operand.team, self.kind))
         return Event
-    
+
 class Supply(Command):
     """补给"""
     def __init__(self, operand, target, fuel = -1, metal = -1, ammo = -1):
@@ -164,7 +164,7 @@ class Supply(Command):
             Event.append(event.Supply("Supply", self.operand, self.target, \
                                   self.fuel, self.metal, self.ammo))
         return Event
-    
+
 class Cancel(Command):
     """取消"""
     def __init__(self, operand):

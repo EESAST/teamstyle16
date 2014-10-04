@@ -7,7 +7,7 @@
 # 模块名: lower_with_under
 # 函数或方法名: firstLowerCapWords()
 # 常量名: CAPS_WITH_UNDER
-# 其他变量, 实例及函数形参: lower_with_under 
+# 其他变量, 实例及函数形参: lower_with_under
 
 # 变量名开头加一个下划线(_)能对保护模块(protected)中的变量及函数提供一些支持(不会被 import * from 导入)
 # 在实例的变量和方法开头加两个下划线(__)能有效地帮助把该变量或方法变成类的私有内容(using name mangling)
@@ -89,63 +89,63 @@ SCOUT = 9       # 侦察机
    defences = [FIRE, TORPEDO] """
 
 PROPERTY = [{
-            'sight_ranges': [4, 10, 8], 'fire_ranges': [0, 7, 5], 
-            'health_max': 2000, 'fuel_max': 1000, 'ammo_max': INFINITY, 'ammo_once': 6, 'metal_max': 200, 
-            'speed': None, 'population': None, 
+            'sight_ranges': [4, 10, 8], 'fire_ranges': [0, 7, 5],
+            'health_max': 2000, 'fuel_max': 1000, 'ammo_max': INFINITY, 'ammo_once': 6, 'metal_max': 200,
+            'speed': None, 'population': None,
             'attacks': [40, 0], 'defences': [15, INFINITY]
             },  # Base
             {
-            'sight_ranges': [3, 8, 6], 'fire_ranges': [0, 5, 4], 
-            'health_max': 800, 'fuel_max': 200, 'ammo_max': 300, 'ammo_once': 4, 'metal_max': 200, 
-            'speed': None, 'population': None, 
+            'sight_ranges': [3, 8, 6], 'fire_ranges': [0, 5, 4],
+            'health_max': 800, 'fuel_max': 200, 'ammo_max': 300, 'ammo_once': 4, 'metal_max': 200,
+            'speed': None, 'population': None,
             'attacks': [25, 0], 'defences': [12, INFINITY]
             },  # Fort
             {
-            'sight_ranges': None, 'fire_ranges': None, 
-            'health_max': INFINITY, 'fuel_max': None, 'ammo_max': None, 'metal_max': 1000, 
-            'speed': None, 'population': None, 
+            'sight_ranges': None, 'fire_ranges': None,
+            'health_max': INFINITY, 'fuel_max': None, 'ammo_max': None, 'metal_max': 1000,
+            'speed': None, 'population': None,
             'attacks': None, 'ammo_once': None, 'defences': [INFINITY, INFINITY]
             },  # Mine
             {
-            'sight_ranges': None, 'fire_ranges': None, 
-            'health_max': INFINITY, 'fuel_max': 1000, 'ammo_max': None, 'ammo_once': None, 'metal_max': None, 
-            'speed': None, 'population': None, 
+            'sight_ranges': None, 'fire_ranges': None,
+            'health_max': INFINITY, 'fuel_max': 1000, 'ammo_max': None, 'ammo_once': None, 'metal_max': None,
+            'speed': None, 'population': None,
             'attacks': None, 'defences': [INFINITY, INFINITY]
             },  # Oilfield
             {
-            'sight_ranges': [6, 5, 3], 'fire_ranges': [5, 5, 0], 
-            'health_max': 35, 'fuel_max': 120, 'ammo_max': 20, 'ammo_once': 2, 'metal_max': None, 
-            'speed': 6, 'population': 2, 
+            'sight_ranges': [6, 5, 3], 'fire_ranges': [5, 5, 0],
+            'health_max': 35, 'fuel_max': 120, 'ammo_max': 20, 'ammo_once': 2, 'metal_max': None,
+            'speed': 6, 'population': 2,
             'attacks': [0, 40], 'defences': [INFINITY, 7]
             },  # Submarine
             {
-            'sight_ranges': [4, 9, 7], 'fire_ranges': [2, 8, 6], 
-            'health_max': 70, 'fuel_max': 150, 'ammo_max': 40, 'ammo_once': 4, 'metal_max': None, 
-            'speed': 7, 'population': 3, 
+            'sight_ranges': [4, 9, 7], 'fire_ranges': [2, 8, 6],
+            'health_max': 70, 'fuel_max': 150, 'ammo_max': 40, 'ammo_once': 4, 'metal_max': None,
+            'speed': 7, 'population': 3,
             'attacks': [22, 11], 'defences': [13, 10]
             },  # Destroyer
             {
-            'sight_ranges': [4, 9, 9], 'fire_ranges': [0, 8, 6], 
-            'health_max': 120, 'fuel_max': 200, 'ammo_max': 70, 'ammo_once': 2, 'metal_max': None, 
-            'speed': 5, 'population': 4, 
+            'sight_ranges': [4, 9, 9], 'fire_ranges': [0, 8, 6],
+            'health_max': 120, 'fuel_max': 200, 'ammo_max': 70, 'ammo_once': 2, 'metal_max': None,
+            'speed': 5, 'population': 4,
             'attacks': [18, 0], 'defences': [16, 10]
             },  # Carrier
             {
-            'sight_ranges': [3, 7, 6], 'fire_ranges': None, 
-            'health_max': 60, 'fuel_max': 300, 'ammo_max': 120, 'ammo_once': None, 'metal_max': 50, 
-            'speed': 8, 'population': 1, 
+            'sight_ranges': [3, 7, 6], 'fire_ranges': None,
+            'health_max': 60, 'fuel_max': 300, 'ammo_max': 120, 'ammo_once': None, 'metal_max': 50,
+            'speed': 8, 'population': 1,
             'attacks': None, 'defences': [15, 8]
             },  # Cargo
             {
-            'sight_ranges': [0, 9, 10], 'fire_ranges': [0, 3, 4], 
-            'health_max': 70, 'fuel_max': 100, 'ammo_max': 21, 'ammo_once': 3, 'metal_max': None, 
-            'speed': 9, 'population': 3, 
+            'sight_ranges': [0, 9, 10], 'fire_ranges': [0, 3, 4],
+            'health_max': 70, 'fuel_max': 100, 'ammo_max': 21, 'ammo_once': 3, 'metal_max': None,
+            'speed': 9, 'population': 3,
             'attacks': [30, 10], 'defences': [10, INFINITY]
             },  # Fighter
             {
-            'sight_ranges': [2, 12, 16], 'fire_ranges': [1, 3, 4], 
-            'health_max': 50, 'fuel_max': 120, 'ammo_max': 5, 'ammo_once': 1, 'metal_max': None, 
-            'speed': 10, 'population': 1, 
+            'sight_ranges': [2, 12, 16], 'fire_ranges': [1, 3, 4],
+            'health_max': 50, 'fuel_max': 120, 'ammo_max': 5, 'ammo_once': 1, 'metal_max': None,
+            'speed': 10, 'population': 1,
             'attacks':[10, 5], 'defences': [7, INFINITY]
             }]  # Scout
 
@@ -153,7 +153,7 @@ PROPERTY = [{
 # 攻击修正
 def modifiedAttacks(distance, fire_range, attacks):
     """返回距离修正后的火力和鱼雷攻击力"""
-    return [int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack) 
+    return [int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack)
             for attack in attacks]    # 可能大于attack
 
 # 对象
@@ -197,7 +197,7 @@ class Position(object):
         else:
             return -1;
 
-    def region(self, level, range):     
+    def region(self, level, range):
         """返回距离该位置range以内区域点集list"""
         region_points = []
         for i in xrange(- range, range + 1):
@@ -254,7 +254,7 @@ class Rectangle(object):
             return (min([point.distance(target) for point in self.bound()])
                     if not target in self.region(target.level) else 0)
         elif isinstance(target, Rectangle):
-            return min([self.distance(point) for point in target.bound()]) 
+            return min([self.distance(point) for point in target.bound()])
         else:
             return -1
 
@@ -299,7 +299,7 @@ class Element(object):
 
 class Resource(Element):
     """资源类, 派生出矿场类和油田类"""
-    pass        
+    pass
 
 class Mine(Resource):
     """矿场"""
@@ -315,13 +315,13 @@ class Oilfield(Resource):
     def __init__(self, pos, fuel = PROPERTY[OILFIELD]['fuel_max'], **kwargs):
         pos.level = SURFACE
         super(Oilfield, self).__init__(pos, **kwargs)
-        self.fuel = fuel        
-        
+        self.fuel = fuel
+
 class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
-    def __init__(self, team, pos, sight_ranges, fire_ranges, 
-                 health_max, fuel_max, ammo_max, ammo_once, metal_max, 
-                 speed, population, 
+    def __init__(self, team, pos, sight_ranges, fire_ranges,
+                 health_max, fuel_max, ammo_max, ammo_once, metal_max,
+                 speed, population,
                  attacks, defences, **kwargs):
         super(UnitBase, self).__init__(pos, **kwargs)
         self.team = team
@@ -363,7 +363,7 @@ class UnitBase(Element):
         else:
             self.ammo -= self.ammo_once  # 减少弹药数目
             modified_attacks = modifiedAttacks(distance, range, self.attacks)
-            fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE]) 
+            fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE])
             # 考虑到 defence = INFINITY 可能无法破防
             torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
             damage = fire_damage + torpedo_damage
@@ -393,9 +393,9 @@ def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
     else:
         fuel_supply_limit = ammo_supply_limit = SUPPLY_LIMIT
     provides = [0, 0]    # 维修者提供的燃料, 弹药
-    provides[0] = max(giver.fuel - giver.fuel_max * fuel_supply_limit, 
+    provides[0] = max(giver.fuel - giver.fuel_max * fuel_supply_limit,
                       receiver.fuel_max - receiver.fuel)
-    provides[1] = max(giver.ammo - giver.ammo_max * ammo_supply_limit, 
+    provides[1] = max(giver.ammo - giver.ammo_max * ammo_supply_limit,
                       receiver.ammo_max - receiver.ammo)
     giver.fuel -= provides[0]
     giver.ammo -= provides[1]
@@ -426,11 +426,11 @@ class Base(Building):
         super(Base, self).__init__(team, pos, **d)
                                    # 从元组解析出数据后传入 Building.__init__()
 
-    def repair(self, our_unit):  
+    def repair(self, our_unit):
         """维修"""
         if not self.team == our_unit.team:
             return -1   # 非友军
-        elif isinstance(our_unit, Plane):  
+        elif isinstance(our_unit, Plane):
             if self.pos.distance(our_unit) > 0:
                 return -2   # 不在范围内
             else:
@@ -465,13 +465,13 @@ class Fort(Building):
 
 class Unit(UnitBase):
     """可移动单位"""
-    def __init__(self, team, pos, sight_ranges, fire_ranges, 
-                 health_max, fuel_max, ammo_max, ammo_once, metal_max, 
-                 speed, population, 
+    def __init__(self, team, pos, sight_ranges, fire_ranges,
+                 health_max, fuel_max, ammo_max, ammo_once, metal_max,
+                 speed, population,
                  attacks, defences, **kwargs):
-        super(Unit, self).__init__(team, pos, sight_ranges, fire_ranges, 
-                                   health_max, fuel_max, ammo_max, ammo_once, metal_max, 
-                                   speed, population, 
+        super(Unit, self).__init__(team, pos, sight_ranges, fire_ranges,
+                                   health_max, fuel_max, ammo_max, ammo_once, metal_max,
+                                   speed, population,
                                    attacks, defences, **kwargs)
         self.dest = kwargs['dest'] if 'dest' in kwargs else self.pos    # 目的地(初始为自身位置)
 
@@ -493,7 +493,7 @@ class Submarine(Unit):
         super(Submarine, self).__init__(team, pos, **d)
 
 class Ship(Unit):
-    """水面舰"""        
+    """水面舰"""
     pass
 
 class Destroyer(Ship):
@@ -502,7 +502,7 @@ class Destroyer(Ship):
     def __init__(self, team, pos, **kwargs):
         pos.level = SURFACE
         d = PROPERTY[DESTROYER].copy()
-        d.update(kwargs)        
+        d.update(kwargs)
         super(Destroyer, self).__init__(team, pos, **d)
 
 class Carrier(Ship):
@@ -511,7 +511,7 @@ class Carrier(Ship):
     def __init__(self, team, pos, **kwargs):
         pos.level = SURFACE
         d = PROPERTY[CARRIER].copy()
-        d.update(kwargs)        
+        d.update(kwargs)
         super(Carrier, self).__init__(team, pos, **d)
 
     def supply(self, our_unit):
@@ -527,7 +527,7 @@ class Carrier(Ship):
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
-            return 0 
+            return 0
 
 class Cargo(Ship):
     """运输舰"""
@@ -551,7 +551,7 @@ class Cargo(Ship):
                 provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
-            return 0 
+            return 0
 
     def collect(self, resource):
         """运输舰从资源点采集资源"""

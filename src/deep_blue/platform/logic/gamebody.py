@@ -81,7 +81,7 @@ class GameBody(object):
             tmp = []
             for point in vision[level]:
                 if (point.x >= 0 and point.x < self.map_info.x_max and
-                    point.y >= 0 and point.y < self.map_info.y_max and 
+                    point.y >= 0 and point.y < self.map_info.y_max and
                     point.z >= 0 and point.z < 3):
                     tmp.append(point)
             vision[level] = tmp
@@ -109,18 +109,18 @@ class GameBody(object):
     def set_command(self, team, command):
         """add a command and resolve conflicts"""
         pass
-    
+
     def run(self):
         """run one round and return the events took place"""
         self.round = self.round + 1
         events = []
         pass
         return events
-                                     
+
     def set_team_name(self, team, name):
         """set name of the team"""
         self.team_names[team] = name
-                                     
+
     def save(self, filename):
         """Save game to file"""
         open(filename).write(self.saves())
