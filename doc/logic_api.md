@@ -340,7 +340,6 @@ TODO：游戏常量
 | production_list(team)      | [(kind, round_left)] | 生产列表                                                  |
 | population(team)           | int                  | 该队伍的人口数                                            |
 | **运行相关**               |                      |                                                           |
-| commands(team)             | [Command]            | 返回该队伍当前的指令集                                    |
 | set_command(team, command) | bool                 | 为该队伍添加一条指令，并更新指令列表, 指令无效则返回False |
 | run()                      | [Event]              | 运行一回合，返回该回合内发生的事件                        |
 | **设置/保存相关**          |                      |                                                           |

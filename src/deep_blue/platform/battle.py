@@ -55,7 +55,7 @@ class Battle(object):
         return command_list
 
     def commands(self, team):
-        return self.gamebody.commands(team)
+        return self.gamebody.commands[team]
 
     def next_round(self):
         self.record_info()
@@ -92,8 +92,8 @@ class Battle(object):
         #self.unit_num_list.append(...)
         self.population_list.append([self.gamebody.population(0),
                                      self.gamebody.population(1)])
-        self.command_list.append([self.gamebody.commands(0),
-                                  self.gamebody.commands(1)])
+        self.command_list.append([self.gamebody.commands[0],
+                                  self.gamebody.commands[1]])
         if self.round() % self.record_interval == 0:
             self.replay_info.append(self.gamebody.map_info.saves_elements())
 
