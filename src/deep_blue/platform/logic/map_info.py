@@ -60,7 +60,7 @@ class MapInfo(object):
         """Save map to string"""
         tmp = copy(self)
         tmp.elements = {str(index): element for index, element in tmp.elements.items()}     # json does not allow int as a dict key
-        return MyEncoder(separators=(',', ':')).encode(tmp)
+        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(tmp)
 
     def saves_elements(self):
         """Save elements to string"""
