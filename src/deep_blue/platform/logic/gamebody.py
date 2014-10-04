@@ -78,6 +78,13 @@ class GameBody(object):
             for element in self.elements(team).values():
                 vision[level].extend(element.pos.region(level, element.sight_ranges[level]))
             vision[level] = list(set(vision[level]))
+            tmp = []
+            for point in vision[level]:
+                if (point.x >= 0 and point.x < self.map_info.x_max and
+                    point.y >= 0 and point.y < self.map_info.y_max and 
+                    point.z >= 0 and point.z < 3):
+                    tmp.append(point)
+            vision[level] = tmp
         return vision
 
     def view_elements(self, perspective):
