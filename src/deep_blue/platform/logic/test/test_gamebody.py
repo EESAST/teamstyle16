@@ -93,13 +93,37 @@ class TestGameBody(unittest.TestCase):
         self.assertNotIn(self.oilfield1, units_in_sight)
         self.assertNotIn(self.mine1, units_in_sight)
 
+    # def test_attack_pos(self):
+    #     """Test behavior of attack position"""
+    #     self.assertTrue(self.gamebody.map_info.add_element(
+    #         Destroyer(1, Position(5, 2, 1), sight_ranges=[1, 3, 2],
+    #                                         fire_ranges=[1, 3, 2])))
+    # def test_attck_unit(self):
+    #     """Test behavior of attack unit"""
+    #     pass
+
+    # def test_change_dest(self):
+    #     """Test behavior of change destination"""
+    #     pass
+
+    # def test_fix(self):
+    #     """Test behavior of fix"""
+    #     pass
+
+    # def test_produce(self):
+    #     """Test behavior of produce"""
+    #     pass
+
+    # def test_supply(self):
+    #     """Test behavior of supply"""
+    #     pass
+
+    # def test_cancel(self):
+    #     """Test behavior of cancel"""
+    #     pass
+
     def test_(self):
-        self.assertTrue(self.gamebody.map_info.add_element(
-            Destroyer(1, Position(5, 2, 1), sight_ranges=[1, 3, 2],
-                                            fire_ranges=[1, 3, 2])))
-
-
-
+        pass
 
 if __name__ == '__main__':
     unittest.main()
