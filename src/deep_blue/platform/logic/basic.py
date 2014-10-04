@@ -16,6 +16,7 @@
 
 from copy import copy
 from random import random, choice
+from Queue import Queue
 
 # 基础参数限制
 ROUND_MAX = 500     # 最大回合数
@@ -161,9 +162,9 @@ class Position(object):
     """三维坐标"""
     def __init__(self, x, y, z = 1):
         super(Position, self).__init__()
-        self.x = max(0, x)
-        self.y = max(0, y)
-        self.z = min(max(0, z), 2)
+        self.x = x
+        self.y = y
+        self.z = z
 
     def __eq__(self, other):
         """判断两Position实例相等"""
@@ -199,11 +200,8 @@ class Position(object):
     def region(self, level, range):     
         """返回距离该位置range以内区域点集list"""
         region_points = []
-        for y in xrange(self.y - range, self.y + range + 1):
-            for x in xrange(self.x - range, self.x + range + 1):
-                if self.distance(Position(x, y, level)) <= range:
-                    region_points.append(Position(x, y, level))
-        # 在一矩形范围内寻找符合条件的点
+        for i in xrange(- range, range + 1):
+            region_points += [Position(self.x + i, self.y + j, level) for j in xrange(- range + abs(i), range - abs(i) + 1)]
         return region_points
 
 
@@ -263,17 +261,20 @@ class Rectangle(object):
     def region(self, level, range = 0):
         """返回矩形区域向外延伸range范围的区域点集list"""
         region_points = []
-        for y in xrange(self.upper_left.y, self.lower_right.y + 1):
-            for x in xrange(self.upper_left.x, self.lower_right.x + 1):
-                region_points.append(Position(x, y, level))    # region_points = 矩形区域内所有点构成的list
+        for i in xrange(self.x, self.x + self.size[0]):
+            for j in xrange(self.y, self.y + self.size[1]):
+                region_points.append(Position(i, j, level))
         if range == 0:
             return region_points
-        else:
-            for point in self.bound():
-                for pos in point.region(level, range):
-                    if pos not in region_points:
-                        region_points.append(pos)
-            return region_points
+        region_points += Rectangle(Position(self.x, self.y - range), Position(self.lower_right.x, self.y - 1)).region(level, 0)
+        region_points += Rectangle(Position(self.lower_right.x + 1, self.y), Position(self.lower_right.x + range, self.lower_right.y)).region(level, 0)
+        region_points += Rectangle(Position(self.x, self.lower_right.y + 1), Position(self.lower_right.x, self.lower_right.y + range)).region(level, 0)
+        region_points += Rectangle(Position(self.x - range, self.y), Position(self.x - 1, self.lower_right.y)).region(level, 0)
+        region_points += self.upper_left.region(level, range)
+        region_points += Position(self.lower_right.x, self.y).region(level, range)
+        region_points += self.lower_right.region(level, range)
+        region_points += Position(self.x, self.lower_right.y).region(level, range)
+        return region_points
 
 class Element(object):
     """所有地图元素, 派生出资源类和作战单位(UnitBase)类"""
