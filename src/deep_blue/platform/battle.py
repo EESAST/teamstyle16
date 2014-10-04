@@ -16,7 +16,7 @@ class Battle(object):
         self.unit_num_list = []
         self.population_list = []
         self.record_interval = 5    #can be switched
-        self.replay_info = []
+        # self.replay_info = []
 
     def map_info(self):
         return self.gamebody.map_info
@@ -32,6 +32,12 @@ class Battle(object):
 
     def score(self, team):
         return self.gamebody.score(team)
+
+    def elements(self, team):
+        return self.gamebody.elements(team)
+
+    def vision(self, team):
+        return self.gamebody.vision(team)
 
     def view_elements(self, perspective):
         return self.gamebody.view_elements(perspective)
@@ -89,13 +95,14 @@ class Battle(object):
     def record_info(self):
         self.score_list.append([self.gamebody.score(0),
                                 self.gamebody.score(1)])
-        #self.unit_num_list.append(...)
+        self.unit_num_list.append([len(self.gamebody.elements(0)),
+                                   len(self.gamebody.elements(1))])
         self.population_list.append([self.gamebody.population(0),
                                      self.gamebody.population(1)])
         self.command_list.append([self.gamebody.commands[0],
                                   self.gamebody.commands[1]])
-        if self.round() % self.record_interval == 0:
-            self.replay_info.append(self.gamebody.map_info.saves_elements())
+        # if self.round() % self.record_interval == 0:
+        #     self.replay_info.append(self.gamebody.map_info.saves_elements())
 
 
 class AIBattle(Battle):
