@@ -27,10 +27,6 @@ class GameBody(object):
         return self.map_info.types
 
     @property
-    def elements(self):
-        return self.map_info.elements
-
-    @property
     def max_population(self):
         return self.map_info.max_population
 
