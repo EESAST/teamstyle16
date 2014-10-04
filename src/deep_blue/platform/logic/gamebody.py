@@ -3,57 +3,24 @@
 from basic import *
 from map_info import *
 from custom_json import *
-import event
 
 STATE_CONTINUE = -1
 STATE_TIE = 2
 
-class TeamInfo(object):
-    """team info"""
-    def __init__(self, team_index, name, **kwargs):
-        self.team_index = team_index  # 0 or 1
-        self.name = name 
-        self.score = 0
-        self.elements = {}
-        self.production_list = []
-        self.commands = []
-        for kw in ['score', 'elements', 'production_list', 'commands']:
-            if kw in kwargs:
-                setattr(self, kw, kwargs[kw])
-        self.score = max(self.score, 0)     # in case score < 0
-    
-    @property
-    def vision(self):
-        """shared 3-level vision of the whole team"""
-        vision = []
-        for level in xrange(3):
-            for element in elements.values():
-                vision.append(element.pos.region(level, element.sight_ranges[level]))
-        return vision
-
-    @property
-    def population(self):
-        """return total population"""
-        return sum([element.population for element in self.elements.values() if element.population != None])
-
-    def saves(self):
-        """save TeamInfo to string"""
-        tmp = copy(self)
-        tmp.elements = {str(index): element for index, element in tmp.elements.items()}     # json does not allow int as a dict key
-        return MyEncoder().encode(tmp)
-    
-def load_team_info(team_str):
-    """return team_info from string"""
-    team_info = MyDecoder().decode(map_str)
-    team_info.elements = {int(index_str): element for index_str, element in team_info.elements.items()}
-    return team_info
-
 class GameBody(object):
     """docstring for GameBody"""
-    def __init__(self, map_info, team_names = None, **kwargs):
+    def __init__(self, map_info, team_names, **kwargs):
         self.map_info = map_info
-        self.round = kwargs['round'] if 'round' in kwargs else 0
-        self.teams_info = kwargs['teams_info'] if 'teams_info' in kwargs else [TeamInfo(0, team_names), TeamInfo(1, team_names)]
+        self.team_names = team_names
+        self.round = 0
+        self.scores = [0, 0]
+        self.production_lists = [[]]
+        self.commands = [[]]
+        for kw in ['round', 'scores', 'production_lists', 'commands']:
+            if kw in kwargs:
+                setattr(self, kw, kwargs[kw])
+        self.round = max(self.round, 0)         # in case round < 0
+        self.scores = [max(score, 0) for score in self.scores]      # in case score < 0
 
     @property
     def map(self):
@@ -89,42 +56,54 @@ class GameBody(object):
             if element.kind == BASE and element.health <= 0:
                 return 1 - element.team
         if self.round >= self.max_round:
-            return 0 if self.score(0) > self.score(1) else (1 if self.score(1) > self.score(0) else 2)
-        return -1
+            return 0 if self.score(0) > self.score(1) else (1 if self.score(1) > self.score(0) else STATE_TIE)
+        return STATE_CONTINUE
 
     def team_name(self, team):
         """return name of the team"""
-        return self.teams_info[team].name
+        return self.team_names[team]
 
     def score(self, team):
         """return score of the team"""
-        return self.teams_info[team].score
+        return self.scores[team]
 
     def elements(self, team):
         """return elements of the team"""
-        return self.teams_info[team].elements
+        our_elements = {}
+        for index, element in self.elements.items():
+            if element.team == team:
+                our_elements[index] = element
+        return our_elements
+
+    def vision(self, team):
+        """shared 3-level vision of the whole team"""
+        vision = []
+        for level in xrange(3):
+            for element in self.elements(team).values():
+                vision.append(element.pos.region(level, element.sight_ranges[level]))
+        return vision
 
     def view_elements(self, perspective):
         """return a dict containing all the elements in team vision"""
         can_see = {}
         for index, element in self.elements.items():
             for point in element.pos.region(element.level, 0):
-                if point in self.teams_info[perspective].vision:
+                if point in self.vision(perspective)[element.level]:
                     can_see[index] = element
                     break
         return can_see
 
     def production_list(self, team):
         """return current production list of the team"""
-        return  self.teams_info[team].production_list
+        return  self.production_lists[team]
 
     def population(self, team):
-        """return population of the team"""
-        return self.teams_info[team].population
+        """return total population of the team"""
+        return sum([element.population for element in self.elements(team).values() if element.population != None])
 
     def commands(self, team):
         """return commands of the team"""
-        return self.teams_info[team].commands
+        return self.commands[team]
 
     def set_command(self, team, command):
         """add a command and resolve conflicts"""
@@ -133,13 +112,13 @@ class GameBody(object):
     def run(self):
         """run one round and return the events took place"""
         self.round = self.round + 1
-        Event = []
+        events = []
         pass
-        return Event
+        return events
                                      
     def set_team_name(self, team, name):
         """set name of the team"""
-        self.teams_info[team].name = name
+        self.team_names[team] = name
                                      
     def save(self, filename):
         """Save game to file"""
