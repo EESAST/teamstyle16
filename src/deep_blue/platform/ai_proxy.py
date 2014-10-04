@@ -43,7 +43,7 @@ class AIProxy(threading.Thread):
         self.ai_program = None
         if file_name is not None:
             self.logger.info('Starting AI (%s)', file_name)
-            self.__run_ai(file_name, port)
+            self.__run_ai(file_name, sock.getsockname()[1])
             self.logger.info('AI started')
 
         self.logger.info('Waiting for connection')
@@ -169,10 +169,10 @@ class AIProxy(threading.Thread):
         """Encode round information of battle into str"""
         map_info = battle.map_info()
         production_list = battle.production_list(self.team_num)
-        elements = battle.elements(self.team_num)
+        view_elements = battle.view_elements(self.team_num)
 
         header = struct.pack('6i', battle.round(),
-                                   len(elements),
+                                   len(view_elements),
                                    battle.population(self.team_num),
                                    len(production_list),
                                    battle.score(0),
@@ -181,7 +181,7 @@ class AIProxy(threading.Thread):
         body = ''
         for entry in production_list:
             body = body + struct.pack('2i', entry[0], entry[1])
-        for element in elements:
+        for element in view_elements.values():
             body = body + self.__serialize_element(element)
 
         return header + body

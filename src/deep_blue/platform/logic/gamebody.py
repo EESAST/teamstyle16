@@ -52,7 +52,7 @@ class GameBody(object):
 
     @property
     def status(self):
-        for element in self.elements:
+        for element in self.map_info.elements.values():
             if element.kind == BASE and element.health <= 0:
                 return 1 - element.team
         if self.round >= self.max_round:
@@ -70,7 +70,7 @@ class GameBody(object):
     def elements(self, team):
         """return elements of the team"""
         our_elements = {}
-        for index, element in self.elements.items():
+        for index, element in self.map_info.elements.items():
             if element.team == team:
                 our_elements[index] = element
         return our_elements
@@ -86,7 +86,7 @@ class GameBody(object):
     def view_elements(self, perspective):
         """return a dict containing all the elements in team vision"""
         can_see = {}
-        for index, element in self.elements.items():
+        for index, element in self.map_info.elements.items():
             for point in element.pos.region(element.level, 0):
                 if point in self.vision(perspective)[element.level]:
                     can_see[index] = element
