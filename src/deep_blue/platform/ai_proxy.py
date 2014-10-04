@@ -127,10 +127,10 @@ class AIProxy(threading.Thread):
             name, args = cmd_str[:2], cmd_str[2:].split()
             args = map(int, args)  # map to ints
 
-            # if name == 'ap':
-            #     cmd = command.AttackPos(args[0], basic.Position(*args[1:]))
-            if name == 'au':
-                cmd = command.Attack(*args)
+            if name == 'ap':
+                cmd = command.AttackPos(args[0], basic.Position(*args[1:]))
+            elif name == 'au':
+                cmd = command.AttackUnit(*args)
             elif name == 'cd':
                 cmd = command.ChangeDest(args[0], basic.Position(*args[1:]))
             elif name == 'fx':
