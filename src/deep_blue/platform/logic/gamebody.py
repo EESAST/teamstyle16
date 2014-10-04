@@ -14,8 +14,8 @@ class GameBody(object):
         self.team_names = team_names
         self.round = 0
         self.scores = [0, 0]
-        self.production_lists = [[]]
-        self.commands = [[]]
+        self.production_lists = [[], []]
+        self.commands = [[], []]
         for kw in ['round', 'scores', 'production_lists', 'commands']:
             if kw in kwargs:
                 setattr(self, kw, kwargs[kw])
@@ -67,16 +67,16 @@ class GameBody(object):
         """return elements of the team"""
         our_elements = {}
         for index, element in self.map_info.elements.items():
-            if element.team == team:
+            if isinstance(element, UnitBase) and element.team == team:
                 our_elements[index] = element
         return our_elements
 
     def vision(self, team):
         """shared 3-level vision of the whole team"""
-        vision = []
+        vision = [[], [], []]
         for level in xrange(3):
             for element in self.elements(team).values():
-                vision.append(element.pos.region(level, element.sight_ranges[level]))
+                vision[level].extend(element.pos.region(level, element.sight_ranges[level]))
         return vision
 
     def view_elements(self, perspective):
@@ -96,10 +96,6 @@ class GameBody(object):
     def population(self, team):
         """return total population of the team"""
         return sum([element.population for element in self.elements(team).values() if element.population != None])
-
-    def commands(self, team):
-        """return commands of the team"""
-        return self.commands[team]
 
     def set_command(self, team, command):
         """add a command and resolve conflicts"""
