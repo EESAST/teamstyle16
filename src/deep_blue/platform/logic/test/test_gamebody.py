@@ -6,11 +6,13 @@ class TestGameBody(unittest.TestCase):
 
     def test_constants(self):
         """Test constants in module gamebody"""
-        self.assertNotEqual(STATE_CONTINUE, 0)
-        self.assertNotEqual(STATE_CONTINUE, 1)
-        self.assertNotEqual(STATE_TIE, 0)
-        self.assertNotEqual(STATE_TIE, 1)
-        self.assertNotEqual(STATE_CONTINUE, STATE_TIE)
+        cont = gamebody.STATE_CONTINUE
+        tie = gamebody.STATE_TIE
+        self.assertNotEqual(cont, 0)
+        self.assertNotEqual(cont, 1)
+        self.assertNotEqual(tie, 0)
+        self.assertNotEqual(tie, 1)
+        self.assertNotEqual(cont, tie)
 
 if __name__ == '__main__':
     unittest.main()
