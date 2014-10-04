@@ -82,9 +82,10 @@ class GameBody(object):
     def view_elements(self, perspective):
         """return a dict containing all the elements in team vision"""
         can_see = {}
+        vision = self.vision(perspective)
         for index, element in self.map_info.elements.items():
             for point in element.pos.region(element.level, 0):
-                if point in self.vision(perspective)[element.level]:
+                if point in vision[element.level]:
                     can_see[index] = element
                     break
         return can_see
