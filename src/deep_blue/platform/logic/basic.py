@@ -176,6 +176,10 @@ class Position(object):
     def level(self):
         return self.z
 
+    @level.setter
+    def level(self, value):
+        self.z = min(max(0, value), 2)
+
     @property
     def size(self):
         return (1, 1)
@@ -205,7 +209,7 @@ class Rectangle(object):
     def __init__(self, upper_left, lower_right):
         super(Rectangle, self).__init__()
         self.upper_left = upper_left
-        lower_right.z = upper_left.z
+        lower_right.level = upper_left.level
         self.lower_right = lower_right
 
     @property
@@ -227,6 +231,10 @@ class Rectangle(object):
     @property
     def level(self):
         return self.upper_left.level
+
+    @level.setter
+    def level(self, value):
+        self.upper_left.level = self.lower_right.level = value
 
     def bound(self):
         """返回矩形区域的边界点集list"""
@@ -293,6 +301,7 @@ class Mine(Resource):
     """矿场"""
     kind = MINE
     def __init__(self, pos, metal = PROPERTY[MINE]['metal_max'], **kwargs):
+        pos.level = SURFACE
         super(Mine, self).__init__(pos, **kwargs)
         self.metal = metal
 
@@ -300,6 +309,7 @@ class Oilfield(Resource):
     """油田"""
     kind = OILFIELD
     def __init__(self, pos, fuel = PROPERTY[OILFIELD]['fuel_max'], **kwargs):
+        pos.level = SURFACE
         super(Oilfield, self).__init__(pos, **kwargs)
         self.fuel = fuel        
         
@@ -406,6 +416,7 @@ class Base(Building):
     """基地, 继承自Building"""
     kind = BASE
     def __init__(self, team, pos, **kwargs):
+        pos.level = SURFACE
         d = PROPERTY[BASE].copy()
         d.update(kwargs)
         super(Base, self).__init__(team, pos, **d)
@@ -442,6 +453,7 @@ class Fort(Building):
     """据点, 继承自Building"""
     kind = FORT
     def __init__(self, team, pos, **kwargs):
+        pos.level = SURFACE
         d = PROPERTY[FORT].copy()
         d.update(kwargs)
         super(Fort, self).__init__(team, pos, **d)
@@ -471,6 +483,7 @@ class Submarine(Unit):
     """潜艇"""
     kind = SUBMARINE
     def __init__(self, team, pos, **kwargs):
+        pos.level = UNDERWATER
         d = PROPERTY[SUBMARINE].copy()
         d.update(kwargs)
         super(Submarine, self).__init__(team, pos, **d)
@@ -483,6 +496,7 @@ class Destroyer(Ship):
     """驱逐舰"""
     kind = DESTROYER
     def __init__(self, team, pos, **kwargs):
+        pos.level = SURFACE
         d = PROPERTY[DESTROYER].copy()
         d.update(kwargs)        
         super(Destroyer, self).__init__(team, pos, **d)
@@ -491,6 +505,7 @@ class Carrier(Ship):
     """航母"""
     kind = CARRIER
     def __init__(self, team, pos, **kwargs):
+        pos.level = SURFACE
         d = PROPERTY[CARRIER].copy()
         d.update(kwargs)        
         super(Carrier, self).__init__(team, pos, **d)
@@ -514,6 +529,7 @@ class Cargo(Ship):
     """运输舰"""
     kind = CARGO
     def __init__(self, team, pos, **kwargs):
+        pos.level = SURFACE
         d = PROPERTY[CARGO].copy()
         d.update(kwargs)
         super(Cargo, self).__init__(team, pos, **d)
@@ -554,6 +570,7 @@ class Fighter(Plane):
     """战斗机"""
     kind = FIGHTER
     def __init__(self, team, pos, **kwargs):
+        pos.level = AIR
         d = PROPERTY[FIGHTER].copy()
         d.update(kwargs)
         super(Fighter, self).__init__(team, pos, **d)
@@ -562,6 +579,7 @@ class Scout(Plane):
     """侦察机"""
     kind = SCOUT
     def __init__(self, team, pos, **kwargs):
+        pos.level = AIR
         d = PROPERTY[SCOUT].copy()
         d.update(kwargs)
         super(Scout, self).__init__(team, pos, **d)
