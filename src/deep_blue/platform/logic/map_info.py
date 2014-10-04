@@ -33,7 +33,7 @@ class MapInfo(object):
 
     def element(self, pos):
         """Return element at pos"""
-        for element in self.elements:
+        for element in self.elements.values():
             if element.pos.distance(pos) == 0:  # in case isinstance(element.pos, Rectangle), distance() is ok.
                 return element
         return None
