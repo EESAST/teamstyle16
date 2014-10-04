@@ -358,7 +358,6 @@ TODO：游戏常量
 | **基本信息**               |                      |                                                           |
 | team_name(team)            | str                  | 队伍名                                                    |
 | **游戏状态**               |                      |                                                           |
-| status()                   | int                  | 当前的游戏状态                                            |
 | score(team)                | int                  | 分数                                                      |
 | elements(team)             | {int:Element}        | 某队所有元素                                              |
 | view_elements(perspective) | {int:Element}        | 某队视角下的所有元素                                      |
