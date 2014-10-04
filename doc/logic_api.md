@@ -321,7 +321,6 @@ TODO：游戏常量
 | commands         | [[Command]]            | 两队当前指令                                            |
 | **property**     |                        |                                                         |
 | map              | [[int]]                | 地形图                                                  |
-| elements         | {int:Element}          | 所有元素                                                |
 | max_population   | int                    | 人口上限                                                |
 | max_round        | int                    | 回合上限                                                |
 | record_interval  | int                    | 统计数据记录间隔                                        |
