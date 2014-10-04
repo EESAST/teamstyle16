@@ -21,11 +21,19 @@ int main(int argc, char const *argv[])
         std::exit(EXIT_FAILURE);
     }
 
-    connection->PrepareWork();
-    while (true)
+    try
     {
-        connection->Update();
-        AIMain();
+        connection->PrepareWork();
+        while (true)
+        {
+            connection->Update();
+            AIMain();
+        }
+    }
+    catch (const boost::system::system_error &e)
+    {
+        std::clog << "Connection lost: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     return 0;
