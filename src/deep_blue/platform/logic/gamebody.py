@@ -27,7 +27,7 @@ class TeamInfo(object):
         """shared 3-level vision of the whole team"""
         vision = []
         for level in xrange(3):
-            for element in elements.values():
+            for element in self.elements.values():
                 vision.append(element.pos.region(level, element.sight_ranges[level]))
         return vision
 
@@ -85,7 +85,7 @@ class GameBody(object):
 
     @property
     def status(self):
-        for element in self.elements:
+        for element in self.map_info.elements.values():
             if element.kind == BASE and element.health <= 0:
                 return 1 - element.team
         if self.round >= self.max_round:
@@ -107,7 +107,7 @@ class GameBody(object):
     def view_elements(self, perspective):
         """return a dict containing all the elements in team vision"""
         can_see = {}
-        for index, element in self.elements.items():
+        for index, element in self.map_info.elements.items():
             for point in element.pos.region(element.level, 0):
                 if point in self.teams_info[perspective].vision:
                     can_see[index] = element
