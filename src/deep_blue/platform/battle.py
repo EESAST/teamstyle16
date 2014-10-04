@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class Battle(object):
     def __init__(self, map_info):
-        self.gamebody = gamebody.GameBody(map_info)
+        self.gamebody = gamebody.GameBody(map_info, ['', ''])
         self.init_map_info = map_info
         self.command_list = []
         self.score_list = []
@@ -119,6 +119,8 @@ class AIBattle(Battle):
         self.AI_0.send_info(self)
         self.AI_1.send_info(self)
         logger.debug('Infos sent')
+        self.AI_0.start()
+        self.AI_1.start()
 
     def feed_ai_commands(self):
         logger.info('Feeding commands')
