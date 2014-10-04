@@ -77,6 +77,7 @@ class GameBody(object):
         for level in xrange(3):
             for element in self.elements(team).values():
                 vision[level].extend(element.pos.region(level, element.sight_ranges[level]))
+            vision[level] = list(set(vision[level]))
         return vision
 
     def view_elements(self, perspective):
