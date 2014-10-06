@@ -88,7 +88,7 @@ class TestBasic(unittest.TestCase):
     def test_element_attr(self):
         """Test attributes of Elements"""
 
-        element_attrs = ['index', 'pos', 'size', 'visible']
+        element_attrs = ['index', 'pos', 'size']
         unit_base_attrs = ['team', 'sight_ranges', 'fire_ranges', 'health',
                          'health_max', 'fuel', 'fuel_max', 'ammo', 'ammo_once',
                          'ammo_max', 'metal', 'metal_max', 'attacks', 'defences']

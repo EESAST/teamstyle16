@@ -337,7 +337,7 @@ class Oilfield(Resource):
 
     def ghost(self):
         return self
-        
+
 class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
     def __init__(self, team, pos, sight_ranges, fire_ranges,
@@ -487,6 +487,10 @@ class Fort(Building):
         d.update(kwargs)
         super(Fort, self).__init__(team, pos, **d)
 
+    def globalGhost(self):
+        ghost = copy(self)
+        ghost.fuel = ghost.ammo = ghost.metal = 0
+        return ghost
 
 class Unit(UnitBase):
     """可移动单位"""
