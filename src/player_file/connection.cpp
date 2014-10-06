@@ -33,11 +33,11 @@ void Connection::Connect(const std::string &host, const std::string &port)
     try
     {
         std::clog << "Connecting to " << host << ':' << port << std::endl;
-        boost::asio::connect(socket_, resolver.resolve({host, port}));
+        boost::asio::connect(socket_, resolver.resolve(tcp::resolver::query(host, port)));
     }
     catch (const boost::system::system_error &e)
     {
-        std::clog << "Connection failed\n";
+        std::clog << "Connection failed: " << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
     // send back team name
@@ -175,7 +175,7 @@ Connection * Connection::Instance()
 Connection::Connection()
         : io_service_(),
           socket_(io_service_),
-          game_info_({0, 0, 0, 0, 0.0f, 0, 0, {0, 0}, 0, 0, 0, {}, 0, {}}),
+          game_info_(),
           map_()
 {
 }
