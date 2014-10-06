@@ -9,7 +9,7 @@ STATE_TIE = 2
 
 class GameBody(object):
     """docstring for GameBody"""
-    def __init__(self, map_info, team_names, **kwargs):
+    def __init__(self, map_info, **kwargs):
         self.map_info = map_info
         self.round = 0
         self.scores = [0, 0]
@@ -47,10 +47,15 @@ class GameBody(object):
 
     @property
     def status(self):
+        dead_bases = 0
+        rst = None
         for element in self.map_info.elements.values():
             if element.kind == BASE and element.health <= 0:
-                return 1 - element.team
-        if self.round >= self.max_round:
+                dead_bases += 1
+                rst = 1 - element.team
+        if dead_bases == 1:
+            return rst
+        if self.round >= self.max_round or dead_bases == 2:
             return 0 if self.score(0) > self.score(1) else (1 if self.score(1) > self.score(0) else STATE_TIE)
         return STATE_CONTINUE
 
