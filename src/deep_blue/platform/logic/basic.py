@@ -283,7 +283,6 @@ class Element(object):
         super(Element, self).__init__()
         self.pos = pos          # pos可以是一个点(Position类型), 也可以是矩形(Rectangle类型)
         self.index = kwargs['index'] if 'index' in kwargs else None       # 调用MapInfo.addElement()才会赋予相应的index值
-        self.visible = kwargs['visible'] if 'visible' in kwargs else False   # 每回合更新所有element的visible值
 
     @property
     def level(self):
@@ -297,6 +296,12 @@ class Element(object):
     def size(self):
         return self.pos.size
 
+    def ghost(self):
+        """return limited info when viewed by enemy"""
+        ghost = copy(self)
+        ghost.fuel = ghost.ammo = ghost.metal = 0   # no access
+        return ghost
+
 class Resource(Element):
     """资源类, 派生出矿场类和油田类"""
     pass
@@ -309,6 +314,14 @@ class Mine(Resource):
         super(Mine, self).__init__(pos, **kwargs)
         self.metal = metal
 
+    def globalGhost(self):
+        ghost = copy(self)
+        ghost.metal = 0
+        return ghost
+
+    def ghost(self):
+        return self
+
 class Oilfield(Resource):
     """油田"""
     kind = OILFIELD
@@ -317,6 +330,14 @@ class Oilfield(Resource):
         super(Oilfield, self).__init__(pos, **kwargs)
         self.fuel = fuel
 
+    def globalGhost(self):
+        ghost = copy(self)
+        ghost.fuel = 0
+        return ghost
+
+    def ghost(self):
+        return self
+        
 class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
     def __init__(self, team, pos, sight_ranges, fire_ranges,
@@ -424,7 +445,11 @@ class Base(Building):
         d = PROPERTY[BASE].copy()
         d.update(kwargs)
         super(Base, self).__init__(team, pos, **d)
-                                   # 从元组解析出数据后传入 Building.__init__()
+
+    def globalGhost(self):
+        ghost = copy(self)
+        ghost.fuel = ghost.ammo = ghost.metal = 0
+        return ghost
 
     def repair(self, our_unit):
         """维修"""
