@@ -31,7 +31,7 @@ class TestGameBody(unittest.TestCase):
                              time_per_round=1.0,
                              weather=0,
                              types=types)
-        self.gamebody = gamebody.GameBody(m, ['', ''])
+        self.gamebody = gamebody.GameBody(m)
 
         # bases, assign ranges explicitly to avoid changes in basic.py
         self.base0 = Base(0, Rectangle(Position(0, 0, 1),

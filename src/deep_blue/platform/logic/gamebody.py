@@ -77,7 +77,7 @@ class GameBody(object):
         for level in xrange(3):
             for element in self.elements(team).values():
                 vision[level].extend(element.pos.region(level, element.sight_ranges[level]))
-            vision[level] = list(set(vision[level]))
+            vision[level] = set(vision[level])
             tmp = []
             for point in vision[level]:
                 if (point.x >= 0 and point.x < self.map_info.x_max and
