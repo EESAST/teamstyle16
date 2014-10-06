@@ -3,3 +3,6 @@
 
 # object code
 *.o
+
+# map file for testing
+src/deep_blue/platform/tmp_map_info.map
