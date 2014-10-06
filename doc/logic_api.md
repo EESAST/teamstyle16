@@ -316,6 +316,7 @@ TODO：游戏常量
 | map_info         | MapInfo                | 地图信息                                                |
 | round            | int                    | 当前回合数, 从0开始                                     |
 | scores           | [int]                  | 两队积分                                                |
+| populations      | [int, int]             | 两队当前人口                                            |
 | production_lists | [[(kind, round_left)]] | 两队生产列表                                            |
 | commands         | [[Command]]            | 两队当前指令                                            |
 | **property**     |                        |                                                         |

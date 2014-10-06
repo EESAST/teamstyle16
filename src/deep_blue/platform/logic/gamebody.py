@@ -13,6 +13,8 @@ class GameBody(object):
         self.map_info = map_info
         self.round = 0
         self.scores = [0, 0]
+        self.populations = [sum([element.population for element in self.elements(0).values() if element.population != None]),
+                            sum([element.population for element in self.elements(1).values() if element.population != None])]
         self.production_lists = [[], []]
         self.commands = [[], []]
         for kw in ['round', 'scores', 'production_lists', 'commands']:
@@ -104,7 +106,7 @@ class GameBody(object):
 
     def population(self, team):
         """return total population of the team"""
-        return sum([element.population for element in self.elements(team).values() if element.population != None])
+        return self.populations[team]
 
     def set_command(self, team, command):
         """add a command and resolve conflicts"""
