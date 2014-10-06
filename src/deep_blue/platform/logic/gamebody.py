@@ -11,7 +11,6 @@ class GameBody(object):
     """docstring for GameBody"""
     def __init__(self, map_info, team_names, **kwargs):
         self.map_info = map_info
-        self.team_names = team_names
         self.round = 0
         self.scores = [0, 0]
         self.production_lists = [[], []]
@@ -54,10 +53,6 @@ class GameBody(object):
         if self.round >= self.max_round:
             return 0 if self.score(0) > self.score(1) else (1 if self.score(1) > self.score(0) else STATE_TIE)
         return STATE_CONTINUE
-
-    def team_name(self, team):
-        """return name of the team"""
-        return self.team_names[team]
 
     def score(self, team):
         """return score of the team"""
@@ -116,10 +111,6 @@ class GameBody(object):
         events = []
         pass
         return events
-
-    def set_team_name(self, team, name):
-        """set name of the team"""
-        self.team_names[team] = name
 
     def save(self, filename):
         """Save game to file"""
