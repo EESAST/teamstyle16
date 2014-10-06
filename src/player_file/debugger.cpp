@@ -92,7 +92,7 @@ void ShowRoundInfo()
 
 const char * GetTeamName()
 {
-    return "0xFFFFFF";  // 队伍名
+    return "0xFFFFFF";
 }
 
 void AIMain()

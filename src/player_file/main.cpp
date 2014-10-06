@@ -27,6 +27,7 @@ int main(int argc, char const *argv[])
         while (true)
         {
             connection->Update();
+            // If AIMain() returns, we assume the player want to update infos.
             AIMain();
         }
     }

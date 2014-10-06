@@ -5,7 +5,7 @@ using namespace teamstyle16;
 
 const char * GetTeamName()
 {
-    return "0xFFFFFF";  // team name
+    return "0xFFFFFF";  // Name of your team
 }
 
 void AIMain()
