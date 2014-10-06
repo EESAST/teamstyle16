@@ -42,15 +42,15 @@ class MapInfo(object):
         """Add a new element to current map"""
         for point in new_element.pos.region(level = 0, range = 0):
             if point.x >= self.x_max or point.y >= self.y_max:
-                return False                    # 位置无效
+                return None                     # 位置无效
             elif self.element(point) != None:
-                return False                    # 位置被占用
+                return None                     # 位置被占用
         index = choice(xrange(10000))           # 10000以内随机生成index
         while index in self.elements.keys():    # 检查是否与已有index冲突
             index += 10000                      # 尝试解决冲突
         new_element.index = index
         self.elements[index] = new_element
-        return True
+        return index
 
     def save(self, filename):
         """Save map to file"""
