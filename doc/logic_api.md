@@ -332,7 +332,7 @@ TODO：游戏常量
 | **游戏状态**               |                      |                                                           |
 | score(team)                | int                  | 分数                                                      |
 | elements(team)             | {int:Element}        | 某队所有元素                                              |
-| vision(team)               | [[Position]]         | 某队共享三层视野                                          |
+| vision(team)               | [set(Position)]      | 某队共享三层视野                                          |
 | view_elements(perspective) | {int:Element}        | 某队视角下的所有元素                                      |
 | production_list(team)      | [(kind, round_left)] | 生产列表                                                  |
 | population(team)           | int                  | 该队伍的人口数                                            |
