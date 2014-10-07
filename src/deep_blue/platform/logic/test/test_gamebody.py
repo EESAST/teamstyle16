@@ -42,28 +42,30 @@ class TestGameBody(unittest.TestCase):
                                        Position(14, 14, 1)),
                      sight_ranges=[4, 10, 8],
                      fire_ranges=[0, 7, 5])
-        self.assertTrue(self.gamebody.map_info.add_element(self.base0))
-        self.assertTrue(self.gamebody.map_info.add_element(self.base1))
+        self.base0_index = self.gamebody.map_info.add_element(self.base0)
+        self.base1_index = self.gamebody.map_info.add_element(self.base1)
+        self.assertIsNotNone(self.base0_index)
+        self.assertIsNotNone(self.base1_index)
         # forts
         self.fort0 = Fort(2, Position(9, 12, 1))
         self.fort1 = Fort(2, Rectangle(Position(6, 6, 1),
                                        Position(7, 7, 1)))
         self.fort2 = Fort(2, Position(9, 4, 1))
-        self.assertTrue(self.gamebody.map_info.add_element(self.fort0))
-        self.assertTrue(self.gamebody.map_info.add_element(self.fort1))
-        self.assertTrue(self.gamebody.map_info.add_element(self.fort2))
+        self.assertIsNotNone(self.gamebody.map_info.add_element(self.fort0))
+        self.assertIsNotNone(self.gamebody.map_info.add_element(self.fort1))
+        self.assertIsNotNone(self.gamebody.map_info.add_element(self.fort2))
 
         # oilfield
         self.oilfield0 = Oilfield(Position(13, 2, 1))
         self.oilfield1 = Oilfield(Position(3, 7, 1))
-        self.assertTrue(self.gamebody.map_info.add_element(self.oilfield0))
-        self.assertTrue(self.gamebody.map_info.add_element(self.oilfield1))
+        self.assertIsNotNone(self.gamebody.map_info.add_element(self.oilfield0))
+        self.assertIsNotNone(self.gamebody.map_info.add_element(self.oilfield1))
 
         # mine
         self.mine0 = Mine(Position(14, 5, 1))
         self.mine1 = Mine(Position(3, 10, 1))
-        self.assertTrue(self.gamebody.map_info.add_element(self.mine0))
-        self.assertTrue(self.gamebody.map_info.add_element(self.mine1))
+        self.assertIsNotNone(self.gamebody.map_info.add_element(self.mine0))
+        self.assertIsNotNone(self.gamebody.map_info.add_element(self.mine1))
 
     def test_constants(self):
         """Test constants in module gamebody"""
@@ -93,34 +95,91 @@ class TestGameBody(unittest.TestCase):
         self.assertNotIn(self.oilfield1, units_in_sight)
         self.assertNotIn(self.mine1, units_in_sight)
 
-    # def test_attack_pos(self):
-    #     """Test behavior of attack position"""
-    #     self.assertTrue(self.gamebody.map_info.add_element(
-    #         Destroyer(1, Position(5, 2, 1), sight_ranges=[1, 3, 2],
-    #                                         fire_ranges=[1, 3, 2])))
-    # def test_attck_unit(self):
-    #     """Test behavior of attack unit"""
-    #     pass
+    def test_attack_pos(self):
+        """Test behavior of attack position"""
+        index = self.gamebody.map_info.add_element(Destroyer(1, Position(3,2,1), sight_ranges = [1,3,2], fire_ranges = [2,2,2]))
+        self.assertIsNotNone(index)
+        self.assertTrue(self.gamebody.set_command(1, AttackPos(index, Position(2,2,1))))
+        health_after_attempt_attack = self.base0.health
+        self.assertNotEqual(health_after_attempt_attack, self.base0.health_max)     #shame on myself, I failed to calculate it accurately.(hhh)
+
+        self.assertFalse(self.gamebody.set_command(1, AttackPos(index, Position(0,0,1))))
+        self.assertEqual(self.base0.health, health_after_attempt_attack)
+
+    def test_attck_unit(self):
+        """Test behavior of attack unit"""
+        index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1), fire_ranges = [2,2,2]))
+        index_2 = self.gamebody.map_info.add_element(Destroyer(1, Position(0,5,1)))
+        index_3 = self.gamebody.map_info.add_element(Destroyer(1, Position(0,7,1)))
+        self.assertIsNotNone(index_1)
+        self.assertIsNotNone(index_2)
+        self.assertIsNotNone(index_3)
+        self.assertTrue(self.gamebody.set_command(0, AttackUnit(index_1, index_2)))
+        self.assertNotEqual(self.gamebody.map_info.elements[index_2].health, self.gamebody.map_info.elements[index_2].health_max)
+        self.assertFalse(self.gamebody.set_command(0, AttackUnit(index_1, index_3)))
+        self.assertEqual(self.gamebody.map_info.elements[index_3].health, self.gamebody.map_info.elements[index_3].health_max)
 
     # def test_change_dest(self):
     #     """Test behavior of change destination"""
-    #     pass
+    #     index = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1)))
+    #     self.assertIsNotNone(index)
+    #     self.assertTrue(self.gamebody.set_command(0, ChangeDest(index, Position(0,6,1))))
+    #     self.assertEqual(self.gamebody.map_info.elements[index].dest, Position(0,6,1))
 
-    # def test_fix(self):
-    #     """Test behavior of fix"""
-    #     pass
+    def test_fix(self):
+        """Test behavior of fix"""
+        index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(3,2,1)))
+        index_2 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1)))
+        self.assertIsNotNone(index_1)
+        self.assertIsNotNone(index_2)
+        self.gamebody.map_info.elements[index_1].health = self.gamebody.map_info.elements[index_1].health_max - 1
+        self.gamebody.map_info.elements[index_2].health = self.gamebody.map_info.elements[index_2].health_max - 1
+        self.assertTrue(self.gamebody.set_command(0, Fix(self.base0_index, index_1)))
+        self.assertFalse(self.gamebody.set_command(0, Fix(self.base0_index, index_2)))
+        self.assertEqual(self.gamebody.map_info.elements[index_1].health, self.gamebody.map_info.elements[index_1].health_max)
+        self.assertEqual(self.gamebody.map_info.elements[index_1].health, self.gamebody.map_info.elements[index_1].health_max - 1)
+        self.assertEqual(self.gamebody.map_info.elements[base0_index].metal, self.gamebody.map_info.elements[base0_index].metal_max - METAL_PER_HEALTH)
 
-    # def test_produce(self):
-    #     """Test behavior of produce"""
-    #     pass
+    def test_produce(self):
+        """Test behavior of produce"""
+        destroyer = Destroyer(0, Position(0,4,1))
+        self.assertTrue(self.gamebody.set_command(0, Produce(self.base0_index, DESTROYER)))
+        for i in range(destroyer.build_round()):
+            self.gamebody.run()
 
-    # def test_supply(self):
-    #     """Test behavior of supply"""
-    #     pass
+    def test_supply(self):
+        """Test behavior of supply"""
+        index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(3,2,1)))
+        index_2 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1)))
+        self.assertIsNotNone(index_1)
+        self.assertIsNotNone(index_2)
+        self.gamebody.map_info.elements[index_1].fuel -= 1
+        self.gamebody.map_info.elements[index_1].metal -= 1
+        self.gamebody.map_info.elements[index_1].ammo -= 1
+        self.gamebody.map_info.elements[index_2].fuel -= 1
+        self.gamebody.map_info.elements[index_2].metal -= 1
+        self.gamebody.map_info.elements[index_2].ammo -= 1
+        self.assertTrue(self.gamebody.set_command(0, Supply(self.base0_index, index_1)))
+        self.assertFalse(self.gamebody.set_command(0, Supply(self.base0_index, index_2)))
+        self.assertEqual(self.gamebody.map_info.elements[self.base0_index].fuel, self.gamebody.map_info.elements[self.base0_index].fuel_max - 1)
+        self.assertEqual(self.gamebody.map_info.elements[self.base0_index].metal, self.gamebody.map_info.elements[self.base0_index].metal_max - 1)
+        self.assertEqual(self.gamebody.map_info.elements[self.base0_index].ammo, self.gamebody.map_info.elements[self.base0_index].ammo_max - 1)
+        self.assertEqual(self.gamebody.map_info.elements[index_1].fuel, self.gamebody.map_info.elements[index_1].fuel_max)
+        self.assertEqual(self.gamebody.map_info.elements[index_1].metal, self.gamebody.map_info.elements[index_1].metal_max)
+        self.assertEqual(self.gamebody.map_info.elements[index_1].ammo, self.gamebody.map_info.elements[index_1].ammo_max)
+        self.assertEqual(self.gamebody.map_info.elements[index_2].fuel, self.gamebody.map_info.elements[index_2].fuel_max - 1)
+        self.assertEqual(self.gamebody.map_info.elements[index_2].metal, self.gamebody.map_info.elements[index_2].metal_max - 1)
+        self.assertEqual(self.gamebody.map_info.elements[index_2].ammo, self.gamebody.map_info.elements[index_2].ammo_max - 1)
 
-    # def test_cancel(self):
-    #     """Test behavior of cancel"""
-    #     pass
+    def test_cancel(self):
+        """Test behavior of cancel"""
+        index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1), fire_ranges = [2,2,2]))
+        index_2 = self.gamebody.map_info.add_element(Destroyer(1, Position(0,5,1)))
+        self.assertIsNotNone(index_1)
+        self.assertIsNotNone(index_2)
+        self.assertTrue(self.gamebody.set_command(0, AttackUnit(index_1, index_2)))
+        self.assertTrue(self.gamebody.set_command(0, Cancel(index_1)))
+        self.assertEqual(self.gamebody.map_info.elements[index_2].health, self.gamebody.map_info.elements[index_2].health_max)
 
     def test_(self):
         pass
