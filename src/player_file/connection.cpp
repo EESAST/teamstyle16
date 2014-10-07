@@ -149,9 +149,8 @@ void Connection::ReadRoundInfo()
         socket_,
         boost::asio::buffer(game_info_.production_list,
                             game_info_.production_num * sizeof(ProductionEntry)));
-    std::clog << "Production list read (" +
-                 std::to_string(game_info_.production_num) +
-                 " entry(s))\n";
+    std::clog << "Production list read (" << game_info_.production_num
+              << " entry(s))\n";
 
     // states
     std::clog << "Reading states from host\n";
@@ -159,9 +158,7 @@ void Connection::ReadRoundInfo()
         socket_,
         boost::asio::buffer(game_info_.elements,
                             game_info_.element_num * sizeof(State)));
-    std::clog << "States read (" +
-                 std::to_string(game_info_.element_num) +
-                 " entry(s))\n";
+    std::clog << "States read (" << game_info_.element_num << " entry(s))\n";
 
     std::clog << "Round infomation read\n";
 }

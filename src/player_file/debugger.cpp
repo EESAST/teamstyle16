@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include "basic.h"
@@ -8,10 +9,10 @@ namespace {
 
 std::string PosString(const teamstyle16::Position &pos)
 {
-    using std::to_string;
-    return "(" + to_string(pos.x) + ", "
-               + to_string(pos.y) + ", "
-               + to_string(pos.z) + ")";
+    std::ostringstream oss;
+    oss << '(' << pos.x << ", " << pos.y << ", " << pos.z << ')';
+
+    return oss.str();
 }
 
 void ShowElement(const teamstyle16::State &state)
@@ -36,7 +37,7 @@ void ShowStableInfo()
     using std::cout;
     using std::endl;
 
-    auto info = teamstyle16::Info();
+    const teamstyle16::GameInfo *info = teamstyle16::Info();
 
     cout << "x_max: " << info->x_max
          << "\ny_max: " << info->y_max
@@ -62,7 +63,7 @@ void ShowRoundInfo()
     using std::cout;
     using std::endl;
 
-    auto info = teamstyle16::Info();
+    const teamstyle16::GameInfo *info = teamstyle16::Info();
 
     cout << "round: " << info->round
          << "\nelement_num: " << info->element_num
@@ -74,14 +75,14 @@ void ShowRoundInfo()
 
     for (int i = 0; i < info->production_num; i++)
     {
-        auto &entry = info->production_list[i];
+        const teamstyle16::ProductionEntry &entry = info->production_list[i];
         cout << "  " << i << ": " << entry.unit_type
                           << ", " << entry.round_left << endl;
     }
     cout << "elements:\n";
     for (int i = 0; i < info->element_num; i++)
     {
-        auto &state = info->elements[i];
+        const teamstyle16::State &state = info->elements[i];
         cout << "  " << i << ": \n";
         ShowElement(state);
     }

@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <sstream>
 
 #include "basic.h"
 #include "connection.h"
@@ -40,64 +41,68 @@ int TryUpdate()
 
 void AttackPos(int operand, Position target)
 {
-    using std::to_string;
+    std::ostringstream oss;
+    oss << "ap" << operand << ' '
+                << target.x << ' '
+                << target.y << ' '
+                << target.z << ',';
 
-    Connection::Instance()->Send("ap" + to_string(operand) + ' ' +
-                                        to_string(target.x) + ' ' +
-                                        to_string(target.y) + ' ' +
-                                        to_string(target.z) + ',');
+    Connection::Instance()->Send(oss.str());
 }
 
 void AttackUnit(int operand, int target)
 {
-    using std::to_string;
+    std::ostringstream oss;
+    oss << "au" << operand << ' ' << target << ',';
 
-    Connection::Instance()->Send("au" + to_string(operand) + ' ' +
-                                        to_string(target) + ',');
+    Connection::Instance()->Send(oss.str());
 }
 
 void ChangeDest(int operand, Position dest)
 {
-    using std::to_string;
+    std::ostringstream oss;
+    oss << "cd" << operand << ' '
+                << dest.x << ' '
+                << dest.y << ' '
+                << dest.z << ',';
 
-    Connection::Instance()->Send("cd" + to_string(operand) + ' ' +
-                                        to_string(dest.x) + ' ' +
-                                        to_string(dest.y) + ' ' +
-                                        to_string(dest.z) + ',');
+    Connection::Instance()->Send(oss.str());
 }
 
 void Fix(int operand, int target)
 {
-    using std::to_string;
+    std::ostringstream oss;
+    oss << "fx" << operand << ' ' << target << ',';
 
-    Connection::Instance()->Send("fx" + to_string(operand) + ' ' +
-                                        to_string(target) + ',');
+    Connection::Instance()->Send(oss.str());
 }
 
 void Produce(int operand, int type)
 {
-    using std::to_string;
+    std::ostringstream oss;
+    oss << "pd" << operand << ' ' << type << ',';
 
-    Connection::Instance()->Send("pd" + to_string(operand) + ' ' +
-                                        to_string(type) + ',');
+    Connection::Instance()->Send(oss.str());
 }
 
 void Supply(int operand, int target, int fuel, int metal, int ammo)
 {
-    using std::to_string;
+    std::ostringstream oss;
+    oss << "sp" << operand << ' '
+                << target << ' '
+                << fuel << ' '
+                << metal << ' '
+                << ammo << ',';
 
-    Connection::Instance()->Send("sp" + to_string(operand) + ' ' +
-                                        to_string(target) + ' ' +
-                                        to_string(fuel) + ' ' +
-                                        to_string(metal) + ' ' +
-                                        to_string(ammo) + ',');
+    Connection::Instance()->Send(oss.str());
 }
 
 void Cancel(int operand)
 {
-    using std::to_string;
+    std::ostringstream oss;
+    oss << "cc" << operand << ',';
 
-    Connection::Instance()->Send("cc" + to_string(operand) + ',');
+    Connection::Instance()->Send(oss.str());
 }
 
 const Property * GetProperty(int type)
