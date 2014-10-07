@@ -8,7 +8,6 @@
 #include <vector>
 
 #include <boost/asio.hpp>
-#include <boost/algorithm/string.hpp>
 #include <gtest/gtest.h>
 
 using boost::asio::ip::tcp;
@@ -63,8 +62,7 @@ class ConnectionTest : public ::testing::Test
         std::size_t max_size = teamstyle16::kMaxTeamNameSize;
         std::size_t size = socket_.read_some(buffer(buffer_, max_size));
 
-        return boost::trim_copy(
-            std::string(buffer_.begin(), buffer_.begin() + size));
+        return std::string(buffer_.begin(), buffer_.begin() + size);
     }
 
     std::string ReadUntil(boost::asio::streambuf &buf,

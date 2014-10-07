@@ -4,7 +4,7 @@
 #include <string>
 
 #include <boost/asio.hpp>
-#include <boost/utility.hpp>
+#include <boost/core/noncopyable.hpp>
 
 #include "basic.h"
 
