@@ -13,6 +13,8 @@ class GameBody(object):
         self.map_info = map_info
         self.round = 0
         self.scores = [0, 0]
+        self.populations = [sum([element.population for element in self.elements(0).values() if element.population != None]),
+                            sum([element.population for element in self.elements(1).values() if element.population != None])]
         self.production_lists = [[], []]
         self.commands = [[], []]
         for kw in ['round', 'scores', 'production_lists', 'commands']:
@@ -77,7 +79,7 @@ class GameBody(object):
         for level in xrange(3):
             for element in self.elements(team).values():
                 vision[level].extend(element.pos.region(level, element.sight_ranges[level]))
-            vision[level] = list(set(vision[level]))
+            vision[level] = set(vision[level])
             tmp = []
             for point in vision[level]:
                 if (point.x >= 0 and point.x < self.map_info.x_max and
@@ -92,9 +94,14 @@ class GameBody(object):
         can_see = {}
         vision = self.vision(perspective)
         for index, element in self.map_info.elements.items():
+            if element.kind == BASE or element.kind == FORT or element.kind == MINE or element.kind == OILFIELD:
+                can_see[index] = element.globalGhost()
             for point in element.pos.region(element.level, 0):
                 if point in vision[element.level]:
-                    can_see[index] = element
+                    if hasattr(element, 'team') is False or element.team != perspective:     # 非己方
+                        can_see[index] = element.ghost()
+                    else:
+                        can_see[index] = element
                     break
         return can_see
 
@@ -104,7 +111,7 @@ class GameBody(object):
 
     def population(self, team):
         """return total population of the team"""
-        return sum([element.population for element in self.elements(team).values() if element.population != None])
+        return self.populations[team]
 
     def set_command(self, team, command):
         """add a command and resolve conflicts"""

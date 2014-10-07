@@ -6,3 +6,6 @@
 
 # map file for testing
 src/deep_blue/platform/tmp_map_info.map
+
+# CMake build files
+src/player_file/build

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class Battle(object):
     def __init__(self, map_info):
-        self.gamebody = gamebody.GameBody(map_info, ['', ''])
+        self.gamebody = gamebody.GameBody(map_info)
         self.init_map_info = map_info
         self.command_list = []
         self.score_list = []

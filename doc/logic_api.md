@@ -121,16 +121,16 @@ TODO：游戏常量
 | time_per_round  | float         | 每回合时间       |
 | weather         | int           | 天气             |
 
-|             方法             | 返回值  |                        描述                       |
-| ---------------------------- | ------- | ------------------------------------------------- |
-| map_type(x, y)               | int     | 查询地形                                          |
-| set_map_type(x, y, map_type) | bool    | 设置地形                                          |
-| element(pos)                 | Element | 返回pos位置的元素, 若无元素则返回None             |
-| add_element(element)         | bool    | 添加元素并设置索引, 若位置无效或被占用则返回false |
-| save(filename)               | None    | 保存地图信息至文件                                |
-| saves()                      | str     | 保存地图至字符串                                  |
-| saves_elements()             | str     | 保存单位状态至字符串                              |
-| loads_elements(str)          | None    | 从字符串读取elements信息, 并更新当前地图          |
+|             方法             | 返回值  |                       描述                       |
+| ---------------------------- | ------- | ------------------------------------------------ |
+| map_type(x, y)               | int     | 查询地形                                         |
+| set_map_type(x, y, map_type) | bool    | 设置地形                                         |
+| element(pos)                 | Element | 返回pos位置的元素, 若无元素则返回None            |
+| add_element(element)         | int     | 添加元素并设置索引, 若位置无效或被占用则返回None |
+| save(filename)               | None    | 保存地图信息至文件                               |
+| saves()                      | str     | 保存地图至字符串                                 |
+| saves_elements()             | str     | 保存单位状态至字符串                             |
+| loads_elements(str)          | None    | 从字符串读取elements信息, 并更新当前地图         |
 
 
 
@@ -316,6 +316,7 @@ TODO：游戏常量
 | map_info         | MapInfo                | 地图信息                                                |
 | round            | int                    | 当前回合数, 从0开始                                     |
 | scores           | [int]                  | 两队积分                                                |
+| populations      | [int, int]             | 两队当前人口                                            |
 | production_lists | [[(kind, round_left)]] | 两队生产列表                                            |
 | commands         | [[Command]]            | 两队当前指令                                            |
 | **property**     |                        |                                                         |
@@ -332,7 +333,7 @@ TODO：游戏常量
 | **游戏状态**               |                      |                                                           |
 | score(team)                | int                  | 分数                                                      |
 | elements(team)             | {int:Element}        | 某队所有元素                                              |
-| vision(team)               | [[Position]]         | 某队共享三层视野                                          |
+| vision(team)               | [set(Position)]      | 某队共享三层视野                                          |
 | view_elements(perspective) | {int:Element}        | 某队视角下的所有元素                                      |
 | production_list(team)      | [(kind, round_left)] | 生产列表                                                  |
 | population(team)           | int                  | 该队伍的人口数                                            |
