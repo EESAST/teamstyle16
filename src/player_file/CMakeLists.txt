@@ -37,10 +37,14 @@ message("Boost configurations:")
 message("    BOOST_ROOT: " ${BOOST_ROOT})
 message("    BOOST_LIBRARYDIR: " ${BOOST_LIBRARYDIR})
 
+add_definitions(-DBOOST_ALL_NO_LIB)
+set(Boost_USE_STATIC_LIBS        ON)
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME    OFF)
+
 find_package(Boost 1.56.0 REQUIRED COMPONENTS system)
 
 include_directories(${Boost_INCLUDE_DIRS})
-add_definitions(-DBOOST_ALL_NO_LIB)
 
 add_library(ai_basic basic.cpp connection.cpp)
 add_library(main main.cpp)
