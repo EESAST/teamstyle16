@@ -93,6 +93,7 @@ class TestGameBody(unittest.TestCase):
         # self.assertNotIn(self.oilfield1, units_in_sight)
         # self.assertNotIn(self.mine1, units_in_sight)
         pass
+):
 
     # def test_attack_pos(self):
     #     """Test behavior of attack position"""
@@ -125,13 +126,44 @@ class TestGameBody(unittest.TestCase):
 
     def test_ignore_invalid_commands(self):
         """Test whether gamebody will ignore invalid commands"""
+        #test AttackPos
+            #无效情况1：弹药量少于单次攻击所需弹药量
+            #无效情况2：攻击目标不在发出攻击的单位攻击范围内
+
+        #test AttackUnit
+            #无效情况1：弹药量少于单次攻击所需弹药量
+            #无效情况2：攻击目标不在发出攻击的单位攻击范围内
+            #无效情况3：攻击目标是己方单位
+            #无效情况4：攻击目标不在攻击发出的单位视野范围内
+
+        #test Fix
+            #无效情况1：维修指令发出的单位不是基地
+            #无效情况2：维修单位不在基地的维修范围内
+            #无效情况3：基地金属不足
+
+        #test ChangeDes
+            #无效情况1：新更改的坐标越地图边界
+            #无效情况2：单位无法到新更改的坐标上
+            #无效情况3：新坐标上已存在其他单位（这个算吗？）
+
+        #test Produce
+            #无效情况1：金属不足
+            #无效情况2：总人口数超过上限
+
+        #test Supply
+            #无效情况1：发出补给指令的单位没有不及权限
+            #无效情况2：被补给的对象不在补给指令发出方的补给范围内
         sub = Submarine(team=1, pos=Position(4, 4, 0), fire_ranges=[1, 2, 3])
         index = self.gamebody.map_info.add_element(sub)
         assertFalse(self.gamebody.set_command(command.AttackUnit(index, self.base0.index)))
         
 
     def test_exclude_commands(self):
-        """"""
+        """Test whether the newer commands will recover the older ones conflicting with them"""
+        pass
+
+    def test_cancle(self):
+        """Test whether it will stop all the commands related to this unit"""
         pass
 
 if __name__ == '__main__':
