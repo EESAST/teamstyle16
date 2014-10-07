@@ -2,6 +2,7 @@
 #define TEAMSTYLE16_CONNECTION_H_
 
 #include <string>
+#include <vector>
 
 #include <boost/asio.hpp>
 #include <boost/core/noncopyable.hpp>

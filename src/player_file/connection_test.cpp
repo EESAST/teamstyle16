@@ -1,5 +1,6 @@
 #include "connection.h"
 
+#include <cstddef>
 #include <cstring>
 #include <algorithm>
 #include <random>
@@ -37,6 +38,7 @@ struct RoundHeader
 };
 
 }  // namespace
+
 class ConnectionTest : public ::testing::Test
 {
  protected:
