@@ -1,5 +1,6 @@
 #include "connection.h"
 
+#include <cstddef>
 #include <cstring>
 #include <algorithm>
 #include <random>

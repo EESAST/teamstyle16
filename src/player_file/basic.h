@@ -1,7 +1,6 @@
 #ifndef TEAMSTYLE16_BASIC_H
 #define TEAMSTYLE16_BASIC_H
 
-#include <cstdint>
 #include <cstddef>
 
 namespace teamstyle16
