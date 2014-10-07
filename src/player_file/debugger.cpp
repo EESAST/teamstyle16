@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include <boost/algorithm/string.hpp>
 #include "basic.h"
 #include "connection.h"
 
@@ -104,8 +103,6 @@ void AIMain()
     {
         std::cout << "round " << Info()->round << ": ";
         std::getline(std::cin, line);
-        boost::trim(line);
-        boost::to_lower(line);
 
         if (line == "n" || line == "next")
             Update();
