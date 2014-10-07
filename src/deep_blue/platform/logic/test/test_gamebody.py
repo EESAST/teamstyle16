@@ -123,15 +123,7 @@ class TestGameBody(unittest.TestCase):
     #     """Test behavior of cancel"""
     #     pass
 
-    def test_ignore_invalid_commands(self):
-        """Test whether gamebody will ignore invalid commands"""
-        sub = Submarine(team=1, pos=Position(4, 4, 0), fire_ranges=[1, 2, 3])
-        index = self.gamebody.map_info.add_element(sub)
-        assertFalse(self.gamebody.set_command(command.AttackUnit(index, self.base0.index)))
-        
-
-    def test_exclude_commands(self):
-        """"""
+    def test_(self):
         pass
 
 if __name__ == '__main__':
