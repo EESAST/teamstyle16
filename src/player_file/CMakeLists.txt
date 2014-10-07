@@ -1,7 +1,16 @@
 cmake_minimum_required (VERSION 2.6)
 project (teamstyle16_ai)
 
-option(with_tests "Build with tests for ai_base library" ON)
+option(with-c++11 "Build using standard C++11" OFF)
+
+# Whether to build tests with gtests
+# Note that this implicitly indicates 'with-c++11' option, because of the
+# impliment of connection_test requires <random> & <thread>, which might be
+# an unnecessary burden if use Boost.random/thread instead
+option(with-tests "Build with tests for ai" OFF)
+if(with-tests)
+    set(with-c++11 ON)
+endif(with-tests)
 
 # Configure Boost library
 # Directory of the boost library shipped
@@ -51,17 +60,22 @@ include_directories(${Boost_INCLUDE_DIRS})
 # Done with Boost library
 
 # Build libraries
-add_library(ai_base basic.cpp connection.cpp ${Boost_LIBRARIES})
+if(with-c++11)
+    add_compile_options(-std=c++11)
+endif(with-c++11)
+
+add_library(ai_base basic.cpp connection.cpp)
+target_link_libraries(ai_base ${Boost_LIBRARIES})
 add_library(ai_driver main.cpp)
 target_link_libraries(ai_driver ai_base)
 
 # Build tests with gtest if required
-if(with_tests)
-    include_directories("${PROJECT_SOURCE_DIR}/gtest-1.7.0/include")
+if(with-tests)
     add_subdirectory(gtest-1.7.0)
-    add_executable(ai_base_test basic_test.cpp connection_test.cpp)
-    target_link_libraries(ai_base_test ai_base)
-endif(with_tests)
+    add_executable(ai_test ai.cpp basic_test.cpp connection_test.cpp)
+    target_include_directories(ai_test PUBLIC ${PROJECT_SOURCE_DIR}/gtest-1.7.0/include)
+    target_link_libraries(ai_test ai_base gtest gtest_main)
+endif(with-tests)
 
 # Build ai & debugger
 add_executable (debugger debugger.cpp)

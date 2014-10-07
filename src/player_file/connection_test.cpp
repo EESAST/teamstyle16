@@ -37,6 +37,7 @@ struct RoundHeader
 };
 
 }  // namespace
+
 class ConnectionTest : public ::testing::Test
 {
  protected:
