@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 project (teamstyle16_ai)
 
+option(with_tests "Build with tests for ai_base library" ON)
+
 # Configure Boost library
 # Directory of the boost library shipped
 set(SHIPPED_BOOST_ROOT ${PROJECT_SOURCE_DIR}/boost_1_56_0)
@@ -52,6 +54,14 @@ include_directories(${Boost_INCLUDE_DIRS})
 add_library(ai_base basic.cpp connection.cpp ${Boost_LIBRARIES})
 add_library(ai_driver main.cpp)
 target_link_libraries(ai_driver ai_base)
+
+# Build tests with gtest if required
+if(with_tests)
+    include_directories("${PROJECT_SOURCE_DIR}/gtest-1.7.0/include")
+    add_subdirectory(gtest-1.7.0)
+    add_executable(ai_base_test basic_test.cpp connection_test.cpp)
+    target_link_libraries(ai_base_test ai_base)
+endif(with_tests)
 
 # Build ai & debugger
 add_executable (debugger debugger.cpp)
