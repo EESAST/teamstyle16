@@ -5,7 +5,13 @@
 #include <vector>
 
 #include <boost/asio.hpp>
+
+// boost::noncopyable has been moved since Boost 1.56
+#if (Boost_VERSION_MAJOR >= 1 && Boost_VERSION_MINOR >= 56)
 #include <boost/core/noncopyable.hpp>
+#else
+#include <boost/utility.hpp>
+#endif
 
 #include "basic.h"
 
