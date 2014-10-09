@@ -1,5 +1,5 @@
-#ifndef TEAMSTYLE16_BASIC_H
-#define TEAMSTYLE16_BASIC_H
+#ifndef TEAMSTYLE16_BASIC_H_
+#define TEAMSTYLE16_BASIC_H_
 
 #include <cstddef>
 
@@ -153,4 +153,4 @@ void Cancel(int operand);
 
 }  // namespace teamstyle16
 
-#endif  // TEAMSTYLE16_BASIC_H
+#endif  // TEAMSTYLE16_BASIC_H_
