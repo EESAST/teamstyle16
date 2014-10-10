@@ -22,7 +22,12 @@ class Battle(object):
         return self.gamebody.map_info
 
     def team_name(self, team):
-        return self.gamebody.team_name(team)
+        if team == 0:
+            return self.AI_0.team_name
+        elif team == 1:
+            return self.AI_1.team_name
+        else:
+            raise ValueError('Invalid team number: ' + str(team))
 
     def round(self):
         return self.gamebody.round
@@ -119,8 +124,6 @@ class AIBattle(Battle):
         self.AI_1 = ai_proxy.AIProxy(1, sock, ai1_filename)
         logger.debug('Proxies built')
 
-        self.gamebody.set_team_name(0, self.AI_0.team_name)
-        self.gamebody.set_team_name(1, self.AI_1.team_name)
         # Battle has been started, so send infos to AIs
         logger.debug('Sending infos of round 0 to AIs')
         self.AI_0.send_info(self)
