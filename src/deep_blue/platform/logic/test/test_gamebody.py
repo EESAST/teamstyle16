@@ -1,6 +1,8 @@
 from .. import gamebody
 from .. import map_info
 from ..basic import *
+from ..command import *
+
 import unittest
 
 class TestGameBody(unittest.TestCase):
@@ -98,16 +100,22 @@ class TestGameBody(unittest.TestCase):
 
     def test_attack_pos(self):
         """Test behavior of attack position"""
-        index = self.gamebody.map_info.add_element(Destroyer(1, Position(3,2,1), sight_ranges = [1,3,2], fire_ranges = [2,2,2]))
-        self.assertIsNotNone(index)
-        self.assertTrue(self.gamebody.set_command(1, AttackPos(index, Position(2,2,1))))
-        health_after_attempt_attack = self.base0.health
-        self.assertNotEqual(health_after_attempt_attack, self.base0.health_max)     #shame on myself, I failed to calculate it accurately.(hhh)
+        # Add attcker
+        attacker = self.gamebody.map_info.add_element(
+            Destroyer(1, Position(3,2,1), sight_ranges = [1,3,2],
+                                          fire_ranges = [2,2,2]))
+        self.assertIsNotNone(attacker)
 
-        self.assertFalse(self.gamebody.set_command(1, AttackPos(index, Position(0,0,1))))
-        self.assertEqual(self.base0.health, health_after_attempt_attack)
+        # Attack an element out of fire range
+        self.assertFalse(self.gamebody.set_command(1, AttackPos(attacker, Position(0,0,1))))
+        self.assertEqual(self.base0.health, self.base0.health_max)
 
-    def test_attck_unit(self):
+        # Attack an element in range
+        self.assertTrue(
+            self.gamebody.set_command(1, AttackPos(attacker, Position(2,2,1))))
+        self.assertNotEqual(self.base0.health, self.base0.health_max)     #shame on myself, I failed to calculate it accurately.(hhh)
+
+    def test_attack_unit(self):
         """Test behavior of attack unit"""
         index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1), fire_ranges = [2,2,2]))
         index_2 = self.gamebody.map_info.add_element(Destroyer(1, Position(0,5,1)))
@@ -115,10 +123,13 @@ class TestGameBody(unittest.TestCase):
         self.assertIsNotNone(index_1)
         self.assertIsNotNone(index_2)
         self.assertIsNotNone(index_3)
+
+        elements = self.gamebody.map_info.elements
+
         self.assertTrue(self.gamebody.set_command(0, AttackUnit(index_1, index_2)))
-        self.assertNotEqual(self.gamebody.map_info.elements[index_2].health, self.gamebody.map_info.elements[index_2].health_max)
+        self.assertNotEqual(elements[index_2].health, elements[index_2].health_max)
         self.assertFalse(self.gamebody.set_command(0, AttackUnit(index_1, index_3)))
-        self.assertEqual(self.gamebody.map_info.elements[index_3].health, self.gamebody.map_info.elements[index_3].health_max)
+        self.assertEqual(elements[index_3].health, elements[index_3].health_max)
 
     # def test_change_dest(self):
     #     """Test behavior of change destination"""
