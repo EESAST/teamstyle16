@@ -21,6 +21,8 @@ class AIBattle(battle.Battle):
         If prev_info is given, restore from it instead of constructing a new
         one.
         """
+        # Start battle
+        super(AIBattle, self).__init__(map_info, prev_info=prev_info)
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         while True:
@@ -36,20 +38,18 @@ class AIBattle(battle.Battle):
 
         logger.debug('Building proxies for AIs')
         self.ais = []
-        self.ais.append(ai_proxy.AIProxy(0, sock, ai0_filename, self))
-        self.ais.append(ai_proxy.AIProxy(1, sock, ai1_filename, self))
+        self.ais.append(ai_proxy.AIProxy(0, sock=sock, battle=self,
+                                            file_name=ai0_filename))
+        self.ais.append(ai_proxy.AIProxy(1, sock=sock, battle=self,
+                                            file_name=ai1_filename))
         logger.debug('Proxies built')
 
-        # Start battle
-        super(AIBattle, self).__init__(map_info,
-                                       team0_name=ais[0].team_name,
-                                       team1_name=ais[1].team_name,
-                                       prev_info=prev_info)
+        # Set team names in Battle
+        self.team_names = [self.ais[0].team_name, self.ais[1].team_name]
+
         # Battle has been started, so send infos to AIs
-        logger.debug('Sending infos of round 0 to AIs')
         for ai in self.ais:
             ai.send_info(self)
-        logger.debug('Infos sent')
 
         for ai in self.ais:
             ai.start()
