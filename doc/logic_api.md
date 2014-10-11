@@ -221,7 +221,6 @@ TODO：游戏常量
 |--------|----------|--------------|
 | index  | int      | 攻击者索引号 |
 | target | Position | 攻击目标     |
-| hit    | bool     | 是否命中     |
 | damage | int      | 造成的伤害   |
 
 ### Class AttackUnit
