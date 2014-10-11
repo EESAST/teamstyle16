@@ -22,12 +22,7 @@ class Battle(object):
         return self.gamebody.map_info
 
     def team_name(self, team):
-        if team == 0:
-            return self.AI_0.team_name
-        elif team == 1:
-            return self.AI_1.team_name
-        else:
-            raise ValueError('Invalid team number: ' + str(team))
+        return self.ais[team].team_name
 
     def round(self):
         return self.gamebody.round
@@ -120,27 +115,33 @@ class AIBattle(Battle):
         sock.listen(2)
 
         logger.debug('Building proxies for AIs')
-        self.AI_0 = ai_proxy.AIProxy(0, sock, ai0_filename)
-        self.AI_1 = ai_proxy.AIProxy(1, sock, ai1_filename)
+        self.ais = []
+        self.ais.append(ai_proxy.AIProxy(0, sock, ai0_filename))
+        self.ais.append(ai_proxy.AIProxy(1, sock, ai1_filename))
         logger.debug('Proxies built')
 
         # Battle has been started, so send infos to AIs
         logger.debug('Sending infos of round 0 to AIs')
-        self.AI_0.send_info(self)
-        self.AI_1.send_info(self)
+        for ai in self.ais:
+            ai.send_info(self)
         logger.debug('Infos sent')
-        self.AI_0.start()
-        self.AI_1.start()
+
+        for ai in self.ais:
+            ai.start()
 
     def feed_ai_commands(self):
         logger.info('Feeding commands')
         time.sleep(self.map_info().time_per_round)
-        ai0_cmds = self.AI_0.get_commands()
-        ai1_cmds = self.AI_1.get_commands()
-        for cmd in ai0_cmds:
-            self.gamebody.set_command(self.AI_0.team_name, cmd)
-        for cmd in ai1_cmds:
-            self.gamebody.set_command(self.AI_1.team_name, cmd)
+
+        cmds = []
+        # Collect commands for both teams first, or team 1 would have more
+        # time to send commands
+        for ai in self.ais:
+            cmds.append(ai.get_commands())
+
+        for ai in self.ais:
+            for cmd in cmds:
+                self.gamebody.set_command(ai.team_num, cmd)
 
     def run_until_end(self):
         while self.gamebody.state() == gamebody.STATE_CONTINUE:
@@ -149,8 +150,8 @@ class AIBattle(Battle):
 
     def next_round(self):
         events = Battle.next_round(self)
-        self.AI_0.send_info(self)
-        self.AI_1.send_info(self)
+        for ai in self.ais:
+            ai.send_info(self)
         return events
 
 
