@@ -87,7 +87,7 @@ class GameBody(object):
                     point.y >= 0 and point.y < self.map_info.y_max and
                     point.z >= 0 and point.z < 3):
                     tmp.append(point)
-            vision[level] = tmp
+            vision[level] = set(tmp)
         return vision
 
     def view_elements(self, perspective):
