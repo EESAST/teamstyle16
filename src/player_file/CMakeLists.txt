@@ -64,13 +64,17 @@ find_package(Boost 1.55.0 REQUIRED COMPONENTS system)
 include_directories(${Boost_INCLUDE_DIRS})
 # Done with Boost library
 
+# On linux Boost.asio need to be linked with pthread, so this is a (hopefully)
+# portable solution
+find_package(Threads)
+
 # Build libraries
 if(with-c++11)
     add_compile_options(-std=c++11)
 endif(with-c++11)
 
 add_library(ai_base basic.cpp connection.cpp)
-target_link_libraries(ai_base ${Boost_LIBRARIES})
+target_link_libraries(ai_base ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 add_library(ai_driver main.cpp)
 target_link_libraries(ai_driver ai_base)
 
