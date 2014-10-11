@@ -46,7 +46,7 @@ class ConnectionTest : public ::testing::Test
             : io_service_(),
               acceptor_(io_service_, tcp::endpoint(tcp::v4(), 8098)),
               socket_(io_service_),
-              generator_((std::random_device()())),
+              generator_((std::random_device())()),
               buffer_(256, 0)
     {
         std::thread acceptor_thread(&ConnectionTest::AcceptAI, this);
