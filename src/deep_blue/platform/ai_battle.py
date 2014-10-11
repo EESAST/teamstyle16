@@ -11,8 +11,16 @@ logger = logging.getLogger(__name__)
 DEFAULT_PORT = 8067
 
 class AIBattle(battle.Battle):
+    """Represent a battle between two AIs"""
     def __init__(self, map_info, port=DEFAULT_PORT,
                  ai0_filename=None, ai1_filename=None, prev_info=None):
+        """Construct an AIBattle from a map, or from previous infos.
+        port is the port number used for listening.
+        If file_name is given, AIBattle is responsible for starting & closing
+        AI program.
+        If prev_info is given, restore from it instead of constructing a new
+        one.
+        """
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.bind(('', port))
@@ -38,10 +46,22 @@ class AIBattle(battle.Battle):
         for ai in self.ais:
             ai.start()
 
+    # Override team_name(), to make sure team names of AI will be displayed,
+    # instead of team names set at the beginning of the battle.
+    # e.g. the battle may be started as a HumanAIBattle, but later taken over
+    # as an AIBattle
     def team_name(self, team):
         return self.ais[team].team_name
 
+    def next_round(self):
+        """Advance the game to the next round, return events happened"""
+        events = battle.Battle.next_round(self)
+        for ai in self.ais:
+            ai.send_info(self)
+        return events
+
     def feed_ai_commands(self):
+        """Feed commands from AIs within time limit time_per_round"""
         logger.info('Feeding commands')
         time.sleep(self.gamebody.time_per_round)
 
@@ -56,17 +76,13 @@ class AIBattle(battle.Battle):
                 self.gamebody.set_command(ai.team_num, cmd)
 
     def run_until_end(self):
+        """Run until the game ends"""
         while self.gamebody.state() == gamebody.STATE_CONTINUE:
             self.feed_ai_commands()
             self.next_round()
 
-    def next_round(self):
-        events = battle.Battle.next_round(self)
-        for ai in self.ais:
-            ai.send_info(self)
-        return events
-
 def load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None):
+    """Load save file, construct an AIBattle based on it"""
     return AIBattle(None, port=port,
                     ai0_filename=ai0_filename, ai1_filename=ai1_filename,
                     prev_info=json.load(open(filename)))
