@@ -1,22 +1,31 @@
-import time, ai_proxy
-from logic import map_info
-from logic import gamebody
+import copy
 import logging
+import json
 import socket
+import time
+from logic import map_info, gamebody
+import ai_proxy
 
 logger = logging.getLogger(__name__)
 
 
 class Battle(object):
     def __init__(self, map_info):
+        # Just check record_interval in map_info, because invalid interval
+        # may casue run time error (e.g. modulo by zero)
+        if map_info.record_interval <= 0:
+            raise ValueError('record_interval should be positive integer')
+
         self.gamebody = gamebody.GameBody(map_info)
-        self.init_map_info = map_info
-        self.command_list = []
-        self.score_list = []
-        self.unit_num_list = []
-        self.population_list = []
-        self.record_interval = 5    #can be switched
-        # self.replay_info = []
+        self.history = {
+            'score': [],
+            'unit_num': [],
+            'population': [],
+            'command': []
+        }
+        self.record_history()
+        self.key_frames = []
+        self.record_key_frame()  # record beginning frame
 
     def map_info(self):
         return self.gamebody.map_info
@@ -49,24 +58,33 @@ class Battle(object):
         return self.gamebody.population(team)
 
     def score_history(self):
-        return score_list
+        return self.history['score']
 
     def unit_num_history(self):
-        return unit_num_list
+        return self.history['unit_num']
 
     def population_history(self):
-        return population_list
+        return self.history['population']
 
     def command_history(self):
-        return command_list
+        return self.history['command']
 
     def commands(self, team):
         return self.gamebody.commands[team]
 
     def next_round(self):
-        self.record_info()
+        """Advance the game to the next round, return events happened"""
         logger.info('Moving to the next round')
-        return self.gamebody.run()
+
+        self.record_commands()  # commands of this round become fixed
+        events = self.gamebody.run()
+        # Record history & key frame as early as possible, or infomation of
+        # the last round will be lost (because no next_round will be called).
+        self.record_history()
+        if self.gamebody.round % self.gamebody.record_interval == 0:
+            self.record_key_frame
+
+        return events
 
     # def save_game(filename):
     #     save_file = open(filename, 'w')
@@ -92,17 +110,21 @@ class Battle(object):
     #     #Such as by @, and func of loading could be load_file.read().split('@')...
     #     #Also we may use some other way as alternative, this part will be further revised later.
 
-    def record_info(self):
-        self.score_list.append([self.gamebody.score(0),
-                                self.gamebody.score(1)])
-        self.unit_num_list.append([len(self.gamebody.elements(0)),
-                                   len(self.gamebody.elements(1))])
-        self.population_list.append([self.gamebody.population(0),
-                                     self.gamebody.population(1)])
-        self.command_list.append([self.gamebody.commands[0],
-                                  self.gamebody.commands[1]])
-        # if self.round() % self.record_interval == 0:
-        #     self.replay_info.append(self.gamebody.map_info.saves_elements())
+    def record_history(self):
+        history = self.history
+        game = self.gamebody
+        history['score'].append(copy.copy(game.scores))
+        history['unit_num'].append([len(game.elements(0)),
+                              len(game.elements(1))])
+        history['population'].append(copy.copy(game.populations))
+
+    def record_commands(self):
+        history['command'].append(copy.copy(game.commands))
+
+    def record_key_frame(self):
+        frame = (copy.deepcopy(self.gamebody.elements),
+                 copy.deepcopy(self.gamebody.production_list))
+        self.key_frames.append(frame)
 
 
 class AIBattle(Battle):
