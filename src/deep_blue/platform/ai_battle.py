@@ -13,8 +13,6 @@ DEFAULT_PORT = 8067
 class AIBattle(battle.Battle):
     def __init__(self, map_info, port=DEFAULT_PORT,
                  ai0_filename=None, ai1_filename=None, prev_info=None):
-        super(AIBattle, self).__init__(map_info, prev_info)
-
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.bind(('', port))
@@ -26,6 +24,11 @@ class AIBattle(battle.Battle):
         self.ais.append(ai_proxy.AIProxy(1, sock, ai1_filename, self))
         logger.debug('Proxies built')
 
+        # Start battle
+        super(AIBattle, self).__init__(map_info,
+                                       team0_name=ais[0].team_name,
+                                       team1_name=ais[1].team_name,
+                                       prev_info=prev_info)
         # Battle has been started, so send infos to AIs
         logger.debug('Sending infos of round 0 to AIs')
         for ai in self.ais:

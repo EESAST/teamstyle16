@@ -6,11 +6,12 @@ from logic import map_info, gamebody
 logger = logging.getLogger(__name__)
 
 class Battle(object):
-    def __init__(self, map_info, prev_info=None):
+    def __init__(self, map_info, team0_name=None, team1_name=None, prev_info=None):
         """Construct a battle based on map_info.
         If prev_info is given, restore from it & ignore map_info"""
         if prev_info is not None:
             # Restore
+            self.team_names = prev_info['team_names']
             self.gamebody = gamebody.loads(prev_info['gamebody'])
             self.history = prev_info['history']
             self.key_frames = prev_info['key_frames']
@@ -21,6 +22,7 @@ class Battle(object):
         if map_info.record_interval <= 0:
             raise ValueError('record_interval should be positive integer')
 
+        self.team_names = [team0_name, team1_name]
         self.gamebody = gamebody.GameBody(map_info)
         self.history = {
             'score': [],
@@ -37,7 +39,7 @@ class Battle(object):
         return self.gamebody.map_info
 
     def team_name(self, team):
-        return None
+        return self.team_names[team]
 
     def round(self):
         return self.gamebody.round
@@ -98,6 +100,7 @@ class Battle(object):
     def save(self, filename):
         save_file = open(filename, 'w')
         contents = {
+            "team_names": self.team_names,
             'gamebody': self.gamebody.saves(),
             'history': self.history,
             'key_frames': self.key_frames
@@ -121,4 +124,4 @@ class Battle(object):
         self.key_frames.append(frame)
 
 def load(filename):
-    return Battle(None, json.load(open(filename)))
+    return Battle(None, prev_info=json.load(open(filename)))

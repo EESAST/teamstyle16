@@ -8,7 +8,7 @@ class Replayer(battle.Battle):
 
     def __init__(self, prev_info):
         self.max_round = len(prev_info['history']['score']) - 1
-        super(Replayer, self).__init__(None, prev_info)
+        super(Replayer, self).__init__(None, prev_info=prev_info)
 
     def next_round(self):
         logger.info('Moving to next round (round %d)', self.gamebody.round + 1)
