@@ -4,21 +4,6 @@
 ## Module platform
 包含平台的设置和少量功能
 
-|          方法         |  返回值  |     描述     |
-|-----------------------|----------|--------------|
-| load_game(filename)   | Battle   | 载入游戏     |
-| load_replay(filename) | Replayer | 载入回放文件 |
-
-## Module battle
-
-类继承关系
-
-    object
-        Battle
-            AIBattle
-            HumanAIBattle
-            Replayer
-
 异常继承关系
 
     IOError
@@ -27,6 +12,17 @@
             AIConnectError   AI连接错误
             ParseError       指令解析错误
 
+## Module battle
+一般性对战，指令完全由调用者提供
+
+|      方法      | 返回值 |   描述   |
+|----------------|--------|----------|
+| load(filename) | Battle | 载入游戏 |
+
+类继承关系
+
+    object
+        Battle
 
 ### Class Battle
 对战基类
@@ -61,10 +57,21 @@
 | commands(team)                           | [Command]            | 返回该队伍当前的指令集           |
 | next_round()                             | [gamebody.Event]     | 进行一回合                       |
 | **保存/载入**                            |                      |                                  |
-| save_game(filename)                      | None                 | 保存游戏                         |
-| load_game(filename)                      | None                 | 载入游戏                         |
-| save_replay(filename, begin=0, end=None) | None                 | 保存[begin, end]回合的回放至文件 |
+| save(filename)                      | None                 | 保存游戏                         |
 
+
+## Module ai_battle
+AI对战，指令均来自于AI
+
+|      方法      |  返回值  |   描述   |
+|----------------|----------|----------|
+| load(filename) | AIBattle | 载入游戏 |
+
+类继承关系
+
+    object
+        Battle
+            AIBattle
 
 ### Class AIBattle
 AI对战
@@ -81,6 +88,19 @@ AI对战
 上述两方法可能抛出 AIConnectError, ParseError
 
 
+## Module human_ai_battle
+人机对战，指令部分来自于AI
+
+|      方法      |    返回值     |   描述   |
+|----------------|---------------|----------|
+| load(filename) | HumanAIBattle | 载入游戏 |
+
+类继承关系
+
+    object
+        Battle
+            HumanAIBattle
+
 ### Class HumanAIBattle
 人机对战
 
@@ -93,6 +113,19 @@ AI对战
 | feed_ai_commands()   | None   | 从AI获取指令，填充至指令集 |
 | add_command(command) | None   | 向选手指令集中增添指令     |
 
+
+## Module replayer
+回放器，指令来自游戏存档
+
+|      方法      |  返回值  |   描述   |
+|----------------|----------|----------|
+| load(filename) | Replayer | 载入游戏 |
+
+类继承关系
+
+    object
+        Battle
+            Replayer
 
 ## Class Replayer
 回放器
