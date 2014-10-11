@@ -66,6 +66,9 @@ class Battle(object):
     def command_history(self):
         return self.history['command']
 
+    def set_command(self, team, command):
+        return self.gamebody.set_command(team, command)
+
     def commands(self, team):
         return self.gamebody.commands[team]
 
