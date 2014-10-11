@@ -1,7 +1,6 @@
 import copy
-import logging
 import json
-import socket
+import logging
 from logic import map_info, gamebody
 
 logger = logging.getLogger(__name__)
