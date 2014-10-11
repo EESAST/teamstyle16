@@ -37,7 +37,7 @@ class Battle(object):
         return self.gamebody.map_info
 
     def team_name(self, team):
-        return self.ais[team].team_name
+        return None
 
     def round(self):
         return self.gamebody.round

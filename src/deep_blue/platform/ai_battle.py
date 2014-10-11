@@ -35,6 +35,9 @@ class AIBattle(battle.Battle):
         for ai in self.ais:
             ai.start()
 
+    def team_name(self, team):
+        return self.ais[team].team_name
+
     def feed_ai_commands(self):
         logger.info('Feeding commands')
         time.sleep(self.gamebody.time_per_round)
