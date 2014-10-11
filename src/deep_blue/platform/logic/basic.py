@@ -512,6 +512,12 @@ class Unit(UnitBase):
     def build_round(self):
         return self.cost / 10
 
+    def ghost(self):
+        ghost = copy(self)
+        ghost.fuel = ghost.ammo = ghost.metal = 0   # no access
+        ghost.dest = None   # no access
+        return ghost
+
 class Submarine(Unit):
     """潜艇"""
     kind = SUBMARINE
