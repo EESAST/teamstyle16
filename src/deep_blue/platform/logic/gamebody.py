@@ -3,6 +3,7 @@
 from basic import *
 from map_info import *
 from custom_json import *
+from copy import copy
 
 STATE_CONTINUE = -1
 STATE_TIE = 2
@@ -95,7 +96,9 @@ class GameBody(object):
         vision = self.vision(perspective)
         for index, element in self.map_info.elements.items():
             if element.kind == BASE or element.kind == FORT or element.kind == MINE or element.kind == OILFIELD:
-                can_see[index] = element.globalGhost()
+                tmp = copy(element)
+                setattr(tmp, visible, False)        # in fact, this element is not in sight
+                can_see[index] = tmp.globalGhost()
             for point in element.pos.region(element.level, 0):
                 if point in vision[element.level]:
                     if hasattr(element, 'team') is False or element.team != perspective:     # 非己方
