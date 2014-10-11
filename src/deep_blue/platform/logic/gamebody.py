@@ -97,7 +97,7 @@ class GameBody(object):
         for index, element in self.map_info.elements.items():
             if element.kind == BASE or element.kind == FORT or element.kind == MINE or element.kind == OILFIELD:
                 tmp = copy(element)
-                setattr(tmp, visible, False)        # in fact, this element is not in sight
+                setattr(tmp, 'visible', False)        # in fact, this element is not in sight
                 can_see[index] = tmp.globalGhost()
             for point in element.pos.region(element.level, 0):
                 if point in vision[element.level]:
