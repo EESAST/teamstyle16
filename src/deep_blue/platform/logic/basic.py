@@ -91,61 +91,61 @@ SCOUT = 9       # 侦察机
 PROPERTY = [{
             'sight_ranges': [4, 10, 8], 'fire_ranges': [0, 7, 5],
             'health_max': 2000, 'fuel_max': 1000, 'ammo_max': INFINITY, 'ammo_once': 6, 'metal_max': 200,
-            'speed': None, 'population': None,
+            'speed': None, 'population': None, 'cost': None, 'build_round': None,
             'attacks': [40, 0], 'defences': [15, INFINITY]
             },  # Base
             {
             'sight_ranges': [3, 8, 6], 'fire_ranges': [0, 5, 4],
             'health_max': 800, 'fuel_max': 200, 'ammo_max': 300, 'ammo_once': 4, 'metal_max': 200,
-            'speed': None, 'population': None,
+            'speed': None, 'population': None, 'cost': None, 'build_round': None,
             'attacks': [25, 0], 'defences': [12, INFINITY]
             },  # Fort
             {
             'sight_ranges': None, 'fire_ranges': None,
             'health_max': INFINITY, 'fuel_max': None, 'ammo_max': None, 'metal_max': 1000,
-            'speed': None, 'population': None,
+            'speed': None, 'population': None, 'cost': None, 'build_round': None,
             'attacks': None, 'ammo_once': None, 'defences': [INFINITY, INFINITY]
             },  # Mine
             {
             'sight_ranges': None, 'fire_ranges': None,
             'health_max': INFINITY, 'fuel_max': 1000, 'ammo_max': None, 'ammo_once': None, 'metal_max': None,
-            'speed': None, 'population': None,
+            'speed': None, 'population': None, 'cost': None, 'build_round': None,
             'attacks': None, 'defences': [INFINITY, INFINITY]
             },  # Oilfield
             {
             'sight_ranges': [6, 5, 3], 'fire_ranges': [5, 5, 0],
             'health_max': 35, 'fuel_max': 120, 'ammo_max': 20, 'ammo_once': 2, 'metal_max': None,
-            'speed': 6, 'population': 2,
+            'speed': 6, 'population': 2, 'cost': 7, 'build_round': 2,
             'attacks': [0, 40], 'defences': [INFINITY, 7]
             },  # Submarine
             {
             'sight_ranges': [4, 9, 7], 'fire_ranges': [2, 8, 6],
             'health_max': 70, 'fuel_max': 150, 'ammo_max': 40, 'ammo_once': 4, 'metal_max': None,
-            'speed': 7, 'population': 3,
+            'speed': 7, 'population': 3, 'cost': 14, 'build_round': 3,
             'attacks': [22, 11], 'defences': [13, 10]
             },  # Destroyer
             {
             'sight_ranges': [4, 9, 9], 'fire_ranges': [0, 8, 6],
             'health_max': 120, 'fuel_max': 200, 'ammo_max': 70, 'ammo_once': 2, 'metal_max': None,
-            'speed': 5, 'population': 4,
+            'speed': 5, 'population': 4, 'cost': 24, 'build_round': 5,
             'attacks': [18, 0], 'defences': [16, 10]
             },  # Carrier
             {
             'sight_ranges': [3, 7, 6], 'fire_ranges': None,
             'health_max': 60, 'fuel_max': 300, 'ammo_max': 120, 'ammo_once': None, 'metal_max': 50,
-            'speed': 8, 'population': 1,
+            'speed': 8, 'population': 1, 'cost': 12, 'build_round': 3,
             'attacks': None, 'defences': [15, 8]
             },  # Cargo
             {
             'sight_ranges': [0, 9, 10], 'fire_ranges': [0, 3, 4],
             'health_max': 70, 'fuel_max': 100, 'ammo_max': 21, 'ammo_once': 3, 'metal_max': None,
-            'speed': 9, 'population': 3,
+            'speed': 9, 'population': 3, 'cost': 14, 'build_round': 3,
             'attacks': [30, 10], 'defences': [10, INFINITY]
             },  # Fighter
             {
             'sight_ranges': [2, 12, 16], 'fire_ranges': [1, 3, 4],
             'health_max': 50, 'fuel_max': 120, 'ammo_max': 5, 'ammo_once': 1, 'metal_max': None,
-            'speed': 10, 'population': 1,
+            'speed': 10, 'population': 1, 'cost': 10, 'build_round': 2,
             'attacks':[10, 5], 'defences': [7, INFINITY]
             }]  # Scout
 
@@ -342,7 +342,7 @@ class UnitBase(Element):
     """作战单位抽象, 派生出建筑类以及可移动单位类"""
     def __init__(self, team, pos, sight_ranges, fire_ranges,
                  health_max, fuel_max, ammo_max, ammo_once, metal_max,
-                 speed, population,
+                 speed, population, cost, build_round,
                  attacks, defences, **kwargs):
         super(UnitBase, self).__init__(pos, **kwargs)
         self.team = team
@@ -355,6 +355,8 @@ class UnitBase(Element):
         self.metal = self.metal_max = metal_max
         self.speed = speed
         self.population = population
+        self.cost = cost
+        self.build_round = build_round
         self.attacks = attacks
         self.defences = defences
         for kw in ['health', 'fuel', 'ammo', 'metal']:
@@ -496,21 +498,13 @@ class Unit(UnitBase):
     """可移动单位"""
     def __init__(self, team, pos, sight_ranges, fire_ranges,
                  health_max, fuel_max, ammo_max, ammo_once, metal_max,
-                 speed, population,
+                 speed, population, cost, build_round,
                  attacks, defences, **kwargs):
         super(Unit, self).__init__(team, pos, sight_ranges, fire_ranges,
                                    health_max, fuel_max, ammo_max, ammo_once, metal_max,
-                                   speed, population,
+                                   speed, population, cost, build_round,
                                    attacks, defences, **kwargs)
         self.dest = kwargs['dest'] if 'dest' in kwargs else self.pos    # 目的地(初始为自身位置)
-
-    @property
-    def cost(self):
-        return int(self.health_max * METAL_PER_HEALTH)
-
-    @property
-    def build_round(self):
-        return self.cost / 10
 
     def ghost(self):
         ghost = copy(self)
