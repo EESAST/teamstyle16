@@ -133,7 +133,7 @@ class GameBody(object):
 
     def saves(self):
         """Save game to string"""
-        return MyEncoder().encode(self)
+        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self)
 
 def load(filename):
     """Read map from file"""

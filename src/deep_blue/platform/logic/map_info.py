@@ -58,14 +58,11 @@ class MapInfo(object):
 
     def saves(self):
         """Save map to string"""
-        tmp = copy(self)
-        tmp.elements = {str(index): element for index, element in tmp.elements.items()}     # json does not allow int as a dict key
-        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(tmp)
+        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self)
 
     def saves_elements(self):
         """Save elements to string"""
-        tmp = {str(index): element for index, element in self.elements.items()}
-        return MyEncoder().encode(tmp)
+        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self.elements)
 
     def loads_elements(self, string):
         """Load elements to current map from string"""
