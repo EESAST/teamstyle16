@@ -7,7 +7,16 @@ from logic import map_info, gamebody
 logger = logging.getLogger(__name__)
 
 class Battle(object):
-    def __init__(self, map_info):
+    def __init__(self, map_info, prev_info=None):
+        """Construct a battle based on map_info.
+        If prev_info is given, restore from it & ignore map_info"""
+        if prev_info is not None:
+            # Restore
+            self.gamebody = gamebody.loads(prev_info['gamebody'])
+            self.history = prev_info['history']
+            self.key_frames = prev_info['key_frames']
+            return
+        # Construct new battle
         # Just check record_interval in map_info, because invalid interval
         # may casue run time error (e.g. modulo by zero)
         if map_info.record_interval <= 0:
@@ -113,10 +122,4 @@ class Battle(object):
         self.key_frames.append(frame)
 
 def load(filename):
-    contents = json.load(filename)
-    game = gamebody.loads(contents['gamebody'])
-    battle = Battle(game.map_info)
-
-    battle.gamebody = contents['gamebody']
-    battle.history = contents['history']
-    battle.key_frames = contents['key_frames']
+    return Battle(None, json.load(filename))

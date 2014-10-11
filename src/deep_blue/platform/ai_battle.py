@@ -5,10 +5,12 @@ import battle
 import ai_proxy
 
 logger = logging.getLogger(__name__)
+DEFAULT_PORT = 8067
 
 class AIBattle(battle.Battle):
-    def __init__(self, map_info, port, ai0_filename=None, ai1_filename=None):
-        super(AIBattle, self).__init__(map_info)
+    def __init__(self, map_info, port=DEFAULT_PORT,
+                 ai0_filename=None, ai1_filename=None, prev_info=None):
+        super(AIBattle, self).__init__(map_info, prev_info)
 
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,8 +19,8 @@ class AIBattle(battle.Battle):
 
         logger.debug('Building proxies for AIs')
         self.ais = []
-        self.ais.append(ai_proxy.AIProxy(0, sock, ai0_filename))
-        self.ais.append(ai_proxy.AIProxy(1, sock, ai1_filename))
+        self.ais.append(ai_proxy.AIProxy(0, sock, ai0_filename, self))
+        self.ais.append(ai_proxy.AIProxy(1, sock, ai1_filename, self))
         logger.debug('Proxies built')
 
         # Battle has been started, so send infos to AIs
@@ -54,3 +56,7 @@ class AIBattle(battle.Battle):
         for ai in self.ais:
             ai.send_info(self)
         return events
+
+def load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None):
+    return AIBattle(None, port=port, ai0_filename=ai0_filename,
+                    ai1_filename=ai1_filename, prev_info=json.load(filename))

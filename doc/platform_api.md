@@ -65,7 +65,7 @@ AI对战，指令均来自于AI
 
 |      方法      |  返回值  |   描述   |
 |----------------|----------|----------|
-| load(filename) | AIBattle | 载入游戏 |
+| load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | AIBattle | 载入游戏 |
 
 类继承关系
 
@@ -78,7 +78,7 @@ AI对战
 
 |                         构造函数                         |                 描述                |
 |----------------------------------------------------------|-------------------------------------|
-| AIBattle(map_info, ai0_filename, ai1_filename, port=...) | 可能抛出AIFileError, AIConnectError |
+| AIBattle(map_info, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | 可能抛出AIFileError, AIConnectError |
 
 |        方法        | 返回值 |            描述            |
 |--------------------|--------|----------------------------|
