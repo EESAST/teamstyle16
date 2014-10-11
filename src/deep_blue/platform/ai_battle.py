@@ -23,7 +23,15 @@ class AIBattle(battle.Battle):
         """
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.bind(('', port))
+        while True:
+            try:
+                sock.bind(('', port))
+            except socket.error:
+                logger.warning('Port %d has already been taken, trying port %d',
+                               port, port + 1)
+                port += 1
+            else:  # binding succeeds
+                break
         sock.listen(2)
 
         logger.debug('Building proxies for AIs')
