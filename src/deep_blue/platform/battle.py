@@ -2,12 +2,9 @@ import copy
 import logging
 import json
 import socket
-import time
 from logic import map_info, gamebody
-import ai_proxy
 
 logger = logging.getLogger(__name__)
-
 
 class Battle(object):
     def __init__(self, map_info):
@@ -127,100 +124,3 @@ class Battle(object):
         self.key_frames.append(frame)
 
 
-class AIBattle(Battle):
-    def __init__(self, map_info, port, ai0_filename=None, ai1_filename=None):
-        super(AIBattle, self).__init__(map_info)
-
-        # build the socket
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.bind(('', port))
-        sock.listen(2)
-
-        logger.debug('Building proxies for AIs')
-        self.ais = []
-        self.ais.append(ai_proxy.AIProxy(0, sock, ai0_filename))
-        self.ais.append(ai_proxy.AIProxy(1, sock, ai1_filename))
-        logger.debug('Proxies built')
-
-        # Battle has been started, so send infos to AIs
-        logger.debug('Sending infos of round 0 to AIs')
-        for ai in self.ais:
-            ai.send_info(self)
-        logger.debug('Infos sent')
-
-        for ai in self.ais:
-            ai.start()
-
-    def feed_ai_commands(self):
-        logger.info('Feeding commands')
-        time.sleep(self.map_info().time_per_round)
-
-        cmds = []
-        # Collect commands for both teams first, or team 1 would have more
-        # time to send commands
-        for ai in self.ais:
-            cmds.append(ai.get_commands())
-
-        for ai in self.ais:
-            for cmd in cmds:
-                self.gamebody.set_command(ai.team_num, cmd)
-
-    def run_until_end(self):
-        while self.gamebody.state() == gamebody.STATE_CONTINUE:
-            self.feed_ai_commands()
-            self.next_round()
-
-    def next_round(self):
-        events = Battle.next_round(self)
-        for ai in self.ais:
-            ai.send_info(self)
-        return events
-
-
-# class Replayer(Battle):
-#     def __init__(self):
-#         Battle.__init__(self)
-
-#     def next_round(self):
-#         commands_to_execute = self.command_list[self.round()]
-#         for cmd in commands_to_execute[0]:
-#             self.gamebody.set_command(0, cmd)
-#         for cmd in commands_to_execute[1]:
-#             self.gamebody.set_command(1, cmd)
-#         return self.gamebody.run()
-
-#     def go_to_round(self, round):
-#         try:
-#             self.gamebody = GameBody(map_info.loads_elements(self.replay_info[round // self.record_interval]))  #here a func which can translate the str returned by saves_elements() to map_info object, I call it loads_elements(str)
-#             for i in range(round % self.record_interval):
-#                 self.gamebody.run()
-#         except IndexError:
-#             #here may assert an error, to notify Replayer that go_to_round() failed because of round out of range.
-#         except:
-#             #here may assert another error, to notify Replayer that go_to_round() failed because of some unknown reason.
-
-#     def begin(self):
-#         self.gamebody = GameBody(self.init_map_info)
-
-#     def end(self):
-#         self.gamebody = GameBody(map_info.loads_elements(self.replay_info[-1]))
-#         while self.gamebody.state() == gamebody.STATE_CONTINUE:
-#             self.gamebody.run()
-
-# def load_replayer(filename):
-#     load_file = open(filename, 'r')
-#     init_map_info = map_info.loads(load_file.readline()[:-1])
-#     replay_info = eval(load_file.readline()[:-1])
-#     score_list = eval(load_file.readline()[:-1])
-#     unit_num_list = eval(load_file.readline()[:-1])
-#     population_list = eval(load_file.readline()[:-1])
-#     command_list = eval(load_file.readline())
-#     load_file.close()
-#     replayer = Replayer(init_map_info)
-#     replayer.init_map_info = init_map_info
-#     replayer.replay_info = replay_info
-#     replayer.score_list = score_list
-#     replayer.unit_num_list = unit_num_list
-#     replayer.population_list = population_list
-#     replayer.command_list = command_list
-#     return replayer
