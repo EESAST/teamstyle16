@@ -8,7 +8,7 @@ class Replayer(battle.Battle):
 
     def __init__(self, prev_info):
         self.max_round = len(prev_info['history']['score']) - 1
-        super(Replayer, self).__init__(prev_info)
+        super(Replayer, self).__init__(None, prev_info)
 
     def next_round(self):
         logger.info('Moving to next round (round %d)', self.gamebody.round + 1)
@@ -16,7 +16,7 @@ class Replayer(battle.Battle):
         cmds = self.history['command'][self.gamebody.round]
         for team in [0, 1]:
             for cmd in cmds[team]:
-            self.gamebody.set_command(cmd)
+                self.gamebody.set_command(cmd)
         # Call run() directly to avoid infos recording in base class
         return self.gamebody.run()
 
@@ -35,9 +35,10 @@ class Replayer(battle.Battle):
             logger.debug('Restoring from key frame %d (round %d)', frame_index,
                                                                    frame_round)
             game.round = frame_round
-            game.map_info.elements, game.production_list = frame
+            game.map_info.loads_elements(frame[0])
+            game.production_list = frame[1]
             game.scores = self.history['score'][frame_round]
-            game.populations = self.history['populations'][frame_round]
+            game.populations = self.history['population'][frame_round]
 
             # Run till round
             while game.round < round:
@@ -52,4 +53,4 @@ class Replayer(battle.Battle):
         self.goto(self.max_round)
 
 def load(filename):
-    return Replayer(json.load(filename))
+    return Replayer(json.load(open(filename)))

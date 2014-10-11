@@ -61,5 +61,6 @@ class AIBattle(battle.Battle):
         return events
 
 def load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None):
-    return AIBattle(None, port=port, ai0_filename=ai0_filename,
-                    ai1_filename=ai1_filename, prev_info=json.load(filename))
+    return AIBattle(None, port=port,
+                    ai0_filename=ai0_filename, ai1_filename=ai1_filename,
+                    prev_info=json.load(open(filename)))

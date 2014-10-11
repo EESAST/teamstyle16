@@ -95,14 +95,14 @@ class Battle(object):
 
         return events
 
-    def save(filename):
+    def save(self, filename):
         save_file = open(filename, 'w')
         contents = {
             'gamebody': self.gamebody.saves(),
             'history': self.history,
             'key_frames': self.key_frames
         }
-        json.dump(save_file, contents, sort_keys=True, separators=(',', ':'))
+        json.dump(contents, save_file, sort_keys=True, separators=(',', ':'))
 
     def record_history(self):
         history = self.history
@@ -113,12 +113,12 @@ class Battle(object):
         history['population'].append(copy.copy(game.populations))
 
     def record_commands(self):
-        history['command'].append(copy.copy(game.commands))
+        self.history['command'].append(copy.copy(self.gamebody.commands))
 
     def record_key_frame(self):
-        frame = (copy.deepcopy(self.gamebody.elements),
-                 copy.deepcopy(self.gamebody.production_list))
+        frame = (copy.deepcopy(self.gamebody.map_info.saves_elements()),
+                 copy.deepcopy(self.gamebody.production_lists))
         self.key_frames.append(frame)
 
 def load(filename):
-    return Battle(None, json.load(filename))
+    return Battle(None, json.load(open(filename)))
