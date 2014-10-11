@@ -58,7 +58,15 @@ class AIProxy(threading.Thread):
         self.__send_stable_info(battle)
         self.logger.info('Info sent')
 
+    def __del__(self):
+        self.stop()
+
     def stop(self):
+        # Terminate AI program if needed
+        if self.ai_program:
+            self.logger.info("Terminaing AI")
+            self.ai_program.terminate()
+        self.logger.info("Stop receiving commands from AI")
         self.stop_flag = True
 
     def run(self):
@@ -87,6 +95,7 @@ class AIProxy(threading.Thread):
             except socket.timeout:
                 self.logger.debug('Receiving timeout, continue to next loop')
                 continue
+        self.logger.info('Receiving thread terminated')
 
     def get_commands(self):
         """Get accepted commands"""
