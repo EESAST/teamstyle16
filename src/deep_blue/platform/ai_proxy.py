@@ -202,7 +202,8 @@ class AIProxy(threading.Thread):
         index = element.index
         pos = element.pos
         kind = element.kind
-        visible = element.visible
+        # Elements in sight might lack attribute 'visible'
+        visible = element.visible if hasattr(element, 'visible') else True
         if isinstance(element, basic.UnitBase):
             team = element.team
             health = element.health
