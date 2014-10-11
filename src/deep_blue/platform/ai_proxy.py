@@ -153,6 +153,8 @@ class AIProxy(threading.Thread):
                 cmd = command.Supply(*args)
             elif name == 'cc':
                 cmd = command.Cancel(*args)
+            else:
+                continue  # not a valid command
 
             cmds.append(cmd)
 
