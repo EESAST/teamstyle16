@@ -228,24 +228,47 @@ class TestGameBody(unittest.TestCase):
         """Test behavior of change destination"""
         unit = self.add(Scout, 1, (2, 2), dest=Position(14, 12, 2))
         new_dest = Position(10, 5, 2)
+
         cmd = ChangeDest(unit.index, new_dest)
+        self.assertTrue(self.gamebody.set_command(1, cmd))
         results = self.gamebody.next_round()
 
         self.assertEqual(new_dest, unit.dest)
 
     def test_fix(self):
         """Test behavior of fix"""
-        index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(3,2,1)))
-        index_2 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1)))
-        self.assertIsNotNone(index_1)
-        self.assertIsNotNone(index_2)
-        self.gamebody.map_info.elements[index_1].health = self.gamebody.map_info.elements[index_1].health_max - 1
-        self.gamebody.map_info.elements[index_2].health = self.gamebody.map_info.elements[index_2].health_max - 1
-        self.assertTrue(self.gamebody.set_command(0, Fix(self.base0_index, index_1)))
-        self.assertFalse(self.gamebody.set_command(0, Fix(self.base0_index, index_2)))
-        self.assertEqual(self.gamebody.map_info.elements[index_1].health, self.gamebody.map_info.elements[index_1].health_max)
-        self.assertEqual(self.gamebody.map_info.elements[index_1].health, self.gamebody.map_info.elements[index_1].health_max - 1)
-        self.assertEqual(self.gamebody.map_info.elements[base0_index].metal, self.gamebody.map_info.elements[base0_index].metal_max - METAL_PER_HEALTH)
+        boat = self.add(Cargo, 0, (3, 2), health_max=100, health=10,
+                                          fuel_max=200, fuel=50,
+                                          ammo_max=300, ammo=0,
+                                          metal_max=40, metal=30)
+        plane = self.add(Fighter, 1, (12, 12), health_max=100, health=50,
+                                               fuel_max=200, fuel=100,
+                                               ammo_max=300, ammo=5)
+
+        cmd0 = Fix(self.base0.index, boad.index)
+        cmd1 = Fix(self.base1.index, plane.index)
+        self.assertTrue(self.gamebody.set_command(0, cmd0))
+        self.assertTrue(self.gamebody.set_command(1, cmd1))
+        results = self.gamebody.next_round()
+
+        # team 0
+        for attr in ['health', 'fuel', 'ammo', 'metal']:
+            self.assertEqual(getattr(boad, attr + '_max'), getattr(boad, attr))
+
+        metal_cost = int(METAL_PER_HEALTH * 90 + 10)  # round down
+        self.assertEqual(self.base0.fuel, self.base0.fuel_max - 150)
+        self.assertEqual(INFINITY, self.base0.ammo)
+        self.assertEqual(self.base0.metal, self.base0.metal_max - metal_cost)
+
+        # team 1
+        for attr in ['health', 'fuel', 'ammo']:
+            self.assertEqual(getattr(plane, attr + '_max'), getattr(plane, attr))
+
+        metal_cost = int(METAL_PER_HEALTH * 50)  # round down
+        self.assertEqual(self.base1.fuel, self.base1.fuel_max - 100)
+        self.assertEqual(INFINITY, self.base1.ammo)
+        self.assertEqual(self.base1.metal, self.base1.metal_max - metal_cost)
+
 
     def test_produce(self):
         """Test behavior of produce"""
