@@ -224,12 +224,14 @@ class TestGameBody(unittest.TestCase):
         self.assertEqual(90, defencer.health)
         self.assertEqual(195, attacker.ammo)
 
-    # def test_change_dest(self):
-    #     """Test behavior of change destination"""
-    #     index = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1)))
-    #     self.assertIsNotNone(index)
-    #     self.assertTrue(self.gamebody.set_command(0, ChangeDest(index, Position(0,6,1))))
-    #     self.assertEqual(self.gamebody.map_info.elements[index].dest, Position(0,6,1))
+    def test_change_dest(self):
+        """Test behavior of change destination"""
+        unit = self.add(Scout, 1, (2, 2), dest=Position(14, 12, 2))
+        new_dest = Position(10, 5, 2)
+        cmd = ChangeDest(unit.index, new_dest)
+        results = self.gamebody.next_round()
+
+        self.assertEqual(new_dest, unit.dest)
 
     def test_fix(self):
         """Test behavior of fix"""
