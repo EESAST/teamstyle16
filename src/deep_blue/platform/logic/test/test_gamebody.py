@@ -168,36 +168,61 @@ class TestGameBody(unittest.TestCase):
 
     def test_attack_pos(self):
         """Test behavior of attack position"""
-        # Add attcker
-        attacker = self.gamebody.map_info.add_element(
-            Destroyer(1, Position(3,2,1), sight_ranges = [1,3,2],
-                                          fire_ranges = [2,2,2]))
-        self.assertIsNotNone(attacker)
+        # 1. Normal attack
+        # Add attcker & defencer
+        attacker = self.add(Destroyer, 1, (5, 2), attacks=[20, 10],
+                                                  ammo_max=200,
+                                                  ammo_once=5)
+        defencer = self.add(Destroyer, 0, (6, 2), defences=[10, 5],
+                                                  health_max=100)
 
-        # Attack an element out of fire range
-        self.assertFalse(self.gamebody.set_command(1, AttackPos(attacker, Position(0,0,1))))
-        self.assertEqual(self.base0.health, self.base0.health_max)
+        def attack_pos(index, pos):
+            # Set command and run
+            cmd = AttackPos(index, pos)
+            self.assertTrue(self.gamebody.set_command(1, cmd))
+            return self.gamebody.next_round()
 
-        # Attack an element in range
-        self.assertTrue(
-            self.gamebody.set_command(1, AttackPos(attacker, Position(2,2,1))))
-        self.assertNotEqual(self.base0.health, self.base0.health_max)     #shame on myself, I failed to calculate it accurately.(hhh)
+        results = attack_pos(attacker.index, defencer.pos)
+        # damage = (20 - 10) + (10 - 5) = 15
+        self.assertEqual(85, defencer.health)
+        self.assertEqual(195, attacker.ammo)
+
+        # 2. Defences greater than attacks
+        defencer.defences = [30, 8]
+        results = attack_pos(attacker.index, defencer.pos)
+        # damage = 10 - 8 = 2
+        self.assertEqual(83, defencer.health)
+        self.assertEqual(190, attacker.ammo)
+
+        # 3. Defences is infinity
+        defencer.defences = [INFINITY, 7]
+        results = attack_pos(attacker.index, defencer.pos)
+        # damage = 10 - 7 = 3
+        self.assertEqual(80, defencer.health)
+        self.assertEqual(185, attacker.ammo)
+
+        # 4. Attack an empty position
+        results = attack_pos(attacker.index, Position(6, 2, 0))
+        # No damage
+        self.assertEqual(80, defencer.health)
+        self.assertEqual(180, attacker.ammo)
 
     def test_attack_unit(self):
         """Test behavior of attack unit"""
-        index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1), fire_ranges = [2,2,2]))
-        index_2 = self.gamebody.map_info.add_element(Destroyer(1, Position(0,5,1)))
-        index_3 = self.gamebody.map_info.add_element(Destroyer(1, Position(0,7,1)))
-        self.assertIsNotNone(index_1)
-        self.assertIsNotNone(index_2)
-        self.assertIsNotNone(index_3)
+        # Just test the basic behavior
+        attacker = self.add(Destroyer, 1, (5, 2), attacks=[20, 10],
+                                                  ammo_max=200,
+                                                  ammo_once=5)
+        defencer = self.add(Destroyer, 0, (6, 2), defences=[10, 30],
+                                                  health_max=100)
 
-        elements = self.gamebody.map_info.elements
-
-        self.assertTrue(self.gamebody.set_command(0, AttackUnit(index_1, index_2)))
-        self.assertNotEqual(elements[index_2].health, elements[index_2].health_max)
-        self.assertFalse(self.gamebody.set_command(0, AttackUnit(index_1, index_3)))
-        self.assertEqual(elements[index_3].health, elements[index_3].health_max)
+        # Set command and run
+        cmd = AttackUnit(attacker.index, defencer.index)
+        self.assertTrue(self.gamebody.set_command(1, cmd))
+        results = self.gamebody.next_round()
+        # damage = 20 - 10 = 10
+        self.assertEqual(90, defencer.health)
+        self.assertEqual(195, attacker.ammo)
 
     # def test_change_dest(self):
     #     """Test behavior of change destination"""
