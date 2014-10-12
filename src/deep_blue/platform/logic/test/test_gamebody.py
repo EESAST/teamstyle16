@@ -2,6 +2,7 @@ from .. import gamebody
 from .. import map_info
 from ..basic import *
 from ..command import *
+from .. import event
 
 import unittest
 
@@ -269,13 +270,30 @@ class TestGameBody(unittest.TestCase):
         self.assertEqual(INFINITY, self.base1.ammo)
         self.assertEqual(self.base1.metal, self.base1.metal_max - metal_cost)
 
-
     def test_produce(self):
         """Test behavior of produce"""
-        destroyer = Destroyer(0, Position(0,4,1))
-        self.assertTrue(self.gamebody.set_command(0, Produce(self.base0_index, DESTROYER)))
-        for i in range(destroyer.build_round()):
-            self.gamebody.run()
+        game = self.gamebody
+        build_round = PROPERTY[FIGHTER]['build_round']
+
+        cmd = Produce(self.base0.index, Fighter.kind)
+        self.assertTrue(game.set_command(0, cmd))
+
+        while build_round > 1:
+            game.next_round()
+            build_round -= 1
+            self.assertEqual(game.production_list(0), [[Fighter.kind, build_round]])
+        # one round left
+        results = game.next_round()
+        self.assertEqual(1, len(results))
+        create = results[0]
+
+        self.assertTrue(isinstance(create, event.Create))
+        plane = game.map_info.elements[create.index]
+
+        self.assertEqual(Fighter.kind, create.kind)
+        self.assertTrue(isinstance(plane, Fighter))
+        self.assertEqual(plane.pos, create.pos)
+        self.assertEqual(0, plane.pos.distance(self.base0.pos))
 
     def test_supply(self):
         """Test behavior of supply"""
