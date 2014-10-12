@@ -4,8 +4,9 @@
 # object code
 *.o
 
-# map file for testing
-src/deep_blue/platform/tmp_map_info.map
+# tmp file for testing
+src/deep_blue/platform/tmp*
+src/deep_blue/platform/test*
 
 # CMake build files
 src/player_file/build
