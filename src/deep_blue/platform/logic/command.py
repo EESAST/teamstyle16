@@ -21,7 +21,7 @@ class AttackPos(Command):
     def add_to(self, commands):
         elements = self.game.map_info.elements
         attacker = elements.get(operand)
-        if attacker == None:
+        if attacker == None or attacker.kind == CARRIER:
             return False
         if not (self.pos.x >= 0 and self.pos.x < self.game.map_info.x_max and
                 self.pos.y >= 0 and self.pos.y < self.game.map_info.y_max and
@@ -30,7 +30,7 @@ class AttackPos(Command):
         if attacker.attack(copy(self.game), self.pos)['valid'] is False:
             return False
         for command in commands:
-            if self.operand == command.operand:
+            if self.operand == command.operand and not isinstance(command, ChangeDest):
                 commands.remove(command)
                 break
         commands.append(self)
@@ -51,14 +51,14 @@ class AttackUnit(Command):
         elements = self.game.map_info.elements
         attacker = elements.get(operand)
         defender = elements.get(target)
-        if attacker == None or defender == None:
+        if attacker == None or defender == None or attacker.kind == CARRIER:
             return False
         if defender.team == attacker.team:
             return False
         if attacker.attack(copy(self.game), defender.pos)['valid'] is False:
             return False
         for command in commands:
-            if self.operand == command.operand:
+            if self.operand == command.operand and not isinstance(command, ChangeDest):
                 commands.remove(command)
                 break
         commands.append(self)
@@ -72,83 +72,59 @@ class AttackUnit(Command):
 
 class Fix(Command):
     """维修"""
-    def __init__(self, operand, target):
-        super(Fix, self).__init__(operand)
-        self.target = target
+    def __init__(self, game, operand, target):
+        super(Fix, self).__init__(game, operand)
+        self.target = target    # index of target
+
+    def add_to(self, commands):
+        elements = self.game.map_info.elements
+        fixer = elements.get(operand)
+        broken = elements.get(target)
+        if fixer == None or broken == None or fixer.kind != BASE:
+            return False
+        if fixer.repair(copy(self.game), broken)['valid'] is False:
+            return False
+        for command in commands:
+            if self.operand == command.operand and not isinstance(command, ChangeDest):
+                commands.remove(command)
+                break
+        commands.append(self)
+        return True
+
     def result_event(self):
-        Operand = ELEMENTS[self.operand]
-        Target = ELEMENTS[self.target]
-        Event = []
-        metal = Operand.metal
-        if Operand.repair(Target) < 0:
-            pass
-        else:
-            provide_metal = metal - Operand.metal
-            add_health = provide_metal / METAL_PER_HEALTH
-            Event.append(event.Fix("Fix", self.operand, self.target, \
-                                   provide_metal, add_health))
-        return Event
+        elements = self.game.map_info.elements
+        fixer = elements[self.operand]
+        broken = elements[self.target]
+        result_dict = fixer.repair(broken)
+        return result_dict['events'] 
+        
 class ChangeDest(Command):
     """更改目的地"""
-    def __init__(self, operand, dest):
-        super(ChangeDest, self).__init__(operand)
+    def __init__(self, game, operand, dest):
+        super(ChangeDest, self).__init__(game, operand)
         self.dest = dest
+
+    def add_to(self, commands):
+        elements = self.game.map_info.elements
+        mover = elements.get(operand)
+        if mover == None or not isinstance(mover, Unit):
+            return False
+        for command in commands:
+            if self.operand ==  command.operand and isinstance(command, ChangeDest):
+                commands.remove(command)
+                break
+        commands.append(self)
+        return True
+
     def result_event(self):
-        Event = []
-        Operand = ELEMENTS[self.operand]
-        ELEMENTS[self.operand].dest = self.dest
-        Event.append(event.ChangeDest("ChangeDest", self.operand, self.dest))
-
-        ##该回合的move效果
-        Node = pathfinding(Operand.pos, self.dest)  ##寻路函数
-        nodes = [Node[0]]
-        distance = 0
-        for i in range(len(Node)):
-            if Node[i].distance(Node[i+1])+distance < speed:
-                distance += Node[i].distance(Node[i+1]) + distance
-                nodes.append(Node[i+1])
-            elif Node[i].distance(Node[i+1])+distance == speed:
-                distance += Node[i].distance(Node[i+1]) + distance
-                nodes.append(Node[i+1])
-                break
-            else :
-                rest = speed - distance
-                if Node[i].x == Node[i+1].x:
-                    pos = Position(Node[i].x, Node[i].y + rest, Node[i].z)
-                    nodes.append(pos)
-                elif Node[i].y == Node[i+1].y:
-                    pos = Position(Node[i].x +rest, Node[i].y, Node[i].z)
-                    nodes.append(pos)
-                break
-        Event.append(event.Move("Move", self.operand, nodes))
-
-        ##move过程中可能产生的collect事件
-        if Operand.kind == Cargo:
-            metal_collected = 0
-            metal_collected = 0
-            for j in range(i+1):
-                for Resource in ELEMENTS and Resource.kind == MINE:
-                    if nodes[i].distance(Resource.pos) + nodes[i].distance(Resource.pos) == nodes[i].distance(nodes[i]) + 2:
-                        metal = Operand.metal
-                        Operand.collect(Resource)
-                        supply = Operand.metal - metal
-                        Event.append(event.Collect("Collect", self.operand,\
-                                                   self.target, 0, supply))
-                        metal_collected = True
-                        break
-                for Resource in ELEMENTS and Resource.kind == OILFIELD:
-                    if nodes[i].distance(Resource.pos) + nodes[i].distance(Resource.pos) == nodes[i].distance(nodes[i]) + 2:
-                        fuel = Operand.fuel
-                        Operand.collect(Resource)
-                        supply = Operand.metal - metal
-                        Event.append(event.Collect("Collect", self.operand,\
-                                                   self.target, supply, 0))
-                        fuel_collected = True
-                        break
-                if fuel_collected and metal_collected:
-                    break
-
-        return Event
+        x_max = self.game.map_info.x_max
+        y_max = self.game.map_info.y_max
+        dest.x = min(x_max, max(0, dest.x))
+        dest.y = min(y_max, max(0, dest.y))
+        dest.z = min(AIR, max(UNDERWATER, dest.z))
+        mover = self.game.map_info.elements[operand]
+        mover.dest = dest
+        return [event.ChangeDest(self.operand, dest)]
 
 class Produce(Command):
     """生产"""

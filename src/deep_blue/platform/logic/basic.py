@@ -406,7 +406,7 @@ class UnitBase(Element):
                     result_dict['events'].append(Destroy(target_unit.index))
             else:
                 target_unit.health -= damage
-            return result_dict
+        return result_dict
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
@@ -460,25 +460,22 @@ class Base(Building):
 
     def repair(self, our_unit):
         """维修"""
+        result_dict = {'events':[]}
         if not self.team == our_unit.team:
-            return -1   # 非友军
-        elif isinstance(our_unit, Plane):
-            if self.pos.distance(our_unit) > 0:
-                return -2   # 不在范围内
-            else:
-                while self.metal >= METAL_PER_HEALTH:
-                    pass
-                replenishFuelAmmo(self, our_unit)
-                return 0
+            result_dict['valid'] = False   # 非友军
+        elif isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0:
+            result_dict['valid'] = False    # 不在范围内
+        elif self.pos.distance(our_unit) > 1:
+            result_dict['valid'] = False   # 不在范围内
         else:
-            if self.pos.distance(our_unit) > 1:
-                return -2   # 不在范围内
-            else:
-                provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
-                self.metal -= provide_metal
-                our_unit.health += provide_metal / METAL_PER_HEALTH
-                replenishFuelAmmo(self, our_unit)
-                return 0
+            result_dict['valid'] = True
+            provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
+            self.metal -= provide_metal
+            our_unit.health += provide_metal / METAL_PER_HEALTH
+            result_dict['events'].append(Fix(self.index, our_unit.index, provide_metal, provide_metal / METAL_PER_HEALTH))
+            supply_dict = self.supply(our_unit)
+            result_dict['events'].append(Supply(self.index, our_unit.index, **supply_dict))
+        return result_dict
 
     def build(self, kind):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
