@@ -246,7 +246,7 @@ class TestGameBody(unittest.TestCase):
                                                fuel_max=200, fuel=100,
                                                ammo_max=300, ammo=5)
 
-        cmd0 = Fix(self.base0.index, boad.index)
+        cmd0 = Fix(self.base0.index, boat.index)
         cmd1 = Fix(self.base1.index, plane.index)
         self.assertTrue(self.gamebody.set_command(0, cmd0))
         self.assertTrue(self.gamebody.set_command(1, cmd1))
