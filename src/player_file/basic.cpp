@@ -85,14 +85,14 @@ void Produce(int operand, int type)
     Connection::Instance()->Send(oss.str());
 }
 
-void Supply(int operand, int target, int fuel, int metal, int ammo)
+void Supply(int operand, int target, int fuel, int ammo, int metal)
 {
     std::ostringstream oss;
     oss << "sp" << operand << ' '
                 << target << ' '
                 << fuel << ' '
-                << metal << ' '
-                << ammo << ',';
+                << ammo << ' '
+                << metal << ',';
 
     Connection::Instance()->Send(oss.str());
 }
