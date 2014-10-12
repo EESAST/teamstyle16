@@ -90,7 +90,6 @@ class TestGameBody(unittest.TestCase):
                     expected = 2
                 else:
                     expected = 0
-                print attr
                 self.assertEqual(expected, getattr(ghost, attr))
 
     def test_constants(self):
@@ -103,24 +102,69 @@ class TestGameBody(unittest.TestCase):
         self.assertNotEqual(tie, 1)
         self.assertNotEqual(cont, tie)
 
-    def test_basic_view(self):
-        """Test baisc behavior of view"""
+    def test_view_friendly(self):
+        """Test behavior of viewing friendly (see everything)"""
+        friendly1 = self.add(Fighter, 1, (14, 14))
+        friendly2 = self.add(Carrier, 1, (8, 5))
+
         units_in_sight = self.gamebody.view_elements(1)
-        for element in [self.base1, self.oilfield0, self.mine0]:
+        for element in [self.base1, self.fort0, friendly1, friendly2]:
             self.assertIn(element, units_in_sight.values())
 
-    def test_view_outrange_base(self):
-        """Test behavior of viewing a base out of sight"""
-        # units_in_sight = self.gamebody.view_elements(1)
-        # self.assertIn(self.base0, units_in_sight)
-        pass
+    def test_view_insight_enemy(self):
+        """Test behavior of viewing enemies in sight (no fuel, ammo, metal,
+        dest)"""
+        self.add(Scout, 1, (0, 2))  # light up enemy base
+        self.fort1.team = 0  # Create an enemy fort
+        enemy1 = self.add(Fighter, 0, (14, 4), dest=Position(1, 1, 2))
+        enemy2 = self.add(Destroyer, 0, (11, 13))
+        enemy3 = self.add(Submarine, 0, (8, 12), dest=Position(8, 11, 0))
+
+        units_in_sight = self.gamebody.view_elements(1)
+        for element in [self.base0, self.fort1, enemy1, enemy2, enemy3]:
+            self.assertIn(element.index, units_in_sight)
+            ghost = units_in_sight[element.index]
+
+            pub_attrs = ['kind', 'position', 'size', 'team', 'health']
+            priv_attrs = ['fuel', 'ammo', 'metal', 'dest']
+
+            self.varify_attrs(element, ghost, pub_attrs, priv_attrs)
+
+    def test_view_outsight_enemy_unit(self):
+        """Test behavior of viewing enemy units out of sight (see nothing)"""
+        enemy1 = self.add(Fighter, 0, (13, 3))
+        enemy2 = self.add(Destroyer, 0, (5, 8))
+        enemy3 = self.add(Submarine, 0, (7, 14))
+
+        units_in_sight = self.gamebody.view_elements(1)
+        for element in [enemy1, enemy2, enemy3]:
+            self.assertNotIn(element.index, units_in_sight)
+
+    def test_view_outsight_fort(self):
+        """Test behavior of viewing forts out of sight (only pos)"""
+        for team in [0, 2]:
+            self.fort2.team = team  # Create an enemy/neutral fort
+
+            units_in_sight = self.gamebody.view_elements(1)
+            self.assertIn(self.fort2.index, units_in_sight)
+            ghost = units_in_sight[self.fort2.index]
+
+            pub_attrs = ['kind', 'position', 'size']
+            priv_attrs = ['team', 'health', 'fuel', 'ammo', 'metal']
+
+            self.varify_attrs(self.fort2, ghost, pub_attrs, priv_attrs)
 
     def test_view_outrange_resource(self):
-        """Test behavior of viewing a base out of sight (see nothing)"""
-        # units_in_sight = self.gamebody.view_elements(1)
-        # self.assertNotIn(self.oilfield1, units_in_sight)
-        # self.assertNotIn(self.mine1, units_in_sight)
-        pass
+        """Test behavior of viewing resources out of sight (see only pos)"""
+        units_in_sight = self.gamebody.view_elements(1)
+
+        pub_attrs = ['kind', 'position', 'size']
+        priv_attrs = ['fuel', 'metal']
+
+        for element in [self.mine1, self.oilfield1]:
+            self.assertIn(element.index, units_in_sight)
+            ghost = units_in_sight[element.index]
+            self.varify_attrs(element, ghost, pub_attrs, priv_attrs)
 
     def test_attack_pos(self):
         """Test behavior of attack position"""
