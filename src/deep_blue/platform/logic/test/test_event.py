@@ -9,7 +9,7 @@ class TestEvent(unittest.TestCase):
         """Test Event inheritance"""
         self.assertTrue(issubclass(event.Event, object))
         self.assertTrue(issubclass(event.AddProductionEntry, event.Event))
-        self.assertTrue(issubclass(event.AttackPos, event.Event))
+        self.assertTrue(issubclass(event.AttackMiss, event.Event))
         self.assertTrue(issubclass(event.AttackUnit, event.Event))
         self.assertTrue(issubclass(event.Supply, event.Event))
         self.assertTrue(issubclass(event.Fix, event.Event))
