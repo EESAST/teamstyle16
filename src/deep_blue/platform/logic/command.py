@@ -7,29 +7,35 @@ import map_info
 
 class Command(object):
     """指令"""
-    def __init__(self, operand):
-        self.operand = operand
+    def __init__(self, game, operand):
+        self.game = game            # current gamebody
+        self.operand = operand      # index of operator
 
 class AttackPos(Command):
-    """攻击"""
-    def __init__(self, operand, pos):
-        super(AttackPos, self).__init__(operand)
+    """攻击坐标"""
+    def __init__(self, game, operand, pos):
+        super(AttackPos, self).__init__(game, operand)
         self.pos = pos
+
+    def add_to(self, commands):
+        operator = self.game.map_info.elements[operand]
+        if not (self.pos.x >= 0 and self.pos.x < self.game.map_info.x_max and
+                self.pos.y >= 0 and self.pos.y < self.game.map_info.y_max and
+                self.pos.z >= 0 and self.pos.z < 3):
+            return False
+        if operator.attack(self.game, self.pos)['valid'] is False:
+            return False
+        for command in commands:
+            if self.operand == command.operand:
+                commands.remove(command)
+                break
+        commands.append(self)
+        return True
+
     def result_event(self):
-        Operand = ELEMENTS[self.operand]
-        Target = getElement(self.pos)
-        Event = []
-        hit_damage = Operand.AttackPos(self.pos)
-        if hit_damage == -3:
-            Event.append(event.AttackPos("AttackPos", self.operand, self.pos, False, 0))
-        elif hit_damage >= 0:
-            Event.append(event.AttackPos("AttackPos", self.operand, self.target, True, hit_damage))
-            if Target.health <= 0:
-                if Target.type == FORT:
-                    Event.append(event.Capture("Capture", self.target, Operand.team))
-                else:
-                    Event.append(event.Destroy("Destroy", self.target))
-        return Event
+        attacker = self.game.map_info.elements[operand]
+        result_dict = attacker.attack(self.game, self.pos)
+        return result_dict['events']
 
 class AttackUnit(Command):########
     """攻击"""

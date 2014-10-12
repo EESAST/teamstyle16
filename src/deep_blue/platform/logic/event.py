@@ -23,7 +23,7 @@ class AddProductionEntry(Event):
 
 class AttackPos(Event):
     """攻击坐标"""
-    def __init__(self, index, target, damage):
+    def __init__(self, index, target_pos, damage):
         super(Attack, self).__init__('%d号单位对坐标为(%d,%d,%d)的单位造成了%d点伤害' % (index, target_pos.x, target_pos.y, target_pos.z, damage))
         self.index = index              # attacker
         self.target_pos = target_pos    # position

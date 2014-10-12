@@ -17,6 +17,7 @@
 from copy import copy
 from random import random, choice
 from Queue import Queue
+from event import *
 
 # 基础参数限制
 ROUND_MAX = 500     # 最大回合数
@@ -371,37 +372,41 @@ class UnitBase(Element):
         else:
             return getElement(target_pos)
 
-    def attack(self, target_pos):
+    def attack(self, game, target_pos):
         """攻击(火力与鱼雷伤害叠加计算)某坐标(可能出现射程大于视野的情况)"""
         distance = self.pos.distance(target_pos)
         range = self.fire_ranges[target_pos.z]
-        target_unit = getElement(target_pos)
+        target_unit = game.map_info.element(target_pos)
+        result_dict = {'events':[]}
         if distance > range:
-            return -1   # 不在攻击范围内
+            result_dict['valid'] = False   # 不在攻击范围内
         elif self.ammo <= 0:
-            return -2    # 无弹药
-        elif target_unit == None or target_unit.team == self.team:
-            self.ammo -= self.ammo_once
-            return -3    # 坐标不存在敌军单位, miss
+            result_dict['valid'] = False   # 无弹药
         else:
-            self.ammo -= self.ammo_once  # 减少弹药数目
+            result_dict['valid'] = True
+            self.ammo -= self.ammo_once
+            if target_unit == None or target_unit.team == self.team:
+                result_dict['events'].append(AttackPos(self.index, target_pos, damage = 0))    # 坐标不存在敌军单位, miss
+                return result_dict
             modified_attacks = modifiedAttacks(distance, range, self.attacks)
             fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE])
             # 考虑到 defence = INFINITY 可能无法破防
             torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
             damage = fire_damage + torpedo_damage
-            # scout influence required.
-            SCORE[self.team] += damage * DAMAGE_SCORE
+            game.scores[self.team] += damage * DAMAGE_SCORE
+            result_dict['events'].append(AttackPos(self.index, target_pos, damage))
             if damage >= target_unit.health:
-                target_unit.health = 0  # killed
-                target_unit.destroy()
+                if target_unit.kind == FORT:    # capture fort
+                    target_unit.team = self.team
+                    target_unit.health = target_unit.health_max
+                    result_dict['events'].append(Capture(target_unit.index, self.team))
+                else:
+                    target_unit.health = 0  # killed
+                    del game.map_info.elements[target_unit.index]
+                    result_dict['events'].append(Destroy(target_unit.index))
             else:
                 target_unit.health -= damage
-            return damage
-
-    def destroy(self):
-        """单位阵亡"""
-        pass
+            return result_dict
 
 
 def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
