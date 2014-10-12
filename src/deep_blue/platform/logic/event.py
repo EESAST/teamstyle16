@@ -87,9 +87,16 @@ class Move(Event):
 
 class Create(Event):
     """生产"""
-    def __init__(self, index):
-        super(Create, self).__init__('%d号单位出生!' % index)
+    def __init__(self, index, kind, pos):
+        d = {
+            SUBMARINE: '潜艇', DESTROYER: '驱逐舰', 
+            CARRIER: '航空母舰', CARGO: '运输舰',
+            FIGHTER: '战斗机', SCOUT: '侦察机'
+            }
+        super(Create, self).__init__('%d号%s在(%d,%d,%d)出生!' % (index, d[kind], pos.x, pos.y, pos.z))
         self.index = index
+        self.kind = kind
+        self.pos = pos
 
 class Destroy(Event):
     """单位损毁"""
