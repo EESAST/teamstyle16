@@ -14,7 +14,7 @@ class Command(object):
 class AttackPos(Command):
     """攻击坐标"""
     def __init__(self, operand, pos):
-        super(AttackPos, self).__init__(game, operand)
+        super(AttackPos, self).__init__(operand)
         self.pos = pos
 
     def add_to(self, game):
@@ -173,7 +173,7 @@ class Supply(Command):
         return True
 
     def result_event(self):
-        
+        pass
 
 class Cancel(Command):
     """取消"""
