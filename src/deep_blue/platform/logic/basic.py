@@ -491,7 +491,7 @@ class Fort(Building):
 
     def globalGhost(self):
         ghost = copy(self)
-        ghost.fuel = ghost.ammo = ghost.metal = 0
+        ghost.health = ghost.fuel = ghost.ammo = ghost.metal = 0
         return ghost
 
 class Unit(UnitBase):
