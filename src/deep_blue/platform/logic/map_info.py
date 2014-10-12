@@ -34,13 +34,14 @@ class MapInfo(object):
     def element(self, pos):
         """Return element at pos"""
         for element in self.elements.values():
-            if element.pos.distance(pos) == 0:  # in case isinstance(element.pos, Rectangle), distance() is ok.
+            # in case isinstance(element.pos, Rectangle), distance() is ok.
+            if element.level == pos.level and element.pos.distance(pos) == 0:
                 return element
         return None
 
     def add_element(self, new_element):
         """Add a new element to current map"""
-        for point in new_element.pos.region(level = 0, range = 0):
+        for point in new_element.pos.region(level = new_element.level, range = 0):
             if point.x >= self.x_max or point.y >= self.y_max:
                 return None                     # 位置无效
             elif self.element(point) != None:
