@@ -68,6 +68,31 @@ class TestGameBody(unittest.TestCase):
         self.assertIsNotNone(m.add_element(self.mine0))
         self.assertIsNotNone(m.add_element(self.mine1))
 
+    def add(self, cls, team, pos, **kw):
+        """Helper method, add element into the map"""
+        element = cls(team, Position(pos[0], pos[1], 0), **kw)
+        self.assertIsNotNone(self.gamebody.map_info.add_element(element))
+        return element
+
+    def varify_attrs(self, element, ghost, pub_attrs, priv_attrs):
+        for attr in pub_attrs:
+            if hasattr(element, attr):
+                # Should be visible to everyone
+                self.assertEqual(getattr(element, attr),
+                                 getattr(ghost, attr))
+        for attr in priv_attrs:
+            if hasattr(element, attr):
+                # Should not be visible to enemy
+                if attr == 'pos' or attr == 'dest':
+                    # pos/dest should be set to None
+                    expected = None
+                elif attr == 'team':
+                    expected = 2
+                else:
+                    expected = 0
+                print attr
+                self.assertEqual(expected, getattr(ghost, attr))
+
     def test_constants(self):
         """Test constants in module gamebody"""
         cont = gamebody.STATE_CONTINUE
