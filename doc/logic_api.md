@@ -183,7 +183,7 @@ TODO：游戏常量
 ### Class Supply
 |                       构造函数                      |          描述          |
 | --------------------------------------------------- | ---------------------- |
-| Supply(operand, target, fuel=-1, metal=-1, ammo=-1) | 补给, 量为负则尽力补给 |
+| Supply(operand, target, fuel=-1, ammo=-1, metal=-1) | 补给, 量为负则尽力补给 |
 
 
 ## Module event
