@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 # command.py
 from basic import *
+from copy import copy
 import event
 import map_info
 
@@ -18,12 +19,15 @@ class AttackPos(Command):
         self.pos = pos
 
     def add_to(self, commands):
-        operator = self.game.map_info.elements[operand]
+        elements = self.game.map_info.elements
+        attacker = elements.get(operand)
+        if attacker == None:
+            return False
         if not (self.pos.x >= 0 and self.pos.x < self.game.map_info.x_max and
                 self.pos.y >= 0 and self.pos.y < self.game.map_info.y_max and
                 self.pos.z >= 0 and self.pos.z < 3):
             return False
-        if operator.attack(self.game, self.pos)['valid'] is False:
+        if attacker.attack(copy(self.game), self.pos)['valid'] is False:
             return False
         for command in commands:
             if self.operand == command.operand:
@@ -37,27 +41,34 @@ class AttackPos(Command):
         result_dict = attacker.attack(self.game, self.pos)
         return result_dict['events']
 
-class AttackUnit(Command):########
-    """攻击"""
-    def __init__(self, operand, target):
-        super(AttackUnit, self).__init__(operand)
-        self.target = target
+class AttackUnit(Command):
+    """攻击单位"""
+    def __init__(self, game, operand, target):
+        super(AttackUnit, self).__init__(game, operand)
+        self.target = target    # index of the target
+
+    def add_to(self, commands):
+        elements = self.game.map_info.elements
+        attacker = elements.get(operand)
+        defender = elements.get(target)
+        if attacker == None or defender == None:
+            return False
+        if defender.team == attacker.team:
+            return False
+        if attacker.attack(copy(self.game), defender.pos)['valid'] is False:
+            return False
+        for command in commands:
+            if self.operand == command.operand:
+                commands.remove(command)
+                break
+        commands.append(self)
+        return True
+
     def result_event(self):
-        Operand = ELEMENTS[self.operand]
-        Target = ELEMENTS[self.target]
-        Event = []
-        damage = Operand.AttackUnit(self.target)
-        if damage < 0:
-            pass  ##打单位没打中的话产生什么event
-        else:
-            hit = True
-            Event.append(event.AttackUnit("AttackUnit", self.operand, self.target, hit, damage))
-            if Target.health <= 0:
-                if Target.type == FORT:
-                    Event.append(event.Capture("Capture", self.target, Operand.team))
-                else:
-                    Event.append(event.Destroy("Destroy", self.target))
-            return Event
+        attacker = self.game.map_info.elements[operand]
+        defender = elements.get(target)
+        result_dict = attacker.attack(self.game, defender.pos)
+        return result_dict['events']
 
 class Fix(Command):
     """维修"""

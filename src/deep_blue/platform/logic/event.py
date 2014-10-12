@@ -21,13 +21,12 @@ class AddProductionEntry(Event):
         self.team = team
         self.kind = kind    # 生产单位的种类
 
-class AttackPos(Event):
-    """攻击坐标"""
-    def __init__(self, index, target_pos, damage):
-        super(Attack, self).__init__('%d号单位对坐标为(%d,%d,%d)的单位造成了%d点伤害' % (index, target_pos.x, target_pos.y, target_pos.z, damage))
+class AttackMiss(Event):
+    """攻击坐标未中(击中可全部归为AttackUnit)"""
+    def __init__(self, index, target_pos):
+        super(Attack, self).__init__('%d号单位没能击中坐标为(%d,%d,%d)的单位! 敌人太狡猾了!' % (index, target_pos.x, target_pos.y, target_pos.z))
         self.index = index              # attacker
         self.target_pos = target_pos    # position
-        self.damage = damage
 
 class AttackUnit(Event):
     """攻击"""

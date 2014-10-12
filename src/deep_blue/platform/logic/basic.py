@@ -386,7 +386,7 @@ class UnitBase(Element):
             result_dict['valid'] = True
             self.ammo -= self.ammo_once
             if target_unit == None or target_unit.team == self.team:
-                result_dict['events'].append(AttackPos(self.index, target_pos, damage = 0))    # 坐标不存在敌军单位, miss
+                result_dict['events'].append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
                 return result_dict
             modified_attacks = modifiedAttacks(distance, range, self.attacks)
             fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE])
@@ -394,7 +394,7 @@ class UnitBase(Element):
             torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
             damage = fire_damage + torpedo_damage
             game.scores[self.team] += damage * DAMAGE_SCORE
-            result_dict['events'].append(AttackPos(self.index, target_pos, damage))
+            result_dict['events'].append(AttackUnit(self.index, target_unit.index, damage))
             if damage >= target_unit.health:
                 if target_unit.kind == FORT:    # capture fort
                     target_unit.team = self.team
