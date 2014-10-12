@@ -34,6 +34,7 @@ class TestGameBody(unittest.TestCase):
                              weather=0,
                              types=types)
         self.gamebody = gamebody.GameBody(m)
+        m = self.gamebody.map_info
 
         # bases, assign ranges explicitly to avoid changes in basic.py
         self.base0 = Base(0, Rectangle(Position(0, 0, 1),
@@ -42,32 +43,30 @@ class TestGameBody(unittest.TestCase):
                           fire_ranges=[0, 7, 5])
         self.base1 = Base(1, Rectangle(Position(12, 12, 1),
                                        Position(14, 14, 1)),
-                     sight_ranges=[4, 10, 8],
-                     fire_ranges=[0, 7, 5])
-        self.base0_index = self.gamebody.map_info.add_element(self.base0)
-        self.base1_index = self.gamebody.map_info.add_element(self.base1)
-        self.assertIsNotNone(self.base0_index)
-        self.assertIsNotNone(self.base1_index)
+                          sight_ranges=[4, 10, 8],
+                          fire_ranges=[0, 7, 5])
+        self.assertIsNotNone(m.add_element(self.base0))
+        self.assertIsNotNone(m.add_element(self.base1))
         # forts
-        self.fort0 = Fort(2, Position(9, 12, 1))
+        self.fort0 = Fort(1, Position(9, 12, 1), sight_ranges=[2, 2, 2])
         self.fort1 = Fort(2, Rectangle(Position(6, 6, 1),
                                        Position(7, 7, 1)))
         self.fort2 = Fort(2, Position(9, 4, 1))
-        self.assertIsNotNone(self.gamebody.map_info.add_element(self.fort0))
-        self.assertIsNotNone(self.gamebody.map_info.add_element(self.fort1))
-        self.assertIsNotNone(self.gamebody.map_info.add_element(self.fort2))
+        self.assertIsNotNone(m.add_element(self.fort0))
+        self.assertIsNotNone(m.add_element(self.fort1))
+        self.assertIsNotNone(m.add_element(self.fort2))
 
         # oilfield
         self.oilfield0 = Oilfield(Position(13, 2, 1))
         self.oilfield1 = Oilfield(Position(3, 7, 1))
-        self.assertIsNotNone(self.gamebody.map_info.add_element(self.oilfield0))
-        self.assertIsNotNone(self.gamebody.map_info.add_element(self.oilfield1))
+        self.assertIsNotNone(m.add_element(self.oilfield0))
+        self.assertIsNotNone(m.add_element(self.oilfield1))
 
         # mine
         self.mine0 = Mine(Position(14, 5, 1))
         self.mine1 = Mine(Position(3, 10, 1))
-        self.assertIsNotNone(self.gamebody.map_info.add_element(self.mine0))
-        self.assertIsNotNone(self.gamebody.map_info.add_element(self.mine1))
+        self.assertIsNotNone(m.add_element(self.mine0))
+        self.assertIsNotNone(m.add_element(self.mine1))
 
     def test_constants(self):
         """Test constants in module gamebody"""
