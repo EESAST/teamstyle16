@@ -45,7 +45,7 @@
 | elements(team)                           | [Element]            | 返回某队所有元素                 |
 | vision(team)                             | [Position][3]        | 返回某队三层视野的点集           |
 | view_elements(perspective)               | [Element]            | 返回某队视角下的所有元素         |
-| production_list(team)                    | [(kind, round_left)] | 返回生产列表                     |
+| production_list(team)                    | [[kind, round_left]] | 返回生产列表                     |
 | population(team)                         | int                  | 返回该队伍的人口数               |
 | **统计数据**                             |                      |                                  |
 | score_history()                          | [int[2]]             | 分数历史                         |

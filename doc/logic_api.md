@@ -316,7 +316,7 @@ TODO：游戏常量
 | round            | int                    | 当前回合数, 从0开始                                     |
 | scores           | [int]                  | 两队积分                                                |
 | populations      | [int, int]             | 两队当前人口                                            |
-| production_lists | [[(kind, round_left)]] | 两队生产列表                                            |
+| production_lists | [[[kind, round_left]]] | 两队生产列表                                            |
 | commands         | [[Command]]            | 两队当前指令                                            |
 | **property**     |                        |                                                         |
 | map              | [[int]]                | 地形图                                                  |
@@ -334,7 +334,7 @@ TODO：游戏常量
 | elements(team)             | {int:Element}        | 某队所有元素                                              |
 | vision(team)               | [set(Position)]      | 某队共享三层视野                                          |
 | view_elements(perspective) | {int:Element}        | 某队视角下的所有元素                                      |
-| production_list(team)      | [(kind, round_left)] | 生产列表                                                  |
+| production_list(team)      | [[kind, round_left]] | 生产列表                                                  |
 | population(team)           | int                  | 该队伍的人口数                                            |
 | **运行相关**               |                      |                                                           |
 | set_command(team, command) | bool                 | 为该队伍添加一条指令，并更新指令列表, 指令无效则返回False |
