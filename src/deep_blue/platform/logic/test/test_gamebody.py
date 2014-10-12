@@ -181,7 +181,7 @@ class TestGameBody(unittest.TestCase):
             # Set command and run
             cmd = AttackPos(index, pos)
             self.assertTrue(self.gamebody.set_command(1, cmd))
-            return self.gamebody.next_round()
+            return self.gamebody.run()
 
         results = attack_pos(attacker.index, defencer.pos)
         # damage = (20 - 10) + (10 - 5) = 15
@@ -220,7 +220,7 @@ class TestGameBody(unittest.TestCase):
         # Set command and run
         cmd = AttackUnit(attacker.index, defencer.index)
         self.assertTrue(self.gamebody.set_command(1, cmd))
-        results = self.gamebody.next_round()
+        results = self.gamebody.run()
         # damage = 20 - 10 = 10
         self.assertEqual(90, defencer.health)
         self.assertEqual(195, attacker.ammo)
@@ -232,7 +232,7 @@ class TestGameBody(unittest.TestCase):
 
         cmd = ChangeDest(unit.index, new_dest)
         self.assertTrue(self.gamebody.set_command(1, cmd))
-        results = self.gamebody.next_round()
+        results = self.gamebody.run()
 
         self.assertEqual(new_dest, unit.dest)
 
@@ -250,7 +250,7 @@ class TestGameBody(unittest.TestCase):
         cmd1 = Fix(self.base1.index, plane.index)
         self.assertTrue(self.gamebody.set_command(0, cmd0))
         self.assertTrue(self.gamebody.set_command(1, cmd1))
-        results = self.gamebody.next_round()
+        results = self.gamebody.run()
 
         # team 0
         for attr in ['health', 'fuel', 'ammo', 'metal']:
@@ -279,11 +279,11 @@ class TestGameBody(unittest.TestCase):
         self.assertTrue(game.set_command(0, cmd))
 
         while build_round > 1:
-            game.next_round()
+            game.run()
             build_round -= 1
             self.assertEqual(game.production_list(0), [[Fighter.kind, build_round]])
         # one round left
-        results = game.next_round()
+        results = game.run()
         self.assertEqual(1, len(results))
         create = results[0]
 
