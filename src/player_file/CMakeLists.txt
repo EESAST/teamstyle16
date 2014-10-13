@@ -16,6 +16,22 @@ if(with-tests)
     set(with-c++11 ON)
 endif(with-tests)
 
+# Configure options
+if(with-c++11)
+    # On MSVC no compile options need to be given
+    if(MSVC)
+        if (MSVC_VERSION LESS 1800 AND with-tests)
+            message(WARNING "Currently only VC++ 12.0 or higher are supported "
+                            "to build tests\n"
+                            "Tests will not be built")
+            set(with-tests OFF)
+        endif()
+    else(MSVC)
+        # As far as I know, Clang, GNU & Intel use this option to support C++11
+        add_compile_options(-std=c++11)
+    endif(MSVC)
+endif(with-c++11)
+
 # Configure Boost library
 # Directory of the boost library shipped
 set(SHIPPED_BOOST_ROOT ${PROJECT_SOURCE_DIR}/boost_1_56_0)
@@ -23,6 +39,7 @@ set(SHIPPED_BOOST_ROOT ${PROJECT_SOURCE_DIR}/boost_1_56_0)
 if(MSVC)
     # To avoid an warning in VS
     add_definitions(-D_WIN32_WINNT=0x0501)
+    add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
 
     if(with-shipped-boost)
         # Try shipped Boost library
@@ -69,21 +86,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(Threads)
 
 # Build libraries
-if(with-c++11)
-    # On MSVC no compile options need to be given
-    if(MSVC)
-        if (MSVC_VERSION LESS 1800 AND with-tests)
-            message(WARNING "Currently only VC++ 12.0 or higher are supported "
-                            "to build tests\n"
-                            "Tests will not be built")
-            set(with-tests OFF)
-        endif()
-    else(MSVC)
-        # As far as I know, Clang, GNU & Intel use this option to support C++11
-        add_compile_options(-std=c++11)
-    endif(MSVC)
-endif(with-c++11)
-
 add_library(ai_base basic.cpp connection.cpp)
 target_link_libraries(ai_base ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 add_library(ai_driver main.cpp)
