@@ -198,5 +198,5 @@ class Cancel(Command):
                 game.commands[operator.team].remove(command)
         return True
 
-    def result_event(self):
+    def result_event(self, game):
         return []
