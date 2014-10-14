@@ -14,7 +14,7 @@
 
 # 以下所有数据暂时并无理论依据...
 
-from copy import copy
+from copy import deepcopy
 from random import random, choice
 from Queue import Queue
 from event import *
@@ -299,7 +299,7 @@ class Element(object):
 
     def ghost(self):
         """return limited info when viewed by enemy"""
-        ghost = copy(self)
+        ghost = deepcopy(self)
         ghost.fuel = ghost.ammo = ghost.metal = 0   # no access
         return ghost
 
@@ -316,7 +316,7 @@ class Mine(Resource):
         self.metal = metal
 
     def globalGhost(self):
-        ghost = copy(self)
+        ghost = deepcopy(self)
         ghost.metal = 0
         return ghost
 
@@ -332,7 +332,7 @@ class Oilfield(Resource):
         self.fuel = fuel
 
     def globalGhost(self):
-        ghost = copy(self)
+        ghost = deepcopy(self)
         ghost.fuel = 0
         return ghost
 
@@ -460,7 +460,7 @@ class Base(Building):
         super(Base, self).__init__(team, pos, **d)
 
     def globalGhost(self):
-        ghost = copy(self)
+        ghost = deepcopy(self)
         ghost.fuel = ghost.ammo = ghost.metal = 0
         return ghost
 
@@ -499,7 +499,7 @@ class Fort(Building):
         super(Fort, self).__init__(team, pos, **d)
 
     def globalGhost(self):
-        ghost = copy(self)
+        ghost = deepcopy(self)
         ghost.team = 2  # Hide team info
         ghost.health = ghost.fuel = ghost.ammo = ghost.metal = 0
         return ghost
@@ -517,7 +517,7 @@ class Unit(UnitBase):
         self.dest = kwargs['dest'] if 'dest' in kwargs else self.pos    # 目的地(初始为自身位置)
 
     def ghost(self):
-        ghost = copy(self)
+        ghost = deepcopy(self)
         ghost.fuel = ghost.ammo = ghost.metal = 0   # no access
         ghost.dest = None   # no access
         return ghost

@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # map.py
 
-from copy import copy
+from copy import deepcopy
 from basic import *
 from custom_json import *
 

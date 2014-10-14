@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # command.py
 from basic import *
-from copy import copy
+from copy import deepcopy
 import event
 import map_info
 
@@ -26,7 +26,7 @@ class AttackPos(Command):
                 self.pos.y >= 0 and self.pos.y < game.map_info.y_max and
                 self.pos.z >= 0 and self.pos.z < 3):
             return False
-        if attacker.attack(copy(game), self.pos)['valid'] is False:
+        if deepcopy(attacker).attack(deepcopy(game), self.pos)['valid'] is False:
             return False
         for command in game.commands[attacker.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -54,7 +54,7 @@ class AttackUnit(Command):
             return False
         if defender.team == attacker.team:
             return False
-        if attacker.attack(copy(game), defender.pos)['valid'] is False:
+        if deepcopy(attacker).attack(deepcopy(game), defender.pos)['valid'] is False:
             return False
         for command in game.commands[attacker.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -81,7 +81,7 @@ class Fix(Command):
         broken = elements.get(self.target)
         if fixer == None or broken == None or fixer.kind != BASE:
             return False
-        if fixer.repair(copy(game), broken)['valid'] is False:
+        if fixer.repair(deepcopy(broken))['valid'] is False:
             return False
         for command in game.commands[fixer.team]:
             if self.operand == command.operand:
@@ -166,7 +166,7 @@ class Supply(Command):
             return False
         if giver.team != receiver.team:
             return False
-        if giver.supply(copy(receiver), self.fuel, self.ammo, self.metal)['valid'] is False:
+        if giver.supply(deepcopy(receiver), self.fuel, self.ammo, self.metal)['valid'] is False:
             return False
         for command in game.commands[giver.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
