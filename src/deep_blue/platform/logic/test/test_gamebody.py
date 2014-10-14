@@ -256,7 +256,7 @@ class TestGameBody(unittest.TestCase):
 
         # team 0
         for attr in ['health', 'fuel', 'ammo', 'metal']:
-            self.assertEqual(getattr(boad, attr + '_max'), getattr(boad, attr))
+            self.assertEqual(getattr(boat, attr + '_max'), getattr(boat, attr))
 
         metal_cost = int(METAL_PER_HEALTH * 90 + 10)  # round down
         self.assertEqual(self.base0.fuel, self.base0.fuel_max - 150)
