@@ -181,9 +181,10 @@ TODO：游戏常量
 | Produce(operand, kind) | 生产 |
 
 ### Class Supply
-|                       构造函数                      |          描述          |
-| --------------------------------------------------- | ---------------------- |
-| Supply(operand, target, fuel=-1, ammo=-1, metal=-1) | 补给, 量为负则尽力补给 |
+|                                构造函数                               |          描述          |
+| --------------------------------------------------------------------- | ---------------------- |
+| Supply(operand, target, fuel=INFINITY, ammo=INFINITY, metal=INFINITY) | 补给, 量为负则尽力补给 |
+
 
 
 ## Module event
