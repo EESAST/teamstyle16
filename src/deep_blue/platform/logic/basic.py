@@ -436,7 +436,7 @@ def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
 class Building(UnitBase):
     """建筑类"""
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):   # 补给操作
-        """建筑对周围单位补给, 不对外提供金属"""
+        """建筑对周围单位补给"""
         result_dict = {'valid': True, 'events': []}
         if not self.team == our_unit.team:
             result_dict['valid'] = False   # 非友军
@@ -447,7 +447,11 @@ class Building(UnitBase):
             return result_dict
         else:
             provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
-            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], 0))
+            if our_unit.metal_max != None:
+                provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
+                self.metal -= provide_metal
+                our_unit.metal += provide_metal            
+            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
             return result_dict
 
 class Base(Building):
@@ -592,7 +596,7 @@ class Cargo(Ship):
             return result_dict
         else:
             provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
-            if our_unit.kind == BASE or our_unit.kind == FORT or our_unit.kind == CARGO:
+            if our_unit.metal_max != None:
                 provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
