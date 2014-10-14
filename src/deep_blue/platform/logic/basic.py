@@ -432,6 +432,7 @@ class Building(UnitBase):
         """建筑对周围单位补给"""
         result_events = []
         provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+        provide_metal = 0
         if our_unit.metal_max != None:
             provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
             self.metal -= provide_metal
@@ -555,6 +556,7 @@ class Cargo(Ship):
         """运输舰对周围单位补给燃料弹药, 可向基地, 据点, 运输舰补充金属"""
         result_events
         provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+        provide_metal = 0
         if our_unit.metal_max != None:
             provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
             self.metal -= provide_metal
