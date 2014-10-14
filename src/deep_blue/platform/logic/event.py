@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # event.py
 
-from basic import *
+import basic
 
 class Event(object):
     def __init__(self, description):
@@ -13,9 +13,9 @@ class AddProductionEntry(Event):
     """添加生产条目"""
     def __init__(self, team, kind):
         d = {
-            SUBMARINE: '潜艇', DESTROYER: '驱逐舰', 
-            CARRIER: '航空母舰', CARGO: '运输舰',
-            FIGHTER: '战斗机', SCOUT: '侦察机'
+            basic.SUBMARINE: '潜艇', basic.DESTROYER: '驱逐舰', 
+            basic.CARRIER: '航空母舰', basic.CARGO: '运输舰',
+            basic.FIGHTER: '战斗机', basic.SCOUT: '侦察机'
             }
         super(AddProductionEntry, self).__init__('%d号队伍开始生产新的%s' % (team, d[kind]))
         self.team = team
@@ -89,9 +89,9 @@ class Create(Event):
     """生产"""
     def __init__(self, index, kind, pos):
         d = {
-            SUBMARINE: '潜艇', DESTROYER: '驱逐舰', 
-            CARRIER: '航空母舰', CARGO: '运输舰',
-            FIGHTER: '战斗机', SCOUT: '侦察机'
+            basic.SUBMARINE: '潜艇', basic.DESTROYER: '驱逐舰', 
+            basic.CARRIER: '航空母舰', basic.CARGO: '运输舰',
+            basic.FIGHTER: '战斗机', basic.SCOUT: '侦察机'
             }
         super(Create, self).__init__('%d号%s在(%d,%d,%d)出生!' % (index, d[kind], pos.x, pos.y, pos.z))
         self.index = index
