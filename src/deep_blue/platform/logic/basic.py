@@ -377,37 +377,30 @@ class UnitBase(Element):
         distance = self.pos.distance(target_pos)
         range = self.fire_ranges[target_pos.z]
         target_unit = game.map_info.element(target_pos)
-        result_dict = {'valid': True,'events': []}
-        if distance > range:
-            result_dict['valid'] = False   # 不在攻击范围内
-            return result_dict
-        elif self.ammo <= 0:
-            result_dict['valid'] = False   # 无弹药
-            return result_dict
-        else:
-            self.ammo -= self.ammo_once
-            if target_unit == None or target_unit.team == self.team:
-                result_dict['events'].append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
-                return result_dict
-            modified_attacks = modifiedAttacks(distance, range, self.attacks)
-            fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE])
-            # 考虑到 defence = INFINITY 可能无法破防
-            torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
-            damage = fire_damage + torpedo_damage
-            game.scores[self.team] += damage * DAMAGE_SCORE
-            result_dict['events'].append(AttackUnit(self.index, target_unit.index, damage))
-            if damage >= target_unit.health:
-                if target_unit.kind == FORT:    # capture fort
-                    target_unit.team = self.team
-                    target_unit.health = target_unit.health_max
-                    result_dict['events'].append(Capture(target_unit.index, self.team))
-                else:
-                    target_unit.health = 0  # killed
-                    del game.map_info.elements[target_unit.index]
-                    result_dict['events'].append(Destroy(target_unit.index))
+        result_events = []
+        self.ammo -= self.ammo_once
+        if target_unit == None or target_unit.team == self.team:
+            result_events.append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
+            return result_events
+        modified_attacks = modifiedAttacks(distance, range, self.attacks)
+        fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE])
+        # 考虑到 defence = INFINITY 可能无法破防
+        torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
+        damage = fire_damage + torpedo_damage
+        game.scores[self.team] += damage * DAMAGE_SCORE
+        result_events.append(AttackUnit(self.index, target_unit.index, damage))
+        if damage >= target_unit.health:
+            if target_unit.kind == FORT:    # capture fort
+                target_unit.team = self.team
+                target_unit.health = target_unit.health_max
+                result_events.append(Capture(target_unit.index, self.team))
             else:
-                target_unit.health -= damage
-        return result_dict
+                target_unit.health = 0  # killed
+                del game.map_info.elements[target_unit.index]
+                result_events.append(Destroy(target_unit.index))
+        else:
+            target_unit.health -= damage
+        return result_events
 
 
 def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
@@ -437,22 +430,14 @@ class Building(UnitBase):
     """建筑类"""
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):   # 补给操作
         """建筑对周围单位补给"""
-        result_dict = {'valid': True, 'events': []}
-        if not self.team == our_unit.team:
-            result_dict['valid'] = False   # 非友军
-            return result_dict
-        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0) or 
-              self.pos.distance(our_unit) > 1):
-            result_dict['valid'] = False    # 不在范围内
-            return result_dict
-        else:
-            provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
-            if our_unit.metal_max != None:
-                provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
-                self.metal -= provide_metal
-                our_unit.metal += provide_metal            
-            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
-            return result_dict
+        result_events = []
+        provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+        if our_unit.metal_max != None:
+            provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
+            self.metal -= provide_metal
+            our_unit.metal += provide_metal            
+        result_events.append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
+        return result_events
 
 class Base(Building):
     """基地, 继承自Building"""
@@ -470,23 +455,13 @@ class Base(Building):
 
     def repair(self, our_unit):
         """维修"""
-        result_dict = {'valid': True, 'events': []}
-        if not self.team == our_unit.team:
-            result_dict['valid'] = False   # 非友军
-            return result_dict
-        elif isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0:
-            result_dict['valid'] = False    # 不在范围内
-            return result_dict
-        elif self.pos.distance(our_unit) > 1:
-            result_dict['valid'] = False   # 不在范围内
-            return result_dict
-        else:
-            provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
-            self.metal -= provide_metal
-            our_unit.health += provide_metal / METAL_PER_HEALTH
-            result_dict['events'].append(Fix(self.index, our_unit.index, provide_metal, provide_metal / METAL_PER_HEALTH))
-            result_dict['events'] += self.supply(our_unit)['events']
-        return result_dict
+        result_events = []
+        provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
+        self.metal -= provide_metal
+        our_unit.health += provide_metal / METAL_PER_HEALTH
+        result_events.append(Fix(self.index, our_unit.index, provide_metal, provide_metal / METAL_PER_HEALTH))
+        result_events += self.supply(our_unit)
+        return result_events
 
     def build(self, kind):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
@@ -562,18 +537,10 @@ class Carrier(Ship):
 
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
         """航母对周围单位补给燃料弹药, 可向飞机补给"""
-        result_dict = {'valid': True, 'events': []}
-        if not self.team == our_unit.team:
-            result_dict['valid'] = False   # 非友军
-            return result_dict
-        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0) or 
-              self.pos.distance(our_unit) > 1):
-            result_dict['valid'] = False  # 不在范围内
-            return result_dict
-        else:
-            provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
-            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], 0))
-            return result_dict
+        result_events = []
+        provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+        result_events.append(Supply(self.index, our_unit.index, provides[0], provides[1], 0))
+        return result_events
 
 class Cargo(Ship):
     """运输舰"""
@@ -586,22 +553,14 @@ class Cargo(Ship):
 
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
         """运输舰对周围单位补给燃料弹药, 可向基地, 据点, 运输舰补充金属"""
-        result_dict = {'valid': True, 'events': []}
-        if not self.team == our_unit.team:
-            result_dict['valid'] = False   # 非友军
-            return result_dict
-        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0) or
-              self.pos.distance(our_unit) > 1):
-            result_dict['valid'] = False   # 不在范围内
-            return result_dict
-        else:
-            provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
-            if our_unit.metal_max != None:
-                provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
-                self.metal -= provide_metal
-                our_unit.metal += provide_metal
-            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
-            return result_dict
+        result_events
+        provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+        if our_unit.metal_max != None:
+            provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
+            self.metal -= provide_metal
+            our_unit.metal += provide_metal
+        result_events.append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
+        return result_events
 
     def collect(self, resource):
         """运输舰从资源点采集资源"""

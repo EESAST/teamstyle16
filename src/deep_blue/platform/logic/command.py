@@ -20,13 +20,15 @@ class AttackPos(Command):
     def add_to(self, game):
         elements = game.map_info.elements
         attacker = elements.get(self.operand)
-        if attacker == None or attacker.kind == CARRIER:
+        if attacker == None or attacker.kind == CARGO:
             return False
         if not (self.pos.x >= 0 and self.pos.x < game.map_info.x_max and
                 self.pos.y >= 0 and self.pos.y < game.map_info.y_max and
                 self.pos.z >= 0 and self.pos.z < 3):
             return False
-        if deepcopy(attacker).attack(deepcopy(game), self.pos)['valid'] is False:
+        if attacker.pos.distance(self.pos) > attacker.fire_ranges[self.pos.z]:
+            return False
+        if attacker.ammo < attacker.ammo_once:
             return False
         for command in game.commands[attacker.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -37,8 +39,7 @@ class AttackPos(Command):
 
     def result_event(self, game):
         attacker = game.map_info.elements[self.operand]
-        result_dict = attacker.attack(game, self.pos)
-        return result_dict['events']
+        return attacker.attack(game, self.pos)
 
 class AttackUnit(Command):
     """攻击单位"""
@@ -54,7 +55,9 @@ class AttackUnit(Command):
             return False
         if defender.team == attacker.team:
             return False
-        if deepcopy(attacker).attack(deepcopy(game), defender.pos)['valid'] is False:
+        if attacker.pos.distance(defender.pos) > attacker.fire_ranges[defender.pos.z]:
+            return False
+        if attacker.ammo < attacker.ammo_once:
             return False
         for command in game.commands[attacker.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -66,8 +69,7 @@ class AttackUnit(Command):
     def result_event(self, game):
         attacker = game.map_info.elements[self.operand]
         defender = game.map_info.elements[self.target]
-        result_dict = attacker.attack(game, defender.pos)
-        return result_dict['events']
+        return attacker.attack(game, defender.pos)
 
 class Fix(Command):
     """维修"""
@@ -81,7 +83,11 @@ class Fix(Command):
         broken = elements.get(self.target)
         if fixer == None or broken == None or fixer.kind != BASE:
             return False
-        if fixer.repair(deepcopy(broken))['valid'] is False:
+        if fixer.team != broken.team:
+            return False
+        if isinstance(broken, Plane) and fixer.distance(broken.pos) > 0:
+            return False
+        if fixer.pos.distance(broken.pos) > 1:
             return False
         for command in game.commands[fixer.team]:
             if self.operand == command.operand:
@@ -94,8 +100,7 @@ class Fix(Command):
         elements = game.map_info.elements
         fixer = elements[self.operand]
         broken = elements[self.target]
-        result_dict = fixer.repair(broken)
-        return result_dict['events'] 
+        return fixer.repair(broken)
         
 class ChangeDest(Command):
     """更改目的地"""
@@ -123,8 +128,7 @@ class ChangeDest(Command):
         self.dest.z = min(AIR, max(UNDERWATER, self.dest.z))
         mover = game.map_info.elements[self.operand]
         mover.dest = self.dest
-        mover.move(game)
-        return [event.ChangeDest(self.operand, self.dest)]
+        return [event.ChangeDest(self.operand, self.dest)] + mover.move(game)
 
 class Produce(Command):
     """生产"""
@@ -147,6 +151,7 @@ class Produce(Command):
 
     def result_event(self, game):
         producer = game.map_info.elements.get(self.operand)
+        game.production_lists[producer.team].append([self.kind, basic.PROPERTY[kind]['build_round']])
         return [event.AddProductionEntry(producer.team, self.kind)]
 
 class Supply(Command):
@@ -166,7 +171,7 @@ class Supply(Command):
             return False
         if giver.team != receiver.team:
             return False
-        if giver.supply(deepcopy(receiver), self.fuel, self.ammo, self.metal)['valid'] is False:
+        if (isinstance(receiver, Plane) and giver.pos.distance(receiver.pos) > 0) or giver.pos.distance(receiver.pos) > 1:
             return False
         for command in game.commands[giver.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -179,7 +184,7 @@ class Supply(Command):
         elements = game.map_info.elements
         giver = elements.get(self.operand)
         receiver = elements.get(self.target)
-        return giver.supply(receiver, self.fuel, self.ammo, self.metal)['events']
+        return giver.supply(receiver, self.fuel, self.ammo, self.metal)
 
 class Cancel(Command):
     """取消"""
