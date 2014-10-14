@@ -4,9 +4,26 @@ from basic import *
 from map_info import *
 from custom_json import *
 from copy import copy
+from random import choice
 
 STATE_CONTINUE = -1
 STATE_TIE = 2
+
+def compare_commands(l_command, r_command):
+    """return whether l_command should be executed first"""
+    sequence_list = ['Produce', 'Attack', 'Supply', 'Fix', 'ChangeDest']
+    l_type = l_command.__class__.__name__
+    if l_type.startswith('Attack'):
+        l_type = 'Attack'
+    r_type = r_command.__class__.__name__
+    if r_type.startswith('Attack'):
+        r_type = 'Attack'
+    if sequence_list.index(l_type) < sequence_list.index(r_type):
+        return -1
+    elif sequence_list.index(l_type) > sequence_list.index(r_type):
+        return 1
+    else:
+        return choice([-1, 1])
 
 class GameBody(object):
     """docstring for GameBody"""
@@ -128,7 +145,11 @@ class GameBody(object):
         """run one round and return the events took place"""
         self.round = self.round + 1
         events = []
-        pass
+        # sort commands
+        all_commands = self.commands[0] + self.commands[1]
+        all_commands.sort(cmp = compare_commands)
+        for command in all_commands:
+            events += command.result_event(self)
         return events
 
     def save(self, filename):

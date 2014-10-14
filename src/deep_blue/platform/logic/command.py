@@ -123,6 +123,7 @@ class ChangeDest(Command):
         dest.z = min(AIR, max(UNDERWATER, dest.z))
         mover = game.map_info.elements[self.operand]
         mover.dest = dest
+        mover.move(game)
         return [event.ChangeDest(self.operand, dest)]
 
 class Produce(Command):
