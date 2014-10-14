@@ -36,7 +36,7 @@ class AttackPos(Command):
         return True
 
     def result_event(self, game):
-        attacker = game.map_info.elements[operand]
+        attacker = game.map_info.elements[self.operand]
         result_dict = attacker.attack(game, self.pos)
         return result_dict['events']
 
@@ -118,13 +118,13 @@ class ChangeDest(Command):
     def result_event(self, game):
         x_max = game.map_info.x_max
         y_max = game.map_info.y_max
-        dest.x = min(x_max, max(0, dest.x))
-        dest.y = min(y_max, max(0, dest.y))
-        dest.z = min(AIR, max(UNDERWATER, dest.z))
+        self.dest.x = min(x_max, max(0, self.dest.x))
+        self.dest.y = min(y_max, max(0, self.dest.y))
+        self.dest.z = min(AIR, max(UNDERWATER, self.dest.z))
         mover = game.map_info.elements[self.operand]
-        mover.dest = dest
+        mover.dest = self.dest
         mover.move(game)
-        return [event.ChangeDest(self.operand, dest)]
+        return [event.ChangeDest(self.operand, self.dest)]
 
 class Produce(Command):
     """生产"""
