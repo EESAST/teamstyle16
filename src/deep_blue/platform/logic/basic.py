@@ -503,7 +503,7 @@ class Unit(UnitBase):
         return ghost
 
     def move(self, game):
-        pass
+        return []
 
 class Submarine(Unit):
     """潜艇"""

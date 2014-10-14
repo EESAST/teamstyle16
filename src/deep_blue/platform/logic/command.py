@@ -85,7 +85,7 @@ class Fix(Command):
             return False
         if fixer.team != broken.team:
             return False
-        if isinstance(broken, Plane) and fixer.distance(broken.pos) > 0:
+        if isinstance(broken, Plane) and fixer.pos.distance(broken.pos) > 0:
             return False
         if fixer.pos.distance(broken.pos) > 1:
             return False
