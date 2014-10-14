@@ -39,7 +39,7 @@ class AttackUnit(Event):
 class Supply(Event):
     """补给"""
     def __init__(self, index, target, fuel, ammo, metal):
-        super(Supply, self).__init__('%d号单位向%d号单位补给了 燃料:%d, 金属:%d, 弹药:%d' % (index, target, fuel, metal, ammo))
+        super(Supply, self).__init__('%d号单位向%d号单位补给了 燃料:%d, 弹药:%d, 金属:%d' % (index, target, fuel, ammo, metal))
         self.index = index
         self.target = target    # index
         self.fuel = fuel

@@ -44,8 +44,8 @@ class TestCommand(unittest.TestCase):
         self.assertEqual(99, cmd.operand)
         self.assertEqual(88, cmd.target)
         self.assertEqual(-1, cmd.fuel)
-        self.assertEqual(-1, cmd.metal)
-        self.assertEqual(76, cmd.ammo)
+        self.assertEqual(-1, cmd.ammo)
+        self.assertEqual(76, cmd.metal)
 
 if __name__ == '__main__':
     unittest.main()
