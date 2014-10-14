@@ -377,13 +377,14 @@ class UnitBase(Element):
         distance = self.pos.distance(target_pos)
         range = self.fire_ranges[target_pos.z]
         target_unit = game.map_info.element(target_pos)
-        result_dict = {'events':[]}
+        result_dict = {'valid': True,'events': []}
         if distance > range:
             result_dict['valid'] = False   # 不在攻击范围内
+            return result_dict
         elif self.ammo <= 0:
             result_dict['valid'] = False   # 无弹药
+            return result_dict
         else:
-            result_dict['valid'] = True
             self.ammo -= self.ammo_once
             if target_unit == None or target_unit.team == self.team:
                 result_dict['events'].append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
@@ -465,15 +466,17 @@ class Base(Building):
 
     def repair(self, our_unit):
         """维修"""
-        result_dict = {'events':[]}
+        result_dict = {'valid': True, 'events': []}
         if not self.team == our_unit.team:
             result_dict['valid'] = False   # 非友军
+            return result_dict
         elif isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0:
             result_dict['valid'] = False    # 不在范围内
+            return result_dict
         elif self.pos.distance(our_unit) > 1:
             result_dict['valid'] = False   # 不在范围内
+            return result_dict
         else:
-            result_dict['valid'] = True
             provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
             self.metal -= provide_metal
             our_unit.health += provide_metal / METAL_PER_HEALTH
