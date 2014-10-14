@@ -118,7 +118,11 @@ class GameBody(object):
 
     def set_command(self, team, command):
         """add a command and resolve conflicts"""
-        pass
+        operator = self.map_info.elements[command.operand]
+        if team != operator.team:
+            return False
+        command.add_to(self)
+        return True
 
     def run(self):
         """run one round and return the events took place"""
