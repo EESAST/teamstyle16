@@ -171,7 +171,8 @@ class TestGameBody(unittest.TestCase):
         """Test behavior of attack position"""
         # 1. Normal attack
         # Add attcker & defencer
-        attacker = self.add(Destroyer, 1, (5, 2), attacks=[20, 10],
+        attacker = self.add(Destroyer, 1, (5, 2), fire_ranges=[99, 5, 99],
+                                                  attacks=[20, 10],
                                                   ammo_max=200,
                                                   ammo_once=5)
         defencer = self.add(Destroyer, 0, (6, 2), defences=[10, 5],
@@ -184,34 +185,35 @@ class TestGameBody(unittest.TestCase):
             return self.gamebody.run()
 
         results = attack_pos(attacker.index, defencer.pos)
-        # damage = (20 - 10) + (10 - 5) = 15
-        self.assertEqual(85, defencer.health)
+        # damage = (20 * 7/6 - 10) + (10 * 7/6 - 5) = 19
+        self.assertEqual(81, defencer.health)
         self.assertEqual(195, attacker.ammo)
 
         # 2. Defences greater than attacks
         defencer.defences = [30, 8]
         results = attack_pos(attacker.index, defencer.pos)
-        # damage = 10 - 8 = 2
-        self.assertEqual(83, defencer.health)
+        # damage = 10 * 7/6 - 8 = 3
+        self.assertEqual(78, defencer.health)
         self.assertEqual(190, attacker.ammo)
 
         # 3. Defences is infinity
         defencer.defences = [INFINITY, 7]
         results = attack_pos(attacker.index, defencer.pos)
-        # damage = 10 - 7 = 3
-        self.assertEqual(80, defencer.health)
+        # damage = 10 * 7/6 - 7 = 4
+        self.assertEqual(74, defencer.health)
         self.assertEqual(185, attacker.ammo)
 
         # 4. Attack an empty position
         results = attack_pos(attacker.index, Position(6, 2, 0))
         # No damage
-        self.assertEqual(80, defencer.health)
+        self.assertEqual(74, defencer.health)
         self.assertEqual(180, attacker.ammo)
 
     def test_attack_unit(self):
         """Test behavior of attack unit"""
         # Just test the basic behavior
-        attacker = self.add(Destroyer, 1, (5, 2), attacks=[20, 10],
+        attacker = self.add(Destroyer, 1, (5, 2), fire_ranges=[99, 5, 99],
+                                                  attacks=[20, 10],
                                                   ammo_max=200,
                                                   ammo_once=5)
         defencer = self.add(Destroyer, 0, (6, 2), defences=[10, 30],
@@ -221,8 +223,8 @@ class TestGameBody(unittest.TestCase):
         cmd = AttackUnit(attacker.index, defencer.index)
         self.assertTrue(self.gamebody.set_command(1, cmd))
         results = self.gamebody.run()
-        # damage = 20 - 10 = 10
-        self.assertEqual(90, defencer.health)
+        # damage = 20 * 7/6 - 10 = 13
+        self.assertEqual(87, defencer.health)
         self.assertEqual(195, attacker.ammo)
 
     def test_change_dest(self):
