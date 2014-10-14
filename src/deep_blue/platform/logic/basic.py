@@ -522,6 +522,9 @@ class Unit(UnitBase):
         ghost.dest = None   # no access
         return ghost
 
+    def move(self, game):
+        pass
+
 class Submarine(Unit):
     """潜艇"""
     kind = SUBMARINE
