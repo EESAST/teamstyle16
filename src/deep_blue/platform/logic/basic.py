@@ -457,7 +457,7 @@ class Base(Building):
     def repair(self, our_unit):
         """维修"""
         result_events = []
-        provide_metal = max(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
+        provide_metal = min(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
         self.metal -= provide_metal
         our_unit.health += provide_metal / METAL_PER_HEALTH
         result_events.append(Fix(self.index, our_unit.index, provide_metal, provide_metal / METAL_PER_HEALTH))
