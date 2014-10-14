@@ -593,7 +593,7 @@ class Cargo(Ship):
         else:
             provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
             if our_unit.kind == BASE or our_unit.kind == FORT or our_unit.kind == CARGO:
-                provide_metal = min(INFINITY, self.metal, our_unit.metal_max - our_unit.metal)
+                provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
             result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
