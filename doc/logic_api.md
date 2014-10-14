@@ -236,8 +236,8 @@ TODO：游戏常量
 | index  | int  | 补给发起方的索引号 |
 | target | int  | 补给接受方的索引号 |
 | fuel   | int  | 补给的燃料量       |
-| metal  | int  | 补给的金属量       |
 | ammo   | int  | 补给的弹药量       |
+| metal  | int  | 补给的金属量       |
 
 ### Class Fix
 |       属性      |   类型   |        描述        |
