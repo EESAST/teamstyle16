@@ -447,7 +447,7 @@ class Building(UnitBase):
             return result_dict
         else:
             provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
-            result_dict['events'].append(Supply(self.index, our_unit.index, *provids, 0))
+            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], 0))
             return result_dict
 
 class Base(Building):
@@ -565,7 +565,7 @@ class Carrier(Ship):
             return result_dict
         else:
             provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
-            result_dict['events'].append(Supply(self.index, our_unit.index, *provides, 0))
+            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], 0))
             return result_dict
 
 class Cargo(Ship):
@@ -593,7 +593,7 @@ class Cargo(Ship):
                 provide_metal = min(INFINITY, self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
-            result_dict['events'].append(Supply(self.index, our_unit.index, *provids, provide_metal))
+            result_dict['events'].append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
             return result_dict
 
     def collect(self, resource):
