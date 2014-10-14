@@ -151,7 +151,7 @@ class Produce(Command):
 
     def result_event(self, game):
         producer = game.map_info.elements.get(self.operand)
-        game.production_lists[producer.team].append([self.kind, basic.PROPERTY[kind]['build_round']])
+        game.production_lists[producer.team].append([self.kind, basic.PROPERTY[self.kind]['build_round']])
         return [event.AddProductionEntry(producer.team, self.kind)]
 
 class Supply(Command):
