@@ -18,6 +18,7 @@ class AttackPos(Command):
         self.pos = pos
 
     def add_to(self, game):
+        game = copy(game)
         elements = game.map_info.elements
         attacker = elements.get(self.operand)
         if attacker == None or attacker.kind == CARRIER:
@@ -26,7 +27,7 @@ class AttackPos(Command):
                 self.pos.y >= 0 and self.pos.y < game.map_info.y_max and
                 self.pos.z >= 0 and self.pos.z < 3):
             return False
-        if attacker.attack(copy(game), self.pos)['valid'] is False:
+        if attacker.attack(game, self.pos)['valid'] is False:
             return False
         for command in game.commands[attacker.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -47,6 +48,7 @@ class AttackUnit(Command):
         self.target = target    # index of the target
 
     def add_to(self, game):
+        gaem = copy(game)
         elements = game.map_info.elements
         attacker = elements.get(self.operand)
         defender = elements.get(self.target)
@@ -54,7 +56,7 @@ class AttackUnit(Command):
             return False
         if defender.team == attacker.team:
             return False
-        if attacker.attack(copy(game), defender.pos)['valid'] is False:
+        if attacker.attack(game, defender.pos)['valid'] is False:
             return False
         for command in game.commands[attacker.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -76,12 +78,13 @@ class Fix(Command):
         self.target = target    # index of target
 
     def add_to(self, game):
+        game = copy(game)
         elements = game.map_info.elements
         fixer = elements.get(self.operand)
         broken = elements.get(self.target)
         if fixer == None or broken == None or fixer.kind != BASE:
             return False
-        if fixer.repair(copy(game), broken)['valid'] is False:
+        if fixer.repair(game, broken)['valid'] is False:
             return False
         for command in game.commands[fixer.team]:
             if self.operand == command.operand:
@@ -150,7 +153,7 @@ class Produce(Command):
 
 class Supply(Command):
     """补给"""
-    def __init__(self, operand, target, fuel = -1, ammo = -1, metal = -1):
+    def __init__(self, operand, target, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
         super(Supply, self).__init__(operand)
         self.target = target
         self.fuel = fuel
@@ -158,12 +161,15 @@ class Supply(Command):
         self.metal = metal
 
     def add_to(self, game):
+        game = copy(game)
         elements = game.map_info.elements
         giver = elements.get(self.operand)
         receiver = elements.get(self.target)
         if giver == None or receiver == None or giver.kind not in [BASE, FORT, CARRIER, CARGO]:
             return False
         if giver.team != receiver.team:
+            return False
+        if giver.supply(receiver, self.fuel, self.ammo, self.metal)['valid'] is False:
             return False
         for command in game.commands[giver.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
@@ -173,16 +179,24 @@ class Supply(Command):
         return True
 
     def result_event(self):
-        pass
+        elements = game.map_info.elements
+        giver = elements.get(self.operand)
+        receiver = elements.get(self.target)
+        return giver.supply(receiver, self.fuel, self.ammo, self.metal)['events']
 
 class Cancel(Command):
     """取消"""
     def __init__(self, operand):
-        super(Cancel,self).__init__(operand)
+        super(Cancel, self).__init__(operand)
+
+    def add_to(self, game):
+        operator = game.map_info.elements.get(operand)
+        if operator == None:
+            return False
+        for command in game.commands[operator.team]:
+            if self.operand == command.operand:
+                game.commands[operator.team].remove(command)
+        return True
+
     def result_event(self):
-        Event = []
-        Operand = ELEMENTS[self.operand]
-        for command in COMMANDS[Operand.team]:
-            if command.operand == self.operand:
-                COMMANDS[Operand.team].pop(command)
-        return Event
+        return []

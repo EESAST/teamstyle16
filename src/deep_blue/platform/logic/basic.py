@@ -409,7 +409,7 @@ class UnitBase(Element):
         return result_dict
 
 
-def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
+def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
     if giver.kind == BASE:
         fuel_supply_limit = ammo_supply_limit = 0
     elif giver.kind == FORT:
@@ -421,28 +421,33 @@ def replenishFuelAmmo(giver, receiver):   # 补给燃料弹药
     else:
         fuel_supply_limit = ammo_supply_limit = SUPPLY_LIMIT
     provides = [0, 0]    # 维修者提供的燃料, 弹药
-    provides[0] = max(giver.fuel - giver.fuel_max * fuel_supply_limit,
-                      receiver.fuel_max - receiver.fuel)
-    provides[1] = max(giver.ammo - giver.ammo_max * ammo_supply_limit,
-                      receiver.ammo_max - receiver.ammo)
+    provides[0] = min(fuel, max(giver.fuel - giver.fuel_max * fuel_supply_limit,
+                                receiver.fuel_max - receiver.fuel))
+    provides[1] = min(ammo, max(giver.ammo - giver.ammo_max * ammo_supply_limit,
+                                receiver.ammo_max - receiver.ammo))
     giver.fuel -= provides[0]
     giver.ammo -= provides[1]
     receiver.fuel += provides[0]
     receiver.ammo += provides[1]
+    return provides
 
 
 class Building(UnitBase):
     """建筑类"""
-    def supply(self, our_unit):   # 补给操作
+    def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):   # 补给操作
         """建筑对周围单位补给, 不对外提供金属"""
+        result_dict = {'valid': True, 'events': []}
         if not self.team == our_unit.team:
-            return -1   # 非友军
-        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0)
-              or self.pos.distance(our_unit) > 1):
-            return -2   # 不在范围内
+            result_dict['valid'] = False   # 非友军
+            return result_dict
+        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0) or 
+              self.pos.distance(our_unit) > 1):
+            result_dict['valid'] = False    # 不在范围内
+            return result_dict
         else:
-            replenishFuelAmmo(self, our_unit)
-            return 0
+            provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+            result_dict['events'].append(Supply(self.index, our_unit.index, *provids, 0))
+            return result_dict
 
 class Base(Building):
     """基地, 继承自Building"""
@@ -473,8 +478,7 @@ class Base(Building):
             self.metal -= provide_metal
             our_unit.health += provide_metal / METAL_PER_HEALTH
             result_dict['events'].append(Fix(self.index, our_unit.index, provide_metal, provide_metal / METAL_PER_HEALTH))
-            supply_dict = self.supply(our_unit)
-            result_dict['events'].append(Supply(self.index, our_unit.index, **supply_dict))
+            result_dict['events'] += self.supply(our_unit)['events']
         return result_dict
 
     def build(self, kind):
@@ -546,20 +550,20 @@ class Carrier(Ship):
         d.update(kwargs)
         super(Carrier, self).__init__(team, pos, **d)
 
-    def supply(self, our_unit):
-        """航母对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
+    def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
+        """航母对周围单位补给燃料弹药, 可向飞机补给"""
+        result_dict = {'valid': True, 'events': []}
         if not self.team == our_unit.team:
-            return -1   # 非友军
-        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0)
-              or self.pos.distance(our_unit) > 1):
-            return -2   # 不在范围内
+            result_dict['valid'] = False   # 非友军
+            return result_dict
+        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0) or 
+              self.pos.distance(our_unit) > 1):
+            result_dict['valid'] = False  # 不在范围内
+            return result_dict
         else:
-            replenishFuelAmmo(self, our_unit)
-            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
-                provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
-                self.metal -= provide_metal
-                our_unit.metal += provide_metal
-            return 0
+            provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+            result_dict['events'].append(Supply(self.index, our_unit.index, *provides, 0))
+            return result_dict
 
 class Cargo(Ship):
     """运输舰"""
@@ -570,20 +574,24 @@ class Cargo(Ship):
         d.update(kwargs)
         super(Cargo, self).__init__(team, pos, **d)
 
-    def supply(self, our_unit):
-        """运输舰对周围单位补给燃料弹药, 可向基地, 运输舰以及航母补充金属"""
+    def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
+        """运输舰对周围单位补给燃料弹药, 可向基地, 据点, 运输舰补充金属"""
+        result_dict = {'valid': True, 'events': []}
         if not self.team == our_unit.team:
-            return -1   # 非友军
-        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0)
-              or self.pos.distance(our_unit) > 1):
-            return -2   # 不在范围内
+            result_dict['valid'] = False   # 非友军
+            return result_dict
+        elif ((isinstance(our_unit, Plane) and self.pos.distance(our_unit) > 0) or
+              self.pos.distance(our_unit) > 1):
+            result_dict['valid'] = False   # 不在范围内
+            return result_dict
         else:
-            replenishFuelAmmo(self, our_unit)
-            if our_unit.kind == BASE or our_unit.kind == CARGO or our_unit.kind == CARRIER:
-                provide_metal = min(self.metal, our_unit.metal_max - our_unit.metal)
+            provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+            if our_unit.kind == BASE or our_unit.kind == FORT or our_unit.kind == CARGO:
+                provide_metal = min(INFINITY, self.metal, our_unit.metal_max - our_unit.metal)
                 self.metal -= provide_metal
                 our_unit.metal += provide_metal
-            return 0
+            result_dict['events'].append(Supply(self.index, our_unit.index, *provids, provide_metal))
+            return result_dict
 
     def collect(self, resource):
         """运输舰从资源点采集资源"""
