@@ -42,9 +42,9 @@
 | round()                                  | int                  | 返回当前回合数                   |
 | status()                                 | int                  | 返回当前的游戏状态               |
 | score(team)                              | int                  | 返回分数                         |
-| elements(team)                           | [Element]            | 返回某队所有元素                 |
+| elements(team)                           | {int:Element}            | 返回某队所有元素                 |
 | vision(team)                             | [Position][3]        | 返回某队三层视野的点集           |
-| view_elements(perspective)               | [Element]            | 返回某队视角下的所有元素         |
+| view_elements(perspective)               | {int:Element}            | 返回某队视角下的所有元素         |
 | production_list(team)                    | [[kind, round_left]] | 返回生产列表                     |
 | population(team)                         | int                  | 返回该队伍的人口数               |
 | **统计数据**                             |                      |                                  |
@@ -55,7 +55,7 @@
 | **运行/指令**                            |                      |                                  |
 | set_command(team, command) | bool                 | 添加指令，指令无效则返回False |
 | commands(team)                           | [Command]            | 返回该队伍当前的指令集           |
-| next_round()                             | [gamebody.Event]     | 进行一回合                       |
+| next_round()                             | [Event]     | 进行一回合                       |
 | **保存/载入**                            |                      |                                  |
 | save(filename)                      | None                 | 保存游戏                         |
 
@@ -93,7 +93,7 @@ AI对战
 
 |      方法      |    返回值     |   描述   |
 |----------------|---------------|----------|
-| load(filename) | HumanAIBattle | 载入游戏 |
+| load(filename, port=DEFAULT_PORT, ai_filename=None) | HumanAIBattle | 载入游戏 |
 
 类继承关系
 
@@ -106,7 +106,7 @@ AI对战
 
 |             构造函数            |                 描述                |
 |---------------------------------|-------------------------------------|
-| HumanAIBattle(map, ai_filename, port=...) | 可能抛出AIFileError, AIConnectError |
+| HumanAIBattle(map_info, port=DEFAULT_PORT, ai_filename=None) | 可能抛出AIFileError, AIConnectError |
 
 |         方法         | 返回值 |            描述            |
 |----------------------|--------|----------------------------|
