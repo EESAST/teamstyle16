@@ -39,6 +39,7 @@ class AIProxy(threading.Thread):
         self.commands = []
 
         self.logger = logging.getLogger('%s.ai%d' % (__name__, team_num))
+        self.positive_close = False
 
         port = sock.getsockname()[1]
         # start AI (if needed) and connect
@@ -59,9 +60,6 @@ class AIProxy(threading.Thread):
         self.__send_stable_info(battle)
         self.logger.info('Info sent')
 
-    def __del__(self):
-        self.stop()
-
     def stop(self):
         # Terminate AI program if needed
         if self.ai_program:
@@ -69,6 +67,8 @@ class AIProxy(threading.Thread):
             self.ai_program.terminate()
 
         self.logger.info("Closing connection socket")
+        self.positive_close=True
+        self.conn.shutdown(socket.SHUT_RDWR)  # To shut down immediately
         self.conn.close()
 
     def run(self):
@@ -79,11 +79,19 @@ class AIProxy(threading.Thread):
             try:
                 data = self.conn.recv(1024)
             except socket.error as e:
+                if self.positive_close:  # Closed by self
+                    self.logger.info('Receiving thread terminated')
+                    return
+                # Else a real error
                 self.logger.error('Receiving failed: %s', e)
                 raise AIConnectError('Receiving from AI %d failed: %s' %
-                                     self.team_num, e)
+                                     (self.team_num, e))
 
             if len(data) == 0:
+                if self.positive_close:
+                    self.logger.info('Receiving thread terminated')
+                    return
+                # Else closed by AI
                 self.logger.error('Connection shutdown orderly by AI')
                 # If started the AI, check its return value if possible
                 if self.ai_program:

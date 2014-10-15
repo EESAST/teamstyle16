@@ -53,6 +53,13 @@ class AIBattle(battle.Battle):
         for ai in self.ais:
             ai.start()
 
+    def __del__(self):
+        for ai in self.ais:
+            logger.info('Stopping AI %d', ai.team_num)
+            ai.stop()
+            ai.join()
+            logger.info('AI %d stopped', ai.team_num)
+
     # Override team_name(), to make sure team names of AI will be displayed,
     # instead of team names set at the beginning of the battle.
     # e.g. the battle may be started as a HumanAIBattle, but later taken over
