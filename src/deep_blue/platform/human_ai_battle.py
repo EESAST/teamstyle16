@@ -53,6 +53,12 @@ class HumanAIBattle(battle.Battle):
         self.ai.send_info(self)
         self.ai.start()
 
+    def __del__(self):
+        logger.info('Stopping AI')
+        self.ai.stop()
+        self.ai.join()
+        logger.info('AI stopped')
+
     # Prevent AI team name from being covered
     def team_name(self, team):
         if team == self.ai.team_num:
