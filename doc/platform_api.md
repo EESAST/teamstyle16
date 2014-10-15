@@ -82,7 +82,7 @@ AI对战
 
 |        方法        | 返回值 |            描述            |
 |--------------------|--------|----------------------------|
-| feed_ai_commands() | None   | 从AI获取指令，填充至指令集 |
+| feed_ai_commands(sleep_time=None) | None   | 从AI获取指令，填充至指令集 |
 | run_until_end()    | None   | 运行直至比赛结束           |
 
 上述两方法可能抛出 AIConnectError, ParseError
@@ -110,7 +110,7 @@ AI对战
 
 |         方法         | 返回值 |            描述            |
 |----------------------|--------|----------------------------|
-| feed_ai_commands()   | None   | 从AI获取指令，填充至指令集 |
+| feed_ai_commands(sleep_time=None)   | None   | 从AI获取指令，填充至指令集 |
 | add_command(command) | bool   | 向选手指令集中增添指令     |
 
 

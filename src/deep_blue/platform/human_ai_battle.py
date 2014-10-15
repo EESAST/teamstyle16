@@ -65,10 +65,12 @@ class HumanAIBattle(battle.Battle):
         ai.send_info(self)
         return events
 
-    def feed_ai_commands(self):
+    def feed_ai_commands(self, sleep_time=None):
         """Feed commands from AI within time limit time_per_round"""
         logger.info('Feeding commands')
-        time.sleep(self.gamebody.time_per_round)
+        if sleep_time is None:
+            sleep_time = self.gamebody.time_per_round
+        time.sleep(sleep_time)
 
         cmds = self.ai.get_commands()
         for cmd in cmds:
