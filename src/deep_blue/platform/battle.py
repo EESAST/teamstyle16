@@ -3,6 +3,8 @@ import json
 import logging
 from logic import map_info, gamebody
 
+VERSION = 1
+
 logger = logging.getLogger(__name__)
 
 class Battle(object):
@@ -12,6 +14,13 @@ class Battle(object):
         if prev_info is not None:
             # Restore
             logger.debug('Restoring battle from previous info')
+
+            if self.version < VERSION:
+                logger.warning('Version of the save file (%d) is not up to date'
+                               ' (%d), errors may occur')
+            elif self.version > VERSION:
+                logger.warning('Version of the save file (%d) is greater than '
+                               'the current version (%d), errors may occur')
 
             self.team_names = prev_info['team_names']
             self.gamebody = gamebody.loads(prev_info['gamebody'])
@@ -28,13 +37,13 @@ class Battle(object):
             raise ValueError('record_interval should be positive integer')
 
         self.team_names = [team0_name, team1_name]
-        self.gamebody = gamebody.GameBody(map_info)
         self.history = {
             'score': [],
             'unit_num': [],
             'population': [],
             'command': []
         }
+        self.gamebody = gamebody.GameBody(map_info)
         self.key_frames = []
 
         self.record_history()
@@ -109,9 +118,10 @@ class Battle(object):
 
         save_file = open(filename, 'w')
         contents = {
+            "version": 1,
             "team_names": self.team_names,
-            'gamebody': self.gamebody.saves(),
             'history': self.history,
+            'gamebody': self.gamebody.saves(),
             'key_frames': self.key_frames
         }
         json.dump(contents, save_file, sort_keys=True, separators=(',', ':'))
