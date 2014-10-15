@@ -79,13 +79,19 @@ class AIProxy(threading.Thread):
                 data = self.conn.recv(1024)
 
                 if len(data) == 0:
-                    if self.ai_program and self.ai_program.poll() is not None:
-                        self.logger.info('AI has been terminated')
-                        return
-                    else:
-                        self.logger.error('Cannot get data from AI')
-                        raise AIConnectError('Connection to AI %d seems broken'
-                                             % self.team_num)
+                    self.logger.error('Connection shutdown orderly by AI')
+
+                    # If started the AI, check its return value if possible
+                    if self.ai_program:
+                        return_code = self.ai_program.returncode
+                        if return_code is not None:
+                            self.logger.info('AI returned wih value %d',
+                                             return_code)
+                        else:
+                            self.logger.info('AI has not stopped yet')
+
+                    raise AIConnectError('Connection shutdown orderly by AI %d'
+                                         % self.team_num)
 
                 self.logger.debug('Data received (size: %d)', len(data))
                 cmds = self.__decode_commands(data.decode())
