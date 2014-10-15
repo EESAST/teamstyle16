@@ -24,11 +24,6 @@ class AIConnectError(AIError):
     def __init__(self, what):
         super(AIConnectError, self).__init__(what)
 
-class ParseError(AIError):
-    """Failed to parse commands sent by AI"""
-    def __init__(self, what):
-        super(ParseError, self).__init__(what)
-
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
@@ -130,9 +125,14 @@ class AIProxy(threading.Thread):
         self.logger.info('Info sent')
 
     def __run_ai(self, filename, port):
-        self.ai_program = subprocess.Popen([filename, 'localhost', str(port)],
-                                           stdout=subprocess.PIPE,
-                                           stderr=subprocess.STDOUT)
+        try:
+            self.ai_program = subprocess.Popen([filename, 'localhost',
+                                                           str(port)],
+                                               stdout=subprocess.PIPE,
+                                               stderr=subprocess.STDOUT)
+        except OSError as e:
+            raise AIFileError("Failed to start AI file (%s): %s" %
+                              (filename, e))
 
     def __get_team_name(self):
         name = self.conn.recv(32)

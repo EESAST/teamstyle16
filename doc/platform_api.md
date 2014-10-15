@@ -10,7 +10,6 @@
         AIError
             AIFileError      AI文件错误
             AIConnectError   AI连接错误
-            ParseError       指令解析错误
 
 ## Module battle
 一般性对战，指令完全由调用者提供
