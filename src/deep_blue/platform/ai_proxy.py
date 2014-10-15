@@ -139,26 +139,36 @@ class AIProxy(threading.Thread):
         cmds = []
         for cmd_str in cmd_strs:
             name, args = cmd_str[:2], cmd_str[2:].split()
-            args = map(int, args)  # map to ints
 
-            if name == 'ap':
-                cmd = command.AttackPos(args[0], basic.Position(*args[1:]))
-            elif name == 'au':
-                cmd = command.AttackUnit(*args)
-            elif name == 'cd':
-                cmd = command.ChangeDest(args[0], basic.Position(*args[1:]))
-            elif name == 'fx':
-                cmd = command.Fix(*args)
-            elif name == 'pd':
-                cmd = command.Produce(*args)
-            elif name == 'sp':
-                cmd = command.Supply(*args)
-            elif name == 'cc':
-                cmd = command.Cancel(*args)
+            # Try to parse a command
+            try:
+                args = map(int, args)  # map to ints
+                if name == 'ap':
+                    cmd = command.AttackPos(args[0], basic.Position(*args[1:]))
+                elif name == 'au':
+                    cmd = command.AttackUnit(*args)
+                elif name == 'cd':
+                    cmd = command.ChangeDest(args[0], basic.Position(*args[1:]))
+                elif name == 'fx':
+                    cmd = command.Fix(*args)
+                elif name == 'pd':
+                    cmd = command.Produce(*args)
+                elif name == 'sp':
+                    # negative value means infinity
+                    for i in [2, 3, 4]:
+                        if args[i] < 0:
+                            args[i] = basic.INFINITY
+                    cmd = command.Supply(*args)
+                elif name == 'cc':
+                    cmd = command.Cancel(*args)
+                else:  # not a valid command
+                    self.logger.error('Unknown command name "%s"' % name)
+                    continue
+            except StandardError as e:
+                self.logger.error('Failed to construct command from "%s": %s',
+                                  cmd_str, e)
             else:
-                continue  # not a valid command
-
-            cmds.append(cmd)
+                cmds.append(cmd)
 
         return cmds
 
