@@ -30,7 +30,7 @@ class ParseError(AIError):
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
-    def __init__(self, team_num, sock, battle, file_name=None):
+    def __init__(self, team_num, sock, battle, filename=None):
         threading.Thread.__init__(self)
         self.lock = threading.RLock()
         self.team_num = team_num
@@ -42,9 +42,9 @@ class AIProxy(threading.Thread):
         port = sock.getsockname()[1]
         # start AI (if needed) and connect
         self.ai_program = None
-        if file_name is not None:
-            self.logger.info('Starting AI (%s)', file_name)
-            self.__run_ai(file_name, port)
+        if filename is not None:
+            self.logger.info('Starting AI (%s)', filename)
+            self.__run_ai(filename, port)
             self.logger.info('AI started')
 
         self.logger.info('Waiting for connection at port %d', port)
@@ -111,8 +111,8 @@ class AIProxy(threading.Thread):
         self.__send_round_info(battle)
         self.logger.info('Info sent')
 
-    def __run_ai(self, file_name, port):
-        self.ai_program = subprocess.Popen([file_name, 'localhost', str(port)],
+    def __run_ai(self, filename, port):
+        self.ai_program = subprocess.Popen([filename, 'localhost', str(port)],
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT)
 

@@ -16,8 +16,8 @@ class AIBattle(battle.Battle):
                  ai0_filename=None, ai1_filename=None, prev_info=None):
         """Construct an AIBattle from a map, or from previous infos.
         port is the port number used for listening.
-        If file_name is given, AIBattle is responsible for starting & closing
-        AI program.
+        If filename is given, AIBattle is responsible for starting & closing
+        the AI program.
         If prev_info is given, restore from it instead of constructing a new
         one.
         """
@@ -39,9 +39,9 @@ class AIBattle(battle.Battle):
         logger.debug('Building proxies for AIs')
         self.ais = []
         self.ais.append(ai_proxy.AIProxy(0, sock=sock, battle=self,
-                                            file_name=ai0_filename))
+                                            filename=ai0_filename))
         self.ais.append(ai_proxy.AIProxy(1, sock=sock, battle=self,
-                                            file_name=ai1_filename))
+                                            filename=ai1_filename))
         logger.debug('Proxies built')
 
         # Set team names in Battle
