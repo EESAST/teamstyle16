@@ -32,6 +32,7 @@ INFINITY = float('inf')     # 正无穷, 大于任何有限数
 SCORE = [0, 0]      # 两队积分
 COMMANDS = [[], []] #两队指令
 WEATHER = 0         # 天气
+PRODUCTION_LIST = [[],[]] #生产列表
 
 #积分规则
 FORT_SCORE = 1      # 占领据点每回合奖励积分
@@ -76,7 +77,7 @@ MINE = 2        # 矿场
 OILFIELD = 3    # 油田
 # 可移动单位(unit)
 SUBMARINE = 4   # 潜艇
-DESTROYER = 5   # 驱逐舰
+DESTROYER = 5   # 驱逐舰   
 CARRIER = 6     # 航母
 CARGO = 7       # 运输舰
 FIGHTER = 8     # 战斗机
@@ -466,6 +467,10 @@ class Base(Building):
 
     def build(self, kind):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
+        if self.metal < PROPERTY[kind]['cost']:
+            return -1
+        PRODUCTION_LIST[self.team].append([kind, PROPERTY[kind]['build_round']])
+        self.metal = self.metal - PROPERTY[kind]['cost']
         pass    ##
 
 
@@ -502,8 +507,26 @@ class Unit(UnitBase):
         ghost.dest = None   # no access
         return ghost
 
-    def move(self, game):
-        return []
+    def move(self, game):  #这个move已经加入了speed的结果,传game干什么，unit本身不是有dest吗
+        cover = 0 #走过的长度
+        for i in range(len(game.map_info.pathfinding(self.pos, self.dest))):
+            Distance = self.speed - cover #剩余的路程
+            if(Distance > nodes[i].distance(nodes[i + 1])):
+                cover += nodes[i].distance(nodes[i + 1])
+            elif Distance == nodes[i].distance(nodes[i + 1]):
+                nodes = nodes[0 : (i + 2)]
+                return nodes
+            else:
+                nodes = nodes[0 : (i + 2)]
+                flag = 1 if (nodes[i].x + nodes[i].y) < (nodes[i + 1].x + nodes[i + 1].y) else -1
+                if nodes[i].x == nodes[i + 1].x:
+                    nodes.append(Position(nodes[i].x + flag * Distance, nodes[i].y, nodes[i].z))
+                    return nods
+                elif nodes[i].y == nodes[i + 1].y:
+                    nodes.append(Position(nodes[i].x, nodes[i].y + flag * Distance, nodes[i].z))
+                    return nodes
+                else:
+                    return False
 
 class Submarine(Unit):
     """潜艇"""
