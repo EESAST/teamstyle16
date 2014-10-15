@@ -93,7 +93,7 @@ AI对战
 
 |      方法      |    返回值     |   描述   |
 |----------------|---------------|----------|
-| load(filename, port=DEFAULT_PORT, ai_filename=None) | HumanAIBattle | 载入游戏 |
+| load(filename, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | HumanAIBattle | 载入游戏 |
 
 类继承关系
 
@@ -106,12 +106,12 @@ AI对战
 
 |             构造函数            |                 描述                |
 |---------------------------------|-------------------------------------|
-| HumanAIBattle(map_info, port=DEFAULT_PORT, ai_filename=None) | 可能抛出AIFileError, AIConnectError |
+| HumanAIBattle(map_info, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | 可能抛出AIFileError, AIConnectError |
 
 |         方法         | 返回值 |            描述            |
 |----------------------|--------|----------------------------|
 | feed_ai_commands()   | None   | 从AI获取指令，填充至指令集 |
-| add_command(command) | None   | 向选手指令集中增添指令     |
+| add_command(command) | bool   | 向选手指令集中增添指令     |
 
 
 ## Module replayer
