@@ -98,7 +98,7 @@ class Battle(object):
         # the last round will be lost (because no next_round will be called).
         self.record_history()
         if self.gamebody.round % self.gamebody.record_interval == 0:
-            self.record_key_frame
+            self.record_key_frame()
 
         logger.info('Moved to round %d', self.gamebody.round)
         return events
