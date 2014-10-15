@@ -178,9 +178,12 @@ class GameBody(object):
         return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self)
 
 def load(filename):
-    """Read map from file"""
+    """Read game from file"""
     return loads(open(filename).read())
 
 def loads(game_str):
     """Read game from string"""
-    return MyDecoder().decode(game_str)
+    game =  MyDecoder().decode(game_str)
+    game.map_info.elements = {int(index_str): element for index_str, element in
+                              game.map_info.elements.items()}
+    return game
