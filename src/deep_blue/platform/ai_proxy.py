@@ -5,8 +5,6 @@ import logging
 from logic import basic
 from logic import command
 
-logging.basicConfig(level=logging.INFO)
-
 DEFAULT_PORT = 8067
 
 class AIError(IOError):
@@ -40,34 +38,36 @@ class AIProxy(threading.Thread):
         # start AI (if needed) and connect
         self.ai_program = None
         if filename is not None:
-            self.logger.info('Starting AI (%s)', filename)
+            self.logger.debug('Starting AI (%s)', filename)
             self.__run_ai(filename, port)
             self.logger.info('AI started')
 
-        self.logger.info('Waiting for connection at port %d', port)
+        self.logger.debug('Waiting for connection at port %d', port)
         self.conn, self.addr = sock.accept()
         self.logger.debug('AI connected, getting team name')
         self.team_name = self.__get_team_name()
         self.logger.info('Connected to AI "%s"', self.team_name)
 
         # Send stable info
-        self.logger.info('Sending stable info to AI')
+        self.logger.debug('Sending stable info')
         self.__send_stable_info(battle)
-        self.logger.info('Info sent')
+        self.logger.info('Stable info sent')
 
     def stop(self):
         # Terminate AI program if needed
         if self.ai_program:
-            self.logger.info("Terminaing AI")
+            self.logger.debug("Terminaing AI")
             self.ai_program.terminate()
+            self.logger.info('AI terminated')
 
-        self.logger.info("Closing connection socket")
+        self.logger.debug("Closing connection socket")
         self.positive_close=True
         self.conn.shutdown(socket.SHUT_RDWR)  # To shut down immediately
         self.conn.close()
+        self.logger.info('Connection closed positively')
 
     def run(self):
-        self.logger.info('Starting receiving thread')
+        self.logger.debug('Starting receiving thread')
 
         while True:
             self.logger.debug('Receiving commands')
@@ -75,8 +75,7 @@ class AIProxy(threading.Thread):
                 data = self.conn.recv(1024)
             except socket.error as e:
                 if self.positive_close:  # Closed by self
-                    self.logger.info('Receiving thread terminated')
-                    return
+                    break
                 # Else a real error
                 self.logger.error('Receiving failed: %s', e)
                 raise AIConnectError('Receiving from AI %d failed: %s' %
@@ -84,8 +83,7 @@ class AIProxy(threading.Thread):
 
             if len(data) == 0:
                 if self.positive_close:
-                    self.logger.info('Receiving thread terminated')
-                    return
+                    break
                 # Else closed by AI
                 self.logger.error('Connection shutdown orderly by AI')
                 # If started the AI, check its return value if possible
@@ -102,7 +100,7 @@ class AIProxy(threading.Thread):
 
             self.logger.debug('Data received (size: %d)', len(data))
             cmds = self.__decode_commands(data.decode())
-            self.logger.info('%d command(s) decoded', len(cmds))
+            self.logger.info('%d command(s) decoded from AI', len(cmds))
 
             self.lock.acquire()
             self.commands.extend(cmds)
@@ -120,9 +118,9 @@ class AIProxy(threading.Thread):
 
     def send_info(self, battle):
         """Send infomations to AI"""
-        self.logger.info('Sending round info to AI')
+        self.logger.debug('Sending round info')
         self.__send_round_info(battle)
-        self.logger.info('Info sent')
+        self.logger.info('Round Info sent')
 
     def __run_ai(self, filename, port):
         try:

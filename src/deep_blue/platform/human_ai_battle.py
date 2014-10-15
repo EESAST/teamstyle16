@@ -43,7 +43,7 @@ class HumanAIBattle(battle.Battle):
 
         self.ai = ai_proxy.AIProxy(ai_team_num, sock=sock, battle=self,
                                                 filename=ai_filename)
-        logger.debug('Proxy built')
+        logger.info('Proxy built')
 
         # Set team names in Battle
         self.team_names[1 - ai_team_num] = human_team_name
@@ -54,7 +54,7 @@ class HumanAIBattle(battle.Battle):
         self.ai.start()
 
     def __del__(self):
-        logger.info('Stopping AI')
+        logger.debug('Stopping AI')
         self.ai.stop()
         self.ai.join()
         logger.info('AI stopped')
@@ -73,7 +73,8 @@ class HumanAIBattle(battle.Battle):
 
     def feed_ai_commands(self, sleep_time=None):
         """Feed commands from AI within time limit time_per_round"""
-        logger.info('Feeding commands')
+        logger.debug('Feeding commands')
+
         if sleep_time is None:
             sleep_time = self.gamebody.time_per_round
         time.sleep(sleep_time)
@@ -81,6 +82,8 @@ class HumanAIBattle(battle.Battle):
         cmds = self.ai.get_commands()
         for cmd in cmds:
             self.gamebody.set_command(ai.team_num, cmd)
+
+        logger.info('AI commands feed')
 
     def add_command(self, command):
         """Add a command to the gamebody for human"""

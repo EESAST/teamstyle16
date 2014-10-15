@@ -41,7 +41,7 @@ class AIBattle(battle.Battle):
                                             filename=ai0_filename))
         self.ais.append(ai_proxy.AIProxy(1, sock=sock, battle=self,
                                             filename=ai1_filename))
-        logger.debug('Proxies built')
+        logger.info('Proxies for AIs built')
 
         # Set team names in Battle
         self.team_names = [self.ais[0].team_name, self.ais[1].team_name]
@@ -55,7 +55,7 @@ class AIBattle(battle.Battle):
 
     def __del__(self):
         for ai in self.ais:
-            logger.info('Stopping AI %d', ai.team_num)
+            logger.debug('Stopping AI %d', ai.team_num)
             ai.stop()
             ai.join()
             logger.info('AI %d stopped', ai.team_num)
@@ -76,7 +76,7 @@ class AIBattle(battle.Battle):
 
     def feed_ai_commands(self, sleep_time=None):
         """Feed commands from AIs within time limit time_per_round"""
-        logger.info('Feeding commands')
+        logger.debug('Feeding commands')
         if sleep_time is None:
             sleep_time = self.gamebody.time_per_round
         time.sleep(sleep_time)
@@ -90,6 +90,7 @@ class AIBattle(battle.Battle):
         for ai in self.ais:
             for cmd in cmds:
                 self.gamebody.set_command(ai.team_num, cmd)
+        logger.info('AI commands feed')
 
     def run_until_end(self):
         """Run until the game ends"""

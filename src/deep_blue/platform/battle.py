@@ -11,11 +11,16 @@ class Battle(object):
         If prev_info is given, restore from it & ignore map_info"""
         if prev_info is not None:
             # Restore
+            logger.debug('Restoring battle from previous info')
+
             self.team_names = prev_info['team_names']
             self.gamebody = gamebody.loads(prev_info['gamebody'])
             self.history = prev_info['history']
             self.key_frames = prev_info['key_frames']
+
+            logger.info('Battle restored')
             return
+
         # Construct new battle
         # Just check record_interval in map_info, because invalid interval
         # may casue run time error (e.g. modulo by zero)
@@ -84,8 +89,8 @@ class Battle(object):
         return self.gamebody.commands[team]
 
     def next_round(self):
-        """Advance the game to the next round, return events happened"""
-        logger.info('Moving to the next round')
+        """Advance game to the next round, return events happened"""
+        logger.debug('Moving to next round (round %d)', self.gamebody.round + 1)
 
         self.record_commands()  # commands of this round become fixed
         events = self.gamebody.run()
@@ -95,9 +100,13 @@ class Battle(object):
         if self.gamebody.round % self.gamebody.record_interval == 0:
             self.record_key_frame
 
+        logger.info('Moved to round %d', self.gamebody.round)
         return events
 
     def save(self, filename):
+        """Save game to file"""
+        logger.debug('Saving game to %s', filename)
+
         save_file = open(filename, 'w')
         contents = {
             "team_names": self.team_names,
@@ -106,6 +115,8 @@ class Battle(object):
             'key_frames': self.key_frames
         }
         json.dump(contents, save_file, sort_keys=True, separators=(',', ':'))
+
+        logger.info('Game saved to %s', filename)
 
     def record_history(self):
         history = self.history

@@ -11,14 +11,17 @@ class Replayer(battle.Battle):
         super(Replayer, self).__init__(None, prev_info=prev_info)
 
     def next_round(self):
-        logger.info('Moving to next round (round %d)', self.gamebody.round + 1)
+        logger.debug('Moving to next round (round %d)', self.gamebody.round + 1)
 
         cmds = self.history['command'][self.gamebody.round]
         for team in [0, 1]:
             for cmd in cmds[team]:
                 self.gamebody.set_command(cmd)
         # Call run() directly to avoid infos recording in base class
-        return self.gamebody.run()
+        events = self.gamebody.run()
+
+        logger.info('Moved to round %d', self.gamebody.round)
+        return events
 
     def goto(self, round):
         """Go to specific round"""
@@ -26,7 +29,7 @@ class Replayer(battle.Battle):
         map_info = game.map_info
 
         if 0 <= round <= self.max_round:
-            logger.info('Going to round %d', round)
+            logger.debug('Going to round %d', round)
             # Find nearest key frame
             frame_index = round // map_info.record_interval
             frame_round = frame_index * map_info.record_interval
@@ -44,13 +47,20 @@ class Replayer(battle.Battle):
             while game.round < round:
                 self.next_round()
 
+            logger.info('Moved to round %d', self.gamebody.round)
+        # round invalid, just warn
+        logger.warning('Try to go to an invalid round (%d / %d)',
+                       round, self.max_round)
+
     def goto_begin(self):
-        logger.info('Going to begin')
+        logger.debug('Going to begin')
         self.goto(0)
+        logger.info('Moved to round %d', self.gamebody.round)
 
     def goto_end(self):
-        logger.info('Going to end')
+        logger.debug('Going to end')
         self.goto(self.max_round)
+        logger.info('Moved to round %d', self.gamebody.round)
 
 def load(filename):
     return Replayer(json.load(open(filename)))
