@@ -1,4 +1,5 @@
 import copy
+import gzip
 import json
 import logging
 from logic import map_info, gamebody
@@ -112,11 +113,11 @@ class Battle(object):
         logger.info('Moved to round %d', self.gamebody.round)
         return events
 
-    def save(self, filename):
+    def save(self, filename, compact=False, compress=False):
         """Save game to file"""
-        logger.debug('Saving game to %s', filename)
+        logger.debug('Saving game to "%s"', filename)
 
-        save_file = open(filename, 'w')
+        save_file = (gzip.open if compress else open)(filename, 'w')
         contents = {
             "version": 1,
             "team_names": self.team_names,
@@ -124,9 +125,12 @@ class Battle(object):
             'gamebody': self.gamebody.saves(),
             'key_frames': self.key_frames
         }
-        json.dump(contents, save_file, sort_keys=True, separators=(',', ':'))
+        if compact:
+            json.dump(contents, save_file, sort_keys=True, separators=(',', ':'))
+        else:
+            json.dump(contents, save_file, indent=4, sort_keys=True)
 
-        logger.info('Game saved to %s', filename)
+        logger.info('Game saved to "%s"', filename)
 
     def record_history(self):
         history = self.history
