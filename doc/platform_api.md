@@ -33,38 +33,38 @@
 |------------------|--------------------|
 | Battle(map_info) | 用地图信息构造战斗 |
 
-|                   方法                   |        返回值        |               描述               |
-|------------------------------------------|----------------------|----------------------------------|
-| **基本信息**                             |                      |                                  |
-| map_info()                               | MapInfo              | 当前的地图信息                   |
-| team_name(team)                          | str                  | 队伍名                           |
-| **游戏状态**                             |                      |                                  |
-| round()                                  | int                  | 返回当前回合数                   |
-| status()                                 | int                  | 返回当前的游戏状态               |
-| score(team)                              | int                  | 返回分数                         |
-| elements(team)                           | {int:Element}            | 返回某队所有元素                 |
-| vision(team)                             | [Position][3]        | 返回某队三层视野的点集           |
-| view_elements(perspective)               | {int:Element}            | 返回某队视角下的所有元素         |
-| production_list(team)                    | [[kind, round_left]] | 返回生产列表                     |
-| population(team)                         | int                  | 返回该队伍的人口数               |
-| **统计数据**                             |                      |                                  |
-| score_history()                          | [int[2]]             | 分数历史                         |
-| unit_num_history()                       | [int[2]]             | 单位数历史                       |
-| population_history()                     | [int[2]]             | 人口历史                         |
-| command_history()                        | [[Command][2]]       | 指令历史 (攻击指令经过修饰)      |
-| **运行/指令**                            |                      |                                  |
+|            方法            |        返回值        |              描述             |
+|----------------------------|----------------------|-------------------------------|
+| **基本信息**               |                      |                               |
+| map_info()                 | MapInfo              | 当前的地图信息                |
+| team_name(team)            | str                  | 队伍名                        |
+| **游戏状态**               |                      |                               |
+| round()                    | int                  | 返回当前回合数                |
+| status()                   | int                  | 返回当前的游戏状态            |
+| score(team)                | int                  | 返回分数                      |
+| elements(team)             | {int:Element}        | 返回某队所有元素              |
+| vision(team)               | [Position][3]        | 返回某队三层视野的点集        |
+| view_elements(perspective) | {int:Element}        | 返回某队视角下的所有元素      |
+| production_list(team)      | [[kind, round_left]] | 返回生产列表                  |
+| population(team)           | int                  | 返回该队伍的人口数            |
+| **统计数据**               |                      |                               |
+| score_history()            | [int[2]]             | 分数历史                      |
+| unit_num_history()         | [int[2]]             | 单位数历史                    |
+| population_history()       | [int[2]]             | 人口历史                      |
+| command_history()          | [[Command][2]]       | 指令历史 (攻击指令经过修饰)   |
+| **运行/指令**              |                      |                               |
 | set_command(team, command) | bool                 | 添加指令，指令无效则返回False |
-| commands(team)                           | [Command]            | 返回该队伍当前的指令集           |
-| next_round()                             | [Event]     | 进行一回合                       |
-| **保存/载入**                            |                      |                                  |
-| save(filename)                      | None                 | 保存游戏                         |
+| commands(team)             | [Command]            | 返回该队伍当前的指令集        |
+| next_round()               | [Event]              | 进行一回合                    |
+| **保存/载入**              |                      |                               |
+| save(filename)             | None                 | 保存游戏                      |
 
 
 ## Module ai_battle
 AI对战，指令均来自于AI
 
-|      方法      |  返回值  |   描述   |
-|----------------|----------|----------|
+|                                   方法                                  |  返回值  |   描述   |
+|-------------------------------------------------------------------------|----------|----------|
 | load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | AIBattle | 载入游戏 |
 
 类继承关系
@@ -76,8 +76,8 @@ AI对战，指令均来自于AI
 ### Class AIBattle
 AI对战
 
-|                         构造函数                         |                 描述                |
-|----------------------------------------------------------|-------------------------------------|
+|                                   构造函数                                  |                 描述                |
+|-----------------------------------------------------------------------------|-------------------------------------|
 | AIBattle(map_info, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | 可能抛出AIFileError, AIConnectError |
 
 |        方法        | 返回值 |            描述            |
@@ -91,8 +91,8 @@ AI对战
 ## Module human_ai_battle
 人机对战，指令部分来自于AI
 
-|      方法      |    返回值     |   描述   |
-|----------------|---------------|----------|
+|                                           方法                                           |    返回值     |   描述   |
+|------------------------------------------------------------------------------------------|---------------|----------|
 | load(filename, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | HumanAIBattle | 载入游戏 |
 
 类继承关系
@@ -104,8 +104,8 @@ AI对战
 ### Class HumanAIBattle
 人机对战
 
-|             构造函数            |                 描述                |
-|---------------------------------|-------------------------------------|
+|                                              构造函数                                             |                 描述                |
+|---------------------------------------------------------------------------------------------------|-------------------------------------|
 | HumanAIBattle(map_info, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | 可能抛出AIFileError, AIConnectError |
 
 |         方法         | 返回值 |            描述            |
