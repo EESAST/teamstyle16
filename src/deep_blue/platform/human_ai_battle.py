@@ -8,11 +8,10 @@ import battle
 import ai_proxy
 
 logger = logging.getLogger(__name__)
-DEFAULT_PORT = 8067
 
 class HumanAIBattle(battle.Battle):
     """Represent a battle between two AIs"""
-    def __init__(self, map_info, port=DEFAULT_PORT, human_team_name=None,
+    def __init__(self, map_info, port=ai_proxy.DEFAULT_PORT, human_team_name=None,
                  ai_filename=None, ai_team_num=1, prev_info=None):
         """Construct an HumanAIBattle from a map, or from previous infos.
         port is the port number used for listening.
@@ -79,7 +78,7 @@ class HumanAIBattle(battle.Battle):
         """Add a command to the gamebody for human"""
         return self.gamebody.set_command(1 - ai.team_num, command)
 
-def load(filename, port=DEFAULT_PORT, human_team_name=None, ai_filename=None,
+def load(filename, port=ai_proxy.DEFAULT_PORT, human_team_name=None, ai_filename=None,
                    ai_team_num=1):
     """Load save file, construct an HumanAIBattle based on it"""
     return HumanAIBattle(None, port=port, human_team_name=human_team_name,

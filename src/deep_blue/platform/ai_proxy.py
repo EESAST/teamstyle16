@@ -7,6 +7,8 @@ from logic import command
 
 logging.basicConfig(level=logging.INFO)
 
+DEFAULT_PORT = 8067
+
 class AIError(IOError):
     """Describe error caused by AI"""
     def __init__(self, what):

@@ -8,11 +8,10 @@ import battle
 import ai_proxy
 
 logger = logging.getLogger(__name__)
-DEFAULT_PORT = 8067
 
 class AIBattle(battle.Battle):
     """Represent a battle between two AIs"""
-    def __init__(self, map_info, port=DEFAULT_PORT,
+    def __init__(self, map_info, port=ai_proxy.DEFAULT_PORT,
                  ai0_filename=None, ai1_filename=None, prev_info=None):
         """Construct an AIBattle from a map, or from previous infos.
         port is the port number used for listening.
@@ -89,7 +88,7 @@ class AIBattle(battle.Battle):
             self.feed_ai_commands()
             self.next_round()
 
-def load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None):
+def load(filename, port=ai_proxy.DEFAULT_PORT, ai0_filename=None, ai1_filename=None):
     """Load save file, construct an AIBattle based on it"""
     return AIBattle(None, port=port,
                     ai0_filename=ai0_filename, ai1_filename=ai1_filename,
