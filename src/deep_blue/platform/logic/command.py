@@ -118,6 +118,7 @@ class ChangeDest(Command):
                 game.commands[mover.team].remove(command)
                 break
         game.commands[mover.team].append(self)
+        mover.dest = dest
         return True
 
     def result_event(self, game):
