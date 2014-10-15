@@ -37,7 +37,6 @@ class AIProxy(threading.Thread):
         self.lock = threading.RLock()
         self.team_num = team_num
         self.commands = []
-        self.stop_flag = False
 
         self.logger = logging.getLogger('%s.ai%d' % (__name__, team_num))
 
@@ -68,41 +67,44 @@ class AIProxy(threading.Thread):
         if self.ai_program:
             self.logger.info("Terminaing AI")
             self.ai_program.terminate()
-        self.logger.info("Stop receiving commands from AI")
-        self.stop_flag = True
+
+        self.logger.info("Closing connection socket")
+        self.conn.close()
 
     def run(self):
-        self.logger.info('Starting loop for receiving commands')
-        while not self.stop_flag:
+        self.logger.info('Starting receiving thread')
+
+        while True:
+            self.logger.debug('Receiving commands')
             try:
-                self.logger.debug('Receiving commands')
                 data = self.conn.recv(1024)
+            except socket.error as e:
+                self.logger.error('Receiving failed: %s', e)
+                raise AIConnectError('Receiving from AI %d failed: %s' %
+                                     self.team_num, e)
 
-                if len(data) == 0:
-                    self.logger.error('Connection shutdown orderly by AI')
+            if len(data) == 0:
+                self.logger.error('Connection shutdown orderly by AI')
+                # If started the AI, check its return value if possible
+                if self.ai_program:
+                    return_code = self.ai_program.returncode
+                    if return_code is not None:
+                        self.logger.info('AI returned wih value %d',
+                                         return_code)
+                    else:
+                        self.logger.info('AI has not stopped yet')
 
-                    # If started the AI, check its return value if possible
-                    if self.ai_program:
-                        return_code = self.ai_program.returncode
-                        if return_code is not None:
-                            self.logger.info('AI returned wih value %d',
-                                             return_code)
-                        else:
-                            self.logger.info('AI has not stopped yet')
+                raise AIConnectError('Connection shutdown orderly by AI %d'
+                                     % self.team_num)
 
-                    raise AIConnectError('Connection shutdown orderly by AI %d'
-                                         % self.team_num)
+            self.logger.debug('Data received (size: %d)', len(data))
+            cmds = self.__decode_commands(data.decode())
+            self.logger.info('%d command(s) decoded', len(cmds))
 
-                self.logger.debug('Data received (size: %d)', len(data))
-                cmds = self.__decode_commands(data.decode())
-                self.logger.info('%d command(s) decoded', len(cmds))
+            self.lock.acquire()
+            self.commands.extend(cmds)
+            self.lock.release()
 
-                self.lock.acquire()
-                self.commands.extend(cmds)
-                self.lock.release()
-            except socket.timeout:
-                self.logger.debug('Receiving timeout, continue to next loop')
-                continue
         self.logger.info('Receiving thread terminated')
 
     def get_commands(self):
