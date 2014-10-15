@@ -54,17 +54,18 @@ class AIProxy(threading.Thread):
         self.logger.info('Stable info sent')
 
     def stop(self):
-        # Terminate AI program if needed
-        if self.ai_program:
-            self.logger.debug("Terminaing AI")
-            self.ai_program.terminate()
-            self.logger.info('AI terminated')
-
-        self.logger.debug("Closing connection socket")
-        self.positive_close=True
-        self.conn.shutdown(socket.SHUT_RDWR)  # To shut down immediately
-        self.conn.close()
-        self.logger.info('Connection closed positively')
+        # stop only when alive
+        if self.isAlive():
+            self.logger.debug("Closing connection socket")
+            self.positive_close=True
+            self.conn.shutdown(socket.SHUT_RDWR)  # To shut down immediately
+            self.conn.close()
+            self.logger.info('Connection closed positively')
+            # Terminate AI program if needed
+            if self.ai_program:
+                self.logger.debug("Terminaing AI")
+                self.ai_program.terminate()
+                self.logger.info('AI terminated')
 
     def run(self):
         self.logger.debug('Starting receiving thread')
