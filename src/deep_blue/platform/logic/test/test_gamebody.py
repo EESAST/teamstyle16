@@ -238,6 +238,52 @@ class TestGameBody(unittest.TestCase):
 
         self.assertEqual(new_dest, unit.dest)
 
+    def test_collect(self):
+        """Test behavior of collect (auto collect when distance == 1 and stop,
+        only Cargo)"""
+        hungry_state = {
+            'health_max': 100, 'health': 10,
+            'fuel_max': 200, 'fuel': 50,
+            'ammo_max': 300, 'ammo': 0,
+            'metal_max': 40, 'metal': 30
+        }
+        cargo1 = self.add(Cargo, 0, (12, 2), **hungry_state)
+        cargo2 = self.add(Cargo, 0, (14, 6), **hungry_state)
+        cargo3 = self.add(Cargo, 0, (2, 6), dest=(2, 8), speed=3, **hungry_state)
+        cargo4 = self.add(Cargo, 0, (0, 10), dest=(2, 10), speed=3, **hungry_state)
+        self.oilfield0.fuel = 10
+        self.oilfield1.fuel = 500
+        self.mine0.metal = 100
+        self.mine1.metal = 0
+
+        results = self.gamebody.run()
+        self.assertEqual(2, len(results))
+
+        expected = [event.Collect(cargo0.index, self.oilfield0.index, 10, 0),
+                    event.Collect(cargo1.index, self.mine0.index, 0, 10)]
+        results = {e.index: e for e in results}
+
+        # Check events
+        for e in expected:
+            self.assertIn(e.index, results)
+            result = results[e.index]
+            for attr in ['target', 'fuel', 'metal']:
+                self.assertEqual(getattr(e, attr), getattr(result, attr))
+
+        # Check consequences
+        self.assertEqual(10, cargo1.health)
+        self.assertEqual(60, cargo1.health)
+        self.assertEqual(0, cargo1.ammo)
+        self.assertEqual(30, cargo1.metal)
+
+        self.assertEqual(50, cargo2.fuel)
+        self.assertEqual(40, cargo2.metal)
+
+        self.assertEqual(0, self.oilfield0.fuel)
+        self.assertEqual(90, self.mine0.metal)
+        self.assertEqual(500, self.oilfield1.fuel)
+        self.assertEqual(0, self.mine1.metal)
+
     def test_fix(self):
         """Test behavior of fix"""
         boat = self.add(Cargo, 0, (3, 2), health_max=100, health=10,
@@ -297,42 +343,23 @@ class TestGameBody(unittest.TestCase):
         self.assertEqual(plane.pos, create.pos)
         self.assertEqual(0, plane.pos.distance(self.base0.pos))
 
-    # def test_supply(self):
-    #     """Test behavior of supply"""
-    #     index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(3,2,1)))
-    #     index_2 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1)))
-    #     self.assertIsNotNone(index_1)
-    #     self.assertIsNotNone(index_2)
-    #     self.gamebody.map_info.elements[index_1].fuel -= 1
-    #     self.gamebody.map_info.elements[index_1].metal -= 1
-    #     self.gamebody.map_info.elements[index_1].ammo -= 1
-    #     self.gamebody.map_info.elements[index_2].fuel -= 1
-    #     self.gamebody.map_info.elements[index_2].metal -= 1
-    #     self.gamebody.map_info.elements[index_2].ammo -= 1
-    #     self.assertTrue(self.gamebody.set_command(0, Supply(self.base0_index, index_1)))
-    #     self.assertFalse(self.gamebody.set_command(0, Supply(self.base0_index, index_2)))
-    #     self.assertEqual(self.gamebody.map_info.elements[self.base0_index].fuel, self.gamebody.map_info.elements[self.base0_index].fuel_max - 1)
-    #     self.assertEqual(self.gamebody.map_info.elements[self.base0_index].metal, self.gamebody.map_info.elements[self.base0_index].metal_max - 1)
-    #     self.assertEqual(self.gamebody.map_info.elements[self.base0_index].ammo, self.gamebody.map_info.elements[self.base0_index].ammo_max - 1)
-    #     self.assertEqual(self.gamebody.map_info.elements[index_1].fuel, self.gamebody.map_info.elements[index_1].fuel_max)
-    #     self.assertEqual(self.gamebody.map_info.elements[index_1].metal, self.gamebody.map_info.elements[index_1].metal_max)
-    #     self.assertEqual(self.gamebody.map_info.elements[index_1].ammo, self.gamebody.map_info.elements[index_1].ammo_max)
-    #     self.assertEqual(self.gamebody.map_info.elements[index_2].fuel, self.gamebody.map_info.elements[index_2].fuel_max - 1)
-    #     self.assertEqual(self.gamebody.map_info.elements[index_2].metal, self.gamebody.map_info.elements[index_2].metal_max - 1)
-    #     self.assertEqual(self.gamebody.map_info.elements[index_2].ammo, self.gamebody.map_info.elements[index_2].ammo_max - 1)
+    def test_supply(self):
+        """Test behavior of supply"""
+        # Building, Carrier, Cargo (diffrent when supply planes)
+        pass
 
-    # def test_cancel(self):
-    #     """Test behavior of cancel"""
-    #     index_1 = self.gamebody.map_info.add_element(Destroyer(0, Position(0,4,1), fire_ranges = [2,2,2]))
-    #     index_2 = self.gamebody.map_info.add_element(Destroyer(1, Position(0,5,1)))
-    #     self.assertIsNotNone(index_1)
-    #     self.assertIsNotNone(index_2)
-    #     self.assertTrue(self.gamebody.set_command(0, AttackUnit(index_1, index_2)))
-    #     self.assertTrue(self.gamebody.set_command(0, Cancel(index_1)))
-    #     self.assertEqual(self.gamebody.map_info.elements[index_2].health, self.gamebody.map_info.elements[index_2].health_max)
+    def test_cancel(self):
+        """Test behavior of cancel"""
+        attacker = self.add(Destroyer, 1, (5, 2))
+        defencer = self.add(Destroyer, 0, (6, 2))
 
-    # def test_(self):
-    #     pass
+        cmd = AttackUnit(attacker.index, defencer.index)
+        self.assertTrue(self.gamebody.set_command(1, cmd))
+        self.assertEqual(1, len(self.gamebody.commands[1]))
+
+        cmd = Cancel(attacker.index)
+        self.assertTrue(self.gamebody.set_command(1, cmd))
+        self.assertEqual(0, len(self.gamebody.commands[1]))
 
 if __name__ == '__main__':
     unittest.main()
