@@ -179,7 +179,7 @@ class Supply(Command):
         game.commands[giver.team].append(self)
         return True
 
-    def result_event(self):
+    def result_event(self, game):
         elements = game.map_info.elements
         giver = elements.get(self.operand)
         receiver = elements.get(self.target)
