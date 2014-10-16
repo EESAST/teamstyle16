@@ -137,15 +137,13 @@ class GameBody(object):
     def set_command(self, team, command):
         """add a command and resolve conflicts"""
         if isinstance(command, Produce):
-            command.add_to(team, self)
-            return True
+            return command.add_to(team, self)
         operator = self.map_info.elements.get(command.operand)
         if operator is None:
             return False
         if team != operator.team:
             return False
-        command.add_to(self)
-        return True
+        return command.add_to(self)
 
     def run(self):
         """run one round and return the events took place"""
