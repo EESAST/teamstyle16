@@ -28,7 +28,7 @@ OILFIELD_NUM_MAX = 12    # 油田最大数量
 POPULATION_MAX = 60    # 单方最大人口数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
-#积分规则
+# 积分规则
 FORT_SCORE = 1      # 占领据点每回合奖励积分
 DAMAGE_SCORE = 1    # 每点伤害奖励积分
 COLLECT_SCORE = 1   # 采集一单位资源奖励积分
@@ -497,24 +497,24 @@ class Unit(UnitBase):
         ghost.dest = None   # no access
         return ghost
 
-    def move(self, game):  #这个move已经加入了speed的结果,传game干什么，unit本身不是有dest吗
-        cover = 0 #走过的长度
+    def move(self, game):
+        cover = 0 # 走过的长度
         nodes = game.map_info.pathfinding(self.pos, self.dest)
         for i in range(len(nodes) - 1):
-            Distance = self.speed - cover #剩余的路程
-            if(Distance > nodes[i].distance(nodes[i + 1])):
+            can_move = self.speed - cover # 剩余的路程
+            if(can_move > nodes[i].distance(nodes[i + 1])):
                 cover += nodes[i].distance(nodes[i + 1])
-            elif Distance == nodes[i].distance(nodes[i + 1]):
+            elif can_move == nodes[i].distance(nodes[i + 1]):
                 nodes = nodes[0 : (i + 2)]
                 break
             else:
                 nodes = nodes[0 : (i + 2)]
                 flag = 1 if (nodes[i].x + nodes[i].y) < (nodes[i + 1].x + nodes[i + 1].y) else -1
                 if nodes[i].x == nodes[i + 1].x:
-                    nodes.append(Position(nodes[i].x + flag * Distance, nodes[i].y, nodes[i].z))
+                    nodes.append(Position(nodes[i].x + flag * can_move, nodes[i].y, nodes[i].z))
                     break
                 elif nodes[i].y == nodes[i + 1].y:
-                    nodes.append(Position(nodes[i].x, nodes[i].y + flag * Distance, nodes[i].z))
+                    nodes.append(Position(nodes[i].x, nodes[i].y + flag * can_move, nodes[i].z))
                     break
                 else:
                     raise RuntimeError()

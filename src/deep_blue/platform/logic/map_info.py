@@ -78,29 +78,29 @@ class MapInfo(object):
         dest.y = max(min(self.y_max, dest.y), 0)
         dest.z = origin.z
         nodes = [origin, dest]
-        Adjacent = {}        #Adjacent字典存储到达这个点的点
+        adjacent = {}        # Adjacent字典存储到达这个点的点
         vector = [(0,1),(1,0),(0,-1),(-1,1)]
-        List = []
-        List.append(origin)
-        while 1:
-            center = List[0]
+        queue = []
+        queue.append(origin)
+        while True:
+            center = queue[0]
             for one in vector:
                 pos = Position(center.x + one[0], center.y + one[1], center.z)
-                if pos in Adjacent:
+                if pos in adjacent:
                     continue
                 if (not isinstance(self.element(pos), Building) and not isinstance(self.element(pos), Resource)
-                    and max(min(self.x_max, pos.x), 0) == pos.x and max(min(self.y_max, pos.y), 0) == pos.y) :           #最小坐标是0还是1      
-                    List.append(pos)
-                    Adjacent[pos] = center
+                    and max(min(self.x_max, pos.x), 0) == pos.x and max(min(self.y_max, pos.y), 0) == pos.y) :           # 最小坐标是0还是1      
+                    queue.append(pos)
+                    adjacent[pos] = center
                 if(pos == dest):
-                    adj = Adjacent[dest]
+                    adj = adjacent[dest]
                     if(isinstance(self.element(pos), Building) or isinstance(self.element(pos), Resource)):
-                        nodes.pop(-1)          #如果目的地是陆地单位或资源单位          
+                        nodes.pop(-1)          # 如果目的地是陆地单位或资源单位          
                     while adj is not origin:
                         nodes.insert(1, adj)
-                        adj = Adjacent[adj]
+                        adj = adjacent[adj]
                     return nodes
-            List.pop(0)
+            queue.pop(0)
 
 def load(filename):
     """Read map from file"""

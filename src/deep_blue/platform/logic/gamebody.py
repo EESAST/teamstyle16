@@ -145,18 +145,18 @@ class GameBody(object):
         """run one round and return the events took place"""
         self.round = self.round + 1
         
-        for Team in [0, 1]:        ##生产列表的变化
-            for Element in self.elements(Team):
-                if isinstance(Element, Base):
-                    break ##返回基地
-            for entry in self.production_lists[Team]:
+        for team_index in [0, 1]:        ## 生产列表的变化
+            for element in self.elements(team_index):
+                if isinstance(element, Base):
+                    break ## 返回基地
+            for entry in self.production_lists[team_index]:
                 level = (AIR if entry[0] >= FIGHTER else SURFACE)
                 if entry[0] == SUBMARINE:
                     level = UNDERWATER
                 if entry[1] <= 0:
-                    for Pos in Element.pos.region(level, 1):
+                    for Pos in element.pos.region(level, 1):
                         if(self.map_info.elements(Pos) == None):
-                            new_element = Unit(team = Team, kind = entry[0], pos = Pos)
+                            new_element = Unit(team = team_index, kind = entry[0], pos = Pos)
                             self.map_info.add_element(new_element)
                 else:
                     entry[1] = entry[1] - 1
