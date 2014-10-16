@@ -108,4 +108,4 @@ def load(filename, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
     """Load save file, construct an AIBattle based on it"""
     return AIBattle(None, port=port, timeout=timeout,
                     ai0_filename=ai0_filename, ai1_filename=ai1_filename,
-                    prev_info=json.load(open(filename)))
+                    prev_info=battle.load_prev_info(filename))

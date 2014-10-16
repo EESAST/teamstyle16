@@ -101,4 +101,4 @@ def load(filename, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
     return HumanAIBattle(None, port=port, timeout=timeout,
                          human_team_name=human_team_name,
                          ai_filename=ai_filename, ai_team_num=ai_team_num,
-                         prev_info=json.load(open(filename)))
+                         prev_info=battle.load_prev_info(filename))

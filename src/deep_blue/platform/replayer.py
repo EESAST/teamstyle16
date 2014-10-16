@@ -63,4 +63,4 @@ class Replayer(battle.Battle):
         logger.info('Moved to round %d', self.gamebody.round)
 
 def load(filename):
-    return Replayer(json.load(open(filename)))
+    return Replayer(battle.load_prev_info(filename))

@@ -107,7 +107,7 @@ class Battle(object):
 
         self.record_commands()  # commands of this round become fixed
         events = self.gamebody.run()
-        # Record history & key frame as early as possible, or infomation of
+        # Record history & key frame as early as possible, or information of
         # the last round will be lost (because no next_round will be called).
         self.record_history()
         if self.gamebody.round % self.gamebody.record_interval == 0:
@@ -151,5 +151,18 @@ class Battle(object):
                  copy.deepcopy(self.gamebody.production_lists))
         self.key_frames.append(frame)
 
+def load_prev_info(filename):
+    """Load previous battle information from file"""
+    try:
+        prev_info = json.load(open(filename))
+    except ValueError:
+        logger.debug('Failed to load file, trying to treat it as gzipped file')
+        try:
+            prev_info = json.load(gzip.open(filename))
+        except IOError:
+            logger.error('%s: Not a valid save file', filename)
+            raise IOError('Invalid save file')
+    return prev_info
+
 def load(filename):
-    return Battle(None, prev_info=json.load(open(filename)))
+    return Battle(None, prev_info=load_prev_info(filename))
