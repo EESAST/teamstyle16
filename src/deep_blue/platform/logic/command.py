@@ -4,12 +4,17 @@ from basic import *
 from copy import deepcopy
 import event
 import map_info
-
+from custom_json import *
 
 class Command(object):
     """指令"""
     def __init__(self, operand):
         self.operand = operand      # index of operator
+
+    def saves(self):
+        """Save command to string"""
+        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self)
+
 
 class AttackPos(Command):
     """攻击坐标"""
@@ -195,3 +200,8 @@ class Cancel(Command):
 
     def result_event(self, game):
         return []
+
+
+def loads(cmd_str):
+    """Read command from string"""
+    return MyDecoder().decode(cmd_str)

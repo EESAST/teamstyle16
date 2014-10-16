@@ -2,12 +2,17 @@
 # event.py
 
 import basic
+from custom_json import *
 
 class Event(object):
     def __init__(self, description):
         self.description = description
     def description(self):
         return self.description
+
+    def saves(self):
+        """Save event to string"""
+        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self)
 
 class AddProductionEntry(Event):
     """添加生产条目"""
@@ -110,3 +115,8 @@ class Capture(Event):
         super(Capture, self).__init__('%d号据点被%d号队伍攻占!' % (index, team))
         self.index = index
         self.team = team
+
+
+def loads(event_str):
+    """Read event from string"""
+    return MyDecoder().decode(event_str)
