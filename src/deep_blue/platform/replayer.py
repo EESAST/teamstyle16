@@ -11,12 +11,17 @@ class Replayer(battle.Battle):
         super(Replayer, self).__init__(None, prev_info=prev_info)
 
     def next_round(self):
+        if self.gamebody.round == self.max_round:
+            # Already at the end, won't move, just warn and return None
+            logger.warning('Try to move past end round')
+            return
+
         logger.debug('Moving to next round (round %d)', self.gamebody.round + 1)
 
         cmds = self.history['command'][self.gamebody.round]
         for team in [0, 1]:
             for cmd in cmds[team]:
-                self.gamebody.set_command(cmd)
+                self.gamebody.set_command(team, cmd)
         # Call run() directly to avoid infos recording in base class
         events = self.gamebody.run()
 
@@ -48,19 +53,18 @@ class Replayer(battle.Battle):
                 self.next_round()
 
             logger.info('Moved to round %d', self.gamebody.round)
-        # round invalid, just warn
-        logger.warning('Try to go to an invalid round (%d / %d)',
-                       round, self.max_round)
+        else:
+            # round invalid, just warn
+            logger.warning('Try to go to an invalid round (%d / %d)',
+                           round, self.max_round)
 
     def goto_begin(self):
         logger.debug('Going to begin')
         self.goto(0)
-        logger.info('Moved to round %d', self.gamebody.round)
 
     def goto_end(self):
         logger.debug('Going to end')
         self.goto(self.max_round)
-        logger.info('Moved to round %d', self.gamebody.round)
 
 def load(filename):
     return Replayer(battle.load_prev_info(filename))
