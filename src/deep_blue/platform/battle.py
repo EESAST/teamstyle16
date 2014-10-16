@@ -3,8 +3,9 @@ import gzip
 import json
 import logging
 from logic import *
+from logic.custom_json import *
 
-VERSION = 2
+VERSION = 3
 
 logger = logging.getLogger(__name__)
 
@@ -29,13 +30,6 @@ class Battle(object):
             self.team_names = prev_info['team_names']
             self.gamebody = gamebody.loads(prev_info['gamebody'])
             self.history = prev_info['history']
-            # Restore commands & events
-            for turn in self.history['command']:
-                for team in xrange(2):
-                    turn[team] = map(command.loads, turn[team])
-            self.history['event'] = [map(event.loads, events) for events
-                                     in self.history['event']]
-
             self.key_frames = prev_info['key_frames']
 
             logger.info('Battle restored')
@@ -137,16 +131,19 @@ class Battle(object):
 
         save_file = (gzip.open if compress else open)(filename, 'w')
         contents = {
-            "version": 2,
+            "version": VERSION,
             "team_names": self.team_names,
             'history': self.history,
             'gamebody': self.gamebody.saves(),
             'key_frames': self.key_frames
         }
+
         if compact:
-            json.dump(contents, save_file, sort_keys=True, separators=(',', ':'))
+            encoder = MyEncoder(sort_keys=True,
+                                separators=(',', ':'))
         else:
-            json.dump(contents, save_file, indent=4, sort_keys=True)
+            encoder = MyEncoder(sort_keys=True, indent=2)
+        save_file.write(encoder.encode(contents))
 
         logger.info('Game saved to "%s"', filename)
 
@@ -159,11 +156,10 @@ class Battle(object):
         history['population'].append(copy.copy(game.populations))
 
     def record_commands(self):
-        self.history['command'].append(
-            [map(command.Command.saves, cmds) for cmds in self.gamebody.commands])
+        self.history['command'].append(copy.copy(self.gamebody.commands))
 
     def record_events(self, events):
-        self.history['event'].append(map(event.Event.saves, events))
+        self.history['event'].append(copy.copy(events))
 
     def record_key_frame(self):
         frame = (copy.deepcopy(self.gamebody.map_info.saves_elements()),
@@ -173,11 +169,11 @@ class Battle(object):
 def load_prev_info(filename):
     """Load previous battle information from file"""
     try:
-        prev_info = json.load(open(filename))
+        prev_info = MyDecoder().decode(open(filename).read())
     except ValueError:
         logger.debug('Failed to load file, trying to treat it as gzipped file')
         try:
-            prev_info = json.load(gzip.open(filename))
+            prev_info = MyDecoder().decode(gzip.open(filename).read())
         except IOError:
             logger.error('%s: Not a valid save file', filename)
             raise IOError('Invalid save file')
