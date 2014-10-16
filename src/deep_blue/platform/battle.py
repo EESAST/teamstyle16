@@ -45,7 +45,8 @@ class Battle(object):
             'score': [],
             'unit_num': [],
             'population': [],
-            'command': []
+            'command': [],
+            'event': []
         }
         self.gamebody = gamebody.GameBody(map_info)
         self.key_frames = []
@@ -95,6 +96,9 @@ class Battle(object):
     def command_history(self):
         return self.history['command']
 
+    def event_history(self):
+        return self.history['event']
+
     def set_command(self, team, command):
         return self.gamebody.set_command(team, command)
 
@@ -110,6 +114,7 @@ class Battle(object):
         # Record history & key frame as early as possible, or information of
         # the last round will be lost (because no next_round will be called).
         self.record_history()
+        self.record_events(events)
         if self.gamebody.round % self.gamebody.record_interval == 0:
             self.record_key_frame()
 
@@ -122,7 +127,7 @@ class Battle(object):
 
         save_file = (gzip.open if compress else open)(filename, 'w')
         contents = {
-            "version": 1,
+            "version": 2,
             "team_names": self.team_names,
             'history': self.history,
             'gamebody': self.gamebody.saves(),
@@ -145,6 +150,9 @@ class Battle(object):
 
     def record_commands(self):
         self.history['command'].append(copy.copy(self.gamebody.commands))
+
+    def record_events(self, events):
+        history['event'].append(copy.copy(events))
 
     def record_key_frame(self):
         frame = (copy.deepcopy(self.gamebody.map_info.saves_elements()),
