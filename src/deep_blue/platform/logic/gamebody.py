@@ -4,7 +4,8 @@ from basic import *
 from map_info import *
 from custom_json import *
 from copy import deepcopy
-from random import choice
+from random import choice, shuffle
+import importlib
 
 STATE_CONTINUE = -1
 STATE_TIE = 2
@@ -135,6 +136,9 @@ class GameBody(object):
 
     def set_command(self, team, command):
         """add a command and resolve conflicts"""
+        if isinstance(command, Produce):
+            command.add_to(team, self)
+            return True
         operator = self.map_info.elements[command.operand]
         if team != operator.team:
             return False
@@ -144,29 +148,40 @@ class GameBody(object):
     def run(self):
         """run one round and return the events took place"""
         self.round = self.round + 1
-        
-        for team_index in [0, 1]:        ## 生产列表的变化
-            for element in self.elements(team_index):
-                if isinstance(element, Base):
-                    break ## 返回基地
-            for entry in self.production_lists[team_index]:
-                level = (AIR if entry[0] >= FIGHTER else SURFACE)
-                if entry[0] == SUBMARINE:
-                    level = UNDERWATER
-                if entry[1] <= 0:
-                    for Pos in element.pos.region(level, 1):
-                        if(self.map_info.elements(Pos) == None):
-                            new_element = Unit(team = team_index, kind = entry[0], pos = Pos)
-                            self.map_info.add_element(new_element)
-                else:
-                    entry[1] = entry[1] - 1
-                                
         events = []
         # sort commands
         all_commands = self.commands[0] + self.commands[1]
         all_commands.sort(cmp = compare_commands)
         for command in all_commands:
             events += command.result_event(self)
+        # update production_lists and create new elements
+        for team_index in [0, 1]:
+            production_list = self.production_lists[team_index]
+            for entry in production_list:
+                entry[1] -= 1 if entry[1] > 0 else 0
+                if (entry[1] == 0 and
+                    self.populations[team_index] + PROPERTY[entry[0]]['population'] < self.max_population):
+                    for element in self.map_info.elements:
+                        if element.kind == BASE and element.team == team_index:
+                            if entry[0] == SUBMARINE:
+                                check_region = element.pos.region(level = UNDERWATER, range = 1).bound()
+                            elif entry[0] == FIGHTER or entry[0] == SCOUT:
+                                check_region = element.pos.region(level = AIR, range = 0)
+                            else:
+                                check_region = element.pos.region(level = SURFACE, range = 1).bound()
+                            for point in shuffle(check_region):
+                                if self.map_info.element(point) == None:
+                                    if entry[0] == FIGHTER or entry[0] == SCOUT or self.map_info.map_type(point.x, point.y) == OCEAN:
+                                        production_list.remove(entry)
+                                        class_name = {SUBMARINE: 'Submarine', DESTROYER: 'Destroyer', CARRIER: 'Carrier', 
+                                                      CARGO: 'Cargo', FIGHTER: 'Fighter', SCOUT: 'Scout'}[entry[0]]
+                                        module = importlib.import_module('basic')
+                                        class_ = getattr(module, class_name)
+                                        new_element = class_(team_index, point)
+                                        index = self.map_info.add_element(new_element)
+                                        event.append(Create(index, entry[0], point))
+                                        break
+                            break
         return events
 
     def save(self, filename):
