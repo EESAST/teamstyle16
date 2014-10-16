@@ -154,8 +154,8 @@ class GameBody(object):
         # sort commands
         all_commands = self.commands[0] + self.commands[1]
         all_commands.sort(cmp = compare_commands)
-        for command in all_commands:
-            events += command.result_event(self)
+        for cmd in all_commands:
+            events += cmd.result_event(self)
         # update production_lists and create new elements
         for team_index in [0, 1]:
             production_list = self.production_lists[team_index]
