@@ -146,11 +146,12 @@ class Produce(Command):
         if self.kind not in xrange(SUBMARINE, SCOUT + 1):
             return False
         game.commands[team].append(self)
+        self.team = team
         return True
 
-    def result_event(self, team, game):
-        game.production_lists[team].append([self.kind, basic.PROPERTY[self.kind]['build_round']])
-        return [event.AddProductionEntry(team, self.kind)]
+    def result_event(self, game):
+        game.production_lists[self.team].append([self.kind, basic.PROPERTY[self.kind]['build_round']])
+        return [event.AddProductionEntry(self.team, self.kind)]
 
 class Supply(Command):
     """补给"""
