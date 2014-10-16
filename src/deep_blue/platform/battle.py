@@ -2,9 +2,9 @@ import copy
 import gzip
 import json
 import logging
-from logic import map_info, gamebody
+from logic import *
 
-VERSION = 1
+VERSION = 2
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +29,13 @@ class Battle(object):
             self.team_names = prev_info['team_names']
             self.gamebody = gamebody.loads(prev_info['gamebody'])
             self.history = prev_info['history']
+            # Restore commands & events
+            for turn in self.history['command']:
+                for team in xrange(2):
+                    turn[team] = map(command.loads, turn[team])
+            self.history['event'] = [map(event.loads, events) for events
+                                     in self.history['event']]
+
             self.key_frames = prev_info['key_frames']
 
             logger.info('Battle restored')
@@ -118,6 +125,9 @@ class Battle(object):
         if self.gamebody.round % self.gamebody.record_interval == 0:
             self.record_key_frame()
 
+        logger.info('Events happened in round %d:', self.gamebody.round - 1)
+        for e in events:
+            logger.info('%s', e.description())
         logger.info('Moved to round %d', self.gamebody.round)
         return events
 
@@ -149,10 +159,11 @@ class Battle(object):
         history['population'].append(copy.copy(game.populations))
 
     def record_commands(self):
-        self.history['command'].append(copy.copy(self.gamebody.commands))
+        self.history['command'].append(
+            [map(command.Command.saves, cmds) for cmds in self.gamebody.commands])
 
     def record_events(self, events):
-        history['event'].append(copy.copy(events))
+        self.history['event'].append(map(event.Event.saves, events))
 
     def record_key_frame(self):
         frame = (copy.deepcopy(self.gamebody.map_info.saves_elements()),

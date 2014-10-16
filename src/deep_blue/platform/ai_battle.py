@@ -92,9 +92,11 @@ class AIBattle(battle.Battle):
         for ai in self.ais:
             cmds.append(ai.get_commands())
 
-        for ai in self.ais:
-            for cmd in cmds:
-                self.gamebody.set_command(ai.team_num, cmd)
+        for team in xrange(2):
+            for cmd in cmds[team]:
+                if not self.gamebody.set_command(team, cmd):
+                    # Invalid command
+                    logger.error('AI %d provided an invalid command', team)
         logger.info('AI commands feed')
 
     def run_until_end(self):
