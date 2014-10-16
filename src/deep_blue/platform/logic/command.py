@@ -118,7 +118,7 @@ class ChangeDest(Command):
                 game.commands[mover.team].remove(command)
                 break
         game.commands[mover.team].append(self)
-        mover.dest = dest
+        mover.dest = self.dest
         return True
 
     def result_event(self, game):
@@ -193,7 +193,7 @@ class Cancel(Command):
         super(Cancel, self).__init__(operand)
 
     def add_to(self, game):
-        operator = game.map_info.elements.get(operand)
+        operator = game.map_info.elements.get(self.operand)
         if operator == None:
             return False
         for command in game.commands[operator.team]:

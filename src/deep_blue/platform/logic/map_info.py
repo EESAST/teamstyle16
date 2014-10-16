@@ -69,7 +69,8 @@ class MapInfo(object):
         """Load elements to current map from string"""
         tmp = MyDecoder().decode(string)
         self.elements = {int(index_str): element for index_str, element in tmp.items()}
-    def pathfinding(origin, dest):
+
+    def pathfinding(self, origin, dest):
         origin.x = max(min(self.x_max, origin.y), 0)
         origin.y = max(min(self.y_max, origin.y), 0)
         origin.z = max(min(origin.z, AIR), UNDERWATER)
@@ -85,18 +86,20 @@ class MapInfo(object):
             center = List[0]
             for one in vector:
                 pos = Position(center.x + one[0], center.y + one[1], center.z)
+                if pos in Adjacent:
+                    continue
+                if (not isinstance(self.element(pos), Building) and not isinstance(self.element(pos), Resource)
+                    and max(min(self.x_max, pos.x), 0) == pos.x and max(min(self.y_max, pos.y), 0) == pos.y) :           #最小坐标是0还是1      
+                    List.append(pos)
+                    Adjacent[pos] = center
                 if(pos == dest):
-                    if(isinstance(self.element(pos), Building) or isinstance(self.element(pos), Resources)):
-                        nodes.pop(-1)          #如果目的地是陆地单位或资源单位          
                     adj = Adjacent[dest]
+                    if(isinstance(self.element(pos), Building) or isinstance(self.element(pos), Resource)):
+                        nodes.pop(-1)          #如果目的地是陆地单位或资源单位          
                     while adj is not origin:
                         nodes.insert(1, adj)
                         adj = Adjacent[adj]
                     return nodes
-                if not isinstance(self.element(pos), Building)   and not isinstance(self.element(pos), Resources)
-                   and max(min(self.x_max, pos.x), 0) == pos.x and max(min(self.y_max, pos.y), 0)) == pos.y :           #最小坐标是0还是1      
-                    List.append(pos)
-                    Adjacent[pos] = center
             List.pop(0)
 
 def load(filename):

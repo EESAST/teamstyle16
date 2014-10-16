@@ -149,7 +149,7 @@ class GameBody(object):
             for Element in self.elements(Team):
                 if isinstance(Element, Base):
                     break ##返回基地
-            for entry in self.production_list[Team]:
+            for entry in self.production_lists[Team]:
                 level = (AIR if entry[0] >= FIGHTER else SURFACE)
                 if entry[0] == SUBMARINE:
                     level = UNDERWATER

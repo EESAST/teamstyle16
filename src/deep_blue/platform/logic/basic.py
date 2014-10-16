@@ -28,12 +28,6 @@ OILFIELD_NUM_MAX = 12    # 油田最大数量
 POPULATION_MAX = 60    # 单方最大人口数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
-
-SCORE = [0, 0]      # 两队积分
-COMMANDS = [[], []] #两队指令
-WEATHER = 0         # 天气
-PRODUCTION_LIST = [[],[]] #生产列表
-
 #积分规则
 FORT_SCORE = 1      # 占领据点每回合奖励积分
 DAMAGE_SCORE = 1    # 每点伤害奖励积分
@@ -467,10 +461,6 @@ class Base(Building):
 
     def build(self, kind):
         """生产单位, 新单位出生地在基地陆地周围一圈"""
-        if self.metal < PROPERTY[kind]['cost']:
-            return -1
-        PRODUCTION_LIST[self.team].append([kind, PROPERTY[kind]['build_round']])
-        self.metal = self.metal - PROPERTY[kind]['cost']
         pass    ##
 
 
@@ -509,24 +499,26 @@ class Unit(UnitBase):
 
     def move(self, game):  #这个move已经加入了speed的结果,传game干什么，unit本身不是有dest吗
         cover = 0 #走过的长度
-        for i in range(len(game.map_info.pathfinding(self.pos, self.dest))):
+        nodes = game.map_info.pathfinding(self.pos, self.dest)
+        for i in range(len(nodes) - 1):
             Distance = self.speed - cover #剩余的路程
             if(Distance > nodes[i].distance(nodes[i + 1])):
                 cover += nodes[i].distance(nodes[i + 1])
             elif Distance == nodes[i].distance(nodes[i + 1]):
                 nodes = nodes[0 : (i + 2)]
-                return nodes
+                break
             else:
                 nodes = nodes[0 : (i + 2)]
                 flag = 1 if (nodes[i].x + nodes[i].y) < (nodes[i + 1].x + nodes[i + 1].y) else -1
                 if nodes[i].x == nodes[i + 1].x:
                     nodes.append(Position(nodes[i].x + flag * Distance, nodes[i].y, nodes[i].z))
-                    return nods
+                    break
                 elif nodes[i].y == nodes[i + 1].y:
                     nodes.append(Position(nodes[i].x, nodes[i].y + flag * Distance, nodes[i].z))
-                    return nodes
+                    break
                 else:
-                    return False
+                    raise RuntimeError()
+        return [Move(self.index, nodes)]
 
 class Submarine(Unit):
     """潜艇"""
