@@ -74,15 +74,15 @@ class MapInfo(object):
         if origin == dest:
             return [origin, dest]
 
-        origin.x = max(min(self.x_max, origin.y), 0)
+        origin.x = max(min(self.x_max, origin.x), 0)
         origin.y = max(min(self.y_max, origin.y), 0)
         origin.z = max(min(origin.z, AIR), UNDERWATER)
-        dest.x = max(min(self.x_max, dest.y), 0)
+        dest.x = max(min(self.x_max, dest.x), 0)
         dest.y = max(min(self.y_max, dest.y), 0)
         dest.z = origin.z
         nodes = [origin, dest]
         adjacent = {}        # Adjacent字典存储到达这个点的点
-        vector = [(0,1),(1,0),(0,-1),(-1,1)]
+        vector = [(0,1),(1,0),(0,-1),(-1,0)]
         queue = []
         queue.append(origin)
 
