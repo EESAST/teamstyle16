@@ -7,12 +7,16 @@ from logic import gamebody
 import battle
 import ai_proxy
 
+from . import DEFAULT_PORT
+from . import DEFAULT_TIMEOUT
+
 logger = logging.getLogger(__name__)
 
 class HumanAIBattle(battle.Battle):
     """Represent a battle between two AIs"""
-    def __init__(self, map_info, port=ai_proxy.DEFAULT_PORT, human_team_name=None,
-                 ai_filename=None, ai_team_num=1, prev_info=None):
+    def __init__(self, map_info, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
+                 human_team_name=None, ai_filename=None, ai_team_num=1,
+                 prev_info=None):
         """Construct an HumanAIBattle from a map, or from previous infos.
         port is the port number used for listening.
         If ai_filename is given, HumanAIBattle is responsible for
@@ -25,6 +29,7 @@ class HumanAIBattle(battle.Battle):
         super(HumanAIBattle, self).__init__(map_info, prev_info=prev_info)
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(timeout)
         while True:
             try:
                 sock.bind(('', port))
@@ -37,7 +42,7 @@ class HumanAIBattle(battle.Battle):
         sock.listen(1)
 
         logger.debug('Building proxy for AI')
-        if ai_team_num != 0 && ai_team_num != 1:
+        if ai_team_num != 0 and ai_team_num != 1:
             raise ValueError(
                 'ai_team_num should be 0 or 1 (%d is given)' % ai_team_num)
 
@@ -54,10 +59,11 @@ class HumanAIBattle(battle.Battle):
         self.ai.start()
 
     def __del__(self):
-        logger.debug('Stopping AI')
-        self.ai.stop()
-        self.ai.join()
-        logger.info('AI stopped')
+        if hasattr(self, 'ai') and self.ai.is_alive():
+            logger.debug('Stopping AI')
+            self.ai.stop()
+            self.ai.join()
+            logger.info('AI stopped')
 
     # Prevent AI team name from being covered
     def team_name(self, team):
@@ -89,9 +95,10 @@ class HumanAIBattle(battle.Battle):
         """Add a command to the gamebody for human"""
         return self.gamebody.set_command(1 - ai.team_num, command)
 
-def load(filename, port=ai_proxy.DEFAULT_PORT, human_team_name=None, ai_filename=None,
-                   ai_team_num=1):
+def load(filename, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
+         human_team_name=None, ai_filename=None, ai_team_num=1):
     """Load save file, construct an HumanAIBattle based on it"""
-    return HumanAIBattle(None, port=port, human_team_name=human_team_name,
-                               ai_filename=ai_filename, ai_team_num=ai_team_num,
-                               prev_info=json.load(open(filename)))
+    return HumanAIBattle(None, port=port, timeout=timeout,
+                         human_team_name=human_team_name,
+                         ai_filename=ai_filename, ai_team_num=ai_team_num,
+                         prev_info=json.load(open(filename)))

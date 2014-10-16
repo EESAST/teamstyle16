@@ -62,9 +62,9 @@
 ## Module ai_battle
 AI对战，指令均来自于AI
 
-|                                   方法                                  |  返回值  |                      描述                     |
-|-------------------------------------------------------------------------|----------|-----------------------------------------------|
-| load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | AIBattle | 载入游戏, 可能抛出AIFileError, AIConnectError |
+|                                               方法                                               |  返回值  |                      描述                     |
+|--------------------------------------------------------------------------------------------------|----------|-----------------------------------------------|
+| load(filename, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT, ai0_filename=None, ai1_filename=None) | AIBattle | 载入游戏, 可能抛出AIFileError, AIConnectError |
 
 类继承关系
 
@@ -75,9 +75,9 @@ AI对战，指令均来自于AI
 ### Class AIBattle
 AI对战
 
-|                                   构造函数                                  |                 描述                |
-|-----------------------------------------------------------------------------|-------------------------------------|
-| AIBattle(map_info, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | 可能抛出AIFileError, AIConnectError |
+|                                               构造函数                                               |                 描述                |
+|------------------------------------------------------------------------------------------------------|-------------------------------------|
+| AIBattle(map_info, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT, ai0_filename=None, ai1_filename=None) | 可能抛出AIFileError, AIConnectError |
 
 |        方法        | 返回值 |            描述            |
 |--------------------|--------|----------------------------|
@@ -90,9 +90,9 @@ AI对战
 ## Module human_ai_battle
 人机对战，指令部分来自于AI
 
-|                                           方法                                           |    返回值     |                      描述                     |
-|------------------------------------------------------------------------------------------|---------------|-----------------------------------------------|
-| load(filename, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | HumanAIBattle | 载入游戏, 可能抛出AIFileError, AIConnectError |
+|                                                        方法                                                       |    返回值     |                      描述                     |
+|-------------------------------------------------------------------------------------------------------------------|---------------|-----------------------------------------------|
+| load(filename, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT, human_team_name=None, ai_filename=None, ai_team_num=1) | HumanAIBattle | 载入游戏, 可能抛出AIFileError, AIConnectError |
 
 类继承关系
 
@@ -103,9 +103,9 @@ AI对战
 ### Class HumanAIBattle
 人机对战
 
-|                                              构造函数                                             |                 描述                |
-|---------------------------------------------------------------------------------------------------|-------------------------------------|
-| HumanAIBattle(map_info, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | 可能抛出AIFileError, AIConnectError |
+|                                                          构造函数                                                          |                 描述                |
+|----------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
+| HumanAIBattle(map_info, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT, human_team_name=None, ai_filename=None, ai_team_num=1) | 可能抛出AIFileError, AIConnectError |
 
 |         方法         | 返回值 |            描述            |
 |----------------------|--------|----------------------------|

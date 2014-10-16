@@ -7,11 +7,14 @@ from logic import gamebody
 import battle
 import ai_proxy
 
+from . import DEFAULT_PORT
+from . import DEFAULT_TIMEOUT
+
 logger = logging.getLogger(__name__)
 
 class AIBattle(battle.Battle):
     """Represent a battle between two AIs"""
-    def __init__(self, map_info, port=ai_proxy.DEFAULT_PORT,
+    def __init__(self, map_info, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
                  ai0_filename=None, ai1_filename=None, prev_info=None):
         """Construct an AIBattle from a map, or from previous infos.
         port is the port number used for listening.
@@ -24,6 +27,7 @@ class AIBattle(battle.Battle):
         super(AIBattle, self).__init__(map_info, prev_info=prev_info)
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(timeout)
         while True:
             try:
                 sock.bind(('', port))
@@ -55,10 +59,11 @@ class AIBattle(battle.Battle):
 
     def __del__(self):
         for ai in self.ais:
-            logger.debug('Stopping AI %d proxy', ai.team_num)
-            ai.stop()
-            ai.join()
-            logger.info('AI %d proxy stopped', ai.team_num)
+            if ai.is_alive():
+                logger.debug('Stopping AI %d proxy', ai.team_num)
+                ai.stop()
+                ai.join()
+                logger.info('AI %d proxy stopped', ai.team_num)
 
     # Override team_name(), to make sure team names of AI will be displayed,
     # instead of team names set at the beginning of the battle.
@@ -98,8 +103,9 @@ class AIBattle(battle.Battle):
             self.feed_ai_commands()
             self.next_round()
 
-def load(filename, port=ai_proxy.DEFAULT_PORT, ai0_filename=None, ai1_filename=None):
+def load(filename, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
+         ai0_filename=None, ai1_filename=None):
     """Load save file, construct an AIBattle based on it"""
-    return AIBattle(None, port=port,
+    return AIBattle(None, port=port, timeout=timeout,
                     ai0_filename=ai0_filename, ai1_filename=ai1_filename,
                     prev_info=json.load(open(filename)))

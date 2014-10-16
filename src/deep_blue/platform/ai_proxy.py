@@ -5,8 +5,6 @@ import logging
 from logic import basic
 from logic import command
 
-DEFAULT_PORT = 8067
-
 class AIError(IOError):
     """Describe error caused by AI"""
     def __init__(self, what):
@@ -43,7 +41,13 @@ class AIProxy(threading.Thread):
             self.logger.info('AI started')
 
         self.logger.debug('Waiting for connection at port %d', port)
-        self.conn, self.addr = sock.accept()
+        try:
+            self.conn, self.addr = sock.accept()
+        except socket.timeout as e:
+            self.logger.error('Waiting Timeout: %s', e)
+            raise AIConnectError('Cannot connect to AI %d: %s' %
+                                 (self.team_num, e))
+
         self.logger.debug('AI connected, getting team name')
         self.team_name = self.__get_team_name()
         self.logger.info('Connected to AI "%s"', self.team_name)
@@ -56,7 +60,7 @@ class AIProxy(threading.Thread):
     def stop(self, how=socket.SHUT_RDWR):
         """Stop connection with AI, stop AI if needed"""
         # Positively stop only when alive
-        if self.isAlive():
+        if self.is_alive():
             self.logger.debug("Closing connection socket")
             self.positive_close=True
             self.conn.shutdown(how)  # To shut down immediately
