@@ -459,10 +459,6 @@ class Base(Building):
         result_events += self.supply(our_unit)
         return result_events
 
-    def build(self, kind):
-        """生产单位, 新单位出生地在基地陆地周围一圈"""
-        pass    ##
-
 
 class Fort(Building):
     """据点, 继承自Building"""
