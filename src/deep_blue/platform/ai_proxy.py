@@ -53,19 +53,20 @@ class AIProxy(threading.Thread):
         self.__send_stable_info(battle)
         self.logger.info('Stable info sent')
 
-    def stop(self):
-        # stop only when alive
+    def stop(self, how=socket.SHUT_RDWR):
+        """Stop connection with AI, stop AI if needed"""
+        # Positively stop only when alive
         if self.isAlive():
             self.logger.debug("Closing connection socket")
             self.positive_close=True
-            self.conn.shutdown(socket.SHUT_RDWR)  # To shut down immediately
+            self.conn.shutdown(how)  # To shut down immediately
             self.conn.close()
             self.logger.info('Connection closed positively')
-            # Terminate AI program if needed
-            if self.ai_program:
-                self.logger.debug("Terminaing AI")
-                self.ai_program.terminate()
-                self.logger.info('AI terminated')
+        # Terminate AI program if needed
+        if self.ai_program and self.ai_program.poll():
+            self.logger.debug("Terminaing AI")
+            self.ai_program.terminate()
+            self.logger.info('AI terminated')
 
     def run(self):
         self.logger.debug('Starting receiving thread')
@@ -79,6 +80,8 @@ class AIProxy(threading.Thread):
                     break
                 # Else a real error
                 self.logger.error('Receiving failed: %s', e)
+                # Clean up
+                self.stop(socket.SHUT_WR)  # Prevent write from main thread
                 raise AIConnectError('Receiving from AI %d failed: %s' %
                                      (self.team_num, e))
 
@@ -95,7 +98,8 @@ class AIProxy(threading.Thread):
                                          return_code)
                     else:
                         self.logger.info('AI has not stopped yet')
-
+                # Clean up
+                self.stop(socket.SHUT_WR)  # Prevent write from main thread
                 raise AIConnectError('Connection shutdown orderly by AI %d'
                                      % self.team_num)
 
@@ -134,16 +138,31 @@ class AIProxy(threading.Thread):
                               (filename, e))
 
     def __get_team_name(self):
-        name = self.conn.recv(32)
+        try:
+            name = self.conn.recv(32)
+        except socket.error as e:
+            # This would cause failure in __init__, so no need to clean up
+            self.logger.error('Failed to get team name')
+            raise AIConnectError('Failed to get team name from AI %d'
+                                 % self.team_num)
         return name.strip()
 
     def __send_stable_info(self, battle):
         """Send infos that do not change over rounds to the AI"""
-        self.conn.send(self.__encode_stable_info(battle))
+        try:
+            self.conn.sendall(self.__encode_stable_info(battle))
+        except socket.error as e:
+            self.logger.error('Failed to send stable info')
+            raise AIConnectError('Failed to send data to AI %d: %s' %
+                                 (self.team_num, e))
 
     def __send_round_info(self, battle):
         """Send infos that change over rounds to the AI"""
-        self.conn.send(self.__encode_round_info(battle))
+        try:
+            self.conn.sendall(self.__encode_round_info(battle))
+        except socket.error as e:
+            raise AIConnectError('Failed to send data to AI %d: %s' %
+                                 (self.team_num, e))
 
     def __decode_commands(self, data):
         """Decode incoming data into list of commands"""

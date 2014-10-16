@@ -55,10 +55,10 @@ class AIBattle(battle.Battle):
 
     def __del__(self):
         for ai in self.ais:
-            logger.debug('Stopping AI %d', ai.team_num)
+            logger.debug('Stopping AI %d proxy', ai.team_num)
             ai.stop()
             ai.join()
-            logger.info('AI %d stopped', ai.team_num)
+            logger.info('AI %d proxy stopped', ai.team_num)
 
     # Override team_name(), to make sure team names of AI will be displayed,
     # instead of team names set at the beginning of the battle.
