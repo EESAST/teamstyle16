@@ -139,7 +139,9 @@ class GameBody(object):
         if isinstance(command, Produce):
             command.add_to(team, self)
             return True
-        operator = self.map_info.elements[command.operand]
+        operator = self.map_info.elements.get(command.operand)
+        if operator is None:
+            return False
         if team != operator.team:
             return False
         command.add_to(self)
