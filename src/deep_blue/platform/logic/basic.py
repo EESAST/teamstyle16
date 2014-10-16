@@ -498,6 +498,7 @@ class Unit(UnitBase):
         return ghost
 
     def move(self, game):
+        events = []
         cover = 0 # 走过的长度
         nodes = game.map_info.pathfinding(self.pos, self.dest)
         for i in range(len(nodes) - 1):
@@ -518,7 +519,13 @@ class Unit(UnitBase):
                     break
                 else:
                     raise RuntimeError()
-        return [Move(self.index, nodes)]
+        events.append(Move(self.index, nodes))
+        if self.kind == CARGO:
+            for point in self.pos.region(level = SURFACE, range = 1):
+                near_element = game.map_info.element(point)
+                if isinstance(near_element, Resource):
+                    events += self.collect(near_element)
+        return events
 
 class Submarine(Unit):
     """潜艇"""
@@ -585,12 +592,14 @@ class Cargo(Ship):
             supply = min(self.metal_max - self.metal, resource.metal)
             self.metal += supply
             resource.metal -= supply
+            return [Collect(self.index, resource.index, 0, supply)]
         elif resource.kind == OILFIELD and resource.fuel > 0:
             supply = min(self.fuel_max - self.fuel, resource.fuel)
             self.fuel += supply
             resource.fuel -= supply
+            return [Collect(self.index, resource.index, supply, 0)]
         else:
-            return -1
+            return []
 
 class Plane(Unit):
     """飞机"""
