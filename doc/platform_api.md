@@ -50,7 +50,8 @@
 | score_history()            | [int[2]]             | 分数历史                      |
 | unit_num_history()         | [int[2]]             | 单位数历史                    |
 | population_history()       | [int[2]]             | 人口历史                      |
-| command_history()          | [[Command][2]]       | 指令历史 (攻击指令经过修饰)   |
+| command_history()          | [[Command][2]]       | 指令历史   |
+| event_history()          | [[Event]]       | 事件历史   |
 | **运行/指令**              |                      |                               |
 | set_command(team, command) | bool                 | 添加指令，指令无效则返回False |
 | commands(team)             | [Command]            | 返回该队伍当前的指令集        |
