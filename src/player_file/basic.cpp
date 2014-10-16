@@ -80,7 +80,7 @@ void Fix(int operand, int target)
 void Produce(int operand, int type)
 {
     std::ostringstream oss;
-    oss << "pd" << operand << ' ' << type << ',';
+    oss << "pd" << type << ',';
 
     Connection::Instance()->Send(oss.str());
 }

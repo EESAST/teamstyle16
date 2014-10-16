@@ -323,7 +323,7 @@ class TestGameBody(unittest.TestCase):
         game = self.gamebody
         build_round = PROPERTY[FIGHTER]['build_round']
 
-        cmd = Produce(self.base0.index, Fighter.kind)
+        cmd = Produce(Fighter.kind)
         self.assertTrue(game.set_command(0, cmd))
 
         while build_round > 1:

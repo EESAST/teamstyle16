@@ -146,7 +146,7 @@ void AttackPos(int operand, Position target);
 void AttackUnit(int operand, int target);
 void ChangeDest(int operand, Position dest);
 void Fix(int operand, int target);
-void Produce(int operand, int type);
+void Produce(int type);
 void Supply(int operand, int target, int fuel, int ammo, int metal);
 void Cancel(int operand);
 
