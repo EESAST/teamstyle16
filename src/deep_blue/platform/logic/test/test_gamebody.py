@@ -346,7 +346,45 @@ class TestGameBody(unittest.TestCase):
     def test_supply(self):
         """Test behavior of supply"""
         # Building, Carrier, Cargo (diffrent when supply planes)
-        pass
+        boat = self.add(Cargo, 0, (3, 2), health_max=100, health=10,
+                                          fuel_max=200, fuel=50,
+                                          ammo_max=300, ammo=0,
+                                          metal_max=40, metal=30)
+        self.base0.fuel = 50
+        self.base0.metal = 30
+
+        game = self.gamebody
+        cmd = Supply(self.base0.index, boat.index, 10, 400, 10)
+        self.assertTrue(game.set_command(0, cmd))
+        results = game.run()
+        
+        self.assertEqual(1, len(results))
+        expected = {
+            'index': self.base0.index,
+            'target': boat.index,
+            'fuel': 10,
+            'ammo': 300,
+            'metal': 10
+        }
+        for attr, value in expected.items():
+            self.assertEqual(value, getattr(results[0], attr))
+            
+
+        self.assertEqual(10, boat.health)
+        self.assertEqual(60, boat.fuel)
+        self.assertEqual(300, boat.ammo)
+        self.assertEqual(40, boat.metal)
+
+        self.assertEqual(40, self.base0.fuel)
+        self.assertEqual(INFINITY, self.base0.ammo)
+        self.assertEqual(20, self.base0.metal)
+
+    def test_move(self):
+        plane = self.add(Fighter, 0, (14, 4), dest=Position(11, 4, 2), speed=3)
+
+        results = self.gamebody.run()
+        self.assertEqual(Position(11, 4, 2), plane.pos)
+
 
     def test_cancel(self):
         """Test behavior of cancel"""
