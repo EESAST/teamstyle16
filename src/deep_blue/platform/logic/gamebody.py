@@ -28,6 +28,14 @@ def compare_commands(l_command, r_command):
     else:
         return choice([-1, 1])
 
+def compare_speed(l_tuple, r_tuple):
+    if l_tuple[1] > r_tuple[1]:
+        return 1
+    elif l_tuple[1] < r_tuple[1]:
+        return -1
+    else:
+        return choice([-1, 1])
+
 class GameBody(object):
     """docstring for GameBody"""
     def __init__(self, map_info, **kwargs):
@@ -156,6 +164,12 @@ class GameBody(object):
         all_commands.sort(cmp = compare_commands)
         for cmd in all_commands:
             events += cmd.result_event(self)
+        l = [(element.index, element.speed) for element in element.values()
+                    if hasattr(element, 'speed') and element.speed != None]
+        l.sort(key = compare_speed)
+        elements = self.map_info.elements
+        for item in l:
+            events += elements[item[0]].move(self)
         # update production_lists and create new elements
         for team_index in [0, 1]:
             production_list = self.production_lists[team_index]
@@ -184,6 +198,7 @@ class GameBody(object):
                                         event.append(Create(index, entry[0], point))
                                         break
                             break
+        self.commands = [[], []]
         return events
 
     def save(self, filename):

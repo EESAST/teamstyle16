@@ -520,7 +520,9 @@ class Unit(UnitBase):
                     break
                 else:
                     raise RuntimeError()
-        events.append(Move(self.index, nodes))
+        self.pos = nodes[-1]
+        move_event = Move(self.index, nodes)
+        events += [] if move_event.steps == 0 else [move_event]
         if self.kind == CARGO:
             for point in self.pos.region(level = SURFACE, range = 1):
                 near_element = game.map_info.element(point)

@@ -134,7 +134,7 @@ class ChangeDest(Command):
         self.dest.z = min(AIR, max(UNDERWATER, self.dest.z))
         mover = game.map_info.elements[self.operand]
         mover.dest = self.dest
-        return [event.ChangeDest(self.operand, self.dest)] + mover.move(game)
+        return [event.ChangeDest(self.operand, self.dest)]
 
 class Produce(Command):
     """生产"""
