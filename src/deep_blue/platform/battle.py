@@ -16,12 +16,15 @@ class Battle(object):
             # Restore
             logger.debug('Restoring battle from previous info')
 
-            if self.version < VERSION:
-                logger.warning('Version of the save file (%d) is not up to date'
-                               ' (%d), errors may occur')
-            elif self.version > VERSION:
-                logger.warning('Version of the save file (%d) is greater than '
-                               'the current version (%d), errors may occur')
+            save_version = prev_info['version']
+            if save_version < VERSION:
+                logger.warning('Older save file detected (save: %d, '
+                               'current: %d), errors may occur',
+                                save_version, VERSION)
+            elif save_version > VERSION:
+                logger.warning('Newer save file detected (save: %d, '
+                               'current: %d), errors may occur',
+                               save_version, VERSION)
 
             self.team_names = prev_info['team_names']
             self.gamebody = gamebody.loads(prev_info['gamebody'])
