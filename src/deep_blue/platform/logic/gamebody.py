@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 # gamebody.py
+import basic
 from basic import *
 from map_info import *
 import command
@@ -7,7 +8,6 @@ import command
 from custom_json import *
 from copy import deepcopy
 from random import choice, shuffle
-import importlib
 
 STATE_CONTINUE = -1
 STATE_TIE = 2
@@ -164,10 +164,10 @@ class GameBody(object):
         all_commands.sort(cmp = compare_commands)
         for cmd in all_commands:
             events += cmd.result_event(self)
-        l = [(element.index, element.speed) for element in element.values()
-                    if hasattr(element, 'speed') and element.speed != None]
-        l.sort(key = compare_speed)
         elements = self.map_info.elements
+        l = [(element.index, element.speed) for element in elements.values()
+                    if hasattr(element, 'speed') and element.speed != None]
+        l.sort(cmp = compare_speed)
         for item in l:
             events += elements[item[0]].move(self)
         # update production_lists and create new elements
@@ -177,7 +177,7 @@ class GameBody(object):
                 entry[1] -= 1 if entry[1] > 0 else 0
                 if (entry[1] == 0 and
                     self.populations[team_index] + PROPERTY[entry[0]]['population'] < self.max_population):
-                    for element in self.map_info.elements:
+                    for element in elements.values():
                         if element.kind == BASE and element.team == team_index:
                             if entry[0] == SUBMARINE:
                                 check_region = element.pos.region(level = UNDERWATER, range = 1).bound()
@@ -185,17 +185,17 @@ class GameBody(object):
                                 check_region = element.pos.region(level = AIR, range = 0)
                             else:
                                 check_region = element.pos.region(level = SURFACE, range = 1).bound()
-                            for point in shuffle(check_region):
+                            shuffle(check_region)
+                            for point in check_region:
                                 if self.map_info.element(point) == None:
                                     if entry[0] == FIGHTER or entry[0] == SCOUT or self.map_info.map_type(point.x, point.y) == OCEAN:
                                         production_list.remove(entry)
                                         class_name = {SUBMARINE: 'Submarine', DESTROYER: 'Destroyer', CARRIER: 'Carrier', 
                                                       CARGO: 'Cargo', FIGHTER: 'Fighter', SCOUT: 'Scout'}[entry[0]]
-                                        module = importlib.import_module('basic')
-                                        class_ = getattr(module, class_name)
+                                        class_ = getattr(basic, class_name)
                                         new_element = class_(team_index, point)
                                         index = self.map_info.add_element(new_element)
-                                        event.append(Create(index, entry[0], point))
+                                        events.append(Create(index, entry[0], point))
                                         break
                             break
         self.commands = [[], []]

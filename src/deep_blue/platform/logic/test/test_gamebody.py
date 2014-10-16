@@ -249,18 +249,18 @@ class TestGameBody(unittest.TestCase):
         }
         cargo1 = self.add(Cargo, 0, (12, 2), **hungry_state)
         cargo2 = self.add(Cargo, 0, (14, 6), **hungry_state)
-        cargo3 = self.add(Cargo, 0, (2, 6), dest=(2, 8), speed=3, **hungry_state)
-        cargo4 = self.add(Cargo, 0, (0, 10), dest=(2, 10), speed=3, **hungry_state)
+        cargo3 = self.add(Cargo, 0, (2, 6), dest=Position(2, 8, 1), speed=3, **hungry_state)
+        cargo4 = self.add(Cargo, 0, (0, 10), dest=Position(2, 10, 1), speed=3, **hungry_state)
         self.oilfield0.fuel = 10
         self.oilfield1.fuel = 500
         self.mine0.metal = 100
         self.mine1.metal = 0
 
         results = self.gamebody.run()
-        self.assertEqual(2, len(results))
+        self.assertEqual(4, len(results))
 
-        expected = [event.Collect(cargo0.index, self.oilfield0.index, 10, 0),
-                    event.Collect(cargo1.index, self.mine0.index, 0, 10)]
+        expected = [event.Collect(cargo1.index, self.oilfield0.index, 10, 0),
+                    event.Collect(cargo2.index, self.mine0.index, 0, 10)]
         results = {e.index: e for e in results}
 
         # Check events
@@ -272,7 +272,7 @@ class TestGameBody(unittest.TestCase):
 
         # Check consequences
         self.assertEqual(10, cargo1.health)
-        self.assertEqual(60, cargo1.health)
+        self.assertEqual(60, cargo1.fuel)
         self.assertEqual(0, cargo1.ammo)
         self.assertEqual(30, cargo1.metal)
 

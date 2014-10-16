@@ -71,6 +71,9 @@ class MapInfo(object):
         self.elements = {int(index_str): element for index_str, element in tmp.items()}
 
     def pathfinding(self, origin, dest):
+        if origin == dest:
+            return [origin, dest]
+
         origin.x = max(min(self.x_max, origin.y), 0)
         origin.y = max(min(self.y_max, origin.y), 0)
         origin.z = max(min(origin.z, AIR), UNDERWATER)
@@ -82,6 +85,7 @@ class MapInfo(object):
         vector = [(0,1),(1,0),(0,-1),(-1,1)]
         queue = []
         queue.append(origin)
+
         while True:
             center = queue[0]
             for one in vector:
