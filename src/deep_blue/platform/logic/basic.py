@@ -77,6 +77,11 @@ CARGO = 7       # 运输舰
 FIGHTER = 8     # 战斗机
 SCOUT = 9       # 侦察机
 
+names = {
+    SUBMARINE: '潜艇', DESTROYER: '驱逐舰', 
+    CARRIER: '航空母舰', CARGO: '运输舰',
+    FIGHTER: '战斗机', SCOUT: '侦察机'
+}
 
 # ElementProperty
 """sight_ranges = [UNDERWATER, SURFACE, AIR]
