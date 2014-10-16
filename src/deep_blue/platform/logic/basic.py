@@ -177,6 +177,9 @@ class Position(object):
     def __hash__(self):
         return hash((Position, self.x, self.y, self.z))
 
+    def __repr__(self):
+        return 'Position(%d, %d, %d)' % (self.x, self.y, self.z)
+
     @property
     def level(self):
         return self.z
@@ -502,6 +505,7 @@ class Unit(UnitBase):
         events = []
         cover = 0 # 走过的长度
         nodes = game.map_info.pathfinding(self.pos, self.dest)
+
         for i in range(len(nodes) - 1):
             can_move = self.speed - cover # 剩余的路程
             if(can_move > nodes[i].distance(nodes[i + 1])):
