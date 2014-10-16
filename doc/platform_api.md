@@ -28,9 +28,9 @@
 
 指令添加方式由子类提供
 
-|     构造函数     |        描述        |
-|------------------|--------------------|
-| Battle(map_info) | 用地图信息构造战斗 |
+|                      构造函数                      |        描述        |
+|----------------------------------------------------|--------------------|
+| Battle(map_info, team0_name=None, team1_name=None) | 用地图信息构造战斗 |
 
 |            方法            |        返回值        |              描述             |
 |----------------------------|----------------------|-------------------------------|
@@ -42,7 +42,7 @@
 | status()                   | int                  | 返回当前的游戏状态            |
 | score(team)                | int                  | 返回分数                      |
 | elements(team)             | {int:Element}        | 返回某队所有元素              |
-| vision(team)               | [Position][3]        | 返回某队三层视野的点集        |
+| vision(team)               | set(Position)[3]        | 返回某队三层视野的点集        |
 | view_elements(perspective) | {int:Element}        | 返回某队视角下的所有元素      |
 | production_list(team)      | [[kind, round_left]] | 返回生产列表                  |
 | population(team)           | int                  | 返回该队伍的人口数            |
@@ -56,15 +56,15 @@
 | commands(team)             | [Command]            | 返回该队伍当前的指令集        |
 | next_round()               | [Event]              | 进行一回合                    |
 | **保存/载入**              |                      |                               |
-| save(filename)             | None                 | 保存游戏                      |
+| save(filename, compact=False, compress=False)             | None                 | 保存游戏, compact为True则将省略空白符, compress=True则会以压缩存档                      |
 
 
 ## Module ai_battle
 AI对战，指令均来自于AI
 
-|                                   方法                                  |  返回值  |   描述   |
-|-------------------------------------------------------------------------|----------|----------|
-| load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | AIBattle | 载入游戏 |
+|                                   方法                                  |  返回值  |                      描述                     |
+|-------------------------------------------------------------------------|----------|-----------------------------------------------|
+| load(filename, port=DEFAULT_PORT, ai0_filename=None, ai1_filename=None) | AIBattle | 载入游戏, 可能抛出AIFileError, AIConnectError |
 
 类继承关系
 
@@ -84,15 +84,15 @@ AI对战
 | feed_ai_commands(sleep_time=None) | None   | 从AI获取指令，填充至指令集 |
 | run_until_end()    | None   | 运行直至比赛结束           |
 
-上述两方法可能抛出 AIConnectError, ParseError
+上述两方法可能抛出 AIConnectError
 
 
 ## Module human_ai_battle
 人机对战，指令部分来自于AI
 
-|                                           方法                                           |    返回值     |   描述   |
-|------------------------------------------------------------------------------------------|---------------|----------|
-| load(filename, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | HumanAIBattle | 载入游戏 |
+|                                           方法                                           |    返回值     |                      描述                     |
+|------------------------------------------------------------------------------------------|---------------|-----------------------------------------------|
+| load(filename, port=DEFAULT_PORT, human_team_name=None, ai_filename=None, ai_team_num=1) | HumanAIBattle | 载入游戏, 可能抛出AIFileError, AIConnectError |
 
 类继承关系
 
@@ -109,7 +109,7 @@ AI对战
 
 |         方法         | 返回值 |            描述            |
 |----------------------|--------|----------------------------|
-| feed_ai_commands(sleep_time=None)   | None   | 从AI获取指令，填充至指令集 |
+| feed_ai_commands(sleep_time=None)   | None   | 从AI获取指令，填充至指令集, 可能抛出 AIConnectError |
 | add_command(command) | bool   | 向选手指令集中增添指令     |
 
 
