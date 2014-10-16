@@ -2,6 +2,8 @@
 # gamebody.py
 from basic import *
 from map_info import *
+import command
+
 from custom_json import *
 from copy import deepcopy
 from random import choice, shuffle
@@ -134,16 +136,16 @@ class GameBody(object):
         """return total population of the team"""
         return self.populations[team]
 
-    def set_command(self, team, command):
+    def set_command(self, team, cmd):
         """add a command and resolve conflicts"""
-        if isinstance(command, Produce):
-            return command.add_to(team, self)
-        operator = self.map_info.elements.get(command.operand)
+        if isinstance(cmd, command.Produce):
+            return cmd.add_to(team, self)
+        operator = self.map_info.elements.get(cmd.operand)
         if operator is None:
             return False
         if team != operator.team:
             return False
-        return command.add_to(self)
+        return cmd.add_to(self)
 
     def run(self):
         """run one round and return the events took place"""
