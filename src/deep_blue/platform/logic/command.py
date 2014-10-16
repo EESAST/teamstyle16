@@ -133,22 +133,17 @@ class ChangeDest(Command):
 
 class Produce(Command):
     """生产"""
-    def __init__(self, team, kind):
+    def __init__(self, kind):
         super(Produce, self).__init__(operand = -1)
-        self.team = team
         self.kind = kind
 
-    def add_to(self, game):
+    def add_to(self, team, game):
         if self.kind not in xrange(SUBMARINE, SCOUT + 1):
             return False
-        for command in game.commands[team]:
-            if self.operand == command.operand:
-                game.commands[team].remove(command)
-                break
         game.commands[team].append(self)
         return True
 
-    def result_event(self, game):
+    def result_event(self, team, game):
         game.production_lists[team].append([self.kind, basic.PROPERTY[self.kind]['build_round']])
         return [event.AddProductionEntry(team, self.kind)]
 

@@ -177,9 +177,9 @@ TODO：游戏常量
 | Fix(operand, target) | 维修 |
 
 ### Class Produce
-|       构造函数      | 描述 |
-| ------------------- | ---- |
-| Produce(team, kind) | 生产 |
+|    构造函数   | 描述 |
+| ------------- | ---- |
+| Produce(kind) | 生产 |
 
 ### Class Supply
 |                                构造函数                               |          描述          |
