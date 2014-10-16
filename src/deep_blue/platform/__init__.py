@@ -1,5 +1,5 @@
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 DEFAULT_PORT = 8067
 DEFAULT_TIMEOUT = 5
