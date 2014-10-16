@@ -36,8 +36,7 @@ class TestCommand(unittest.TestCase):
         self.assertEqual(8, cmd.operand)
         self.assertEqual(22, cmd.target)
 
-        cmd = command.Produce(42, 6)
-        self.assertEqual(42, cmd.operand)
+        cmd = command.Produce(6)
         self.assertEqual(6, cmd.kind)
 
         cmd = command.Supply(99, 88, -1, -1, 76)
