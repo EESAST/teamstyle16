@@ -244,8 +244,8 @@ TEST_F(ConnectionTest, CommandSentCorrectly)
     teamstyle16::Fix(77777, 45678);
     EXPECT_EQ("fx77777 45678", ReadUntil(buf, is, ','));
 
-    teamstyle16::Produce(7438, 3);
-    EXPECT_EQ("pd7438 3", ReadUntil(buf, is, ','));
+    teamstyle16::Produce(3);
+    EXPECT_EQ("pd3", ReadUntil(buf, is, ','));
 
     teamstyle16::Supply(50702, 49810, 500, -1, 450);
     EXPECT_EQ("sp50702 49810 500 -1 450", ReadUntil(buf, is, ','));
