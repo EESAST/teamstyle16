@@ -85,7 +85,7 @@ class MapInfo(object):
             for one in vector:
                 pos = Position(center.x + one[0], center.y + one[1], center.z)
                 if (pos in adjacent or pos.x < 0 or pos.x >= self.x_max or pos.y < 0 or pos.y >= self.y_max
-                    or (plane is False and self.map_type(pos.x, pos.y) == OCEAN)):
+                    or (plane is False and self.map_type(pos.x, pos.y) == LAND)):
                     continue
                 queue.append(pos)
                 adjacent[pos] = center
@@ -96,7 +96,7 @@ class MapInfo(object):
                         adj = adjacent[adj]
                     while True:
                         if len(nodes) == 1:
-                            return [orgin, orgin]
+                            return [origin, origin]
                         elif self.element(nodes[-1]) != None: # 目的地有其他单位
                             nodes.pop(-1)
                             continue
