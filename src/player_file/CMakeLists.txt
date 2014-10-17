@@ -93,7 +93,7 @@ target_link_libraries(ai_driver ai_base)
 
 # Build tests with gtest if required
 if(with-tests)
-    set(gtest_force_shared_crt ON)  # force gtest to use shared CRT
+    set(gtest_force_shared_crt ON CACHE BOOL "force gtest to use shared CRT")
     add_subdirectory(gtest-1.7.0)
     add_executable(ai_test ai.cpp basic_test.cpp connection_test.cpp)
     target_include_directories(ai_test PUBLIC ${PROJECT_SOURCE_DIR}/gtest-1.7.0/include)
