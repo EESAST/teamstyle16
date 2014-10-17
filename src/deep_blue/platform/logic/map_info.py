@@ -70,18 +70,12 @@ class MapInfo(object):
         tmp = MyDecoder().decode(string)
         self.elements = {int(index_str): element for index_str, element in tmp.items()}
 
-    def pathfinding(self, origin, dest):
+    def pathfinding(self, origin, dest, plane = False):
+        nodes = [origin, dest]
         if origin == dest:
             return [origin, dest]
 
-        origin.x = max(min(self.x_max, origin.x), 0)
-        origin.y = max(min(self.y_max, origin.y), 0)
-        origin.z = max(min(origin.z, AIR), UNDERWATER)
-        dest.x = max(min(self.x_max, dest.x), 0)
-        dest.y = max(min(self.y_max, dest.y), 0)
-        dest.z = origin.z
-        nodes = [origin, dest]
-        adjacent = {}        # Adjacent字典存储到达这个点的点
+        adjacent = {origin: origin}        # Adjacent字典存储到达这个点的点
         vector = [(0,1),(1,0),(0,-1),(-1,0)]
         queue = []
         queue.append(origin)
@@ -90,20 +84,24 @@ class MapInfo(object):
             center = queue[0]
             for one in vector:
                 pos = Position(center.x + one[0], center.y + one[1], center.z)
-                if pos in adjacent:
+                if (pos in adjacent or pos.x < 0 or pos.x >= self.x_max or pos.y < 0 or pos.y >= self.y_max
+                    or (plane is False and self.map_type(pos.x, pos.y) == OCEAN)):
                     continue
-                if (not isinstance(self.element(pos), Building) and not isinstance(self.element(pos), Resource)
-                    and max(min(self.x_max, pos.x), 0) == pos.x and max(min(self.y_max, pos.y), 0) == pos.y) :           # 最小坐标是0还是1      
-                    queue.append(pos)
-                    adjacent[pos] = center
-                if(pos == dest):
+                queue.append(pos)
+                adjacent[pos] = center
+                if pos == dest:
                     adj = adjacent[dest]
-                    if(isinstance(self.element(pos), Building) or isinstance(self.element(pos), Resource)):
-                        nodes.pop(-1)          # 如果目的地是陆地单位或资源单位          
                     while adj is not origin:
                         nodes.insert(1, adj)
                         adj = adjacent[adj]
-                    return nodes
+                    while True:
+                        if len(nodes) == 1:
+                            return [orgin, orgin]
+                        elif self.element(nodes[-1]) != None: # 目的地有其他单位
+                            nodes.pop(-1)
+                            continue
+                        else:
+                            return nodes
             queue.pop(0)
 
 def load(filename):

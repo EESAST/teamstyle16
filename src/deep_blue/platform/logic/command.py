@@ -127,12 +127,12 @@ class ChangeDest(Command):
         return True
 
     def result_event(self, game):
+        mover = game.map_info.elements[self.operand]
         x_max = game.map_info.x_max
         y_max = game.map_info.y_max
         self.dest.x = min(x_max, max(0, self.dest.x))
         self.dest.y = min(y_max, max(0, self.dest.y))
-        self.dest.z = min(AIR, max(UNDERWATER, self.dest.z))
-        mover = game.map_info.elements[self.operand]
+        self.dest.z = mover.pos.z
         mover.dest = self.dest
         return [event.ChangeDest(self.operand, self.dest)]
 

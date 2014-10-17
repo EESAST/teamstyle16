@@ -504,7 +504,7 @@ class Unit(UnitBase):
     def move(self, game):
         events = []
         cover = 0 # 走过的长度
-        nodes = game.map_info.pathfinding(self.pos, self.dest)
+        nodes = game.map_info.pathfinding(self.pos, self.dest, isinstance(self, Plane))
 
         for i in range(len(nodes) - 1):
             can_move = self.speed - cover # 剩余的路程
