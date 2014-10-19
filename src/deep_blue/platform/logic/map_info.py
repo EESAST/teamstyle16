@@ -79,6 +79,7 @@ class MapInfo(object):
         vector = [(0,1),(1,0),(0,-1),(-1,0)]
         queue = []
         queue.append(origin)
+        nearest = origin
 
         while True:
             center = queue[0]
@@ -89,8 +90,12 @@ class MapInfo(object):
                     continue
                 queue.append(pos)
                 adjacent[pos] = center
-                if pos == dest:
-                    adj = adjacent[dest]
+                if pos.distance(dest) < nearest.distance(dest):
+                    nearest = pos
+                if pos == dest or len(queue) == 0:
+                    if len(queue) == 0:
+                        pos = nearest
+                    adj = adjacent[pos]
                     while adj is not origin:
                         nodes.insert(1, adj)
                         adj = adjacent[adj]

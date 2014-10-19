@@ -178,7 +178,10 @@ class Position(object):
         return hash((Position, self.x, self.y, self.z))
 
     def __repr__(self):
-        return 'Position(%d, %d, %d)' % (self.x, self.y, self.z)
+        return '<Position (%d, %d, %d)>' % (self.x, self.y, self.z)
+
+    def __str__(self):
+        return '(%d, %d, %d)' % (self.x, self.y, self.z)
 
     @property
     def level(self):
@@ -216,6 +219,14 @@ class Rectangle(object):
         self.upper_left = upper_left
         lower_right.level = upper_left.level
         self.lower_right = lower_right
+
+    def __repr__(self):
+        size = self.size
+        return '<Rectangle %s %d*%d>' % (self.upper_left, size[0], size[1])
+
+    def __str__(self):
+        size = self.size
+        return '%s, %d*%d' % (self.upper_left, size[0], size[1])
 
     @property
     def size(self):
@@ -308,7 +319,8 @@ class Element(object):
 
 class Resource(Element):
     """资源类, 派生出矿场类和油田类"""
-    pass
+    def __repr__(self):
+        return '<%s at %s>' % (self.__class__.__name__, self.pos)
 
 class Mine(Resource):
     """矿场"""
@@ -367,6 +379,9 @@ class UnitBase(Element):
             if kw in kwargs:
                 maximum = getattr(self, kw + '_max')
                 setattr(self, kw, min(max(0, kwargs[kw]), maximum))     # in case health < 0 or health > health_max
+
+    def __repr__(self):
+        return '<team %s %s at %s>' % (self.team, self.__class__.__name__, self.pos)
 
     def view(self, target_pos):
         """查看目标点的状态"""

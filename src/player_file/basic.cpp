@@ -77,7 +77,7 @@ void Fix(int operand, int target)
     Connection::Instance()->Send(oss.str());
 }
 
-void Produce(int operand, int type)
+void Produce(int type)
 {
     std::ostringstream oss;
     oss << "pd" << type << ',';
