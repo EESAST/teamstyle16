@@ -30,11 +30,10 @@ struct RoundHeader
 
 void Connection::Connect(const std::string &host, const std::string &port)
 {
-    tcp::resolver resolver(io_service_);
     try
     {
         std::clog << "Connecting to " << host << ':' << port << std::endl;
-        boost::asio::connect(socket_, resolver.resolve(tcp::resolver::query(host, port)));
+        iosteam_.connect(tcp::resolver::query(host, port));
     }
     catch (const boost::system::system_error &e)
     {
@@ -45,7 +44,8 @@ void Connection::Connect(const std::string &host, const std::string &port)
     std::string team_name = GetTeamName();
     if (team_name.size() > kMaxTeamNameSize)
         team_name.resize(kMaxTeamNameSize);
-    boost::asio::write(socket_, boost::asio::buffer(team_name));
+
+    iosteam_ << team_name;
     std::clog << "Connection established\n";
 }
 
@@ -53,7 +53,7 @@ void Connection::Connect(const std::string &host, const std::string &port)
 void Connection::Send(const std::string &message)
 {
     std::clog << "Sending message (" + message + ") to host\n";
-    boost::asio::write(socket_, boost::asio::buffer(message));
+    iosteam_ << message;
     std::clog << "Message sent\n";
 }
 
@@ -70,7 +70,7 @@ int Connection::Update()
     {
         ReadRoundInfo();
         round_passed++;
-    } while (socket_.available());
+    } while (iosteam_.rdbuf()->available());
 
     std::clog << round_passed << " round(s) passed\n";
     return round_passed;
@@ -81,7 +81,7 @@ int Connection::TryUpdate()
     std::clog << "Try update\n";
 
     int round_passed = 0;
-    while (socket_.available())
+    while (iosteam_.rdbuf()->available())
     {
         ReadRoundInfo();
         round_passed++;
@@ -97,7 +97,7 @@ void Connection::ReadStableInfo()
     // read header
     std::vector<char> buffer(sizeof(StableHeader));
     std::clog << "Reading stable header from host\n";
-    boost::asio::read(socket_, boost::asio::buffer(buffer));
+    iosteam_.read(buffer.data(), buffer.size());
     std::clog << "Stable header read\n";
 
     const StableHeader * header =
@@ -117,7 +117,8 @@ void Connection::ReadStableInfo()
     map_.resize(game_info_.x_max * game_info_.y_max);
     std::clog << "Reading map (" << game_info_.x_max << " * "
                                  << game_info_.y_max << ")\n";
-    boost::asio::read(socket_, boost::asio::buffer(map_));
+    iosteam_.read(reinterpret_cast<char *>(map_.data()),
+                  map_.size() * sizeof(map_[0]));
     std::clog << "Map read\n";
     std::clog << "Stable infomation read\n";
 }
@@ -128,7 +129,7 @@ void Connection::ReadRoundInfo()
     // read header
     std::vector<char> buffer(sizeof(RoundHeader));
     std::clog << "Reading round header from host\n";
-    boost::asio::read(socket_, boost::asio::buffer(buffer));
+    iosteam_.read(buffer.data(), buffer.size());
     std::clog << "Round header read\n";
 
     const RoundHeader * header =
@@ -146,19 +147,15 @@ void Connection::ReadRoundInfo()
     // read body
     // production list
     std::clog << "Reading production list from host\n";
-    boost::asio::read(
-        socket_,
-        boost::asio::buffer(game_info_.production_list,
-                            game_info_.production_num * sizeof(ProductionEntry)));
+    iosteam_.read(reinterpret_cast<char *>(game_info_.production_list),
+                  game_info_.production_num * sizeof(ProductionEntry));
     std::clog << "Production list read (" << game_info_.production_num
               << " entry(s))\n";
 
     // states
     std::clog << "Reading states from host\n";
-    boost::asio::read(
-        socket_,
-        boost::asio::buffer(game_info_.elements,
-                            game_info_.element_num * sizeof(State)));
+    iosteam_.read(reinterpret_cast<char *>(game_info_.elements),
+                  game_info_.element_num * sizeof(State));
     std::clog << "States read (" << game_info_.element_num << " entry(s))\n";
 
     std::clog << "Round infomation read\n";
@@ -171,8 +168,7 @@ Connection * Connection::Instance()
 }
 
 Connection::Connection()
-        : io_service_(),
-          socket_(io_service_),
+        : iosteam_(),
           game_info_(),
           map_()
 {

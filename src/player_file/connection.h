@@ -32,7 +32,6 @@ class Connection : boost::noncopyable
     int TryUpdate();  // the same, does not block
 
     // accessors
-    boost::asio::io_service & io_service() { return io_service_; }
     const GameInfo * game_info() { return &game_info_; }
     MapType map(int x, int y) { return map_[y * game_info_.x_max + x]; }
 
@@ -45,8 +44,7 @@ class Connection : boost::noncopyable
     void ReadStableInfo();
     void ReadRoundInfo();
 
-    boost::asio::io_service io_service_;
-    boost::asio::ip::tcp::socket socket_;
+    boost::asio::ip::tcp::iostream iosteam_;
 
     GameInfo game_info_;
     std::vector<MapType> map_;
