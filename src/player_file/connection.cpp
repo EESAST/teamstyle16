@@ -6,6 +6,8 @@ const char * GetTeamName();
 
 namespace teamstyle16 {
 
+using boost::asio::ip::tcp;
+
 struct StableHeader
 {
     int x_max;

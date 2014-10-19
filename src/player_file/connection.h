@@ -17,8 +17,6 @@
 
 namespace teamstyle16 {
 
-using boost::asio::ip::tcp;
-
 const std::string default_host("localhost");
 const std::string default_port("8067");
 
