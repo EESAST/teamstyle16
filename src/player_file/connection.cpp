@@ -40,14 +40,11 @@ using boost::asio::ip::tcp;
 
 void Connection::Connect(const std::string &host, const std::string &port)
 {
-    try
+    std::clog << "Connecting to " << host << ':' << port << std::endl;
+    iosteam_.connect(host, port);
+    if (!iosteam_)
     {
-        std::clog << "Connecting to " << host << ':' << port << std::endl;
-        iosteam_.connect(tcp::resolver::query(host, port));
-    }
-    catch (const boost::system::system_error &e)
-    {
-        std::clog << "Connection failed: " << e.what() << std::endl;
+        std::clog << "Connection failed: " << iosteam_.error().message() << std::endl;
         std::exit(EXIT_FAILURE);
     }
     // send back team name
@@ -55,7 +52,8 @@ void Connection::Connect(const std::string &host, const std::string &port)
     if (team_name.size() > kMaxTeamNameSize)
         team_name.resize(kMaxTeamNameSize);
 
-    iosteam_ << team_name;
+    // TODO: check whether '\n' in team_name
+    iosteam_ << team_name << std::endl;
     std::clog << "Connection established\n";
 }
 
@@ -104,7 +102,8 @@ int Connection::TryUpdate()
 void Connection::ReadStableInfo()
 {
     std::clog << "Reading stable infomation from host\n";
-    stable_info_.ParseFromIstream(&iosteam_);
+    ReadMessage();
+    stable_info_.ParseFromString(message_);
 
     std::clog << "Decoding stable info header\n";
     game_info_.x_max = stable_info_.map().x_max();
@@ -122,7 +121,8 @@ void Connection::ReadStableInfo()
 void Connection::ReadRoundInfo()
 {
     std::clog << "Reading round infomation from host\n";
-    round_info_.ParseFromIstream(&iosteam_);
+    ReadMessage();
+    round_info_.ParseFromString(message_);
 
     std::clog << "Decoding stable info header\n";
     game_info_.round = round_info_.round();
@@ -139,6 +139,7 @@ void Connection::ReadRoundInfo()
     {
         const communicate::Element &element = round_info_.element(i);
         ParseToState(element, elements_[element.index()]);
+        game_info_.elements[i] = element.index();
     }
     std::clog << "States read (" << game_info_.element_num << " entry(s))\n";
 
@@ -154,6 +155,16 @@ void Connection::ReadRoundInfo()
     std::clog << "Round infomation read\n";
 }
 
+void Connection::ReadMessage()
+{
+    std::size_t message_size;
+    iosteam_ >> message_size;
+    iosteam_.ignore(1);  // ignore the following '\n'
+
+    message_.resize(message_size);
+    iosteam_.read(&message_[0], message_size);
+}
+
 Connection * Connection::Instance()
 {
     static Connection connection;
@@ -164,6 +175,8 @@ Connection::Connection()
         : iosteam_(),
           stable_info_(),
           round_info_(),
+          message_(),
+          elements_(),
           game_info_()
 {
 }

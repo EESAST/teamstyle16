@@ -53,10 +53,13 @@ class Connection : boost::noncopyable
     void ReadStableInfo();
     void ReadRoundInfo();
 
+    void ReadMessage();
+
     boost::asio::ip::tcp::iostream iosteam_;
 
     communicate::StableInfo stable_info_;
     communicate::RoundInfo round_info_;
+    std::string message_;
 
     std::map<int, State> elements_;
     GameInfo game_info_;
