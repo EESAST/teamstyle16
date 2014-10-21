@@ -37,7 +37,7 @@ class Connection : boost::noncopyable
     MapType map(int x, int y)
     {
         return static_cast<MapType>(
-            stable_info_.map().terrain(y * game_info_.x_max + x));
+            stable_info_.map().terrain(x * game_info_.y_max + y));
     }
     const State * GetState(int index)
     {
