@@ -110,7 +110,7 @@ struct GameInfo  // Necessary informations about the game
     int population;
 
     int element_num;
-    State elements[kMaxElementNum];
+    int elements[kMaxElementNum];
 
     int production_num;
     ProductionEntry production_list[kMaxProductionListSize];
