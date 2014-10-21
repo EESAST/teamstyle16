@@ -39,7 +39,7 @@
 | team_name(team)            | str                  | 队伍名                        |
 | **游戏状态**               |                      |                               |
 | round()                    | int                  | 返回当前回合数                |
-| status()                   | int                  | 返回当前的游戏状态            |
+| state()                   | int                  | 返回当前的游戏状态            |
 | score(team)                | int                  | 返回分数                      |
 | elements(team)             | {int:Element}        | 返回某队所有元素              |
 | vision(team)               | set(Position)[3]        | 返回某队三层视野的点集        |

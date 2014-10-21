@@ -101,7 +101,7 @@ class AIBattle(battle.Battle):
 
     def run_until_end(self):
         """Run until the game ends"""
-        while self.gamebody.state() == gamebody.STATE_CONTINUE:
+        while self.gamebody.state == gamebody.STATE_CONTINUE:
             self.feed_ai_commands()
             self.next_round()
 

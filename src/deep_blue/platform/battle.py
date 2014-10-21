@@ -64,8 +64,8 @@ class Battle(object):
     def round(self):
         return self.gamebody.round
 
-    def status(self):
-        return self.gamebody.status
+    def state(self):
+        return self.gamebody.state
 
     def score(self, team):
         return self.gamebody.score(team)
