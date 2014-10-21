@@ -135,7 +135,7 @@ TEST_F(ConnectionTest, StableInfoReceived)
     for (int x = 0; x < Info()->x_max; x++)
         for (int y = 0; y < Info()->y_max; y++)
         {
-            EXPECT_EQ(map.terrain(y * map.x_max() + x), Map(x, y));
+            EXPECT_EQ(map.terrain(x * map.y_max() + y), Map(x, y));
         }
 }
 
