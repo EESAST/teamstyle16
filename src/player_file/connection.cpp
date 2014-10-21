@@ -105,7 +105,7 @@ void Connection::ReadStableInfo()
     ReadMessage();
     stable_info_.ParseFromString(message_);
 
-    std::clog << "Decoding stable info header\n";
+    std::clog << "Decoding stable info\n";
     game_info_.x_max = stable_info_.map().x_max();
     game_info_.y_max = stable_info_.map().y_max();
     game_info_.team_num = stable_info_.team_num();
@@ -124,7 +124,7 @@ void Connection::ReadRoundInfo()
     ReadMessage();
     round_info_.ParseFromString(message_);
 
-    std::clog << "Decoding stable info header\n";
+    std::clog << "Decoding round info\n";
     game_info_.round = round_info_.round();
     game_info_.scores[0] = round_info_.score(0);
     game_info_.scores[1] = round_info_.score(1);
