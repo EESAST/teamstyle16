@@ -50,7 +50,6 @@ struct Size
 struct Property
 {
     Level level;
-    Size size;
 
     int sight_ranges[3];
     int fire_ranges[3];
@@ -75,6 +74,7 @@ struct State
     int index;  // Every element has an unique index
 
     Position pos;  // position of the upper-left corner
+    Size size;
     int type;
     int team;
     bool visible;
