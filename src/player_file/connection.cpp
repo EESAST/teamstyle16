@@ -4,29 +4,39 @@
 
 const char * GetTeamName();
 
+namespace {
+
+void ParseToState(const teamstyle16::communicate::Element &element,
+                  teamstyle16::State &state)
+{
+    state.index = element.index();
+
+    state.pos.x = element.pos().x();
+    state.pos.y = element.pos().y();
+    state.pos.z = element.pos().z();
+
+    state.size.x_length = element.size().x();
+    state.size.y_length = element.size().y();
+
+    state.type = element.type();
+    state.team = element.team();
+    state.visible = element.visible();
+    state.health = element.health();
+    state.fuel = element.fuel();
+    state.ammo = element.ammo();
+    state.metal = element.metal();
+    state.ammo = element.ammo();
+
+    state.destination.x = element.dest().x();
+    state.destination.y = element.dest().y();
+    state.destination.z = element.dest().z();
+}
+
+}  // namespace
+
 namespace teamstyle16 {
 
 using boost::asio::ip::tcp;
-
-struct StableHeader
-{
-    int x_max;
-    int y_max;
-    int weather;
-    int team_num;
-    int population_limit;
-    int round_limit;
-    float time_per_round;
-};
-
-struct RoundHeader
-{
-    int round;
-    int element_num;
-    int population;
-    int production_num;
-    int scores[2];
-};
 
 void Connection::Connect(const std::string &host, const std::string &port)
 {
@@ -94,69 +104,52 @@ int Connection::TryUpdate()
 void Connection::ReadStableInfo()
 {
     std::clog << "Reading stable infomation from host\n";
-    // read header
-    std::vector<char> buffer(sizeof(StableHeader));
-    std::clog << "Reading stable header from host\n";
-    iosteam_.read(buffer.data(), buffer.size());
-    std::clog << "Stable header read\n";
-
-    const StableHeader * header =
-        reinterpret_cast<const StableHeader *>(buffer.data());
+    stable_info_.ParseFromIstream(&iosteam_);
 
     std::clog << "Decoding stable info header\n";
-    game_info_.x_max = header->x_max;
-    game_info_.y_max = header->y_max;
-    game_info_.weather = header->weather;
-    game_info_.team_num = header->team_num;
-    game_info_.population_limit = header->population_limit;
-    game_info_.round_limit = header->round_limit;
-    game_info_.time_per_round = header->time_per_round;
+    game_info_.x_max = stable_info_.map().x_max();
+    game_info_.y_max = stable_info_.map().y_max();
+    game_info_.team_num = stable_info_.team_num();
+    game_info_.weather = stable_info_.weather();
+    game_info_.population_limit = stable_info_.population_limit();
+    game_info_.round_limit = stable_info_.round_limit();
+    game_info_.time_per_round = stable_info_.time_per_round();
     std::clog << "Decode completed\n";
 
-    // read body (map)
-    map_.resize(game_info_.x_max * game_info_.y_max);
-    std::clog << "Reading map (" << game_info_.x_max << " * "
-                                 << game_info_.y_max << ")\n";
-    iosteam_.read(reinterpret_cast<char *>(map_.data()),
-                  map_.size() * sizeof(map_[0]));
-    std::clog << "Map read\n";
     std::clog << "Stable infomation read\n";
 }
 
 void Connection::ReadRoundInfo()
 {
     std::clog << "Reading round infomation from host\n";
-    // read header
-    std::vector<char> buffer(sizeof(RoundHeader));
-    std::clog << "Reading round header from host\n";
-    iosteam_.read(buffer.data(), buffer.size());
-    std::clog << "Round header read\n";
-
-    const RoundHeader * header =
-        reinterpret_cast<const RoundHeader *>(buffer.data());
+    round_info_.ParseFromIstream(&iosteam_);
 
     std::clog << "Decoding stable info header\n";
-    game_info_.round = header->round;
-    game_info_.element_num = header->element_num;
-    game_info_.population = header->population;
-    game_info_.production_num = header->production_num;
-    game_info_.scores[0] = header->scores[0];
-    game_info_.scores[1] = header->scores[1];
+    game_info_.round = round_info_.round();
+    game_info_.scores[0] = round_info_.score(0);
+    game_info_.scores[1] = round_info_.score(1);
+    game_info_.population = round_info_.population();
+    game_info_.element_num = round_info_.element_size();
+    game_info_.production_num = round_info_.production_list_size();
     std::clog << "Decode completed\n";
 
-    // read body
-    // production list
-    std::clog << "Reading production list from host\n";
-    iosteam_.read(reinterpret_cast<char *>(game_info_.production_list),
-                  game_info_.production_num * sizeof(ProductionEntry));
-    std::clog << "Production list read (" << game_info_.production_num
-              << " entry(s))\n";
-
-    // states
-    std::clog << "Reading states from host\n";
-    iosteam_.read(reinterpret_cast<char *>(game_info_.elements),
-                  game_info_.element_num * sizeof(State));
+    // Set elements
+    elements_.clear();
+    for (int i = 0; i < game_info_.element_num; i++)
+    {
+        const communicate::Element &element = round_info_.element(i);
+        ParseToState(element, elements_[element.index()]);
+    }
     std::clog << "States read (" << game_info_.element_num << " entry(s))\n";
+
+    // Set prodection list
+    for (int i = 0; i < game_info_.production_num; i++)
+    {
+        const communicate::RoundInfo::ProductionEntry &this_entry =
+            round_info_.production_list(i);
+        game_info_.production_list[i].unit_type = this_entry.type();
+        game_info_.production_list[i].round_left = this_entry.round_left();
+    }
 
     std::clog << "Round infomation read\n";
 }
@@ -169,8 +162,9 @@ Connection * Connection::Instance()
 
 Connection::Connection()
         : iosteam_(),
-          game_info_(),
-          map_()
+          stable_info_(),
+          round_info_(),
+          game_info_()
 {
 }
 

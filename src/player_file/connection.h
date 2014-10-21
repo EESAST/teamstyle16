@@ -1,8 +1,8 @@
 #ifndef TEAMSTYLE16_CONNECTION_H_
 #define TEAMSTYLE16_CONNECTION_H_
 
+#include <map>
 #include <string>
-#include <vector>
 
 #include <boost/asio.hpp>
 
@@ -14,6 +14,7 @@
 #endif
 
 #include "basic.h"
+#include "communicate.pb.h"
 
 namespace teamstyle16 {
 
@@ -33,8 +34,16 @@ class Connection : boost::noncopyable
 
     // accessors
     const GameInfo * game_info() { return &game_info_; }
-    MapType map(int x, int y) { return map_[y * game_info_.x_max + x]; }
-
+    MapType map(int x, int y)
+    {
+        return static_cast<MapType>(
+            stable_info_.map().terrain(y * game_info_.x_max + x));
+    }
+    const State * GetState(int index)
+    {
+        std::map<int, State>::const_iterator iter = elements_.find(index);
+        return iter == elements_.end() ? NULL : &iter->second;
+    }
     static Connection * Instance();
 
  private:
@@ -46,8 +55,11 @@ class Connection : boost::noncopyable
 
     boost::asio::ip::tcp::iostream iosteam_;
 
+    communicate::StableInfo stable_info_;
+    communicate::RoundInfo round_info_;
+
+    std::map<int, State> elements_;
     GameInfo game_info_;
-    std::vector<MapType> map_;
 };
 
 }  // namespace teamstyle16
