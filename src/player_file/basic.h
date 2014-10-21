@@ -132,6 +132,7 @@ extern const Property kElementInfos[kElementTypes];
 
 const GameInfo * Info();  // Get game information
 MapType Map(int x, int y);
+const State * GetState(int index);
 
 // Move to the next round, or the latest round if possible.
 // Return rounds actually passed

@@ -29,6 +29,11 @@ MapType Map(int x, int y)
     return Connection::Instance()->map(x, y);
 }
 
+const State * GetState(int index)
+{
+    return Connection::Instance()->GetState(index);
+}
+
 int Update()
 {
     return Connection::Instance()->Update();
