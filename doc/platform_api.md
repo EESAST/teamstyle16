@@ -58,6 +58,7 @@
 | next_round()                                  | [Event]              | 进行一回合                                                         |
 | **保存/载入**                                 |                      |                                                                    |
 | save(filename, compact=False, compress=False) | None                 | 保存游戏, compact为True则将省略空白符, compress=True则会以压缩存档 |
+| save_event_strings(filename)                  | None                 | 保存事件字符串                                                     |
 
 
 ## Module ai_battle

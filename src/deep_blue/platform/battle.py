@@ -147,6 +147,19 @@ class Battle(object):
 
         logger.info('Game saved to "%s"', filename)
 
+    def save_event_strings(self, filename):
+        """Save event strings to file"""
+        logger.debug('Saving event strings to "%s"', filename)
+        f = open(filename, 'w')
+        for round, round_events in enumerate(self.history['event']):
+            event_num = len(round_events)
+            if event_num > 0:  # At least one event happened in this round
+                f.write('round %d:\n' % round)
+                for event in round_events:
+                    f.write(event.description() + '\n')
+
+        logger.info('Event strings saved to "%s"', filename)
+
     def record_history(self):
         history = self.history
         game = self.gamebody
