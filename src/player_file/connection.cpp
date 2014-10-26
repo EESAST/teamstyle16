@@ -158,11 +158,17 @@ void Connection::ReadRoundInfo()
 void Connection::ReadMessage()
 {
     std::size_t message_size;
-    iosteam_ >> message_size;
+    if (!(iosteam_ >> message_size))
+        throw std::runtime_error("Failed to read message size from host, "
+                                 "connection seems lost");
+
     iosteam_.ignore(1);  // ignore the following '\n'
 
     message_.resize(message_size);
     iosteam_.read(&message_[0], message_size);
+    if (!iosteam_)  // failed to read
+        throw std::runtime_error("Failed to read messages from host, "
+                                 "connection seems lost");
 }
 
 Connection * Connection::Instance()
