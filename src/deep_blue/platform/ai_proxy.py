@@ -43,6 +43,7 @@ class AIProxy(threading.Thread):
         self.logger.debug('Waiting for connection at port %d', port)
         try:
             self.conn, self.addr = sock.accept()
+            self.conn.settimeout(None)  # no timeout for connection socket
         except socket.timeout as e:
             self.logger.error('Waiting Timeout: %s', e)
             raise AIConnectError('Cannot connect to AI %d: %s' %
