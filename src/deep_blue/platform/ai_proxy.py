@@ -1,9 +1,9 @@
 import threading, socket
 import subprocess
-import struct
 import logging
 from logic import basic
 from logic import command
+import communicate_pb2
 
 class AIError(IOError):
     """Describe error caused by AI"""
@@ -43,6 +43,7 @@ class AIProxy(threading.Thread):
         self.logger.debug('Waiting for connection at port %d', port)
         try:
             self.conn, self.addr = sock.accept()
+            self.conn.settimeout(None)  # no timeout for connection socket
         except socket.timeout as e:
             self.logger.error('Waiting Timeout: %s', e)
             raise AIConnectError('Cannot connect to AI %d: %s' %
@@ -55,7 +56,7 @@ class AIProxy(threading.Thread):
         # Send stable info
         self.logger.debug('Sending stable info')
         self.__send_stable_info(battle)
-        self.logger.info('Stable info sent')
+        self.logger.debug('Stable info sent')
 
     def stop(self, how=socket.SHUT_RDWR):
         """Stop connection with AI, stop AI if needed"""
@@ -65,7 +66,7 @@ class AIProxy(threading.Thread):
             self.positive_close=True
             self.conn.shutdown(how)  # To shut down immediately
             self.conn.close()
-            self.logger.info('Connection closed positively')
+            self.logger.info('Connection closed')
         # Terminate AI program if needed
         if self.ai_program and self.ai_program.poll():
             self.logger.debug("Terminaing AI")
@@ -129,7 +130,7 @@ class AIProxy(threading.Thread):
         """Send infomations to AI"""
         self.logger.debug('Sending round info')
         self.__send_round_info(battle)
-        self.logger.info('Round Info sent')
+        self.logger.debug('Round Info sent')
 
     def __run_ai(self, filename, port):
         try:
@@ -213,65 +214,67 @@ class AIProxy(threading.Thread):
     def __encode_stable_info(self, battle):
         """Encode stable information of battle into str"""
         map_info = battle.map_info()
-        header = struct.pack('6if', map_info.x_max,
-                                    map_info.y_max,
-                                    map_info.weather,
-                                    self.team_num,
-                                    map_info.max_population,
-                                    map_info.max_round,
-                                    map_info.time_per_round)
-        # serialize map
-        map_array = []
-        for x in xrange(map_info.x_max):
-            for y in xrange(map_info.y_max):
-                map_array.append(map_info.map_type(x, y))
-        body = struct.pack(str(len(map_array)) + 'i', *map_array)
+        info = communicate_pb2.StableInfo()
 
-        return header + body
+        info.map.x_max = map_info.x_max
+        info.map.y_max = map_info.y_max
+        # serialize map
+        info.map.terrain.extend(
+            [map_info.map_type(x, y) for x in xrange(map_info.x_max)
+                                     for y in xrange(map_info.y_max)])
+        info.team_num = self.team_num
+        info.weather = map_info.weather
+        info.population_limit = map_info.max_population
+        info.round_limit = map_info.max_round
+        info.time_per_round = map_info.time_per_round
+
+        info_str = info.SerializeToString()
+        return ''.join([str(len(info_str)), '\n', info_str])
 
     def __encode_round_info(self, battle):
         """Encode round information of battle into str"""
         map_info = battle.map_info()
-        production_list = battle.production_list(self.team_num)
-        view_elements = battle.view_elements(self.team_num)
+        info = communicate_pb2.RoundInfo()
 
-        header = struct.pack('6i', battle.round(),
-                                   len(view_elements),
-                                   battle.population(self.team_num),
-                                   len(production_list),
-                                   battle.score(0),
-                                   battle.score(1))
+        info.round = battle.round()
+        info.score.append(battle.score(0))
+        info.score.append(battle.score(1))
+        info.population = battle.population(self.team_num)
 
-        body = ''
-        for entry in production_list:
-            body = body + struct.pack('2i', entry[0], entry[1])
-        for element in view_elements.values():
-            body = body + self.__serialize_element(element)
+        for entry in battle.production_list(self.team_num):
+            e = info.production_list.add()
+            e.type, e.round_left = entry
 
-        return header + body
+        for element in battle.view_elements(self.team_num).values():
+            e = info.element.add()
+            self.__encode_element(e, element)
 
-    def __serialize_element(self, element):
-        index = element.index
-        pos = element.pos
-        kind = element.kind
+        info_str = info.SerializeToString()
+        return ''.join([str(len(info_str)), '\n', info_str])
+
+    def __encode_element(self, encoded, element):
+        encoded.index = element.index
+        encoded.type = element.kind
+        encoded.pos.x = element.pos.x
+        encoded.pos.y = element.pos.y
+        encoded.pos.z = element.pos.z
+        encoded.size.x, encoded.size.y = element.size
         # Elements in sight might lack attribute 'visible'
-        visible = element.visible if hasattr(element, 'visible') else True
-        if isinstance(element, basic.UnitBase):
-            team = element.team
-            health = element.health
-            fuel = element.fuel
-            ammo = element.ammo if element.ammo != basic.INFINITY else -1
-            metal = element.metal
-            dest = element.dest if isinstance(element, basic.Unit) else pos
-        else:
-            team = 2
-            health = fuel = ammo = metal = 0
-            if isinstance(element, basic.Mine):
-                metal = element.metal
-            else:  # is a Oilfield
-                fuel = element.fuel
-            dest = pos
+        encoded.visible = element.visible if hasattr(element, 'visible') else True
 
-        return struct.pack('6i?7i', index, pos.x, pos.y, pos.z, kind, team,
-                                    visible, health, fuel, ammo, metal,
-                                    dest.x, dest.y, dest.z)
+        if isinstance(element, basic.UnitBase):
+            encoded.team = element.team
+            encoded.health = element.health
+            encoded.fuel = element.fuel
+            encoded.ammo = element.ammo if element.ammo != basic.INFINITY else -1
+            encoded.metal = element.metal
+
+            if isinstance(element, basic.Unit):
+                encoded.dest.x = element.dest.x
+                encoded.dest.y = element.dest.y
+                encoded.dest.z = element.dest.z
+        else:  # Resource
+            if isinstance(element, basic.Mine):
+                encoded.metal = element.metal
+            else:  # is a Oilfield
+                encoded.fuel = element.fuel

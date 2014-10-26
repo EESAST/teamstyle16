@@ -77,7 +77,7 @@ class GameBody(object):
         return self.map_info.weather
 
     @property
-    def status(self):
+    def state(self):
         dead_bases = 0
         rst = None
         for element in self.map_info.elements.values():

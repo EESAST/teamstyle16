@@ -1,8 +1,8 @@
 #ifndef TEAMSTYLE16_CONNECTION_H_
 #define TEAMSTYLE16_CONNECTION_H_
 
+#include <map>
 #include <string>
-#include <vector>
 
 #include <boost/asio.hpp>
 
@@ -14,10 +14,9 @@
 #endif
 
 #include "basic.h"
+#include "communicate.pb.h"
 
 namespace teamstyle16 {
-
-using boost::asio::ip::tcp;
 
 const std::string default_host("localhost");
 const std::string default_port("8067");
@@ -34,10 +33,17 @@ class Connection : boost::noncopyable
     int TryUpdate();  // the same, does not block
 
     // accessors
-    boost::asio::io_service & io_service() { return io_service_; }
     const GameInfo * game_info() { return &game_info_; }
-    MapType map(int x, int y) { return map_[y * game_info_.x_max + x]; }
-
+    MapType map(int x, int y)
+    {
+        return static_cast<MapType>(
+            stable_info_.map().terrain(x * game_info_.y_max + y));
+    }
+    const State * GetState(int index)
+    {
+        std::map<int, State>::const_iterator iter = elements_.find(index);
+        return iter == elements_.end() ? NULL : &iter->second;
+    }
     static Connection * Instance();
 
  private:
@@ -47,11 +53,16 @@ class Connection : boost::noncopyable
     void ReadStableInfo();
     void ReadRoundInfo();
 
-    boost::asio::io_service io_service_;
-    boost::asio::ip::tcp::socket socket_;
+    void ReadMessage();
 
+    boost::asio::ip::tcp::iostream iosteam_;
+
+    communicate::StableInfo stable_info_;
+    communicate::RoundInfo round_info_;
+    std::string message_;
+
+    std::map<int, State> elements_;
     GameInfo game_info_;
-    std::vector<MapType> map_;
 };
 
 }  // namespace teamstyle16

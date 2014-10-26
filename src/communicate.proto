@@ -1,0 +1,60 @@
+package teamstyle16.communicate;
+
+message Position {
+    required int32 x = 1;
+    required int32 y = 2;
+    required int32 z = 3;
+}
+
+message Element {
+    // Shared by all elements
+    required int32 index = 1;
+    required int32 type = 2;
+    required Position pos = 3;
+
+    message Size {
+        required int32 x = 1;
+        required int32 y = 2;
+    }
+
+    optional Size size = 4;
+    required bool visible = 5;
+    // Shared by buildings & units
+    optional int32 team = 6 [default = 2];
+    optional int32 health = 7;
+    optional int32 fuel = 8;
+    optional int32 ammo = 9;
+    optional int32 metal = 10;
+    // Shared by units
+    optional Position dest = 11;
+}
+
+message Map {
+    required int32 x_max = 1;
+    required int32 y_max = 2;
+    repeated int32 terrain = 3;
+}
+
+message StableInfo {
+    required Map map = 1;
+    required int32 team_num = 2;
+    // Extra infomation about the game
+    optional bool weather = 3;
+    optional int32 population_limit = 4;
+    optional int32 round_limit = 5;
+    optional float time_per_round = 6;
+}
+
+message RoundInfo {
+    required int32 round = 1;
+    repeated int32 score = 2;
+    optional int32 population = 3;
+    repeated Element element = 4;
+
+    message ProductionEntry {
+        required int32 type = 1;
+        required int32 round_left = 2;
+    }
+
+    repeated ProductionEntry production_list = 5;
+}

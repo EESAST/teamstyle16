@@ -50,7 +50,6 @@ struct Size
 struct Property
 {
     Level level;
-    Size size;
 
     int sight_ranges[3];
     int fire_ranges[3];
@@ -75,6 +74,7 @@ struct State
     int index;  // Every element has an unique index
 
     Position pos;  // position of the upper-left corner
+    Size size;
     int type;
     int team;
     bool visible;
@@ -110,7 +110,7 @@ struct GameInfo  // Necessary informations about the game
     int population;
 
     int element_num;
-    State elements[kMaxElementNum];
+    int elements[kMaxElementNum];  // array of indexes
 
     int production_num;
     ProductionEntry production_list[kMaxProductionListSize];
@@ -132,6 +132,7 @@ extern const Property kElementInfos[kElementTypes];
 
 const GameInfo * Info();  // Get game information
 MapType Map(int x, int y);
+const State * GetState(int index);
 
 // Move to the next round, or the latest round if possible.
 // Return rounds actually passed

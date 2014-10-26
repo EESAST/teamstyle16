@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 #include "connection.h"
 
 void AIMain();
@@ -35,6 +36,11 @@ int main(int argc, char const *argv[])
     catch (const boost::system::system_error &e)
     {
         std::clog << "Connection lost: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    catch (const std::exception &e)
+    {
+        std::clog << "Exception caught: " << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
 

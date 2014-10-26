@@ -21,10 +21,11 @@ void ShowElement(const teamstyle16::State &state)
     using std::endl;
 
     cout << "    index: " << state.index
-         << "\n    pos: " << PosString(state.pos)
          << "\n    type: " << state.type
-         << "\n    team: " << state.team
+         << "\n    pos: " << PosString(state.pos)
+         << "\n    size: " << state.size.x_length << " * " << state.size.y_length
          << "\n    visible: " << state.visible
+         << "\n    team: " << state.team
          << "\n    health: " << state.health
          << "\n    fuel: " << state.fuel
          << "\n    ammo: " << state.ammo
@@ -82,7 +83,7 @@ void ShowRoundInfo()
     cout << "elements:\n";
     for (int i = 0; i < info->element_num; i++)
     {
-        const teamstyle16::State &state = info->elements[i];
+        const teamstyle16::State &state = *teamstyle16::GetState(info->elements[i]);
         cout << "  " << i << ": \n";
         ShowElement(state);
     }
