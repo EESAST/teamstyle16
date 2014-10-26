@@ -45,7 +45,7 @@ class AIBattle(battle.Battle):
                                             filename=ai0_filename))
         self.ais.append(ai_proxy.AIProxy(1, sock=sock, battle=self,
                                             filename=ai1_filename))
-        logger.info('Proxies for AIs built')
+        logger.debug('Proxies for AIs built')
 
         # Set team names in Battle
         self.team_names = [self.ais[0].team_name, self.ais[1].team_name]
@@ -53,9 +53,12 @@ class AIBattle(battle.Battle):
         # Battle has been started, so send infos to AIs
         for ai in self.ais:
             ai.send_info(self)
+        logger.info('Info sent to AIs')
 
         for ai in self.ais:
             ai.start()
+
+        logger.info('Battle started')
 
     def __del__(self):
         for ai in self.ais:
@@ -63,7 +66,7 @@ class AIBattle(battle.Battle):
                 logger.debug('Stopping AI %d proxy', ai.team_num)
                 ai.stop()
                 ai.join()
-                logger.info('AI %d proxy stopped', ai.team_num)
+                logger.debug('AI %d proxy stopped', ai.team_num)
 
     # Override team_name(), to make sure team names of AI will be displayed,
     # instead of team names set at the beginning of the battle.
@@ -77,6 +80,8 @@ class AIBattle(battle.Battle):
         events = battle.Battle.next_round(self)
         for ai in self.ais:
             ai.send_info(self)
+        logger.info('Info sent to AIs')
+
         return events
 
     def feed_ai_commands(self, sleep_time=None):
@@ -97,7 +102,7 @@ class AIBattle(battle.Battle):
                 if not self.gamebody.set_command(team, cmd):
                     # Invalid command
                     logger.error('AI %d provided an invalid command', team)
-        logger.info('AI commands feed')
+        logger.info('AIs commands feed')
 
     def run_until_end(self):
         """Run until the game ends"""

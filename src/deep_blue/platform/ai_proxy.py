@@ -56,7 +56,7 @@ class AIProxy(threading.Thread):
         # Send stable info
         self.logger.debug('Sending stable info')
         self.__send_stable_info(battle)
-        self.logger.info('Stable info sent')
+        self.logger.debug('Stable info sent')
 
     def stop(self, how=socket.SHUT_RDWR):
         """Stop connection with AI, stop AI if needed"""
@@ -130,7 +130,7 @@ class AIProxy(threading.Thread):
         """Send infomations to AI"""
         self.logger.debug('Sending round info')
         self.__send_round_info(battle)
-        self.logger.info('Round Info sent')
+        self.logger.debug('Round Info sent')
 
     def __run_ai(self, filename, port):
         try:
