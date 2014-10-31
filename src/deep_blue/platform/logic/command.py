@@ -138,7 +138,7 @@ class ChangeDest(Command):
 
 class Produce(Command):
     """生产"""
-    def __init__(self, kind):
+    def __init__(self, kind, **kw):
         super(Produce, self).__init__(operand = -1)
         self.kind = kind
 
