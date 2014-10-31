@@ -381,9 +381,11 @@ class TestGameBody(unittest.TestCase):
 
     def test_move(self):
         plane = self.add(Fighter, 0, (14, 4), dest=Position(11, 4, 2), speed=3)
+        cargo = self.add(Cargo, 0, (1, 5), dest=Position(0, 0, 1), speed=6)
 
         results = self.gamebody.run()
         self.assertEqual(Position(11, 4, 2), plane.pos)
+        self.assertEqual(Position(0, 4, 1), cargo.pos)
 
 
     def test_cancel(self):
