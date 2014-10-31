@@ -180,11 +180,15 @@ class GameBody(object):
                     for element in elements.values():
                         if element.kind == BASE and element.team == team_index:
                             if entry[0] == SUBMARINE:
-                                check_region = [point for point in element.pos.region(level = UNDERWATER, range = 1) if element.pos.distance(point) == 1]
+                                check_region = [point for point in element.pos.region(level = UNDERWATER, range = 1) if element.pos.distance(point) == 1 and
+                                                                                                                        point.x >= 0 and point.x < self.map_info.x_max and
+                                                                                                                        point.y >= 0 and point.y < self.map_info.y_max]
                             elif entry[0] == FIGHTER or entry[0] == SCOUT:
                                 check_region = element.pos.region(level = AIR, range = 0)
                             else:
-                                check_region = [point for point in element.pos.region(level = SURFACE, range = 1) if element.pos.distance(point) == 1]
+                                check_region = [point for point in element.pos.region(level = SURFACE, range = 1) if element.pos.distance(point) == 1 and
+                                                                                                                     point.x >= 0 and point.x < self.map_info.x_max and
+                                                                                                                     point.y >= 0 and point.y < self.map_info.y_max]
                             shuffle(check_region)
                             for point in check_region:
                                 if self.map_info.element(point) == None:
