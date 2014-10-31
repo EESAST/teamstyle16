@@ -267,7 +267,7 @@ TODO：游戏常量
 |  属性 |    类型    |       描述       |
 | ----- | ---------- | ---------------- |
 | index | int        | 单位索引号       |
-| nodes | [Position] | 移动路径上的拐点 |
+| nodes | [Position] | 移动路径上所有点 |
 | steps | int        | 总步数           |
 
 ### Class Create
