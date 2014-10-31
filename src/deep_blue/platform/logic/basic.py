@@ -526,24 +526,26 @@ class Unit(UnitBase):
         cover = 0 # 走过的长度
         nodes = game.map_info.pathfinding(self.pos, self.dest, isinstance(self, Plane))
 
-        for i in range(len(nodes) - 1):
-            can_move = self.speed - cover # 剩余的路程
-            if(can_move > nodes[i].distance(nodes[i + 1])):
-                cover += nodes[i].distance(nodes[i + 1])
-            elif can_move == nodes[i].distance(nodes[i + 1]):
-                nodes = nodes[0 : (i + 2)]
-                break
-            else:
-                nodes = nodes[0 : (i + 2)]
-                flag = 1 if (nodes[i].x + nodes[i].y) < (nodes[i + 1].x + nodes[i + 1].y) else -1
-                if nodes[i].x == nodes[i + 1].x:
-                    nodes.append(Position(nodes[i].x + flag * can_move, nodes[i].y, nodes[i].z))
-                    break
-                elif nodes[i].y == nodes[i + 1].y:
-                    nodes.append(Position(nodes[i].x, nodes[i].y + flag * can_move, nodes[i].z))
-                    break
-                else:
-                    raise RuntimeError()
+        # for i in range(len(nodes) - 1):
+        #     can_move = self.speed - cover # 剩余的路程
+        #     if(can_move > nodes[i].distance(nodes[i + 1])):
+        #         cover += nodes[i].distance(nodes[i + 1])
+        #     elif can_move == nodes[i].distance(nodes[i + 1]):
+        #         nodes = nodes[0 : (i + 2)]
+        #         break
+        #     else:
+        #         nodes = nodes[0 : (i + 2)]
+        #         flag = 1 if (nodes[i].x + nodes[i].y) < (nodes[i + 1].x + nodes[i + 1].y) else -1
+        #         if nodes[i].x == nodes[i + 1].x:
+        #             nodes.append(Position(nodes[i].x + flag * can_move, nodes[i].y, nodes[i].z))
+        #             break
+        #         elif nodes[i].y == nodes[i + 1].y:
+        #             nodes.append(Position(nodes[i].x, nodes[i].y + flag * can_move, nodes[i].z))
+        #             break
+        #         else:
+        #             raise RuntimeError()
+        if self.speed + 1 < len(nodes):
+            nodes = nodes[:self.speed + 1]
         self.pos = nodes[-1]
         move_event = Move(self.index, nodes)
         events += [] if move_event.steps == 0 else [move_event]
