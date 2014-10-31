@@ -195,6 +195,11 @@ class Position(object):
     def size(self):
         return (1, 1)
 
+    def inMap(self, map):
+        return (self.x >= 0 and self.x < map.x_max and
+                self.y >= 0 and self.y < map.y_max and
+                self.z >= 0 and self.z < 3)
+
     def distance(self, target):
         """返回该位置到target(点或矩形)的(最小)距离"""
         if isinstance(target, Position):
