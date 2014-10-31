@@ -71,43 +71,41 @@ class MapInfo(object):
         self.elements = {int(index_str): element for index_str, element in tmp.items()}
 
     def pathfinding(self, origin, dest, plane = False):
-        nodes = [origin, dest]
+        nodes = [origin]
         if origin == dest:
-            return [origin, dest]
+            return [origin]
 
         adjacent = {origin: origin}        # Adjacent字典存储到达这个点的点
         vector = [(0,1),(1,0),(0,-1),(-1,0)]
-        queue = []
-        queue.append(origin)
+        queue = [origin]
         nearest = origin
 
         while True:
             center = queue[0]
             for one in vector:
                 pos = Position(center.x + one[0], center.y + one[1], center.z)
-                if (pos in adjacent or pos.x < 0 or pos.x >= self.x_max or pos.y < 0 or pos.y >= self.y_max
-                    or (plane is False and self.map_type(pos.x, pos.y) == LAND)):
+                if (pos in adjacent or pos.inMap(self) is False or
+                    (plane is False and self.map_type(pos.x, pos.y) == LAND)):
                     continue
                 queue.append(pos)
                 adjacent[pos] = center
-                if pos.distance(dest) < nearest.distance(dest):
-                    nearest = pos
-                if pos == dest or len(queue) == 0:
-                    if len(queue) == 0:
-                        pos = nearest
-                    adj = adjacent[pos]
-                    while adj is not origin:
-                        nodes.insert(1, adj)
-                        adj = adjacent[adj]
-                    while True:
-                        if len(nodes) == 1:
-                            return [origin, origin]
-                        elif self.element(nodes[-1]) != None: # 目的地有其他单位
-                            nodes.pop(-1)
-                            continue
-                        else:
-                            return nodes
-            queue.pop(0)
+            pos = queue.pop(0)
+            if pos.distance(dest) < nearest.distance(dest):
+                nearest = pos
+            if pos == dest or len(queue) == 0:
+                if len(queue) == 0:
+                    pos = nearest
+                while pos is not origin:
+                    nodes.insert(1, pos)
+                    pos = adjacent[pos]
+                while True:
+                    if len(nodes) == 1:
+                        return [origin]
+                    elif self.element(nodes[-1]) != None: # 目的地有其他单位
+                        nodes.pop(-1)
+                        continue
+                    else:
+                        return nodes
 
 def load(filename):
     """Read map from file"""
