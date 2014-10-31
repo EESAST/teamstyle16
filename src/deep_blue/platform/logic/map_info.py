@@ -21,11 +21,11 @@ class MapInfo(object):
 
     def map_type(self, x, y):
         """Return map type(OCEAN or LAND) on (x, y)"""
-        return self.types[x][y]
+        return self.types[x][y] if Position(x, y).inMap(self) else None
 
     def set_map_type(self, x, y, map_type = LAND):
         """Set type on (x, y) to map_type"""
-        if x >= self.x_max or y >= self.y_max:
+        if Position(x, y).inMap(self) is False:
             return False
         else:
             self.types[x][y] = min(map_type, LAND)      # in case map_type = 2, 3, etc..
@@ -42,7 +42,7 @@ class MapInfo(object):
     def add_element(self, new_element):
         """Add a new element to current map"""
         for point in new_element.pos.region(level = new_element.level, range = 0):
-            if point.x >= self.x_max or point.y >= self.y_max:
+            if point.inMap(self) is False:
                 return None                     # 位置无效
             elif self.element(point) != None:
                 return None                     # 位置被占用

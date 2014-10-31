@@ -111,9 +111,7 @@ class GameBody(object):
             vision[level] = set(vision[level])
             tmp = []
             for point in vision[level]:
-                if (point.x >= 0 and point.x < self.map_info.x_max and
-                    point.y >= 0 and point.y < self.map_info.y_max and
-                    point.z >= 0 and point.z < 3):
+                if point.inMap(self.map_info):
                     tmp.append(point)
             vision[level] = set(tmp)
         return vision

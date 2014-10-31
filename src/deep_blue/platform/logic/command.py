@@ -27,9 +27,7 @@ class AttackPos(Command):
         attacker = elements.get(self.operand)
         if attacker == None or attacker.kind == CARGO:
             return False
-        if not (self.pos.x >= 0 and self.pos.x < game.map_info.x_max and
-                self.pos.y >= 0 and self.pos.y < game.map_info.y_max and
-                self.pos.z >= 0 and self.pos.z < 3):
+        if self.pos.inMap(game.map_info) is False:
             return False
         if attacker.pos.distance(self.pos) > attacker.fire_ranges[self.pos.z]:
             return False
