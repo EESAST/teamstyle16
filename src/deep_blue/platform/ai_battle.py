@@ -146,7 +146,7 @@ def black_box_run(args):
 
     # Save into files
     if args.save:
-        b.save('hehe.battle', compact=args.compact, compress=args.compress)
+        b.save(args.save, compact=args.compact, compress=args.compress)
     if args.out:
         b.save_event_strings(args.out)
 
