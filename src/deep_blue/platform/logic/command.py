@@ -56,7 +56,7 @@ class AttackUnit(Command):
         defender = elements.get(self.target)
         if attacker == None or defender == None or attacker.kind == CARRIER:
             return False
-        if defender.team == attacker.team:
+        if hasattr(defender, 'team') is False or defender.team == attacker.team:
             return False
         if attacker.pos.distance(defender.pos) > attacker.fire_ranges[defender.pos.z]:
             return False
