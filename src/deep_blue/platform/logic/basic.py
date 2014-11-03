@@ -402,7 +402,7 @@ class UnitBase(Element):
         target_unit = game.map_info.element(target_pos)
         result_events = []
         self.ammo -= self.ammo_once
-        if target_unit == None or target_unit.team == self.team:
+        if target_unit == None or hasattr(target_unit, 'team') is False or target_unit.team == self.team:
             result_events.append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
             return result_events
         modified_attacks = modifiedAttacks(distance, range, self.attacks)
