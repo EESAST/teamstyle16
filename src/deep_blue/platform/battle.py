@@ -116,8 +116,8 @@ class Battle(object):
         # the last round will be lost (because no next_round will be called).
         self.record_history()
         self.record_events(events)
-        if self.gamebody.round % self.gamebody.record_interval == 0:
-            self.record_key_frame()
+        # record key frame every round
+        self.record_key_frame()
 
         logger.info('Events happened in round %d:', self.gamebody.round - 1)
         for e in events:

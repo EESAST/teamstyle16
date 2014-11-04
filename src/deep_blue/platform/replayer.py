@@ -16,16 +16,13 @@ class Replayer(battle.Battle):
             logger.warning('Try to move past end round')
             return
 
-        logger.debug('Moving to next round (round %d)', self.gamebody.round + 1)
+        # Just return events recorded
+        # Notice that indexes may have changed, so simulating is a bad idea
+        events = self.history['event'][self.gamebody.round]
 
-        cmds = self.history['command'][self.gamebody.round]
-        for team in [0, 1]:
-            for cmd in cmds[team]:
-                self.gamebody.set_command(team, cmd)
-        # Call run() directly to avoid infos recording in base class
-        events = self.gamebody.run()
+        logger.debug('Moving to next round')
+        self.goto(self.gamebody.round + 1)
 
-        logger.info('Moved to round %d', self.gamebody.round)
         return events
 
     def goto(self, round):
@@ -35,22 +32,16 @@ class Replayer(battle.Battle):
 
         if 0 <= round <= self.max_round:
             logger.debug('Going to round %d', round)
-            # Find nearest key frame
-            frame_index = round // map_info.record_interval
-            frame_round = frame_index * map_info.record_interval
-            frame = self.key_frames[frame_index]
-            # Restore to the frame
-            logger.debug('Restoring from key frame %d (round %d)', frame_index,
-                                                                   frame_round)
-            game.round = frame_round
+            # Find the key frame
+            frame = self.key_frames[round]
+            # Restore from the frame
+            logger.debug('Restoring from key frame %d (round %d)', round,
+                                                                   round)
+            game.round = round
             game.map_info.loads_elements(frame[0])
             game.production_list = frame[1]
-            game.scores = self.history['score'][frame_round]
-            game.populations = self.history['population'][frame_round]
-
-            # Run till round
-            while game.round < round:
-                self.next_round()
+            game.scores = self.history['score'][round]
+            game.populations = self.history['population'][round]
 
             logger.info('Moved to round %d', self.gamebody.round)
         else:
