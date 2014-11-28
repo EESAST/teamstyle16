@@ -39,7 +39,7 @@ class Replayer(battle.Battle):
                                                                    round)
             game.round = round
             game.map_info.loads_elements(frame[0])
-            game.production_list = frame[1]
+            game.production_lists = frame[1]
             game.scores = self.history['score'][round]
             game.populations = self.history['population'][round]
 
