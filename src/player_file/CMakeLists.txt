@@ -86,8 +86,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(Threads)
 
 # TODO: Use shipped version of protobuf for Windows users.
-add_subdirectory(protobuf-2.5.0)
+set(PROTOBUF_ROOT ${PROJECT_SOURCE_DIR}/protobuf-2.5.0 CACHE PATH "Location of protobuf sources.")
 include_directories(${PROJECT_SOURCE_DIR}/protobuf-2.5.0/src)
+add_subdirectory(protobuf)
 
 # Build libraries
 add_library(ai_base basic.cpp connection.cpp communicate.pb.cc)
