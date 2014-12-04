@@ -86,12 +86,13 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(Threads)
 
 # TODO: Use shipped version of protobuf for Windows users.
-find_package(Protobuf)
-include_directories(${PROTOBUF_INCLUDE_DIRS})
+add_subdirectory(protobuf-2.5.0)
+include_directories(${PROJECT_SOURCE_DIR}/protobuf-2.5.0/src)
 
 # Build libraries
 add_library(ai_base basic.cpp connection.cpp communicate.pb.cc)
-target_link_libraries(ai_base ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${PROTOBUF_LIBRARIES})
+target_link_libraries(ai_base ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} libprotobuf)
+
 add_library(ai_driver main.cpp)
 target_link_libraries(ai_driver ai_base)
 
