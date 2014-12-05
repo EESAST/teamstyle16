@@ -117,6 +117,3 @@ else()
 endif()
 
 add_subdirectory(libprotobuf)
-add_subdirectory(libprotoc)
-add_subdirectory(protoc)
-
