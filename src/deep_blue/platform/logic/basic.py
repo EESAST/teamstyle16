@@ -388,13 +388,6 @@ class UnitBase(Element):
     def __repr__(self):
         return '<team %s %s at %s>' % (self.team, self.__class__.__name__, self.pos)
 
-    def view(self, target_pos):
-        """查看目标点的状态"""
-        if self.pos.distance(target_pos) > self.sight_ranges[target_pos.level]:
-            return -1   # 不在视野范围内, 不可见
-        else:
-            return getElement(target_pos)
-
     def attack(self, game, target_pos):
         """攻击(火力与鱼雷伤害叠加计算)某坐标(可能出现射程大于视野的情况)"""
         distance = self.pos.distance(target_pos)
