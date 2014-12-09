@@ -72,9 +72,9 @@ def testgame_attackunit(game, events):
             return 0 if game.score(0) > game.score(1) else (1 if game.score(1) > game.score(0) else STATE_TIE)
         return STATE_CONTINUE
 
-TestGAME = ['', '', '', '', '']
-TestGAME[TEST_PRODUCE] = [testgame_produce, 'test.map']
-TestGAME[TEST_COLLECT] = [testgame_collect, 'test.map']
-TestGAME[TEST_CAPTURE] = [testgame_capture, 'test.map']
-TestGAME[TEST_ATTACK_UNIT] = [testgame_attackunit, 'test.map']
-TestGAME[TEST_REAL_GAME] = [testgame_realgame, 'test.map']
+#TestGame列表
+TestGame = [[testgame_produce, 'test.map'],
+            [testgame_collect, 'test.map'],
+            [testgame_capture, 'test.map'],
+            [testgame_attackunit, 'test.map'],
+            [testgame_realgame, 'test.map']]
