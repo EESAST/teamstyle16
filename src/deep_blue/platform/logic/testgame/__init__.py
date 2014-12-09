@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-from .. import basic, map_info, gamebody
+from logic import basic, map_info, gamebody
 
 STATE_CONTINUE = -1
 STATE_TIE = 2
