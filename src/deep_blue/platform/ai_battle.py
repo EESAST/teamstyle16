@@ -132,7 +132,13 @@ def black_box_run(args):
     if args.time_per_round:  # override time_per_round of the map
         b.gamebody.map_info.time_per_round = args.time_per_round
 
-    b.run_until_end()
+    if args.debug:
+        while b.gamebody.state == gamebody.STATE_CONTINUE:
+            raw_input('Round %d (press Enter to advance)' % g.round())
+            b.feed_ai_commands()
+            b.next_round()
+    else:
+        b.run_until_end()
 
     # Print result
     print b.round(), 'round(s) passed'
@@ -169,6 +175,8 @@ if __name__ == '__main__':
                         help='Override time interval of the map')
     parser.add_argument('-b', '--battle', action='store_true',
                         help='Treat map file as a battle')
+    parser.add_argument('-g', '--debug', action='store_true',
+                        help='Use debug mode (move to next round manually)')
     parser.add_argument('--compact', action='store_true',
                         help='Make save file more compact')
     parser.add_argument('--compress', action='store_true',

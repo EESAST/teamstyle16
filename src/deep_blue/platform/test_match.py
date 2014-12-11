@@ -2,6 +2,7 @@ import argparse
 import logging
 
 from logic.testgame import TestGame
+from logic import gamebody
 import ai_battle
 
 def run_test_match(args):
@@ -26,7 +27,13 @@ def run_test_match(args):
     if args.time_per_round:  # override time_per_round of the map
         b.gamebody.map_info.time_per_round = args.time_per_round
 
-    b.run_until_end()
+    if args.debug:
+        while b.gamebody.state == gamebody.STATE_CONTINUE:
+            raw_input('Round %d (press Enter to advance)' % g.round())
+            b.feed_ai_commands()
+            b.next_round()
+    else:
+        b.run_until_end()
 
     # Print result
     print b.round(), 'round(s) passed'
@@ -69,6 +76,8 @@ if __name__ == '__main__':
                         help='Make save file more compact')
     parser.add_argument('--compress', action='store_true',
                         help='Compress save file')
+    parser.add_argument('-g', '--debug', action='store_true',
+                        help='Use debug mode (move to next round manually)')
 
     parser.add_argument('-v', '--verbose', action='count',
                         help='increase output verbosity')
