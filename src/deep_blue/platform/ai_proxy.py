@@ -267,7 +267,7 @@ class AIProxy(threading.Thread):
             encoded.health = element.health
             encoded.fuel = element.fuel
             encoded.ammo = element.ammo if element.ammo != basic.INFINITY else -1
-            encoded.metal = element.metal
+            encoded.metal = 0 if element.metal is None else element.metal
 
             if isinstance(element, basic.Unit):
                 encoded.dest.x = element.dest.x
