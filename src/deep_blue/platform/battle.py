@@ -10,7 +10,8 @@ VERSION = 3
 logger = logging.getLogger(__name__)
 
 class Battle(object):
-    def __init__(self, map_info, team0_name=None, team1_name=None, prev_info=None):
+    def __init__(self, map_info, team0_name=None, team1_name=None,
+                 prev_info=None, **kw):
         """Construct a battle based on map_info.
         If prev_info is given, restore from it & ignore map_info"""
         if prev_info is not None:
@@ -49,7 +50,7 @@ class Battle(object):
             'command': [],
             'event': []
         }
-        self.gamebody = gamebody.GameBody(map_info)
+        self.gamebody = gamebody.GameBody(map_info, **kw)
         self.key_frames = []
 
         self.record_history()
