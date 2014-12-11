@@ -5,6 +5,8 @@ from logic.testgame import TestGame
 from logic import gamebody
 import ai_battle
 
+logger = logging.getLogger(__name__)
+
 def run_test_match(args):
     """Run test match"""
     # check level & load match_info
@@ -13,6 +15,16 @@ def run_test_match(args):
         return
 
     judge, map_file, opponent_ai = TestGame[level - 1]  # level begins from 1
+
+    # Try to figure out where built AIs are
+    last_slash_pos = args.ai.rfind('/')
+    # Try back slash if failed
+    if last_slash_pos == -1:
+        last_slash_pos = args.ai.rfind('\\')
+
+    base_dir_end_pos = 0 if last_slash_pos == -1 else last_slash_pos + 1
+    opponent_ai = args.ai[0:base_dir_end_pos] + opponent_ai
+    logger.debug('opponent_ai: %s', opponent_ai)
 
     kw = dict(ai0_filename=args.ai, ai1_filename=opponent_ai, judge=judge)
     if args.timeout:
