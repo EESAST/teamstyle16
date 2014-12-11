@@ -106,8 +106,12 @@ if(with-tests)
     target_link_libraries(ai_test ai_base gtest gtest_main)
 endif(with-tests)
 
-# Build ai & debugger
+# Build ai, sample_ai, empty_ai & debugger
 add_executable (debugger debugger.cpp)
 add_executable (ai ai.cpp)
+add_executable (sample_ai sample_ai.cpp)
+add_executable (empty_ai empty_ai.cpp)
 target_link_libraries (debugger ai_driver)
 target_link_libraries (ai ai_driver)
+target_link_libraries (sample_ai ai_driver)
+target_link_libraries (empty_ai ai_driver)

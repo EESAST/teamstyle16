@@ -12,6 +12,20 @@ from random import choice, shuffle
 STATE_CONTINUE = -1
 STATE_TIE = 2
 
+def default_judge(game, events):
+    dead_bases = 0
+    rst = None
+    for element in game.map_info.elements.values():
+        if element.kind == BASE and element.health <= 0:
+            dead_bases += 1
+            rst = 1 - element.team
+    if dead_bases == 1:
+        return rst
+    if game.round >= game.max_round or dead_bases == 2:
+        return 0 if game.score(0) > game.score(1) else (1 if game.score(1) > game.score(0) else STATE_TIE)
+    return STATE_CONTINUE
+
+
 def compare_commands(l_command, r_command):
     """return whether l_command should be executed first"""
     sequence_list = ['Produce', 'Attack', 'Supply', 'Fix', 'ChangeDest']
@@ -38,7 +52,7 @@ def compare_speed(l_tuple, r_tuple):
 
 class GameBody(object):
     """docstring for GameBody"""
-    def __init__(self, map_info, **kwargs):
+    def __init__(self, map_info, judge=default_judge, **kwargs):
         self.map_info = map_info
         self.round = 0
         self.scores = [0, 0]
@@ -51,6 +65,9 @@ class GameBody(object):
                 setattr(self, kw, kwargs[kw])
         self.round = max(self.round, 0)         # in case round < 0
         self.scores = [max(score, 0) for score in self.scores]      # in case score < 0
+
+        self.state = STATE_CONTINUE
+        self.judge = judge
 
     @property
     def map(self):
@@ -75,20 +92,6 @@ class GameBody(object):
     @property
     def weather(self):
         return self.map_info.weather
-
-    @property
-    def state(self):
-        dead_bases = 0
-        rst = None
-        for element in self.map_info.elements.values():
-            if element.kind == BASE and element.health <= 0:
-                dead_bases += 1
-                rst = 1 - element.team
-        if dead_bases == 1:
-            return rst
-        if self.round >= self.max_round or dead_bases == 2:
-            return 0 if self.score(0) > self.score(1) else (1 if self.score(1) > self.score(0) else STATE_TIE)
-        return STATE_CONTINUE
 
     def score(self, team):
         """return score of the team"""
@@ -201,6 +204,10 @@ class GameBody(object):
                                         break
                             break
         self.commands = [[], []]
+
+        # Update state
+        self.state = self.judge(this, events)
+
         return events
 
     def save(self, filename):
