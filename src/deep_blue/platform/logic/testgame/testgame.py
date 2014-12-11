@@ -80,8 +80,8 @@ def testgame_realgame(game, events):
 
 
 #TestGame列表
-TestGame = [[testgame_produce, 'test.map', 'null_ai.cpp'],
-            [testgame_collect, 'test.map', 'null_ai.cpp'],
-            [testgame_capture, 'test.map', 'null_ai.cpp'],
-            [testgame_attackunit, 'test.map', 'ai.cpp'],
-            [testgame_realgame, 'test.map', 'ai.cpp']]
+TestGame = [[testgame_produce, 'sample/stest.map', 'empty_ai'],
+            [testgame_collect, 'sample/test.map', 'empty_ai'],
+            [testgame_capture, 'sample/test.map', 'empty_ai'],
+            [testgame_attackunit, 'sample/test.map', 'sample_ai'],
+            [testgame_realgame, 'sample/test.map', 'sample_ai']]
