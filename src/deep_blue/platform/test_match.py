@@ -1,8 +1,8 @@
 import argparse
 import logging
 
-from logic.testgame import TestGame
-from logic import gamebody
+from logic.testgame.testgame import TestGame
+from logic import gamebody, map_info
 import ai_battle
 
 logger = logging.getLogger(__name__)
@@ -10,8 +10,9 @@ logger = logging.getLogger(__name__)
 def run_test_match(args):
     """Run test match"""
     # check level & load match_info
-    if args.level < 1 or args.level > len(TestGame):
-        print 'Level %d does not exist' % args.level
+    level = int(args.level)
+    if level < 1 or level > len(TestGame):
+        print 'Level %d does not exist' % level
         return
 
     judge, map_file, opponent_ai = TestGame[level - 1]  # level begins from 1

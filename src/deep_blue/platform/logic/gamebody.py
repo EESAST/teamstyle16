@@ -206,7 +206,7 @@ class GameBody(object):
         self.commands = [[], []]
 
         # Update state
-        self.state = self.judge(this, events)
+        self.state = self.judge(self, events)
 
         return events
 

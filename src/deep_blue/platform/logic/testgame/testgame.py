@@ -19,9 +19,9 @@ def testgame_produce(game, events):
         if event.__class__.__name__ == 'Create':
             test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
                 else game.map_info.elements[event.index].team
-    if game.test_state >= 0:
-        if game.test_state in [0, 1]:
-            return game.test_state
+    if test_state >= 0:
+        if test_state in [0, 1]:
+            return test_state
         else:
             return STATE_TIE
     if game.round >= game.max_round:
@@ -31,7 +31,7 @@ def testgame_produce(game, events):
 
 def testgame_collect(game, events):
     for element in game.map_info.elements.values():
-        if game.scores[element.team] > 0 and element.kind == basic.BASE and \
+        if element.kind == basic.BASE and game.scores[element.team] > 0 and \
                         element.fuel == basic.PROPERTY[basic.BASE]['fuel_max'] and \
                         element.metal == basic.PROPERTY[basic.BASE]['metal_max']:
             return element.team
@@ -55,9 +55,9 @@ def testgame_attackunit(game, events):
         if event.__class__.__name__ == 'AttackUnit' and not event.taregt in game.map_info.elements:
             test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
                 else game.map_info.elements[event.index].team
-    if game.test_state >= 0:
-        if game.test_state in [0, 1]:
-            return game.test_state
+    if test_state >= 0:
+        if test_state in [0, 1]:
+            return test_state
         else:
             return STATE_TIE
     if game.round >= game.max_round:
@@ -80,8 +80,8 @@ def testgame_realgame(game, events):
 
 
 #TestGame列表
-TestGame = [[testgame_produce, 'sample/stest.map', 'empty_ai'],
-            [testgame_collect, 'sample/test.map', 'empty_ai'],
-            [testgame_capture, 'sample/test.map', 'empty_ai'],
-            [testgame_attackunit, 'sample/test.map', 'sample_ai'],
-            [testgame_realgame, 'sample/test.map', 'sample_ai']]
+TestGame = [[testgame_produce, 'platform/samples/small.map', 'empty_ai'],
+            [testgame_collect, 'platform/samples/small.map', 'empty_ai'],
+            [testgame_capture, 'platform/samples/small.map', 'empty_ai'],
+            [testgame_attackunit, 'platform/samples/small.map', 'sample_ai'],
+            [testgame_realgame, 'platform/samples/small.map', 'sample_ai']]

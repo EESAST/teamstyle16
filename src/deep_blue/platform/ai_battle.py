@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 class AIBattle(battle.Battle):
     """Represent a battle between two AIs"""
     def __init__(self, map_info, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
-                 ai0_filename=None, ai1_filename=None, prev_info=None):
+                 ai0_filename=None, ai1_filename=None, prev_info=None,
+                 **kw):
         """Construct an AIBattle from a map, or from previous infos.
         port is the port number used for listening.
         If filename is given, AIBattle is responsible for starting & closing
@@ -24,7 +25,7 @@ class AIBattle(battle.Battle):
         one.
         """
         # Start battle
-        super(AIBattle, self).__init__(map_info, prev_info=prev_info)
+        super(AIBattle, self).__init__(map_info, prev_info=prev_info, **kw)
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(timeout)
