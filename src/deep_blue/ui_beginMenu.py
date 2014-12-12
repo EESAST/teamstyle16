@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'BeginMenu.ui'
 #
-# Created: Tue Sep 23 19:11:58 2014
+# Created: Fri Sep 26 20:11:09 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,46 +26,32 @@ except AttributeError:
 class Ui_BeginMenu(object):
     def setupUi(self, BeginMenu):
         BeginMenu.setObjectName(_fromUtf8("BeginMenu"))
-        BeginMenu.resize(400, 371)
-        self.layoutWidget = QtGui.QWidget(BeginMenu)
-        self.layoutWidget.setGeometry(QtCore.QRect(160, 20, 77, 325))
-        self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
-        self.verticalLayout = QtGui.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setMargin(0)
-        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.SinglePlayerButton = QtGui.QPushButton(self.layoutWidget)
-        self.SinglePlayerButton.setObjectName(_fromUtf8("SinglePlayerButton"))
-        self.verticalLayout.addWidget(self.SinglePlayerButton)
-        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
-        self.OnlinePlayButton = QtGui.QPushButton(self.layoutWidget)
+        BeginMenu.resize(766, 654)
+        self.OnlinePlayButton = QtGui.QPushButton(BeginMenu)
+        self.OnlinePlayButton.setGeometry(QtCore.QRect(510, 340, 250, 73))
+        self.OnlinePlayButton.setText(_fromUtf8(""))
         self.OnlinePlayButton.setObjectName(_fromUtf8("OnlinePlayButton"))
-        self.verticalLayout.addWidget(self.OnlinePlayButton)
-        spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem1)
-        self.MapEditorButton = QtGui.QPushButton(self.layoutWidget)
-        self.MapEditorButton.setStyleSheet(_fromUtf8(""))
-        self.MapEditorButton.setObjectName(_fromUtf8("MapEditorButton"))
-        self.verticalLayout.addWidget(self.MapEditorButton)
-        spacerItem2 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem2)
-        self.AboutUsButton = QtGui.QPushButton(self.layoutWidget)
+        self.AboutUsButton = QtGui.QPushButton(BeginMenu)
+        self.AboutUsButton.setGeometry(QtCore.QRect(510, 500, 250, 73))
+        self.AboutUsButton.setText(_fromUtf8(""))
         self.AboutUsButton.setObjectName(_fromUtf8("AboutUsButton"))
-        self.verticalLayout.addWidget(self.AboutUsButton)
-        spacerItem3 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem3)
-        self.ExitGameButton = QtGui.QPushButton(self.layoutWidget)
+        self.ExitGameButton = QtGui.QPushButton(BeginMenu)
+        self.ExitGameButton.setGeometry(QtCore.QRect(510, 580, 250, 73))
+        self.ExitGameButton.setText(_fromUtf8(""))
         self.ExitGameButton.setObjectName(_fromUtf8("ExitGameButton"))
-        self.verticalLayout.addWidget(self.ExitGameButton)
+        self.SinglePlayerButton = QtGui.QPushButton(BeginMenu)
+        self.SinglePlayerButton.setGeometry(QtCore.QRect(510, 260, 250, 73))
+        self.SinglePlayerButton.setText(_fromUtf8(""))
+        self.SinglePlayerButton.setObjectName(_fromUtf8("SinglePlayerButton"))
+        self.MapEditorButton = QtGui.QPushButton(BeginMenu)
+        self.MapEditorButton.setGeometry(QtCore.QRect(510, 420, 250, 73))
+        self.MapEditorButton.setStyleSheet(_fromUtf8(""))
+        self.MapEditorButton.setText(_fromUtf8(""))
+        self.MapEditorButton.setObjectName(_fromUtf8("MapEditorButton"))
 
         self.retranslateUi(BeginMenu)
         QtCore.QMetaObject.connectSlotsByName(BeginMenu)
 
     def retranslateUi(self, BeginMenu):
         BeginMenu.setWindowTitle(_translate("BeginMenu", "Form", None))
-        self.SinglePlayerButton.setText(_translate("BeginMenu", "单人游戏", None))
-        self.OnlinePlayButton.setText(_translate("BeginMenu", "网络对战", None))
-        self.MapEditorButton.setText(_translate("BeginMenu", "地图编辑", None))
-        self.AboutUsButton.setText(_translate("BeginMenu", "关于我们", None))
-        self.ExitGameButton.setText(_translate("BeginMenu", "退出游戏", None))
 

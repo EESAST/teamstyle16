@@ -11,10 +11,7 @@ class TeamWidget(QWidget, Ui_TeamWidget):
 	def __init__(self, parent = None):
 		super(TeamWidget, self).__init__(parent)
 		self.setupUi(self)
-		self.setupUi(self)
-		palette = QPalette()
-		palette.setBrush(QPalette.Window, QBrush(Qt.NoBrush))
-		self.setPalette(palette)
+		self.setAutoFillBackground(True)
 
 
 if __name__ == "__main__":
