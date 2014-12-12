@@ -74,7 +74,7 @@ class HumanAIBattle(battle.Battle):
     def next_round(self):
         """Advance the game to the next round, return events happened"""
         events = battle.Battle.next_round(self)
-        ai.send_info(self)
+        self.ai.send_info(self)
         return events
 
     def feed_ai_commands(self, sleep_time=None):
