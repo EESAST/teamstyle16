@@ -270,9 +270,14 @@ class AIProxy(threading.Thread):
             encoded.metal = 0 if element.metal is None else element.metal
 
             if isinstance(element, basic.Unit):
-                encoded.dest.x = element.dest.x
-                encoded.dest.y = element.dest.y
-                encoded.dest.z = element.dest.z
+                if element.dest is not None:  # Friendly
+                    encoded.dest.x = element.dest.x
+                    encoded.dest.y = element.dest.y
+                    encoded.dest.z = element.dest.z
+                else:  # Enemy, hide dest
+                    encoded.dest.x = element.pos.x
+                    encoded.dest.y = element.pos.y
+                    encoded.dest.z = element.pos.z
         else:  # Resource
             if isinstance(element, basic.Mine):
                 encoded.metal = element.metal
