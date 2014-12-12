@@ -153,7 +153,7 @@ void Supply_Repair(int i)
 	if(Element.health < parameter[0] * kElementInfos[Element.type].health_max && if_command(i, RETURNBASE))
 	{
 		ChangeDest(Element.index, GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
-		command[i][1] = max(command[i][2], RETURNBASE);
+		command[i][1] = max(command[i][1], RETURNBASE);
 	}
 	else if((Element.ammo <  parameter[1]*kElementInfos[Element.type].ammo_max ||   //金属不足
 		Element.fuel < parameter[2]*kElementInfos[Element.type].fuel_max)          //燃料不足
