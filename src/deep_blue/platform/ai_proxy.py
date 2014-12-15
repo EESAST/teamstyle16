@@ -164,7 +164,10 @@ class AIProxy(threading.Thread):
     def __send_round_info(self, battle):
         """Send infos that change over rounds to the AI"""
         try:
-            self.conn.sendall(self.__encode_round_info(battle))
+            self.logger.debug('Encoding round info')
+            encoded_info = self.__encode_round_info(battle)
+            self.logger.debug('Round info encoded, sending it')
+            self.conn.sendall(encoded_info)
         except socket.error as e:
             raise AIConnectError('Failed to send data to AI %d: %s' %
                                  (self.team_num, e))
