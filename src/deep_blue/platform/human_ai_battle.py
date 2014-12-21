@@ -93,7 +93,7 @@ class HumanAIBattle(battle.Battle):
 
     def add_command(self, command):
         """Add a command to the gamebody for human"""
-        return self.gamebody.set_command(1 - ai.team_num, command)
+        return self.gamebody.set_command(1 - self.ai.team_num, command)
 
 def load(filename, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
          human_team_name=None, ai_filename=None, ai_team_num=1):

@@ -145,6 +145,7 @@ class AIProxy(threading.Thread):
     def __get_team_name(self):
         try:
             name = self.conn.recv(32)
+            self.logger.debug('AI name received: %r', name)
         except socket.error as e:
             # This would cause failure in __init__, so no need to clean up
             self.logger.error('Failed to get team name')
