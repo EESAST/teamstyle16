@@ -20,8 +20,8 @@ class MapThread(QThread):
 	def run(self):
 		self.running = True
 		for i in range(10000):
-			self.land_thread.append(MapMakerUnit(0,0,0,10,1))
-			self.water_thread.append(MapMakerUnit(0,0,0,10,0))
+			self.land_thread.append(MapMakerUnit(0,0,0,30,1))
+			self.water_thread.append(MapMakerUnit(0,0,0,30,0))
 
 class MapMakerReplayer(QGraphicsView):
 	def __init__(self, scene, parent = None):
@@ -42,12 +42,16 @@ class MapMakerReplayer(QGraphicsView):
 		self.x_max = 0
 		self.y_max = 0
 		self.MapList = []
-		self.size = 10
+		self.size = 30
+
+	def wheelEvent(self, event):
+	    factor = 1.41 ** (event.delta() / 240.0)
+	    self.scale(factor, factor)
 
 	def createMap(self, num, population, round_):#num: 0对称方式 1地图大小 2陆海对比 3资源数量 4-9：6单位数量
 		if not self.mapcreate.running:
 			self.mapcreate.run()
-		self.map = map_info.MapInfo(num[1][0], num[1][1], population, round_, 1, 1.0, 0)
+		self.map = map_info.MapInfo(num[1][0], num[1][1], population, round_, 1, 1.0, num[10])
 		if num[0] == 0:
 			area = ((num[1][0] + 1)/2, num[1][1])
 		else:
@@ -262,7 +266,7 @@ class MapMakerReplayer(QGraphicsView):
 		self.show()
 
 	def show(self):
-		self.setSceneRect(0,0,self.size*self.x_max, self.size*self.y_max)
+		self.setSceneRect(0,0,30*self.x_max, 30*self.y_max)
 		Elements = self.map.elements
 		for element in Elements.values():
 			self.Unit_Info[element.position] = element
@@ -277,16 +281,17 @@ class MapMakerReplayer(QGraphicsView):
 
 	def resetUnit(self):
 		for item in self.UnitBase:
-			self.scene.removeItem(item)
+			if item.scene() == self.scene:
+				self.scene.removeItem(item)
 		self.UnitBase = []
 
 	def setUnit(self):
 		self.resetUnit()
 		for j in self.Unit_Info.keys():
-			new_unit = SoldierMakerUnit(self.Unit_Info[j],0,0,self.size)
+			new_unit = SoldierMakerUnit(self.Unit_Info[j],30)
 			self.UnitBase.append(new_unit)
 			self.scene.addItem(new_unit)
-			new_unit.setPos(new_unit.corX, new_unit.corY, new_unit.corZ, self.size)
+			new_unit.setPos(new_unit.corX, new_unit.corY, new_unit.corZ, 30)
 
 	def setMap(self):
 		self.resetMap()
@@ -301,13 +306,13 @@ class MapMakerReplayer(QGraphicsView):
 					new_map = self.mapcreate.water_thread[self.mapcreate.used_water]
 					self.mapcreate.used_water += 1
 				self.scene.addItem(new_map)
-				new_map.setitsSize(self.size)
-				new_map.setPos(i,j,2,self.size)
+				new_map.setPos(i,j,2,30)
 				self.MapList.append(new_map)
 
 	def resetMap(self):
 		for item in self.MapList:
-			self.scene.removeItem(item)
+			if item.scene() == self.scene:
+				self.scene.removeItem(item)
 		self.MapList = []
 
 	def save(self, filename):
@@ -324,6 +329,3 @@ class MapMakerReplayer(QGraphicsView):
 		self.Map_Info = [[]]
 		self.x_max = 0
 		self.y_max = 0
-
-	def setWindowSize(self):
-		self.scene.setSceneRect(QRectF(0,0,self.size,self.size))

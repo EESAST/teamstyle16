@@ -25,12 +25,14 @@ class SmallMap(QGraphicsView):
 		self.right = 0
 		self.up = 0
 		self.down = 0
+		self.init = False
 
 		self.SmallMapList = []
 		self.UnitBase = [[],[]]
 		self.Unit_Info = [{},{}]
 
 	def setSmallMap(self):
+		self.resetSmallMap()
 		self.run = True
 		self.left = (MAP_X - self.width)/2
 		self.right = (MAP_X + self.width)/2
@@ -42,11 +44,12 @@ class SmallMap(QGraphicsView):
 				self.scene.addItem(new_smallmap)
 				new_smallmap.setPos(i,j,2,flag = False)
 				self.SmallMapList.append(new_smallmap)
-		if self.chosenArea in self.scene.items():
-			self.scene.removeItem(self.chosenArea)
-		self.chosenArea = ChosenIndUnit(self.left, self.up, 0)
-		self.scene.addItem(self.chosenArea)
-		self.chosenArea.setPos(self.left,self.up,0,flag = False)
+		if not self.init:
+			if self.chosenArea in self.scene.items():
+				self.scene.removeItem(self.chosenArea)
+			self.chosenArea = ChosenIndUnit(self.left, self.up, 0)
+			self.scene.addItem(self.chosenArea)
+			self.chosenArea.setPos(self.left,self.up,0,flag = False)
 
 	'''待修改'''
 	def mousePressEvent(self, event):
@@ -66,13 +69,14 @@ class SmallMap(QGraphicsView):
 		self.chosenArea = ChosenIndUnit(pos.x(), pos.y(), 0)
 		self.scene.addItem(self.chosenArea)
 		pos = (int(pos.x()/2), int(pos.y()/2))
-		self.chosenArea.setPos(pos[0],pos[1],0,flag = False)
+		self.chosenArea.setPos(pos[0],pos[1],2,flag = False)
 		pos = QPoint(pos[0] - self.left, pos[1] - self.up)
 		self.emit(SIGNAL("areaChanged(QPoint)"), pos)
 
 	def resetSmallMap(self):
 		for item in self.SmallMapList:
-			self.scene.removeItem(item)
+			if item.scene() == self.scene:
+				self.scene.removeItem(item)
 		self.SmallMapList = []
 
 	def resetUnit(self):
@@ -106,21 +110,23 @@ class SmallMap(QGraphicsView):
 				new_unit.setPos(new_unit.corX + self.left, new_unit.corY + self.up, new_unit.corZ, flag = False)
 
 	def Initialize(self, battle):
-		MapInfo = battle.map_info()
+		if not self.init:
+			MapInfo = battle.map_info()
+			self.width = MapInfo.x_max
+			self.height = MapInfo.y_max
+			self.Map_Info = [[0 for y in range(MapInfo.y_max)] for x in range(MapInfo.x_max)]
+			for i in range(MapInfo.x_max):
+				for j in range(MapInfo.y_max):
+					self.Map_Info[i][j] = MapInfo.map_type(i, j)
+			self.setSmallMap()
 		Elements = [battle.elements(0), battle.elements(1)]
-		self.width = MapInfo.x_max
-		self.height = MapInfo.y_max
 		for i in range(2):
 			for element in Elements[i].values():
 				self.Unit_Info[i][element.position] = element
-		self.Map_Info = [[0 for y in range(MapInfo.y_max)] for x in range(MapInfo.x_max)]
-		for i in range(MapInfo.x_max):
-			for j in range(MapInfo.y_max):
-				self.Map_Info[i][j] = MapInfo.map_type(i, j)
-		self.setSmallMap()
 		self.setUnit()
-		self.scene.update()
-		rect = QRectF(0, 0, 200, 200)
-		self.scene.setSceneRect(rect)
-		self.fitInView(self.scene.sceneRect())
+		if not self.init:
+			rect = QRectF(0, 0, 200, 200)
+			self.scene.setSceneRect(rect)
+			self.fitInView(self.scene.sceneRect())
+		self.init = True
 

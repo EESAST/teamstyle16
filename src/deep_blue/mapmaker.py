@@ -20,8 +20,8 @@ class MapMaker(QWidget, Ui_Mapmaker):
         palette.setBrush(QPalette.Window, QBrush(Qt.NoBrush))
         self.setPalette(palette)
 
-        self.num = [0 for x in range(10)]
-        self.num[1] = (60, 60)
+        self.num = [0 for x in range(11)]
+        self.num[1] = (30, 30)
         self.population = 60
         self.round = 500
 
@@ -34,6 +34,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.ScoutLineEdit.setValidator(vali)
         self.PopulationLineEdit.setValidator(QIntValidator(30, 200))
         self.RoundLineEdit.setValidator(QIntValidator(1, 1000))
+        self.WeatherLineEdit.setValidator(QIntValidator(-1, 1))
 
         self.scene = QGraphicsScene()
         self.CenterWidget = MapMakerReplayer(self.scene)
@@ -100,6 +101,12 @@ class MapMaker(QWidget, Ui_Mapmaker):
                 QMessageBox.critical(self, QString.fromUtf8("设置失败"), QString.fromUtf8("超出人口限制。"), QMessageBox.Ok, QMessageBox.NoButton)
 
     @pyqtSlot()
+    def on_WeatherLineEdit_editingFinished(self):
+        text = self.WeatherLineEdit.text()
+        if text != "":
+            self.num[10] = int(unicode(text))
+
+    @pyqtSlot()
     def on_ScoutLineEdit_editingFinished(self):
         text = self.ScoutLineEdit.text()
         if text != "":
@@ -125,7 +132,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
     def on_RoundLineEdit_editingFinished(self):
         text = self.RoundLineEdit.text()
         if text != "":
-            self.round = unicode(text)
+            self.round = int(unicode(text))
 
     @pyqtSlot(int)
     def on_CenterCombo_currentIndexChanged(self, index):
@@ -133,7 +140,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
 
     @pyqtSlot(int)
     def on_SizeCombo_currentIndexChanged(self, index):
-        self.num[1] = (60 + index * 10, 60 + index * 10)
+        self.num[1] = (30 + index * 10, 30 + index * 10)
 
     @pyqtSlot(int)
     def on_LandCombo_currentIndexChanged(self, index):
@@ -150,7 +157,8 @@ class MapMaker(QWidget, Ui_Mapmaker):
             try:
                 self.CenterWidget.save(unicode(saveFile))
             except:
-                QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+                if saveFile != "":
+                    QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
         else:
             QMessageBox.critical(self, QString.fromUtf8("储存失败"), QString.fromUtf8("您尚未生成地图。"), QMessageBox.Ok, QMessageBox.NoButton)
 
@@ -165,7 +173,12 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.CenterWidget.reset()
         self.goback.emit()
 
-    @pyqtSlot(int)    
-    def on_SizeSlider_valueChanged(self, size):
-        self.CenterWidget.size = size
-        self.CenterWidget.show()
+    @pyqtSlot()
+    def on_UpPushButton_clicked(self):
+        if self.create:
+            self.CenterWidget.scale(1.1,1.1)
+
+    @pyqtSlot()
+    def on_DownPushButton_clicked(self):
+        if self.create:
+            self.CenterWidget.scale(0.9,0.9)

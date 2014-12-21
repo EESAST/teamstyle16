@@ -12,7 +12,7 @@ from ReplayEvent import *
 from lib.SmallMap import *
 from platform import *
 from functools import partial
-from lib.ProductionEvent import *
+from ProductionEvent import *
 
 REPLAY_FILE_DIR = "."
 
@@ -35,12 +35,13 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.scene1 = QGraphicsScene()
 		self.scene2 = QGraphicsScene()
 		self.scene3 = QGraphicsScene()
+		self.scene4 = QGraphicsScene()
 
 		self.CenterWidget = Replay(self.scene1)
 		self.CenterLayout.addWidget(self.CenterWidget)
 		self.SmallMap = SmallMap(self.scene2)
 		self.SmallMapLayout.addWidget(self.SmallMap)
-		self.CreateWidget = ProductionReplay(self.scene3)
+		self.CreateWidget = CreateTab(self.scene3, self.scene4)
 		self.CreateLayout.addWidget(self.CreateWidget)
 		self.OpenFileComboBox1.setMaxCount(10)
 		self.OpenFileComboBox2.setMaxCount(10)
@@ -67,24 +68,39 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.CenterWidget.moveAnimEnd.connect(self.on_animEnd)
 		self.connect(self.SmallMap, SIGNAL("areaChanged(QPoint)"), self.CenterWidget.setMapArea)
 
+		self.updateUi()
+
 
 	def updateUi(self):
 		if self.loadRepFile:
 			self.CenterWidget.HUMAN_REPLAY = 3
+			self.CreateWidget.team1.HUMAN_REPLAY = 3
+			self.CreateWidget.team2.HUMAN_REPLAY = 3
 		elif self.loadMap and self.loadAi1 and self.HumanCheckBox2.isChecked():
 			self.CenterWidget.HUMAN_REPLAY = 1
+			self.CreateWidget.team1.HUMAN_REPLAY = 1
+			self.CreateWidget.team2.HUMAN_REPLAY = 1
 		elif self.loadMap and self.loadAi2 and self.HumanCheckBox1.isChecked():
 			self.CenterWidget.HUMAN_REPLAY = 0
+			self.CreateWidget.team1.HUMAN_REPLAY = 0
+			self.CreateWidget.team2.HUMAN_REPLAY = 0
 		elif self.loadMap and self.HumanCheckBox1.isChecked() and self.HumanCheckBox2.isChecked():
 			self.CenterWidget.HUMAN_REPLAY = 2
+			self.CreateWidget.team1.HUMAN_REPLAY = 2
+			self.CreateWidget.team2.HUMAN_REPLAY = 2
 		elif self.loadMap and self.loadAi2 and self.loadAi1:
 			self.CenterWidget.HUMAN_REPLAY = 4
+			self.CreateWidget.team1.HUMAN_REPLAY = 4
+			self.CreateWidget.team2.HUMAN_REPLAY = 4
 		if self.CenterWidget.HUMAN_REPLAY != -1:
 			self.PlayPushButton.setCheckable(True)
 			self.PlayPushButton.setEnabled(True)
 		else:
 			self.PlayPushButton.setCheckable(False)
 			self.PlayPushButton.setEnabled(False)
+		if self.CenterWidget.HUMAN_REPLAY in [3, 4]:
+			self.Frog2RadioButton.setEnabled(self.started)
+			self.Frog1RadioButton.setEnabled(self.started)
 		self.OpenFileButton1.setEnabled(not self.started)
 		self.OpenFileButton2.setEnabled(not self.started)
 		self.LoadFilePushButton.setEnabled(not self.started)
@@ -92,8 +108,26 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.HumanCheckBox1.setEnabled(not self.started)
 		self.HumanCheckBox2.setEnabled(not self.started)
 		self.StopPushButton.setEnabled(self.started)
-		if self.CenterWidget.HUMAN_REPLAY in [0,1,2]:
+		self.UpPushButton.setEnabled(self.started)
+		self.DownPushButton.setEnabled(self.started)
+		self.RoundSlider.blockSignals(not self.started)
+		if self.CenterWidget.HUMAN_REPLAY in [0,1,2,4]:
 			self.RoundSlider.blockSignals(True)
+			if self.CenterWidget.HUMAN_REPLAY == 1:
+				self.Frog1RadioButton.setChecked(False)
+				self.Frog2RadioButton.setChecked(True)
+				self.Frog2RadioButton.setEnabled(False)
+				self.Frog1RadioButton.setEnabled(False)
+				self.GodVisionRadioButton.setEnabled(False)
+				self.CenterWidget.frogIndex = 1
+			elif self.CenterWidget.HUMAN_REPLAY == 0:
+				self.Frog1RadioButton.setChecked(True)
+				self.Frog2RadioButton.setChecked(False)
+				self.Frog2RadioButton.setEnabled(False)
+				self.Frog1RadioButton.setEnabled(False)
+				self.GodVisionRadioButton.setEnabled(False)
+				self.CenterWidget.frogIndex = 0
+
 
 	@pyqtSlot(int)
 	def on_SpeedSlider_valueChanged(self, speed):
@@ -206,7 +240,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			try:
 				fileInfo = replayer.load(fname)
 			except:
-				QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+				if fname != "":
+					QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 			else:
 				self.loadRepFile = True
 				self.ReplayComboBox.addItem(fname)
@@ -234,7 +269,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			try:
 				mapInfo = map_info.load(mapname)
 			except:
-				QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+				if mapname != "":
+					QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 			else:
 				self.loadMap = True
 				self.MapComboBox.addItem(mapname)
@@ -303,30 +339,18 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	@pyqtSlot(bool)
 	def on_Frog1RadioButton_clicked(self, check):
-		print "set frog 0"
-		print
-		print
-		print
 		if check:
 			self.CenterWidget.frogIndex = 0
 			self.CenterWidget.setFrog(0)
 
 	@pyqtSlot(bool)
 	def on_Frog2RadioButton_clicked(self, check):
-		print "set frog 1"
-		print
-		print
-		print
 		if check:
 			self.CenterWidget.frogIndex = 1
 			self.CenterWidget.setFrog(1)
 
 	@pyqtSlot(bool)
 	def on_GodVisionRadioButton_clicked(self, check):
-		print "set frog 2"
-		print
-		print
-		print
 		if check:
 			self.CenterWidget.frogIndex = -1
 			self.CenterWidget.resetFrog()
@@ -335,12 +359,16 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 	def on_PlayPushButton_toggled(self, trigger):
 		if self.started:
 			if trigger:
-				if self.CenterWidget.nowRound == self.fileInfo.max_round:
-					return
-				self.CreateWidget.Initialize(self.fileInfo)
+				self.isPaused = False
+				if self.CenterWidget.HUMAN_REPLAY == 3:
+					if self.CenterWidget.nowRound == self.fileInfo.max_round:
+						return
+				self.CreateWidget.team1.Initialize(self.fileInfo)
+				self.CreateWidget.team2.Initialize(self.fileInfo)
 				self.CenterWidget.Play(self.fileInfo)
 				self.SmallMap.Initialize(self.fileInfo)
 				self.infoWidget1.setText(self.fileInfo)
+				self.infoWidget2.updateInfo(self.fileInfo)
 				self.RoundLcdNumber.display(self.fileInfo.round())
 				
 			else:
@@ -355,22 +383,35 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1))
 			elif self.CenterWidget.HUMAN_REPLAY == 2:
 				QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("人人对战即将推出，敬请期待"), QMessageBox.Ok)
+				self.HumanCheckBox2.setChecked(False)
+				self.HumanCheckBox1.setChecked(False)
 				self.on_StopPushButton_clicked()
 			self.started = True
 			if self.CenterWidget.HUMAN_REPLAY == 3:
 				self.totalround = self.fileInfo.max_round
 				self.RoundSlider.setRange(0,self.totalround)
-				self.synRoundSlider()
 				self.fileInfo.goto(0)
+				self.synRoundSlider()
 			self.CenterWidget.Initialize(self.fileInfo)
-			self.CreateWidget.Initialize(self.fileInfo)
+			self.CreateWidget.team1.Initialize(self.fileInfo)
+			self.CreateWidget.team2.Initialize(self.fileInfo)
 			self.SmallMap.Initialize(self.fileInfo)
 			self.CenterWidget.Play(self.fileInfo)
 			self.infoWidget1.setText(self.fileInfo)
+			self.infoWidget2.updateInfo(self.fileInfo)
 			self.RoundLcdNumber.display(self.fileInfo.round())
 			self.updateUi()
 
 	def on_animEnd(self):
+		self.CenterWidget.TerminateAni()
+		if self.CenterWidget.changed:
+			self.CenterWidget.setMap()
+			self.CenterWidget.setUnit()
+			self.CenterWidget.mouseUnit.setVisible(False)
+			if self.CenterWidget.frogIndex != -1:
+				self.CenterWidget.setFrog(self.frogIndex)
+			self.CenterWidget.changed = False
+		print "over animation"
 		if self.isPaused:
 			return
 		if self.CenterWidget.nowRound == self.totalround:
@@ -389,7 +430,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 					try:
 						battle.Battle.save(self.fileInfo, saveFile)
 					except:
-						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+						if saveFile != "":
+							QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 				else:
 					pass
 			self.on_StopPushButton_clicked()
@@ -397,30 +439,50 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.synRoundSlider()
 		self.CenterWidget.Play(self.fileInfo)
 		self.SmallMap.Initialize(self.fileInfo)
-		self.CreateWidget.Initialize(self.fileInfo)
+		self.CreateWidget.team1.Initialize(self.fileInfo)
+		self.CreateWidget.team2.Initialize(self.fileInfo)
+		self.infoWidget2.updateInfo(self.fileInfo)
 		self.infoWidget1.setText(self.fileInfo)
 		self.RoundLcdNumber.display(self.fileInfo.round())
 
 	@pyqtSlot(int)    
 	def on_RoundSlider_valueChanged(self, round_):
 		if self.started:
-			if not round_ == self.CenterWidget.nowRound:
+			if round_ != self.CenterWidget.nowRound:
+				self.CenterWidget.mouseUnit.setVisible(False)
 				self.fileInfo.goto(round_)
+				self.CenterWidget.nowRound = round_
+				self.CenterWidget.Initialize(self.fileInfo)
+				self.CreateWidget.team1.Initialize(self.fileInfo)
+				self.CreateWidget.team2.Initialize(self.fileInfo)
+				self.SmallMap.Initialize(self.fileInfo)
 				if not self.isPaused:
 					self.CenterWidget.Play(self.fileInfo)
 				self.RoundLcdNumber.display(round_)
 				self.infoWidget1.setText(self.fileInfo)
+				self.infoWidget2.updateInfo(self.fileInfo)
+
+	@pyqtSlot()
+	def on_UpPushButton_clicked(self):
+		self.CenterWidget.scale(1.1,1.1)
+
+	@pyqtSlot()
+	def on_DownPushButton_clicked(self):
+		self.CenterWidget.scale(0.9,0.9)
 
 	@pyqtSlot()
 	def on_StopPushButton_clicked(self):
 		self.CenterWidget.reset()
 		self.SmallMap.reset()
-		self.CreateWidget.reset()
+		self.CreateWidget.team1.reset()
+		self.CreateWidget.team2.reset()
 		self.infoWidget1.reset()
+		self.infoWidget2.resetUnitInfo()
 		self.started = False
 		self.PlayPushButton.setCheckable(False)
 		self.PlayPushButton.setEnabled(False)
 		self.RoundSlider.setRange(0, 0)
+		self.RoundLcdNumber.display(0)
 		self.updateUi()
 
 	@pyqtSlot()

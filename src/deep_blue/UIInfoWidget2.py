@@ -13,8 +13,19 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 	def __init__(self, parent = None):
 		super(InfoWidget2, self).__init__(parent)
 		self.setupUi(self)
+		self.unit = None
+		self.flag = -1
+		self.show = False
 
-	def newUnitInfo(self, unit, flag):
+	def newUnitInfo(self, unit, flag, battle):
+		Elements = [battle.elements(0), battle.elements(1), battle.elements(2)]
+		for i in range(3):
+			for element in Elements[i].values():
+				if element.index == unit.index:
+					unit = element
+		self.unit = unit
+		self.flag = flag
+		self.show = True
 		self.resetUnitInfo()
 		self.CoordinateLineEdit.setText("(%d, %d, %d)" %(unit.position.x,unit.position.y,unit.position.z))
 		self.TypeLineEdit.setText(QString.fromUtf8(NumToUnitType[unit.kind]))
@@ -33,9 +44,10 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.DefenceLineEdit.setText("%.1f/%.1f" %(unit.defences[0],unit.defences[1]))
 		self.SightRangeLineEdit.setText("%d/%d/%d" %(unit.sight_ranges[0],unit.sight_ranges[1],unit.sight_ranges[2]))
 		if flag >=4:
-			self.SpeedLineEdit.setText("%d" %unit.speed)
-			self.PopulationLineEdit.setText("%d" %unit.population)
-			self.NeedMetalLineEdit.setText("%d" %unit.cost)
+			if unit.kind != 1 and unit.kind != 0:
+				self.SpeedLineEdit.setText("%d" %unit.speed)
+				self.PopulationLineEdit.setText("%d" %unit.population)
+				self.NeedMetalLineEdit.setText("%d" %unit.cost)
 		if flag == 0 or flag == 1:
 			if unit.team != flag:
 				return
@@ -43,12 +55,14 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		if unit.kind == 7:
 			self.CarrySourceLineEdit.setText("%d/%d" %(unit.metal,unit.metal_max))
 		if flag >= 4:
-			self.MoveTargetLineEdit.setText("(%d, %d, %d)" %(unit.dest.x,unit.dest.y,unit.dest.z))
+			if unit.kind != 1 and unit.kind != 0:
+				self.MoveTargetLineEdit.setText("(%d, %d, %d)" %(unit.dest.x,unit.dest.y,unit.dest.z))
 
 	def newMapInfo(self, kind):
 		self.TerrainLineEdit.setText(QString.fromUtf8(NumToMapType[kind]))
 
 	def resetUnitInfo(self):
+		self.show = False
 		self.CoordinateLineEdit.setText("")
 		self.TypeLineEdit.setText("")
 		self.HealthLineEdit.setText("")
@@ -63,6 +77,19 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.AmmoLineEdit.setText("")
 		self.CarrySourceLineEdit.setText("")
 		self.MoveTargetLineEdit.setText("")
+		self.TerrainLineEdit.setText("")
+
+	def updateInfo(self, battle):
+		if not self.unit:
+			return
+		Elements = [battle.elements(0), battle.elements(1), battle.elements(2)]
+		for i in range(3):
+			for element in Elements[i].values():
+				if element.index == self.unit.index:
+					print "update info"
+					self.unit = element
+					self.newUnitInfo(self.unit, self.flag, battle)
+					return
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)

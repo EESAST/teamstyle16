@@ -18,7 +18,7 @@ CHOSEN_HEIGHT = 50
 #for test
 fil = open("test.txt","w")
 
-FILE_UNIT = ["base","fort","mine","oilfield","submarine","destroyer","carrier","cargo","fighter","scout"]
+FILE_UNIT = [["base","fort","mine","oilfield","submarine","destroyer","carrier","cargo","fighter","scout"],["base2","fort2","mine2","oilfield2","submarine2","destroyer2","carrier2","cargo2","fighter2","scout2"],["base2","fort1","mine","oilfield","submarine2","destroyer2","carrier2","cargo2","fighter2","scout2"]]
 FILE_MAP = ["water","land"]
 FILE_SMALLMAP = ["watersmall", "landsmall"]
 
@@ -37,8 +37,18 @@ class AbstractUnit(QGraphicsObject):
 		self.corX = x
 		self.corY = y
 		self.corZ = z
+		self.size = 1
+	'''
 	def boundingRect(self):
-		return QRectF(0, 0, CHOSEN_WIDTH, CHOSEN_WIDTH)
+		if hasattr(self, obj):
+			if hasattr(self.obj, team):
+				return QRectF(0, 0, 30 * self.size, 10 * self.size)
+			else:
+				return QRectF(0, 0, 30, 30)
+		else:
+			if isinstance()
+			return QRectF(0, 0, 30, 30)
+	'''
 	def setPos(self, x, y, z, size = 30, flag = True):
 		self.corX = x
 		self.corY = y
@@ -57,11 +67,18 @@ class MapUnit(AbstractUnit):
 		self.obj = map_
 		self.pos = (x, y, z)
 
+	def boundingRect(self):
+		return QRectF(0, 0, 30, 30)
+
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		filename = ":" + FILE_MAP[self.obj] + ".png"
-		image = QImage(filename).convertToFormat(QImage.Format_ARGB32)
-		painter.drawImage(QPoint(0,0), image.scaled(GRID_WIDTH, GRID_HEIGHT, Qt.IgnoreAspectRatio))
+		painter.setPen(Qt.NoPen)
+		if self.obj:
+			brush = QBrush(QColor(61, 145, 64))
+		else:
+			brush = QBrush(QColor(65, 105, 225))
+		painter.setBrush(brush)
+		painter.drawRect(0, 0, GRID_WIDTH, GRID_HEIGHT)
 		'''
 		painter.setBrush(Qt.NoBrush)
 		pen = QPen(QColor(255, 255, 255))
@@ -82,11 +99,18 @@ class MapMakerUnit(AbstractUnit):
 	def setitsSize(self, size):
 		self.size = size
 
+	def boundingRect(self):
+		return QRectF(0, 0, self.size, self.size)
+
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		filename = ":" + FILE_MAP[self.obj] + ".png"
-		image = QImage(filename).convertToFormat(QImage.Format_ARGB32)
-		painter.drawImage(QPoint(0,0), image.scaled(self.size, self.size, Qt.IgnoreAspectRatio))
+		painter.setPen(Qt.NoPen)
+		if self.obj:
+			brush = QBrush(QColor(61, 145, 64))
+		else:
+			brush = QBrush(QColor(65, 105, 225))
+		painter.setBrush(brush)
+		painter.drawRect(0, 0, self.size, self.size)
 		painter.restore()
 
 class SmallMapUnit(AbstractUnit):
@@ -95,13 +119,20 @@ class SmallMapUnit(AbstractUnit):
 		super(SmallMapUnit, self).__init__(x, y, 2, parent)
 		self.obj = map_
 		self.pos = (x, y, z)
-		self.setZValue(0.8)
+		self.setZValue(0.5)
+
+	def boundingRect(self):
+		return QRectF(0, 0, SMALL_WIDTH, SMALL_HEIGHT)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		filename = ":" + FILE_SMALLMAP[self.obj] + ".png"
-		image = QImage(filename).convertToFormat(QImage.Format_ARGB32)
-		painter.drawImage(QPoint(0,0), image.scaled(SMALL_WIDTH, SMALL_HEIGHT, Qt.IgnoreAspectRatio))
+		painter.setPen(Qt.NoPen)
+		if self.obj:
+			brush = QBrush(QColor(61, 145, 64))
+		else:
+			brush = QBrush(QColor(65, 105, 225))
+		painter.setBrush(brush)
+		painter.drawRect(0, 0, SMALL_WIDTH, SMALL_HEIGHT)
 		painter.restore()	
 
 class PointUnit(AbstractUnit):
@@ -109,7 +140,10 @@ class PointUnit(AbstractUnit):
 	def __init__(self, pos, i, parent = None):
 		super(PointUnit, self).__init__(pos.x, pos.y, 2, parent)
 		self.team = i
-		self.setZValue(0.9)
+		self.setZValue(0.6)
+
+	def boundingRect(self):
+		return QRectF(0, 0, 3, 3)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
@@ -119,7 +153,7 @@ class PointUnit(AbstractUnit):
 		else:
 			brush = QBrush(Qt.blue,Qt.SolidPattern)
 		painter.setBrush(brush)
-		painter.drawEllipse(0, 0, 5, 5)
+		painter.drawEllipse(0, 0, 3, 3)
 		painter.restore()
 
 class ChosenIndUnit(AbstractUnit):
@@ -128,6 +162,9 @@ class ChosenIndUnit(AbstractUnit):
 		super(ChosenIndUnit, self).__init__(x, y, z, parent)
 		self.setZValue(0.7)
 
+	def boundingRect(self):
+		return QRectF(0, 0, CHOSEN_WIDTH, CHOSEN_HEIGHT)
+
 	def paint(self, painter, option, widget = None):
 		painter.save()
 		pen = QPen()
@@ -136,38 +173,48 @@ class ChosenIndUnit(AbstractUnit):
 		pen.setJoinStyle(Qt.RoundJoin)
 		pen.setColor(QColor(Qt.blue).darker())
 		painter.setPen(pen)
-		painter.setCompositionMode(QPainter.CompositionMode_Multiply)
 		painter.drawRect(QRect(0, 0, CHOSEN_WIDTH, CHOSEN_HEIGHT))
 		painter.restore()
 
 class SoldierUnit(AbstractUnit):
 	"""单位基类"""
 	def __init__(self, unit, parent = None):
-		super(SoldierUnit, self).__init__(unit.position.x, unit.position.y, unit.position.z,parent)
+		super(SoldierUnit, self).__init__(unit.position.x, unit.position.y, unit.position.z, parent)
 		self.obj = unit
-		self.nowMove = False
 		self.setZValue(0.5)
+		if self.obj.kind in [2, 3]:
+			filename = ":" + FILE_UNIT[2][self.obj.kind] + ".png"
+		else:
+			filename = ":" + FILE_UNIT[self.obj.team][self.obj.kind] + ".png"
+		self.image = QImage(filename)
+
+	def boundingRect(self):
+		return QRectF(0, 0, UNIT_WIDTH * self.obj.size[0], UNIT_HEIGHT * self.obj.size[1])
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		filename = ":" + FILE_UNIT[self.obj.kind] + ".png"
-		image = QImage(filename).convertToFormat(QImage.Format_ARGB32)
-		painter.drawImage(QPoint(0,0), image.scaled(UNIT_WIDTH * self.obj.size[0], UNIT_HEIGHT * self.obj.size[1], Qt.IgnoreAspectRatio))
+		painter.drawImage(QPoint(0,0), self.image.scaled(UNIT_WIDTH * self.obj.size[0], UNIT_HEIGHT * self.obj.size[1], Qt.IgnoreAspectRatio))
 		painter.restore()
 
 class SoldierMakerUnit(AbstractUnit):
 	"""单位基类"""
-	def __init__(self, unit, x, y, size, parent = None):
-		super(SoldierMakerUnit, self).__init__(unit.position.x, unit.position.y, unit.position.z,parent)
+	def __init__(self, unit, size, parent = None):
+		super(SoldierMakerUnit, self).__init__(unit.position.x, unit.position.y, unit.position.z, parent)
 		self.obj = unit
 		self.setZValue(0.5)
 		self.size = size
+		if self.obj.kind in [2, 3]:
+			filename = ":" + FILE_UNIT[2][self.obj.kind] + ".png"
+		else:
+			filename = ":" + FILE_UNIT[self.obj.team][self.obj.kind] + ".png"
+		self.image = QImage(filename)
+
+	def boundingRect(self):
+		return QRectF(0, 0, self.size, self.size/3)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		filename = ":" + FILE_UNIT[self.obj.kind] + ".png"
-		image = QImage(filename).convertToFormat(QImage.Format_ARGB32)
-		painter.drawImage(QPoint(0,0), image.scaled(self.size, self.size/3, Qt.IgnoreAspectRatio))
+		painter.drawImage(QPoint(0,0), self.image.scaled(self.size, self.size/3, Qt.IgnoreAspectRatio))
 		painter.restore()
 
 
@@ -176,12 +223,14 @@ class FrogUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(FrogUnit, self).__init__(x, y, z, parent)
 		self.setZValue(0.6)
-		self.setOpacity(1)
+		self.setOpacity(1.0)
+
+	def boundingRect(self):
+		return QRectF(0, 0, 30, 30)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		brush = QBrush(Qt.SolidPattern)
-		brush.setColor(QColor(qGray))
+		brush = QBrush(QColor(192, 192, 192))
 		painter.setPen(Qt.NoPen)
 		painter.setBrush(brush)
 		painter.drawRect(0,0,UNIT_WIDTH,UNIT_HEIGHT)
@@ -189,68 +238,47 @@ class FrogUnit(AbstractUnit):
 
 class MouseIndUnit(AbstractUnit):
 	"""光标"""
-	def __init__(self, x, y, z, parent = None):
+	def __init__(self, x, y, z, size, parent = None):
 		super(MouseIndUnit, self).__init__(x, y, 2, parent)
-		self.timer = QTimer()
-		self.connect(self.timer, SIGNAL("timeout()"), self.timeOut)
 		self.setZValue(0.7)
+		self.size = size
 
-	def setVis(self, vis):
-		if vis:
-			self.timer.start(600)
-		else:
-			self.timer.stop()
-
-	def timeOut(self):
-		self.setVisible(not self.isVisible())
+	def boundingRect(self):
+		return QRectF(0, 0, self.size * UNIT_WIDTH, self.size * UNIT_HEIGHT)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
 		RLINE = 0.3 #rate of line
 		pen = QPen()
-		pen.setWidth(1)
-		pen.setCapStyle(Qt.RoundCap)
-		pen.setJoinStyle(Qt.RoundJoin)
-		pen.setColor(QColor(Qt.blue).lighter())
-		painter.setPen(pen)
-		painter.drawLine(QPointF(0, 0),
-						 QPointF(0, RLINE*(UNIT_HEIGHT)))
-		painter.drawLine(QPointF(0, 0),
-						 QPointF(RLINE*(UNIT_WIDTH), 0))
-		painter.drawLine(QPointF(UNIT_WIDTH, 0),
-						 QPointF(UNIT_WIDTH, RLINE*(UNIT_HEIGHT)))
-		painter.drawLine(QPointF(UNIT_WIDTH, 0),
-						 QPointF((1-RLINE)*(UNIT_WIDTH), 0))
-		painter.drawLine(QPointF(0, (UNIT_HEIGHT)),
-						 QPointF(0, (1-RLINE)*(UNIT_HEIGHT)))
-		painter.drawLine(QPointF(0, (UNIT_HEIGHT)),
-						 QPointF(RLINE*(UNIT_WIDTH), (UNIT_HEIGHT)))
-		painter.drawLine(QPointF(UNIT_WIDTH, (UNIT_HEIGHT)),
-						 QPointF(UNIT_WIDTH, (1-RLINE)*(UNIT_HEIGHT)))
-		painter.drawLine(QPointF(UNIT_WIDTH, (UNIT_HEIGHT)),
-						 QPointF((1-RLINE)*(UNIT_WIDTH ), (UNIT_HEIGHT)))
-		painter.restore()
-
-class MouseFocusUnit(AbstractUnit):
-	def __init__(self, x, y, z, parent = None):
-		super(MouseFocusUnit, self).__init__(x, y, 2, parent)
-		self.setZValue(0.9)
-
-	def paint(self, painter, option, widget = None):
-		painter.save()
-		pen = QPen()
-		pen.setWidth(1)
+		pen.setWidth(2)
 		pen.setCapStyle(Qt.RoundCap)
 		pen.setJoinStyle(Qt.RoundJoin)
 		pen.setColor(QColor(Qt.blue).darker())
 		painter.setPen(pen)
-		painter.setCompositionMode(QPainter.CompositionMode_Multiply)
-		painter.drawRect(QRect(0, 0, UNIT_WIDTH, UNIT_HEIGHT))
+		painter.drawLine(QPointF(0, 0),
+						 QPointF(0, RLINE*(UNIT_HEIGHT)*self.size))
+		painter.drawLine(QPointF(0, 0),
+						 QPointF(RLINE*(UNIT_WIDTH)*self.size, 0))
+		painter.drawLine(QPointF(UNIT_WIDTH*self.size, 0),
+						 QPointF(UNIT_WIDTH*self.size, RLINE*(UNIT_HEIGHT)*self.size))
+		painter.drawLine(QPointF(UNIT_WIDTH*self.size, 0),
+						 QPointF((1-RLINE)*(UNIT_WIDTH)*self.size, 0))
+		painter.drawLine(QPointF(0, (UNIT_HEIGHT)*self.size),
+						 QPointF(0, (1-RLINE)*(UNIT_HEIGHT)*self.size))
+		painter.drawLine(QPointF(0, (UNIT_HEIGHT)*self.size),
+						 QPointF(RLINE*(UNIT_WIDTH)*self.size, (UNIT_HEIGHT)*self.size))
+		painter.drawLine(QPointF(UNIT_WIDTH*self.size, (UNIT_HEIGHT)*self.size),
+						 QPointF(UNIT_WIDTH*self.size, (1-RLINE)*(UNIT_HEIGHT)*self.size))
+		painter.drawLine(QPointF(UNIT_WIDTH*self.size, (UNIT_HEIGHT)*self.size),
+						 QPointF((1-RLINE)*(UNIT_WIDTH )*self.size, (UNIT_HEIGHT)*self.size))
 		painter.restore()
 
 class DieIndUnit(AbstractUnit):
-	def __init__(self, x = 0, y = 0, z = 2, parent = None):
-		super(DieIndUnit, self).__init__(x, y, 2, parent)
+	def __init__(self, x, y, z, parent = None):
+		super(DieIndUnit, self).__init__(x, y, z, parent)
+
+	def boundingRect(self):
+		return QRectF(0, 0, UNIT_WIDTH, UNIT_HEIGHT)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
@@ -265,11 +293,14 @@ class AttackEffectUnit(AbstractUnit):
 		super(AttackEffectUnit, self).__init__(x, y, 2, parent)
 		self.setZValue(0.8)
 
+	def boundingRect(self):
+		return QRectF(0, 0, 10, 10)
+
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		brush = QBrush(QColor(Qt.blue),Qt.SolidPattern)
+		brush = QBrush(QColor(Qt.red),Qt.SolidPattern)
 		painter.setBrush(brush)
-		painter.drawEllipse(0, 0, 10, 10)
+		painter.drawEllipse(0, 0, 5, 5)
 		painter.restore()
 
 class EffectIndUnit(QGraphicsTextItem):
@@ -277,22 +308,23 @@ class EffectIndUnit(QGraphicsTextItem):
 		super(EffectIndUnit, self).__init__(text, parent)
 		self.text = text
 		font = self.font()
+		self.setScale(0.7)
 		self.setDefaultTextColor(QColor(Qt.red))
 		if text[0] == "-" :
-			font.setPointSize(font.pointSize() * 2)
-			font.setBold(True)
+			font.setPointSize(font.pointSize())
 			self.setDefaultTextColor(QColor(Qt.red))
 		elif text[0] == "+" :
-			font.setPointSize(font.pointSize() * 2)
-			font.setBold(True)
+			font.setPointSize(font.pointSize())
+			self.setDefaultTextColor(QColor(Qt.green))
+		else:
+			font.setPointSize(font.pointSize())
 			self.setDefaultTextColor(QColor(Qt.green))
 		self.setFont(font)
 		
 		
 	def setText(self, text):
 		if text[0] == "+" or text[0] == '-':
-			font.setPointSize(font.pointSize() * 2)
-			font.setBold(True)
+			font.setPointSize(font.pointSize())
 		QGraphicsTextItem.setText(self, text)
 
 	def setColor(self, color):
@@ -300,23 +332,60 @@ class EffectIndUnit(QGraphicsTextItem):
 
 class FixEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
-		super(RepairIndUnit, self).__init__(x, y, 2, perent)
+		super(FixEffectUnit, self).__init__(x, y, z, parent)
 		self.setZValue(0.8)
+		self.image = QImage(":fix.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
+
+	def boundingRect(self):
+		return QRectF(0, 0, UNIT_WIDTH, UNIT_HEIGHT)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		image = QImage(":repair.png")
-		painter.drawImage(QPoint(0,0), image.scaled(UNIT_WIDTH, UNIT_HEIGHT, Qt.IgnoreAspectRatio))
+		painter.drawImage(QPoint(self.corX,self.corY), self.image)
+		painter.restore()
 
 class ColEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
-		super(RepairIndUnit, self).__init__(x, y, 2, perent)
+		super(ColEffectUnit, self).__init__(x, y, z, parent)
 		self.setZValue(0.8)
+		self.image = QImage(":collect.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
+
+	def boundingRect(self):
+		return QRectF(0, 0, UNIT_WIDTH, UNIT_HEIGHT)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		image = QImage(":collect.png")
-		painter.drawImage(QPoint(0,0), image.scaled(UNIT_WIDTH, UNIT_HEIGHT, Qt.IgnoreAspectRatio))
+		painter.drawImage(QPoint(self.corX,self.corY), self.image)
+		painter.restore()
+
+class SupEffectUnit(AbstractUnit):
+	def __init__(self, x, y, z, parent = None):
+		super(SupEffectUnit, self).__init__(x, y, z, parent)
+		self.setZValue(0.8)
+		self.image = QImage(":supply.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
+
+	def boundingRect(self):
+		return QRectF(0, 0, UNIT_WIDTH, UNIT_HEIGHT)
+
+	def paint(self, painter, option, widget = None):
+		painter.save()
+		painter.drawImage(QPoint(self.corX,self.corY), self.image)
+		painter.restore()
+
+class BoomEffectUnit(AbstractUnit):
+	def __init__(self, x, y, z, parent = None):
+		super(BoomEffectUnit, self).__init__(x, y, z, parent)
+		self.setZValue(0.6)
+		self.image = QImage(":boom.png").scaled(30, 10, Qt.KeepAspectRatio)
+
+	def boundingRect(self):
+		return QRectF(0, 0, UNIT_WIDTH, UNIT_HEIGHT)
+
+	def paint(self, painter, option, widget = None):
+		painter.save()
+		painter.drawImage(QPoint(0,0), self.image)
+		painter.restore()
+
 '''
 if __name__ == "__main__":
 	import sys,qrc_source

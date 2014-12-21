@@ -22,7 +22,7 @@ class MainWindow(QGraphicsView):
 		self.scene =  QGraphicsScene(self)
 		self.scene.setSceneRect(self.scene.itemsBoundingRect())
 		self.setScene(self.scene)
-		self.setAttribute(55)
+		self.setAttribute(55, True)
 
 		#背景界面
 		self.backWindow = QGraphicsProxyWidget()
@@ -173,9 +173,20 @@ class MainWindow(QGraphicsView):
 			if target in self.stateDict:
 				self.stateDict[target].widget().show()
 
+	def resizeEvent(self, event):
+		QGraphicsView.resizeEvent(self,event)
+		self.scene.setSceneRect(self.scene.itemsBoundingRect())
+
 if __name__ == "__main__":
 	import time
 	app = QApplication(sys.argv)
+	font = app.font()
+	font.setLetterSpacing(QFont.PercentageSpacing, 115)
+	app.setFont(font)
+	palette = app.palette()
+	palette.setBrush(QPalette.Active, QPalette.ButtonText, QColor(150,255,255))
+	palette.setBrush(QPalette.Disabled, QPalette.ButtonText, QColor(0,0,0))
+	QApplication.addLibraryPath(".")
 	splash = QSplashScreen(QPixmap(":splash.png"), Qt.WindowStaysOnTopHint)
 	splash.show()
 	form = MainWindow()

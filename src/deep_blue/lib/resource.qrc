@@ -4,6 +4,10 @@
     <file alias="fighter.png">image/fighter.png</file>
     <file alias="scout.png">image/scout.png</file>
     <file alias="submarine.png">image/submarine.png</file>
+    <file alias="carrier2.png">image/carrier2.png</file>
+    <file alias="fighter2.png">image/fighter2.png</file>
+    <file alias="scout2.png">image/scout2.png</file>
+    <file alias="submarine2.png">image/submarine2.png</file>
     <file alias="0a.png">image/0a.png</file>
     <file alias="1a.png">image/1a.png</file>
     <file alias="2a.png">image/2a.png</file>
@@ -13,12 +17,21 @@
     <file alias="destroyer.png">image/destroyer.png</file>
     <file alias="cargo.png">image/cargo.png</file>
     <file alias="fort.png">image/fort.png</file>
+    <file alias="destroyer2.png">image/destroyer2.png</file>
+    <file alias="cargo2.png">image/cargo2.png</file>
+    <file alias="fort2.png">image/fort2.png</file>
+    <file alias="fort1.png">image/fort1.png</file>
     <file alias="oilfield.png">image/oilfield.png</file>
     <file alias="mine.png">image/mine.png</file>
     <file alias="base.png">image/base.png</file> 
+    <file alias="base2.png">image/base2.png</file> 
     <file alias="land.png">image/land1.png</file>
     <file alias="water.png">image/water.png</file>
     <file alias="landsmall.png">image/landsmall.png</file>
     <file alias="watersmall.png">image/watersmall.png</file>
+    <file alias="supply.png">image/supply.png</file>
+    <file alias="collect.png">image/collect.png</file>
+    <file alias="fix.png">image/fix.png</file>
+    <file alias="boom.png">image/boom.png</file>
   </qresource>
-</RCC>
+</RCC>  
