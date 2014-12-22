@@ -41,10 +41,10 @@ using boost::asio::ip::tcp;
 void Connection::Connect(const std::string &host, const std::string &port)
 {
     std::clog << "Connecting to " << host << ':' << port << std::endl;
-    iosteam_.connect(host, port);
-    if (!iosteam_)
+    iostream_.connect(host, port);
+    if (!iostream_)
     {
-        std::clog << "Connection failed: " << iosteam_.error().message() << std::endl;
+        std::clog << "Connection failed: " << iostream_.error().message() << std::endl;
         std::exit(EXIT_FAILURE);
     }
     // send back team name
@@ -53,7 +53,7 @@ void Connection::Connect(const std::string &host, const std::string &port)
         team_name.resize(kMaxTeamNameSize);
 
     // TODO: check whether '\n' in team_name
-    iosteam_ << team_name << std::endl;
+    iostream_ << team_name << std::endl;
     std::clog << "Connection established\n";
 }
 
@@ -61,7 +61,7 @@ void Connection::Connect(const std::string &host, const std::string &port)
 void Connection::Send(const std::string &message)
 {
     std::clog << "Sending message (" + message + ") to host\n";
-    iosteam_ << message;
+    iostream_ << message;
     std::clog << "Message sent\n";
 }
 
@@ -78,7 +78,7 @@ int Connection::Update()
     {
         ReadRoundInfo();
         round_passed++;
-    } while (iosteam_.rdbuf()->available());
+    } while (iostream_.rdbuf()->available());
 
     std::clog << round_passed << " round(s) passed\n";
     return round_passed;
@@ -89,7 +89,7 @@ int Connection::TryUpdate()
     std::clog << "Try update\n";
 
     int round_passed = 0;
-    while (iosteam_.rdbuf()->available())
+    while (iostream_.rdbuf()->available())
     {
         ReadRoundInfo();
         round_passed++;
@@ -158,15 +158,15 @@ void Connection::ReadRoundInfo()
 void Connection::ReadMessage()
 {
     std::size_t message_size;
-    if (!(iosteam_ >> message_size))
+    if (!(iostream_ >> message_size))
         throw std::runtime_error("Failed to read message size from host, "
                                  "connection seems lost");
 
-    iosteam_.ignore(1);  // ignore the following '\n'
+    iostream_.ignore(1);  // ignore the following '\n'
 
     message_.resize(message_size);
-    iosteam_.read(&message_[0], message_size);
-    if (!iosteam_)  // failed to read
+    iostream_.read(&message_[0], message_size);
+    if (!iostream_)  // failed to read
         throw std::runtime_error("Failed to read messages from host, "
                                  "connection seems lost");
 }
@@ -178,7 +178,7 @@ Connection * Connection::Instance()
 }
 
 Connection::Connection()
-        : iosteam_(),
+        : iostream_(),
           stable_info_(),
           round_info_(),
           message_(),

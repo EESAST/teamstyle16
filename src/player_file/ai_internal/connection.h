@@ -55,7 +55,7 @@ class Connection : boost::noncopyable
 
     void ReadMessage();
 
-    boost::asio::ip::tcp::iostream iosteam_;
+    boost::asio::ip::tcp::iostream iostream_;
 
     communicate::StableInfo stable_info_;
     communicate::RoundInfo round_info_;
