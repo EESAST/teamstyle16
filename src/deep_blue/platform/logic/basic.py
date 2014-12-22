@@ -516,8 +516,17 @@ class Unit(UnitBase):
 
     def move(self, game):
         events = []
-        cover = 0 # 走过的长度
+        # cover = 0 # 走过的长度
         nodes = game.map_info.pathfinding(self.pos, self.dest, isinstance(self, Plane))
+
+        if isinstance(self, Plane) and self.fuel <= 0:  # plane crashed
+            self.health = 0
+            del game.map_info.elements[self.index]
+            events.append(Destroy(self.index))
+            return events
+
+        if self.fuel <= 0:  # cannot move
+            return events
 
         # for i in range(len(nodes) - 1):
         #     can_move = self.speed - cover # 剩余的路程
@@ -547,6 +556,14 @@ class Unit(UnitBase):
                 near_element = game.map_info.element(point)
                 if isinstance(near_element, Resource):
                     events += self.collect(near_element)
+
+        # fuel
+        if isinstance(self, Plane):
+            self.fuel -= max(1, len(nodes) - 1)     # plane consumes at least 1 unit fuel each movement
+        else:
+            self.fuel -= len(nodes) - 1
+        self.fuel = max(0, self.fuel)
+
         return events
 
 class Submarine(Unit):
