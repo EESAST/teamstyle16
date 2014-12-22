@@ -19,7 +19,7 @@ def MenuAnimation(formerWidget, aimWidget):
 		AppWidget.setDuration(1000)
 		AppWidget.setKeyValueAt(1, 1)
 		AppWidget.setEasingCurve(QEasingCurve.InOutQuad)
-
+	'''
 	if formerWidget:
 		fPingWidget = QPropertyAnimation(formerWidget, "y")
 		fPingWidget.setDuration(500)
@@ -38,14 +38,14 @@ def MenuAnimation(formerWidget, aimWidget):
 
 		aPingWidget.setKeyValueAt(1,y)
 		aPingWidget.setEasingCurve(QEasingCurve.InOutQuad)
-
+	'''
 	parallelWid = QParallelAnimationGroup()
 	if formerWidget:
 		parallelWid.addAnimation(DisWidget)
-		parallelWid.addAnimation(fPingWidget)
+		#parallelWid.addAnimation(fPingWidget)
 	if aimWidget:
 		parallelWid.addAnimation(AppWidget)
-		parallelWid.addAnimation(aPingWidget)
+		#parallelWid.addAnimation(aPingWidget)
 
 	return parallelWid
 

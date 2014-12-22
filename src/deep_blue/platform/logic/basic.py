@@ -178,7 +178,10 @@ class Position(object):
         return hash((Position, self.x, self.y, self.z))
 
     def __repr__(self):
-        return 'Position(%d, %d, %d)' % (self.x, self.y, self.z)
+        return '<Position (%d, %d, %d)>' % (self.x, self.y, self.z)
+
+    def __str__(self):
+        return '(%d, %d, %d)' % (self.x, self.y, self.z)
 
     @property
     def level(self):
@@ -191,6 +194,11 @@ class Position(object):
     @property
     def size(self):
         return (1, 1)
+
+    def inMap(self, map):
+        return (self.x >= 0 and self.x < map.x_max and
+                self.y >= 0 and self.y < map.y_max and
+                self.z >= 0 and self.z < 3)
 
     def distance(self, target):
         """返回该位置到target(点或矩形)的(最小)距离"""
@@ -216,6 +224,14 @@ class Rectangle(object):
         self.upper_left = upper_left
         lower_right.level = upper_left.level
         self.lower_right = lower_right
+
+    def __repr__(self):
+        size = self.size
+        return '<Rectangle %s %d*%d>' % (self.upper_left, size[0], size[1])
+
+    def __str__(self):
+        size = self.size
+        return '%s, %d*%d' % (self.upper_left, size[0], size[1])
 
     @property
     def size(self):
@@ -308,7 +324,8 @@ class Element(object):
 
 class Resource(Element):
     """资源类, 派生出矿场类和油田类"""
-    pass
+    def __repr__(self):
+        return '<%s at %s>' % (self.__class__.__name__, self.pos)
 
 class Mine(Resource):
     """矿场"""
@@ -368,12 +385,8 @@ class UnitBase(Element):
                 maximum = getattr(self, kw + '_max')
                 setattr(self, kw, min(max(0, kwargs[kw]), maximum))     # in case health < 0 or health > health_max
 
-    def view(self, target_pos):
-        """查看目标点的状态"""
-        if self.pos.distance(target_pos) > self.sight_ranges[target_pos.level]:
-            return -1   # 不在视野范围内, 不可见
-        else:
-            return getElement(target_pos)
+    def __repr__(self):
+        return '<team %s %s at %s>' % (self.team, self.__class__.__name__, self.pos)
 
     def attack(self, game, target_pos):
         """攻击(火力与鱼雷伤害叠加计算)某坐标(可能出现射程大于视野的情况)"""
@@ -382,7 +395,7 @@ class UnitBase(Element):
         target_unit = game.map_info.element(target_pos)
         result_events = []
         self.ammo -= self.ammo_once
-        if target_unit == None or target_unit.team == self.team:
+        if target_unit == None or hasattr(target_unit, 'team') is False or target_unit.team == self.team:
             result_events.append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
             return result_events
         modified_attacks = modifiedAttacks(distance, range, self.attacks)
@@ -504,26 +517,28 @@ class Unit(UnitBase):
     def move(self, game):
         events = []
         cover = 0 # 走过的长度
-        nodes = game.map_info.pathfinding(self.pos, self.dest)
+        nodes = game.map_info.pathfinding(self.pos, self.dest, isinstance(self, Plane))
 
-        for i in range(len(nodes) - 1):
-            can_move = self.speed - cover # 剩余的路程
-            if(can_move > nodes[i].distance(nodes[i + 1])):
-                cover += nodes[i].distance(nodes[i + 1])
-            elif can_move == nodes[i].distance(nodes[i + 1]):
-                nodes = nodes[0 : (i + 2)]
-                break
-            else:
-                nodes = nodes[0 : (i + 2)]
-                flag = 1 if (nodes[i].x + nodes[i].y) < (nodes[i + 1].x + nodes[i + 1].y) else -1
-                if nodes[i].x == nodes[i + 1].x:
-                    nodes.append(Position(nodes[i].x + flag * can_move, nodes[i].y, nodes[i].z))
-                    break
-                elif nodes[i].y == nodes[i + 1].y:
-                    nodes.append(Position(nodes[i].x, nodes[i].y + flag * can_move, nodes[i].z))
-                    break
-                else:
-                    raise RuntimeError()
+        # for i in range(len(nodes) - 1):
+        #     can_move = self.speed - cover # 剩余的路程
+        #     if(can_move > nodes[i].distance(nodes[i + 1])):
+        #         cover += nodes[i].distance(nodes[i + 1])
+        #     elif can_move == nodes[i].distance(nodes[i + 1]):
+        #         nodes = nodes[0 : (i + 2)]
+        #         break
+        #     else:
+        #         nodes = nodes[0 : (i + 2)]
+        #         flag = 1 if (nodes[i].x + nodes[i].y) < (nodes[i + 1].x + nodes[i + 1].y) else -1
+        #         if nodes[i].x == nodes[i + 1].x:
+        #             nodes.append(Position(nodes[i].x + flag * can_move, nodes[i].y, nodes[i].z))
+        #             break
+        #         elif nodes[i].y == nodes[i + 1].y:
+        #             nodes.append(Position(nodes[i].x, nodes[i].y + flag * can_move, nodes[i].z))
+        #             break
+        #         else:
+        #             raise RuntimeError()
+        if self.speed + 1 < len(nodes):
+            nodes = nodes[:self.speed + 1]
         self.pos = nodes[-1]
         move_event = Move(self.index, nodes)
         events += [] if move_event.steps == 0 else [move_event]
@@ -583,7 +598,7 @@ class Cargo(Ship):
 
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
         """运输舰对周围单位补给燃料弹药, 可向基地, 据点, 运输舰补充金属"""
-        result_events
+        result_events = []
         provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
         provide_metal = 0
         if our_unit.metal_max != None:

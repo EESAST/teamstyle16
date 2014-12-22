@@ -100,12 +100,13 @@ class Move(Event):
         super(Move, self).__init__()
         self.index = index
         self.nodes = nodes
-        self.steps = 0
-        for i in xrange(len(self.nodes) - 1):
-            self.steps += self.nodes[i].distance(self.nodes[i + 1])
+
+    @property
+    def steps(self):
+        return len(self.nodes) - 1
 
     def description(self):
-        s = '%d号单位' % index
+        s = '%d号单位' % self.index
         if len(self.nodes) == 2:
             s += '从(%d,%d,%d)直接杀向了(%d,%d,%d)' % (
                 self.nodes[0].x, self.nodes[0].y, self.nodes[0].z,

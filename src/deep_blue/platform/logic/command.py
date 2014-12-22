@@ -27,9 +27,7 @@ class AttackPos(Command):
         attacker = elements.get(self.operand)
         if attacker == None or attacker.kind == CARGO:
             return False
-        if not (self.pos.x >= 0 and self.pos.x < game.map_info.x_max and
-                self.pos.y >= 0 and self.pos.y < game.map_info.y_max and
-                self.pos.z >= 0 and self.pos.z < 3):
+        if self.pos.inMap(game.map_info) is False:
             return False
         if attacker.pos.distance(self.pos) > attacker.fire_ranges[self.pos.z]:
             return False
@@ -58,7 +56,7 @@ class AttackUnit(Command):
         defender = elements.get(self.target)
         if attacker == None or defender == None or attacker.kind == CARRIER:
             return False
-        if defender.team == attacker.team:
+        if hasattr(defender, 'team') is False or defender.team == attacker.team:
             return False
         if attacker.pos.distance(defender.pos) > attacker.fire_ranges[defender.pos.z]:
             return False
@@ -127,18 +125,18 @@ class ChangeDest(Command):
         return True
 
     def result_event(self, game):
+        mover = game.map_info.elements[self.operand]
         x_max = game.map_info.x_max
         y_max = game.map_info.y_max
         self.dest.x = min(x_max, max(0, self.dest.x))
         self.dest.y = min(y_max, max(0, self.dest.y))
-        self.dest.z = min(AIR, max(UNDERWATER, self.dest.z))
-        mover = game.map_info.elements[self.operand]
+        self.dest.z = mover.pos.z
         mover.dest = self.dest
         return [event.ChangeDest(self.operand, self.dest)]
 
 class Produce(Command):
     """生产"""
-    def __init__(self, kind):
+    def __init__(self, kind, **kw):
         super(Produce, self).__init__(operand = -1)
         self.kind = kind
 

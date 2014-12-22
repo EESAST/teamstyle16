@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'webWidget.ui'
 #
-# Created: Tue Sep 23 20:37:46 2014
+# Created: Wed Sep 24 18:43:45 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,14 +26,14 @@ except AttributeError:
 class Ui_WebWidget(object):
     def setupUi(self, WebWidget):
         WebWidget.setObjectName(_fromUtf8("WebWidget"))
-        WebWidget.resize(1100, 830)
-        self.webView = QtWebKit.QWebView(WebWidget)
-        self.webView.setGeometry(QtCore.QRect(40, 10, 1024, 768))
-        self.webView.setUrl(QtCore.QUrl(_fromUtf8("http://duishi.eekexie.org/")))
-        self.webView.setObjectName(_fromUtf8("webView"))
+        WebWidget.resize(1100, 742)
         self.returnButton = QtGui.QPushButton(WebWidget)
-        self.returnButton.setGeometry(QtCore.QRect(512, 790, 75, 23))
+        self.returnButton.setGeometry(QtCore.QRect(510, 720, 75, 23))
         self.returnButton.setObjectName(_fromUtf8("returnButton"))
+        self.webView = QtWebKit.QWebView(WebWidget)
+        self.webView.setGeometry(QtCore.QRect(10, 10, 1081, 701))
+        self.webView.setUrl(QtCore.QUrl(_fromUtf8("http://teamstyle16.eesast.com/")))
+        self.webView.setObjectName(_fromUtf8("webView"))
 
         self.retranslateUi(WebWidget)
         QtCore.QMetaObject.connectSlotsByName(WebWidget)

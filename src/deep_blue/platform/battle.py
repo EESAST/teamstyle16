@@ -10,7 +10,8 @@ VERSION = 3
 logger = logging.getLogger(__name__)
 
 class Battle(object):
-    def __init__(self, map_info, team0_name=None, team1_name=None, prev_info=None):
+    def __init__(self, map_info, team0_name=None, team1_name=None,
+                 prev_info=None, **kw):
         """Construct a battle based on map_info.
         If prev_info is given, restore from it & ignore map_info"""
         if prev_info is not None:
@@ -49,7 +50,7 @@ class Battle(object):
             'command': [],
             'event': []
         }
-        self.gamebody = gamebody.GameBody(map_info)
+        self.gamebody = gamebody.GameBody(map_info, **kw)
         self.key_frames = []
 
         self.record_history()
@@ -64,8 +65,8 @@ class Battle(object):
     def round(self):
         return self.gamebody.round
 
-    def status(self):
-        return self.gamebody.status
+    def state(self):
+        return self.gamebody.state
 
     def score(self, team):
         return self.gamebody.score(team)
@@ -116,8 +117,8 @@ class Battle(object):
         # the last round will be lost (because no next_round will be called).
         self.record_history()
         self.record_events(events)
-        if self.gamebody.round % self.gamebody.record_interval == 0:
-            self.record_key_frame()
+        # record key frame every round
+        self.record_key_frame()
 
         logger.info('Events happened in round %d:', self.gamebody.round - 1)
         for e in events:
@@ -146,6 +147,19 @@ class Battle(object):
         save_file.write(encoder.encode(contents))
 
         logger.info('Game saved to "%s"', filename)
+
+    def save_event_strings(self, filename):
+        """Save event strings to file"""
+        logger.debug('Saving event strings to "%s"', filename)
+        f = open(filename, 'w')
+        for round, round_events in enumerate(self.history['event']):
+            event_num = len(round_events)
+            if event_num > 0:  # At least one event happened in this round
+                f.write('round %d:\n' % round)
+                for event in round_events:
+                    f.write(event.description() + '\n')
+
+        logger.info('Event strings saved to "%s"', filename)
 
     def record_history(self):
         history = self.history

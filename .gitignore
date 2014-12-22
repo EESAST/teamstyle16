@@ -4,9 +4,5 @@
 # object code
 *.o
 
-# tmp file for testing
-src/deep_blue/platform/tmp*
-src/deep_blue/platform/test*
-
 # CMake build files
 src/player_file/build
