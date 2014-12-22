@@ -18,6 +18,7 @@ def run_test_match(args):
     judge, map_file, opponent_ai = TestGame[level - 1]  # level begins from 1
 
     # Try to figure out where built AIs are
+    # TODO: likely to failed mow
     last_slash_pos = args.ai.rfind('/')
     # Try back slash if failed
     if last_slash_pos == -1:
