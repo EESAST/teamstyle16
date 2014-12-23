@@ -143,11 +143,20 @@ class Produce(Command):
     def add_to(self, team, game):
         if self.kind not in xrange(SUBMARINE, SCOUT + 1):
             return False
+        for element in game.map_info.elements.values():
+            if isinstance(element, Base) and element.team == team:
+                if element.metal < PROPERTY[self.kind]['health_max'] * METAL_PER_HEALTH:
+                    return False
+                break
         game.commands[team].append(self)
         self.team = team
         return True
 
     def result_event(self, game):
+        for element in game.map_info.elements.values():
+            if isinstance(element, Base) and element.team == team:
+                element.metal -= PROPERTY[self.kind]['health_max'] * METAL_PER_HEALTH
+                break
         game.production_lists[self.team].append([self.kind, basic.PROPERTY[self.kind]['build_round']])
         return [event.AddProductionEntry(self.team, self.kind)]
 
