@@ -493,27 +493,27 @@ class Replay(QGraphicsView):
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == move_unit_index:
-					move_unit = soldier.obj
+					move_unit = soldier
 					break			
 		for i in range(3):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == attack_target_index:
-					attack_target = soldier.obj
+					attack_target = soldier
 					break
 
 		showAtkAnim = QParallelAnimationGroup()
-		move_effect = AttackEffectUnit(move_unit.position.x, move_unit.position.y, move_unit.position.z)
-		move_effect.setPos(move_unit.position.x, move_unit.position.y, move_unit.position.z)
+		move_effect = AttackEffectUnit(move_unit.corX, move_unit.corY, move_unit.corZ)
+		move_effect.setPos(move_unit.corX, move_unit.corY, move_unit.corZ)
 		self.scene.addItem(move_effect)
 
 #炮弹飞行效果
 		ani = QPropertyAnimation(move_effect, "pos")
 		ani.setDuration(ATTACK_TIME)
-		ani.setStartValue(QPointF((move_unit.position.x)* 30 + 15, (move_unit.position.y)* 30 + 5 + 10 * (2 - move_unit.position.z)))
+		ani.setStartValue(QPointF((move_unit.corX)* 30 + 15, (move_unit.corY)* 30 + 5 + 10 * (2 - move_unit.corZ)))
 		if isinstance(attack_target, basic.Position):
 			ani.setEndValue(QPointF((attack_target.x)* 30 + 15, (attack_target.y)* 30 + 5 + 10 * (2 - attack_target.z)))
 		else:
-			ani.setEndValue(QPointF((attack_target.position.x)* 30 + 15, (attack_target.position.y)* 30 + 5 + 10 * (2 - attack_target.position.z)))
+			ani.setEndValue(QPointF((attack_target.corX)* 30 + 15, (attack_target.corY)* 30 + 5 + 10 * (2 - attack_target.corZ)))
 		showAtkAnim.addAnimation(ani)
 
 
@@ -534,7 +534,7 @@ class Replay(QGraphicsView):
 		if isinstance(attack_target,basic.Position):
 			label.setPos(QPointF((attack_target.x)* 30, (attack_target.y)* 30 + 5 + 10 * (2 - attack_target.z)) + QPointF(0, -10))
 		else:
-			label.setPos(QPointF((attack_target.position.x)* 30, (attack_target.position.y)* 30 + 5 + 10 * (2 - attack_target.position.z)) + QPointF(0, -10))
+			label.setPos(QPointF((attack_target.corX)* 30, (attack_target.corY)* 30 + 5 + 10 * (2 - attack_target.corZ)) + QPointF(0, -10))
 		ani = QPropertyAnimation(label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
@@ -547,8 +547,8 @@ class Replay(QGraphicsView):
 			boom = BoomEffectUnit(attack_target.x, attack_target.y, attack_target.z)
 			boom.setPos(attack_target.x, attack_target.y, attack_target.z)
 		else:
-			boom = BoomEffectUnit(attack_target.position.x, attack_target.position.y, attack_target.position.z)
-			boom.setPos(attack_target.position.x, attack_target.position.y, attack_target.position.z)
+			boom = BoomEffectUnit(attack_target.corX, attack_target.corY, attack_target.corZ)
+			boom.setPos(attack_target.corX, attack_target.corY, attack_target.corZ)
 		ani = QPropertyAnimation(boom, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
@@ -619,10 +619,10 @@ class Replay(QGraphicsView):
 				#move_mouse_effect.setPos(nodes[-1].x, nodes[-1].y, nodes[-1].z)
 				moveAnim_mouse.setEndValue(QPointF((nodes[-1].x)* 30, (nodes[-1].y)* 30 + 10 *(2 - nodes[-1].z)))
 		else:
-			moveAnim.setEndValue(QPointF((move_unit.position.x)* 30, (move_unit.position.y)* 30 + 10 * (2 - move_unit.position.z)))
+			moveAnim.setEndValue(QPointF((move_unit.corX)* 30, (move_unit.corY)* 30 + 10 * (2 - move_unit.corZ)))
 			if flag2:
 				#move_mouse_effect.setPos(nodes[-1].x, nodes[-1].y, nodes[-1].z)
-				moveAnim_mouse.setEndValue(QPointF((move_unit.position.x)* 30, (move_unit.position.y)* 30 + 10 * (2 - move_unit.position.z)))
+				moveAnim_mouse.setEndValue(QPointF((move_unit.corX)* 30, (move_unit.corY)* 30 + 10 * (2 - move_unit.corZ)))
 
 		return moveAnim, moveAnim_mouse, []
 
@@ -632,18 +632,18 @@ class Replay(QGraphicsView):
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == supply_unit_index:
-					supply_unit = soldier.obj
+					supply_unit = soldier
 					break			
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == supply_target_index:
-					supply_target = soldier.obj
+					supply_target = soldier
 					break
 		
 		showSplAnim = QParallelAnimationGroup()
 		
-		move_unit = SupEffectUnit(supply_unit.position.x, supply_unit.position.y, supply_unit.position.z)
-		move_unit.setPos(supply_unit.position.x, supply_unit.position.y, supply_unit.position.z)
+		move_unit = SupEffectUnit(supply_unit.corX, supply_unit.corY, supply_unit.corZ)
+		move_unit.setPos(supply_unit.corX, supply_unit.corY, supply_unit.corZ)
 		self.scene.addItem(move_unit)
 		
 		ani = QPropertyAnimation(move_unit, "opacity")
@@ -658,7 +658,7 @@ class Replay(QGraphicsView):
 		label.setColor(Qt.green)
 		label.setOpacity(0)
 		self.scene.addItem(label)
-		label.setPos(QPointF((supply_target.position.x)* 30, (supply_target.position.y)* 30 + 5))
+		label.setPos(QPointF((supply_target.corX)* 30, (supply_target.corY)* 30 + 5))
 		ani = QPropertyAnimation(label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
@@ -686,19 +686,19 @@ class Replay(QGraphicsView):
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == fix_unit_index:
-					fix_unit = soldier.obj
+					fix_unit = soldier
 					break			
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == fix_target_index:
-					fix_target = soldier.obj
+					fix_target = soldier
 					break			
 		
 		showFixAnim = QParallelAnimationGroup()
 		
 		#位置可能不对，再调
-		effect_unit = FixEffectUnit(fix_unit.position.x, fix_unit.position.y, fix_unit.position.z)
-		effect_unit.setPos(fix_unit.position.x, fix_unit.position.y, fix_unit.position.z)
+		effect_unit = FixEffectUnit(fix_unit.corX, fix_unit.corY, fix_unit.corZ)
+		effect_unit.setPos(fix_unit.corX, fix_unit.corY, fix_unit.corZ)
 		self.scene.addItem(effect_unit)
 		
 		ani = QPropertyAnimation(effect_unit, "opacity")
@@ -715,7 +715,7 @@ class Replay(QGraphicsView):
 		fix_label.setColor(Qt.red)
 		fix_label.setOpacity=(0)
 		self.scene.addItem(fix_label)
-		fix_label.setPos(QPointF((fix_unit.position.x)* 30, (fix_unit.position.y)* 30))
+		fix_label.setPos(QPointF((fix_unit.corX)* 30, (fix_unit.corY)* 30))
 		ani = QPropertyAnimation(fix_label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
@@ -738,7 +738,7 @@ class Replay(QGraphicsView):
 		effect_label.setDefaultTextColor(Qt.green)
 		effect_label.setOpacity = (0)
 		self.scene.addItem(effect_label)
-		effect_label.setPos(QPointF((fix_target.position.x)* 30, (fix_target.position.y)* 30))
+		effect_label.setPos(QPointF((fix_target.corX)* 30, (fix_target.corY)* 30))
 		ani = QPropertyAnimation(effect_label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
@@ -756,17 +756,17 @@ class Replay(QGraphicsView):
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == collect_unit_index:
-					collect_unit = soldier.obj
+					collect_unit = soldier
 					break			
 		for soldier in self.UnitBase[2]:
 			if soldier.obj.index == collect_target_index:
-				collect_target = soldier.obj
+				collect_target = soldier
 				break			
 
 		showColAnim = QParallelAnimationGroup()
 
-		effect_unit = ColEffectUnit(collect_target.position.x, collect_target.position.y , collect_target.position.z)
-		effect_unit.setPos(collect_target.position.x, collect_target.position.y , collect_target.position.z)
+		effect_unit = ColEffectUnit(collect_target.corX, collect_target.corY , collect_target.corZ)
+		effect_unit.setPos(collect_target.corX, collect_target.corY , collect_target.corZ)
 		self.scene.addItem(effect_unit)
 		
 		ani = QPropertyAnimation(effect_unit, "opacity")
@@ -781,7 +781,7 @@ class Replay(QGraphicsView):
 		effect_label = EffectIndUnit("Fuel+%d\n Metal+%d" %(fuel_collect, metal_collect))
 		effect_label.setColor(Qt.green)
 		self.scene.addItem(effect_label)
-		effect_label.setPos(QPointF((collect_unit.position.x)* 30, (collect_unit.position.y) * 30))
+		effect_label.setPos(QPointF((collect_unit.corX)* 30, (collect_unit.corY) * 30))
 		ani = QPropertyAnimation(effect_label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
@@ -875,15 +875,19 @@ class Replay(QGraphicsView):
 		move_unit = None
 		label = None
 
-		move_unit = self.battle.map_info().elements[move_unit_index]
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == move_unit_index:
+					move_unit = soldier
+					break
 
 		showAtkAnim = QParallelAnimationGroup()
-		move_effect = AttackEffectUnit(move_unit.position.x, move_unit.position.y, move_unit.position.z)
-		move_effect.setPos(move_unit.position.x, move_unit.position.y, move_unit.position.z)
+		move_effect = AttackEffectUnit(move_unit.corX, move_unit.corY, move_unit.corZ)
+		move_effect.setPos(move_unit.corX, move_unit.corY, move_unit.corZ)
 		self.scene.addItem(move_effect)
 		ani = QPropertyAnimation(move_effect, "pos")
 		ani.setDuration(ATTACK_TIME)
-		ani.setStartValue(QPointF((move_unit.position.x)* 30 + 15, ((move_unit.position.y)* 30 + 5 + (2 - move_unit.position.z) * 10)))
+		ani.setStartValue(QPointF((move_unit.corX)* 30 + 15, ((move_unit.corY)* 30 + 5 + (2 - move_unit.corZ) * 10)))
 		ani.setEndValue(QPointF((attack_target.x)* 30 + 15, ((attack_target.y)* 30 + 5 + (2 - attack_target.z) * 10)))
 		showAtkAnim.addAnimation(ani)
 
