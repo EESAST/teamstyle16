@@ -57,19 +57,21 @@ class ProductionReplay(QGraphicsView):
 		self.statelist = []
 
 	def mousePressEvent(self, event):
-		print "in mousePressEvent!"
+		print "in mousePressEvent!1"
 		if not self.run:
 			QGraphicsView.mousePressEvent(self, event)
 			return
-		print "in mousePressEvent!"
-		if Qt.LeftButton:
+		print "in mousePressEvent!2"
+		if event.button() == Qt.LeftButton:
 			if self.index != self.HUMAN_REPLAY:
 				return
+			print "in mousePressEvent!3"
 			pos = event.pos()
 			items = self.items(pos)
 
 			for it in items:
 				if isinstance(it, SoldierUnit):
+					print "in mousePressEvent!4"
 					new_command = command.Produce(it.obj.kind)
 					self.battle.add_command(new_command)
 
@@ -110,15 +112,15 @@ class ProductionReplay(QGraphicsView):
 			self.scene.addItem(new_unit)
 			new_unit = SoldierMakerUnit(basic.Cargo(self.index, basic.Position(0,0,0)), 50)
 			self.objects1.append(new_unit)
-			new_unit.setPos(0,1,2)
+			new_unit.setPos(0,2,2)
 			self.scene.addItem(new_unit)
 			new_unit = SoldierMakerUnit(basic.Fighter(self.index, basic.Position(0,0,0)), 50)
 			self.objects1.append(new_unit)
-			new_unit.setPos(2,1,2)
+			new_unit.setPos(2,2,2)
 			self.scene.addItem(new_unit)
 			new_unit = SoldierMakerUnit(basic.Scout(self.index, basic.Position(0,0,0)), 50)
 			self.objects1.append(new_unit)
-			new_unit.setPos(4,1,2)
+			new_unit.setPos(4,2,2)
 			self.scene.addItem(new_unit)
 
 
@@ -138,9 +140,9 @@ class ProductionReplay(QGraphicsView):
 			else:
 				number = EffectIndUnit("%d" %now_list[0][i])
 			if i < 3:
-				number.setPos(i*60, 10)
+				number.setPos(i*60, 30)
 			else:
-				number.setPos((i-3)*60, 60)
+				number.setPos((i-3)*60, 80)
 			number.setScale(1.2)
 			number.setDefaultTextColor(QColor(Qt.blue))
 			self.scene.addItem(number)

@@ -28,8 +28,8 @@ class SmallMap(QGraphicsView):
 		self.init = False
 
 		self.SmallMapList = []
-		self.UnitBase = [[],[]]
-		self.Unit_Info = [{},{}]
+		self.UnitBase = [[],[],[]]
+		self.Unit_Info = [{},{},{}]
 
 	def setSmallMap(self):
 		self.resetSmallMap()
@@ -86,12 +86,15 @@ class SmallMap(QGraphicsView):
 		for item in self.UnitBase[1]:
 			if item.scene() == self.scene:
 				self.scene.removeItem(item)
-		self.UnitBase = [[],[]]
+		for item in self.UnitBase[2]:
+			if item.scene() == self.scene:
+				self.scene.removeItem(item)
+		self.UnitBase = [[],[],[]]
 
 	def reset(self):
 		self.resetSmallMap()
 		self.resetUnit()
-		self.Unit_Info = [{},{}]
+		self.Unit_Info = [{},{},{}]
 		self.run = False
 		self.left = 0
 		self.right = 0
@@ -102,14 +105,14 @@ class SmallMap(QGraphicsView):
 
 	def setUnit(self):
 		self.resetUnit()
-		for i in range(2):
+		for i in range(3):
 			for j in self.Unit_Info[i].keys():
-				new_unit = PointUnit(self.Unit_Info[i][j].position, i)
+				new_unit = PointUnit(self.Unit_Info[i][j].position, i, self.Unit_Info[i][j].kind)
 				self.UnitBase[i].append(new_unit)
 				self.scene.addItem(new_unit)
 				new_unit.setPos(new_unit.corX + self.left, new_unit.corY + self.up, new_unit.corZ, flag = False)
 
-	def Initialize(self, battle):
+	def Initialize(self, battle, index):
 		if not self.init:
 			MapInfo = battle.map_info()
 			self.width = MapInfo.x_max
@@ -119,10 +122,19 @@ class SmallMap(QGraphicsView):
 				for j in range(MapInfo.y_max):
 					self.Map_Info[i][j] = MapInfo.map_type(i, j)
 			self.setSmallMap()
-		Elements = [battle.elements(0), battle.elements(1)]
-		for i in range(2):
-			for element in Elements[i].values():
-				self.Unit_Info[i][element.position] = element
+		self.Unit_Info = [{},{},{}]
+		if index not in [0, 1]:
+			Elements = [battle.elements(0), battle.elements(1)]
+			for i in range(2):
+				for element in Elements[i].values():
+					self.Unit_Info[i][element.position] = element
+		else:
+			Elements = battle.view_elements(index)
+			for element in Elements.values():
+				if element.kind not in [2,3]:
+					self.Unit_Info[element.team][element.position] = element
+				else:
+					self.Unit_Info[2][element.position] = element
 		self.setUnit()
 		if not self.init:
 			rect = QRectF(0, 0, 200, 200)

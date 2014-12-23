@@ -137,23 +137,32 @@ class SmallMapUnit(AbstractUnit):
 
 class PointUnit(AbstractUnit):
 	"""小地图单位点类"""
-	def __init__(self, pos, i, parent = None):
+	def __init__(self, pos, i, base, parent = None):
 		super(PointUnit, self).__init__(pos.x, pos.y, 2, parent)
 		self.team = i
 		self.setZValue(0.6)
+		self.base = base
 
 	def boundingRect(self):
-		return QRectF(0, 0, 3, 3)
+		if self.base:
+			return QRectF(0, 0, 3, 3)
+		else:
+			return QRectF(0, 0, 6, 6)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
 		painter.setPen(Qt.NoPen)
 		if self.team == 0:
 			brush = QBrush(Qt.red,Qt.SolidPattern)
-		else:
+		elif self.team == 1:
 			brush = QBrush(Qt.blue,Qt.SolidPattern)
+		else:
+			brush = QBrush(Qt.green,Qt.SolidPattern)
 		painter.setBrush(brush)
-		painter.drawEllipse(0, 0, 3, 3)
+		if self.base:
+			painter.drawEllipse(0, 0, 3, 3)
+		else:
+			painter.drawEllipse(0, 0, 6, 6)
 		painter.restore()
 
 class ChosenIndUnit(AbstractUnit):
@@ -181,7 +190,10 @@ class SoldierUnit(AbstractUnit):
 	def __init__(self, unit, parent = None):
 		super(SoldierUnit, self).__init__(unit.position.x, unit.position.y, unit.position.z, parent)
 		self.obj = unit
-		self.setZValue(0.5)
+		if self.obj.kind in [0, 1]:
+			self.setZValue(0.5)
+		else:
+			self.setZValue(0.6)
 		if self.obj.kind in [2, 3]:
 			filename = ":" + FILE_UNIT[2][self.obj.kind] + ".png"
 		else:
@@ -201,7 +213,7 @@ class SoldierMakerUnit(AbstractUnit):
 	def __init__(self, unit, size, parent = None):
 		super(SoldierMakerUnit, self).__init__(unit.position.x, unit.position.y, unit.position.z, parent)
 		self.obj = unit
-		self.setZValue(0.5)
+		self.setZValue(0.6)
 		self.size = size
 		if self.obj.kind in [2, 3]:
 			filename = ":" + FILE_UNIT[2][self.obj.kind] + ".png"
@@ -222,7 +234,7 @@ class FrogUnit(AbstractUnit):
 	"""战争迷雾"""
 	def __init__(self, x, y, z, parent = None):
 		super(FrogUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.6)
+		self.setZValue(0.9)
 		self.setOpacity(1.0)
 
 	def boundingRect(self):
@@ -291,7 +303,7 @@ class DieIndUnit(AbstractUnit):
 class AttackEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(AttackEffectUnit, self).__init__(x, y, 2, parent)
-		self.setZValue(0.8)
+		self.setZValue(0.6)
 
 	def boundingRect(self):
 		return QRectF(0, 0, 10, 10)
@@ -308,6 +320,7 @@ class EffectIndUnit(QGraphicsTextItem):
 		super(EffectIndUnit, self).__init__(text, parent)
 		self.text = text
 		font = self.font()
+		self.setZValue(0.5)
 		self.setScale(0.7)
 		self.setDefaultTextColor(QColor(Qt.red))
 		if text[0] == "-" :
@@ -321,6 +334,8 @@ class EffectIndUnit(QGraphicsTextItem):
 			self.setDefaultTextColor(QColor(Qt.green))
 		self.setFont(font)
 		
+	def boundingRect(self):
+		return QRectF(0, 0, 30, 20)
 		
 	def setText(self, text):
 		if text[0] == "+" or text[0] == '-':
@@ -333,7 +348,7 @@ class EffectIndUnit(QGraphicsTextItem):
 class FixEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(FixEffectUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.8)
+		self.setZValue(0.6)
 		self.image = QImage(":fix.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
 
 	def boundingRect(self):
@@ -347,7 +362,7 @@ class FixEffectUnit(AbstractUnit):
 class ColEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(ColEffectUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.8)
+		self.setZValue(0.6)
 		self.image = QImage(":collect.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
 
 	def boundingRect(self):
@@ -361,7 +376,7 @@ class ColEffectUnit(AbstractUnit):
 class SupEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(SupEffectUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.8)
+		self.setZValue(0.6)
 		self.image = QImage(":supply.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
 
 	def boundingRect(self):

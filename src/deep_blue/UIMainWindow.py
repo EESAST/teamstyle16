@@ -180,9 +180,6 @@ class MainWindow(QGraphicsView):
 if __name__ == "__main__":
 	import time
 	app = QApplication(sys.argv)
-	font = app.font()
-	font.setLetterSpacing(QFont.PercentageSpacing, 115)
-	app.setFont(font)
 	palette = app.palette()
 	palette.setBrush(QPalette.Active, QPalette.ButtonText, QColor(150,255,255))
 	palette.setBrush(QPalette.Disabled, QPalette.ButtonText, QColor(0,0,0))

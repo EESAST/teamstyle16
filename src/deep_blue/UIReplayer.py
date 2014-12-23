@@ -101,6 +101,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		if self.CenterWidget.HUMAN_REPLAY in [3, 4]:
 			self.Frog2RadioButton.setEnabled(self.started)
 			self.Frog1RadioButton.setEnabled(self.started)
+			self.GodVisionRadioButton.setEnabled(self.started)
 		self.OpenFileButton1.setEnabled(not self.started)
 		self.OpenFileButton2.setEnabled(not self.started)
 		self.LoadFilePushButton.setEnabled(not self.started)

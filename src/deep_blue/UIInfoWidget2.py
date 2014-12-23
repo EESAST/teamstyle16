@@ -90,6 +90,7 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 					print "update info"
 					self.unit = element
 					self.newUnitInfo(self.unit, self.flag, battle)
+					self.newMapInfo(battle.map_info().types[self.unit.position.x][self.unit.position.y])
 					return
 
 if __name__ == "__main__":

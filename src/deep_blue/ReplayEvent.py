@@ -67,10 +67,7 @@ class Replay(QGraphicsView):
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
 		self.frogIndex = -1
-		self.a_pressed = False
-		self.m_pressed = False
-		self.f_pressed = False
-		self.s_pressed = False
+		self.key_pressed = 0
 		self.changed = False
 		self.battle = None
 		self.now_state = None
@@ -94,11 +91,15 @@ class Replay(QGraphicsView):
 		self.CreateList = []
 		self.MoveList = []
 		self.animationItem = []
+		self.command_list = []
+		self.attack_list = {}
 
 		#状态机
+		'''
 		self.stateMachine = QStateMachine(self)
 		self.State_Run = QState(self.stateMachine)
 		self.State_Selected = QState(self.State_Run)
+		self.State_Nothing = QState(self.State_Selected)
 		self.State_A_Pressed = QState(self.State_Selected)
 		self.State_F_Pressed = QState(self.State_Selected)
 		self.State_M_Pressed = QState(self.State_Selected)
@@ -106,22 +107,27 @@ class Replay(QGraphicsView):
 		self.State_Unselected = QState(self.State_Run)
 		self.stateMachine.setInitialState(self.State_Run)
 		self.State_Run.setInitialState(self.State_Unselected)
+		self.State_Selected.setInitialState(self.State_Nothing)
 		self.State_Final = QFinalState(self.stateMachine)
 
 		self.statelist = [self.State_Unselected, self.State_Selected, self.State_A_Pressed, self.State_F_Pressed, self.State_M_Pressed, self.State_S_Pressed]
 
 		self.State_Unselected.addTransition(self, SIGNAL("unitSelected()"), self.State_Selected)
 		self.State_Selected.addTransition(self, SIGNAL("mapSelected()"), self.State_Unselected)
-		self.State_Unselected.addTransition(self, SIGNAL("endGame()"), self.State_Final)
+		self.State_Run.addTransition(self, SIGNAL("endGame()"), self.State_Final)
 		self.State_Selected.addTransition(self, SIGNAL("Unselected()"), self.State_Unselected)
-		self.State_Selected.addTransition(self, SIGNAL("APressed()"), self.State_A_Pressed)
-		self.State_Selected.addTransition(self, SIGNAL("FPressed()"), self.State_F_Pressed)
-		self.State_Selected.addTransition(self, SIGNAL("MPressed()"), self.State_M_Pressed)
-		self.State_Selected.addTransition(self, SIGNAL("SPressed()"), self.State_S_Pressed)
-		self.State_Selected.addTransition(self, SIGNAL("EscPressed()"), self.State_Unselected)
+		self.State_Nothing.addTransition(self, SIGNAL("APressed()"), self.State_A_Pressed)
+		self.State_Nothing.addTransition(self, SIGNAL("FPressed()"), self.State_F_Pressed)
+		self.State_Nothing.addTransition(self, SIGNAL("MPressed()"), self.State_M_Pressed)
+		self.State_Nothing.addTransition(self, SIGNAL("SPressed()"), self.State_S_Pressed)
+		self.State_A_Pressed.addTransition(self, SIGNAL("EscPressed()"), self.State_Nothing)
+		self.State_F_Pressed.addTransition(self, SIGNAL("EscPressed()"), self.State_Nothing)
+		self.State_M_Pressed.addTransition(self, SIGNAL("EscPressed()"), self.State_Nothing)
+		self.State_S_Pressed.addTransition(self, SIGNAL("EscPressed()"), self.State_Nothing)
 
 		for state in self.statelist:
 			self.connect(state, SIGNAL("entered()"), self.on_Entered)
+		'''
 
 	'''
 	人机已经实现的功能:
@@ -149,73 +155,87 @@ class Replay(QGraphicsView):
 			pos = event.pos()
 			items = self.items(pos)
 			focus = None
-			if self.now_state not in [self.State_A_Pressed, self.State_S_Pressed, self.State_F_Pressed, self.State_M_Pressed]:
-				for it in items:
-					if isinstance(it, SoldierUnit):
-						self.SelectedIndex = it.obj
 			if not items:
 				return
-			for it in items:
-				if isinstance(it, SoldierUnit):
-					self.emit(SIGNAL("unitSelected"),it.obj,self.HUMAN_REPLAY,self.battle)
-					self.SelectedIndex = it.obj #此变量的作用是识别被选定单位的队伍，以判定是否可以发出攻击指令，待修改
-					focus = it
-				elif isinstance(it, MapUnit):
-					self.emit(SIGNAL("mapSelected"), it.obj)
-			if focus:
-				if self.moveani:
-					self.moveani.stop()
-					self.moveani.deleteLater()
-					self.moveani = None
-				if not self.mouseUnit.isVisible():
-					self.mouseUnit.setVisible(True)
-				self.mouseUnit.size = focus.obj.size[0]
-				self.mouseUnit.setPos(focus.corX, focus.corY, focus.corZ)
-			if not self.SelectedIndex:
-				return
-			#点击键盘后的左键指令只判断接收方是否符合要求，对发起方的要求在keyPressEvent中判断
-			print "judge state:", self.now_state == self.State_A_Pressed, self.now_state == self.State_F_Pressed, self.now_state == self.State_M_Pressed, self.now_state == self.State_S_Pressed
-			if self.now_state == self.State_A_Pressed:
-				flag = False
+			if self.key_pressed == 0:
 				for it in items:
-					if isinstance(it, FrogUnit):
-						return
+					if isinstance(it, SoldierUnit):
+						self.emit(SIGNAL("unitSelected"),it.obj,self.HUMAN_REPLAY,self.battle)
+						self.SelectedIndex = it.obj #此变量的作用是识别被选定单位的队伍，以判定是否可以发出攻击指令，待修改
+						focus = it
+					elif isinstance(it, MapUnit):
+						self.emit(SIGNAL("mapSelected"), it.obj)
+				if focus:
+					if self.moveani:
+						self.moveani.stop()
+						self.moveani.deleteLater()
+						self.moveani = None
+					if not self.mouseUnit.isVisible():
+						self.mouseUnit.setVisible(True)
+					self.mouseUnit.size = focus.obj.size[0]
+					self.mouseUnit.setPos(focus.corX, focus.corY, focus.corZ)
+				else:
+					self.SelectedIndex = None
+			#点击键盘后的左键指令只判断接收方是否符合要求，对发起方的要求在keyPressEvent中判断
+			elif self.key_pressed == 1:
+				flag1 = False
+				flag2 = False
+				pos = None
 				for it in items:
 					if isinstance(it, SoldierUnit) and it.obj.team != self.SelectedIndex.team:
 						#self.emit(SIGNAL("attackTargetSelected"), it.obj)
 						new_command = command.AttackUnit(self.SelectedIndex.index, it.obj.index)
-						self.battle.add_command(new_command)
-						flag = True
-					if isinstance(it, MapUnit) and not flag:
+						self.command_list.append(new_command)
+						self.attack_list[self.SelectedIndex.index] = new_command
+						self.key_pressed = 0
+						flag1 = True
+					if isinstance(it, MapUnit):
+						flag2 = True
+						pos = it.pos
 						#self.emit(SIGNAL("attackPosSelected"), it.pos)
-						new_command = command.AttackPos(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
-						self.battle.add_command(new_command)
-			if self.now_state == self.State_F_Pressed:
+					if flag2 and not flag1:
+						new_command = command.AttackPos(self.SelectedIndex.index, basic.Position(pos[0], pos[1], pos[2]))
+						self.command_list.append(new_command)
+						self.attack_list[self.SelectedIndex.index] = new_command
+				self.key_pressed = 0
+			elif self.key_pressed == 2:
 				for it in items:
 					if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team and it.obj.kind in [4, 5, 6, 7, 8, 9]:
 						#self.emit(SIGNAL("fixTargetSelected"), it.obj)
 						new_command = command.Fix(self.SelectedIndex.index, it.obj.index)
-						self.battle.add_command(new_command)
-			if self.now_state == self.State_M_Pressed:
+						if self.SelectedIndex.index in self.attack_list.keys():
+							del self.attack_list[self.SelectedIndex.index]
+						self.command_list.append(new_command)
+				self.key_pressed = 0
+			elif self.key_pressed == 3:
 				for it in items:
 					if isinstance(it, MapUnit):
 						new_command = command.ChangeDest(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
-						self.battle.add_command(new_command)
-			if self.now_state == self.State_S_Pressed:
+						if self.SelectedIndex.index in self.attack_list.keys():
+							del self.attack_list[self.SelectedIndex.index]
+						self.command_list.append(new_command)
+				self.key_pressed = 0
+			elif self.key_pressed == 4:
 				for it in items:
 					if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team: #认为除了矿井和和油田外的对象均能被补给
 						#self.emit(SINGAL("supplyTargetSelected"), it.obj)
 						new_command = command.Supply(self.SelectedIndex.index, it.obj.index)
-						self.battle.add_command(new_command)
+						if self.SelectedIndex.index in self.attack_list.keys():
+							del self.attack_list[self.SelectedIndex.index]
+						self.command_list.append(new_command)
+				self.key_pressed = 0
 			
 		
 
-		if event.button() == Qt.RightButton:
+		elif event.button() == Qt.RightButton:
 			if not self.HUMAN_REPLAY in [0, 1, 2]:
+				return
+			if not self.SelectedIndex:
 				return
 			if self.HUMAN_REPLAY in [0, 1]:
 				if self.SelectedIndex.team != self.HUMAN_REPLAY:
 					return
+			print "in right button! now:",self.HUMAN_REPLAY, self.SelectedIndex.team
 			pos = event.pos()
 			items = self.items(pos)
 			if not items:
@@ -223,24 +243,32 @@ class Replay(QGraphicsView):
 			for it in items:
 				if isinstance(it, SoldierUnit) and it.obj.team != self.SelectedIndex.team:  #如果点击对象是单位，并且点击对象和被选中的单位不属于同一队伍，则攻击
 					new_command = command.AttackUnit(self.SelectedIndex.index, it.obj.index)
-					self.battle.add_command(new_command)
+					self.command_list.append(new_command)
+					self.attack_list[self.SelectedIndex.index] = new_command
 				if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team:
 					if it.obj.kind in [4, 5, 6, 7, 8, 9] and self.SelectedIndex.kind == 0:
 						#如果之前选中了基地，再右击可被维修的单位，则发出维修指令
 						new_command = command.Fix(self.SelectedIndex.index, it.obj.index)
-						self.battle.add_command(new_command)
+						if self.SelectedIndex.index in self.attack_list.keys():
+							del self.attack_list[self.SelectedIndex.index]
+						self.command_list.append(new_command)
 					elif it.obj.kind in [0, 1] and self.SelectedIndex.kind in [6,7]:
 						#如果之前选中航母或运输舰，在右击基地或据点，则补给
 						new_command = command.Supply(self.SelectedIndex.index, it.obj.index)
-						self.battle.add_command(new_command)
+						if self.SelectedIndex.index in self.attack_list.keys():
+							del self.attack_list[self.SelectedIndex.index]
+						self.command_list.append(new_command)
 				#由于修理和补给指令的双方种类可能完全相同，所以只定义了右键点击可以修理以及单位向建筑物补给，对单位补给指令只能通过"s+左键"发出
 				elif isinstance(it, MapUnit):
 					if self.SelectedIndex.kind == 0 or self.SelectedIndex.kind == 1:
 						new_command = command.AttackPos(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
-						self.battle.add_command(new_command)
+						self.command_list.append(new_command)
+						self.attack_list[self.SelectedIndex.index] = new_command
 					elif self.SelectedIndex.kind >= 4:
 						new_command = command.ChangeDest(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
-						self.battle.add_command(new_command)
+						if self.SelectedIndex.index in self.attack_list.keys():
+							del self.attack_list[self.SelectedIndex.index]
+						self.command_list.append(new_command)
 				else:
 					return
 	'''
@@ -272,73 +300,94 @@ class Replay(QGraphicsView):
 			QGraphicsView.keyPressEvent(self, event)
 			return
 
+		key_list = [Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5, Qt.Key_6]
+
+		if event.key() in key_list:
+			new_command = command.Produce(event.key() - Qt.Key_1 + 4)
+			self.command_list.append(new_command)
+			return
+
 		if not self.SelectedIndex or self.SelectedIndex.kind in [2, 3]:
 			return
 
 		if event.key() == Qt.Key_Escape:
+			'''
 			if self.now_state in [self.State_A_Pressed, self.State_C_Pressed, self.State_F_Pressed, self.State_S_Pressed]:
 				self.EscPressed.emit()
 			elif self.now_state == self.State_Selected:
 				self.Unselected.emit()
 			else:
 				return
+			'''
+			if self.key_pressed:
+				self.key_pressed = 0
+			elif self.SelectedIndex:
+				self.SelectedIndex = None
+			else:
+				return
 
 		elif event.key() == Qt.Key_A:
 			if not self.HUMAN_REPLAY in [0, 1, 2]: 
 				return
-			elif self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY: 
+			if not self.SelectedIndex:
 				return
+			if self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY: 
+				return
+			'''
 			if self.now_state == self.State_Unselected:
 				return
-			elif self.SelectedIndex.kind in [0, 1, 4, 5, 6, 8, 9]:          #不知道能不能实现，不能的话交由平台管？
-				self.APressed.emit()
+			'''
+			if self.SelectedIndex.kind in [0, 1, 4, 5, 6, 8, 9]:          #不知道能不能实现，不能的话交由平台管？
+				self.key_pressed = 1
 			else:
 				return
 
 		elif event.key() == Qt.Key_F:
 			if not self.HUMAN_REPLAY in [0, 1, 2]:
 				return
-			elif self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
+			if not self.SelectedIndex:
 				return
-			if self.now_state == self.State_Unselected:
+			if self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
 				return
-			elif self.SelectedIndex.kind == 0:          
-				self.FPressed.emit()
+			if self.SelectedIndex.kind == 0:          
+				self.key_pressed = 2
 			else:
 				return
 
 		elif event.key() == Qt.Key_M:
 			if not self.HUMAN_REPLAY in [0, 1, 2]:
 				return
-			elif self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
+			if not self.SelectedIndex:
 				return
-			if self.now_state == self.State_Unselected:
+			if self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
 				return
-			elif self.SelectedIndex.kind >= 4:
-				self.MPressed.emit()
+			if self.SelectedIndex.kind >= 4:
+				self.key_pressed = 3
 			else:
 				return
 
 		elif event.key() == Qt.Key_S:
 			if not self.HUMAN_REPLAY in [0, 1, 2]:
 				return
-			if self.now_state == self.State_Unselected:
+			if not self.SelectedIndex:
 				return
-			elif self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
+			if self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
 				return
-			elif self.SelectedIndex.kind in [0, 1, 6, 7]:
-				self.SPressed.emit()
+			if self.SelectedIndex.kind in [0, 1, 6, 7]:
+				self.key_pressed = 4
 			else:
 				return
 
 		else:
 			return
 	
+	'''
 	def on_Entered(self):
 		now_state = self.sender()
 		if not isinstance(now_state, QState):
 			return
 		self.now_state = now_state
+	'''
 
 	def resetMap(self):
 		for item in self.MapList:
@@ -429,15 +478,28 @@ class Replay(QGraphicsView):
 		self.setUnit()
 		self.run = True
 
+		'''
 		if not self.stateMachine.isRunning():
+			print "try to open stateMachine, now it is ", self.stateMachine.isRunning()
 			self.stateMachine.start()
+			print "after open, it is", self.stateMachine.isRunning()
+		print "Initialize! stateMachine running? ", self.stateMachine.isRunning() 
+		'''
 
 	def attackAnimation(self, move_unit_index, attack_target_index, damage):
 		ATTACK_TIME = 10 * self.TIME_PER_STEP
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 
-		move_unit = self.battle.map_info().elements[move_unit_index]
-		attack_target = self.battle.map_info().elements[attack_target_index]
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == move_unit_index:
+					move_unit = soldier.obj
+					break			
+		for i in range(3):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == attack_target_index:
+					attack_target = soldier.obj
+					break
 
 		showAtkAnim = QParallelAnimationGroup()
 		move_effect = AttackEffectUnit(move_unit.position.x, move_unit.position.y, move_unit.position.z)
@@ -508,16 +570,16 @@ class Replay(QGraphicsView):
 		item = [move_effect, label, boom]
 		return showAtkAnim, item
 
-	def moveAnimation(self, move_unit_index, nodes, total_distance):
-		move_unit = self.battle.map_info().elements[move_unit_index]
+	def moveAnimation(self, move_unit_index, nodes, total_distance):		
 		moveAnim_mouse = None
 		flag2 = False
 		flag = False
-		for soldier in self.UnitBase[move_unit.team]:
-			if soldier.obj.index == move_unit_index:
-				move_effect = soldier
-				flag = True
-				break
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == move_unit_index:
+					move_effect = soldier
+					flag = True
+					break
 		if not flag:
 			return None, None, []
 		if self.SelectedIndex:
@@ -567,8 +629,16 @@ class Replay(QGraphicsView):
 	def supplyAnimation(self, supply_unit_index, supply_target_index, fuel_supply, ammo_supply, metal_supply):
 		TOTAL_TIME=20 * self.TIME_PER_STEP
 
-		supply_unit = self.battle.map_info().elements[supply_unit_index]
-		supply_target = self.battle.map_info().elements[supply_target_index]
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == supply_unit_index:
+					supply_unit = soldier.obj
+					break			
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == supply_target_index:
+					supply_target = soldier.obj
+					break
 		
 		showSplAnim = QParallelAnimationGroup()
 		
@@ -613,14 +683,22 @@ class Replay(QGraphicsView):
 	def fixAnimation(self, fix_unit_index, fix_target_index, metal_consumption, health_increase):
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 
-		fix_unit = self.battle.map_info().elements[fix_unit_index]
-		fix_target = self.battle.map_info().elements[fix_target_index]
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == fix_unit_index:
+					fix_unit = soldier.obj
+					break			
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == fix_target_index:
+					fix_target = soldier.obj
+					break			
 		
 		showFixAnim = QParallelAnimationGroup()
 		
 		#位置可能不对，再调
-		effect_unit = FixEffectUnit(supply_unit.position.x, supply_unit.position.y, supply_unit.position.z)
-		effect_unit.setPos(supply_unit.position.x, supply_unit.position.y, supply_unit.position.z)
+		effect_unit = FixEffectUnit(fix_unit.position.x, fix_unit.position.y, fix_unit.position.z)
+		effect_unit.setPos(fix_unit.position.x, fix_unit.position.y, fix_unit.position.z)
 		self.scene.addItem(effect_unit)
 		
 		ani = QPropertyAnimation(effect_unit, "opacity")
@@ -675,8 +753,15 @@ class Replay(QGraphicsView):
 	def collectAnimation(self, collect_unit_index, collect_target_index, fuel_collect, metal_collect):
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 
-		collect_unit = self.battle.map_info().elements[collect_unit_index]
-		collect_target = self.battle.map_info().elements[collect_target_index]
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == collect_unit_index:
+					collect_unit = soldier.obj
+					break			
+		for soldier in self.UnitBase[2]:
+			if soldier.obj.index == collect_target_index:
+				collect_target = soldier.obj
+				break			
 
 		showColAnim = QParallelAnimationGroup()
 
@@ -743,21 +828,25 @@ class Replay(QGraphicsView):
 
 	def destroyAnimation(self, destroyed_unit_index):
 		#要不要画个什么效果
+		print "unit destroyed!"
+		print
+		print
 
-		destroyed_unit = self.battle.map_info().elements[destroyed_unit_index]
-		for soldier in self.UnitBase[destroyed_unit.team]:
-			if soldier.obj.index == destroyed_unit_index:
-				destroyed_effect = soldier
-				break			
+		for i in range(2):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == destroyed_unit_index:
+					destroyed_effect = soldier
+					break			
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 		
 		destroyAnim = QPropertyAnimation(destroyed_effect, "opacity")
-		destoryAnim.setDuration(TOTAL_TIME)
+		destroyAnim.setDuration(TOTAL_TIME)
 		destroyAnim.setStartValue(1)
 		destroyAnim.setKeyValueAt(0.5, 0.5)
 		destroyAnim.setEndValue(0)
+		self.UnitBase[destroyed_effect.obj.team].remove(destroyed_effect)
 		
-		return destroyAnim,[destroyed_effect]
+		return destroyAnim,[]
 
 	def captureAnimation(self, target_unit_index, team):		
 		TOTAL_TIME=20 * self.TIME_PER_STEP
@@ -844,7 +933,13 @@ class Replay(QGraphicsView):
 	def Play(self, battle):
 		eventgroup = None
 		self.battle = battle
-		if self.HUMAN_REPLAY == 4:
+		if self.HUMAN_REPLAY in [0, 1]:
+			for command in self.command_list:
+				self.battle.add_command(command)
+			self.command_list = []
+			for command in self.attack_list.values():
+				self.command_list.append(command)
+		if self.HUMAN_REPLAY in [0, 1, 4]:
 			battle.feed_ai_commands()
 		eventgroup = self.battle.next_round()
 		#print "len:",len(eventgroup)
@@ -880,6 +975,10 @@ class Replay(QGraphicsView):
 					self.animation.addAnimation(ani)
 					self.CreateList.extend(item)
 				if isinstance(events, event.Destroy):
+					print "event destroyed!"
+					print
+					print 
+					print
 					ani, item = self.destroyAnimation(events.index)
 					self.animation.addAnimation(ani)
 					self.animationItem.extend(item)
@@ -933,10 +1032,7 @@ class Replay(QGraphicsView):
 		self.resetMap()
 		self.emit(SIGNAL("endGame()"))
 		self.frogIndex = -1
-		self.a_pressed = False
-		self.m_pressed = False
-		self.f_pressed = False
-		self.s_pressed = False
+		self.key_pressed = 0
 		self.changed = False
 		self.battle = None
 		self.now_state = None
@@ -960,3 +1056,5 @@ class Replay(QGraphicsView):
 		self.CreateList = []
 		self.MoveList = []
 		self.animationItem = []
+		self.command_list = []
+		self.attack_list = {}
