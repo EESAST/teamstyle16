@@ -236,6 +236,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 	@pyqtSlot()
 	def on_LoadFilePushButton_clicked(self):
 		fname = unicode(QFileDialog.getOpenFileName(self, QString.fromUtf8("加载回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)"))
+		print fname
 		if fname and fname!= self.repFileName:
 			try:
 				fileInfo = replayer.load(fname)
@@ -392,6 +393,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.RoundSlider.setRange(0,self.totalround)
 				self.fileInfo.goto(0)
 				self.synRoundSlider()
+			else:
+				self.totalround = self.fileInfo.map_info().max_round
 			self.CenterWidget.Initialize(self.fileInfo)
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
@@ -425,7 +428,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
 			if self.CenterWidget.HUMAN_REPLAY != 3:
 				choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
-				if choice == QMessageBox.Yes():
+				if choice == QMessageBox.Yes:
 					saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
 					try:
 						battle.Battle.save(self.fileInfo, saveFile)
@@ -483,6 +486,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.PlayPushButton.setEnabled(False)
 		self.RoundSlider.setRange(0, 0)
 		self.RoundLcdNumber.display(0)
+		del self.fileInfo
 		self.updateUi()
 
 	@pyqtSlot()

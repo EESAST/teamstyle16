@@ -49,6 +49,7 @@ class MapMakerReplayer(QGraphicsView):
 	    self.scale(factor, factor)
 
 	def createMap(self, num, population, round_):#num: 0对称方式 1地图大小 2陆海对比 3资源数量 4-9：6单位数量
+		print "get round:", round_
 		if not self.mapcreate.running:
 			self.mapcreate.run()
 		self.map = map_info.MapInfo(num[1][0], num[1][1], population, round_, 1, 1.0, num[10])
@@ -168,7 +169,22 @@ class MapMakerReplayer(QGraphicsView):
 				self.map.set_map_type(i[0], num[1][1] - i[1] - 1, 1)
 			else:
 				self.map.set_map_type(num[1][0] - i[0] - 1, num[1][1] - i[1] - 1, 1)
-		self.map.add_element(basic.Base(0, basic.Position(base_island[0][0] + 2, base_island[0][1] + 2)))
+		self.map.add_element(basic.Base(0, basic.Rectangle(basic.Position(base_island[0][0] + 1, base_island[0][1] + 1), basic.Position(base_island[0][0] + 3, base_island[0][1] + 3))))
+		near_water_flag = False
+		nr_list = []
+		for i in range(3):
+			if not base_island[0][i] in self.land_list:
+				near_water_flag = True
+				break
+			if not base_island[i][0] in self.land_list:
+				near_water_flag = True
+				break
+			nr_list.append(base_island[0][i])
+			nr_list.append(base_island[i][0])
+		if not near_water_flag:
+			create_sea = random.sample(nr_list, 2)
+			self.map.set_map_type(create_sea[0][0], create_sea[0][1], 0)
+			self.map.set_map_type(create_sea[1][0], create_sea[1][1], 0)
 		sourcelist = random.sample(self.near_sea_list, min(len(self.near_sea_list), min(num[3] * 3 + random.randint(5, 7), 12)))
 		planelist = random.sample(wholemap, num[8] + num[9])
 		shiplist = random.sample(self.water_list, num[5] + num[6] + num[7])
@@ -195,7 +211,7 @@ class MapMakerReplayer(QGraphicsView):
 		for i in fort_list:
 			self.map.add_element(basic.Fort(2, basic.Position(i[0], i[1])))
 		if num[0] == 0:
-			self.map.add_element(basic.Base(1, basic.Position(num[1][0] - base_island[0][0] - 3, base_island[0][1] + 2)))
+			self.map.add_element(basic.Base(1, basic.Rectangle(basic.Position(num[1][0] - base_island[0][0] - 4, base_island[0][1] + 1), basic.Position(num[1][0] - base_island[0][0] - 2, base_island[0][1] + 3))))
 			for i in range(len(sourcelist)):
 				if i < len(sourcelist) / 2:
 					self.map.add_element(basic.Mine(basic.Position(num[1][0] - sourcelist[i][0] - 1, sourcelist[i][1])))
@@ -218,7 +234,7 @@ class MapMakerReplayer(QGraphicsView):
 			for i in fort_list:
 				self.map.add_element(basic.Fort(2, basic.Position(num[1][0] - i[0] - 1, i[1])))
 		elif num[0] == 1:
-			self.map.add_element(basic.Base(1, basic.Position(base_island[0][0] + 2, num[1][1] - base_island[0][1] - 3)))
+			self.map.add_element(basic.Base(1, basic(basic.Position(base_island[0][0] + 1, num[1][1] - base_island[0][1] - 4),basic.Position(base_island[0][0] + 3, num[1][1] - base_island[0][1] - 2))))
 			for i in range(len(sourcelist)):
 				if i < len(sourcelist) / 2:
 					self.map.add_element(basic.Mine(basic.Position(sourcelist[i][0], num[1][1] - sourcelist[i][1] - 1)))
@@ -241,7 +257,7 @@ class MapMakerReplayer(QGraphicsView):
 			for i in fort_list:
 				self.map.add_element(basic.Fort(2, basic.Position(i[0], num[1][1] - i[1] - 1)))
 		else:
-			self.map.add_element(basic.Base(1, basic.Position(num[1][0] - base_island[0][0] - 3, num[1][1] - base_island[0][1] - 3)))
+			self.map.add_element(basic.Base(1, basic.Rectangle(basic.Position(num[1][0] - base_island[0][0] - 4, num[1][1] - base_island[0][1] - 4), basic.Position(num[1][0] - base_island[0][0] - 2, num[1][1] - base_island[0][1] - 2))))
 			for i in range(len(sourcelist)):
 				if i < len(sourcelist) / 2:
 					self.map.add_element(basic.Mine(basic.Position(num[1][0] - sourcelist[i][0] - 1, num[1][1] - sourcelist[i][1] - 1)))

@@ -27,6 +27,7 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.flag = flag
 		self.show = True
 		self.resetUnitInfo()
+		self.TeamLineEdit.setText("%d" %unit.team)
 		self.CoordinateLineEdit.setText("(%d, %d, %d)" %(unit.position.x,unit.position.y,unit.position.z))
 		self.TypeLineEdit.setText(QString.fromUtf8(NumToUnitType[unit.kind]))
 		if unit.kind == 2:

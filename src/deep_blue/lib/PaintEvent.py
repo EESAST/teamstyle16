@@ -226,7 +226,7 @@ class FrogUnit(AbstractUnit):
 		self.setOpacity(1.0)
 
 	def boundingRect(self):
-		return QRectF(0, 0, 30, 30)
+		return QRectF(0, 0, 30, 10)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()

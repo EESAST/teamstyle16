@@ -108,11 +108,11 @@ class Replay(QGraphicsView):
 		self.State_Run.setInitialState(self.State_Unselected)
 		self.State_Final = QFinalState(self.stateMachine)
 
-		self.statelist = [self.State_Unselected, self.State_Selected]
+		self.statelist = [self.State_Unselected, self.State_Selected, self.State_A_Pressed, self.State_F_Pressed, self.State_M_Pressed, self.State_S_Pressed]
 
 		self.State_Unselected.addTransition(self, SIGNAL("unitSelected()"), self.State_Selected)
 		self.State_Selected.addTransition(self, SIGNAL("mapSelected()"), self.State_Unselected)
-		self.State_Run.addTransition(self, SIGNAL("endGame()"), self.State_Final)
+		self.State_Unselected.addTransition(self, SIGNAL("endGame()"), self.State_Final)
 		self.State_Selected.addTransition(self, SIGNAL("Unselected()"), self.State_Unselected)
 		self.State_Selected.addTransition(self, SIGNAL("APressed()"), self.State_A_Pressed)
 		self.State_Selected.addTransition(self, SIGNAL("FPressed()"), self.State_F_Pressed)
@@ -128,7 +128,7 @@ class Replay(QGraphicsView):
 		左键单击选中单位：
 			键盘点击A，左键单击敌方单位————攻击单位
 			键盘点击A，左键单击地图元素————攻击地点
-			键盘点击C                  ————取消现有行动
+			键盘点击M                  ————移动
 			键盘点击F，左键点击本方单位————维修
 			键盘点击S，左键点击本方单位————补给
 			右键单击敌方单位           ————攻击单位
@@ -145,7 +145,7 @@ class Replay(QGraphicsView):
 			QGraphicsView.mousePressEvent(self, event)
 			return
 
-		if Qt.LeftButton:
+		if event.button() == Qt.LeftButton:
 			pos = event.pos()
 			items = self.items(pos)
 			focus = None
@@ -174,6 +174,7 @@ class Replay(QGraphicsView):
 			if not self.SelectedIndex:
 				return
 			#点击键盘后的左键指令只判断接收方是否符合要求，对发起方的要求在keyPressEvent中判断
+			print "judge state:", self.now_state == self.State_A_Pressed, self.now_state == self.State_F_Pressed, self.now_state == self.State_M_Pressed, self.now_state == self.State_S_Pressed
 			if self.now_state == self.State_A_Pressed:
 				flag = False
 				for it in items:
@@ -190,7 +191,6 @@ class Replay(QGraphicsView):
 						new_command = command.AttackPos(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
 						self.battle.add_command(new_command)
 			if self.now_state == self.State_F_Pressed:
-				flag = False
 				for it in items:
 					if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team and it.obj.kind in [4, 5, 6, 7, 8, 9]:
 						#self.emit(SIGNAL("fixTargetSelected"), it.obj)
@@ -202,16 +202,15 @@ class Replay(QGraphicsView):
 						new_command = command.ChangeDest(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
 						self.battle.add_command(new_command)
 			if self.now_state == self.State_S_Pressed:
-				flag = False
 				for it in items:
-					if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team and not it.obj.kind in [2, 3]: #认为除了矿井和和油田外的对象均能被补给
+					if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team: #认为除了矿井和和油田外的对象均能被补给
 						#self.emit(SINGAL("supplyTargetSelected"), it.obj)
 						new_command = command.Supply(self.SelectedIndex.index, it.obj.index)
 						self.battle.add_command(new_command)
 			
 		
 
-		if Qt.RightButton:
+		if event.button() == Qt.RightButton:
 			if not self.HUMAN_REPLAY in [0, 1, 2]:
 				return
 			if self.HUMAN_REPLAY in [0, 1]:
@@ -323,9 +322,9 @@ class Replay(QGraphicsView):
 		elif event.key() == Qt.Key_S:
 			if not self.HUMAN_REPLAY in [0, 1, 2]:
 				return
-			elif self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
-				return
 			if self.now_state == self.State_Unselected:
+				return
+			elif self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
 				return
 			elif self.SelectedIndex.kind in [0, 1, 6, 7]:
 				self.SPressed.emit()
