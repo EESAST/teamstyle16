@@ -216,7 +216,14 @@ class GameBody(object):
 
     def saves(self):
         """Save game to string"""
-        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self)
+        # Hide judge from json encoder
+        judge = self.judge
+        del self.judge
+        encoded_str = MyEncoder(sort_keys=True,
+                                separators=(',', ':')).encode(self)
+        self.judge = judge
+
+        return encoded_str
 
 def load(filename):
     """Read game from file"""
