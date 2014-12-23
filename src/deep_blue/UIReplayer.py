@@ -368,7 +368,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
 				self.CenterWidget.Play(self.fileInfo)
-				self.SmallMap.Initialize(self.fileInfo)
+				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
 				self.infoWidget1.setText(self.fileInfo)
 				self.infoWidget2.updateInfo(self.fileInfo)
 				self.RoundLcdNumber.display(self.fileInfo.round())
@@ -399,7 +399,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.Initialize(self.fileInfo)
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.SmallMap.Initialize(self.fileInfo)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
 			self.CenterWidget.Play(self.fileInfo)
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
@@ -442,7 +442,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			return
 		self.synRoundSlider()
 		self.CenterWidget.Play(self.fileInfo)
-		self.SmallMap.Initialize(self.fileInfo)
+		self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
 		self.CreateWidget.team1.Initialize(self.fileInfo)
 		self.CreateWidget.team2.Initialize(self.fileInfo)
 		self.infoWidget2.updateInfo(self.fileInfo)
@@ -459,7 +459,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.CenterWidget.Initialize(self.fileInfo)
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
-				self.SmallMap.Initialize(self.fileInfo)
+				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
 				if not self.isPaused:
 					self.CenterWidget.Play(self.fileInfo)
 				self.RoundLcdNumber.display(round_)
@@ -468,11 +468,11 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	@pyqtSlot()
 	def on_UpPushButton_clicked(self):
-		self.CenterWidget.scale(1.1,1.1)
+		self.CenterWidget.scale(1.25,1.25)
 
 	@pyqtSlot()
 	def on_DownPushButton_clicked(self):
-		self.CenterWidget.scale(0.9,0.9)
+		self.CenterWidget.scale(0.8,0.8)
 
 	@pyqtSlot()
 	def on_StopPushButton_clicked(self):

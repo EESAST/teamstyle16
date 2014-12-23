@@ -6,6 +6,7 @@ from lib.PaintEvent import *
 from platform import *
 from ui_mapmaker import *
 from mapreplayer import *
+from UIHelpdlg2 import *
 
 REPLAY_FILE_DIR = "."
 
@@ -19,6 +20,8 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.setFixedSize(self.size())
         palette.setBrush(QPalette.Window, QBrush(Qt.NoBrush))
         self.setPalette(palette)
+        self.helpdlg = HelpDialog(self)
+        self.helpdlg.setVisible(False)
 
         self.num = [0 for x in range(11)]
         self.num[1] = (30, 30)
@@ -41,6 +44,10 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.CenterLayout.addWidget(self.CenterWidget)
 
         self.create = False
+
+    @pyqtSlot()
+    def on_HelpButton_clicked(self):
+        self.helpdlg.setVisible(True)
 
     def get_population(self):
         return self.num[4] * 2 + self.num[5] * 3 + self.num[6] * 4 + self.num[7] + self.num[8] * 3 + self.num[9]
