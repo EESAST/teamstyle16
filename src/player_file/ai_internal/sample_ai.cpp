@@ -1,10 +1,12 @@
 #include "basic.h"
 #include<iostream>
 #include<cmath>
+#include<vector>
 
 
 // Remove this line if you konw C++, and don't want a dirty namespace
 using namespace teamstyle16;
+using namespace std;
 
 const char * GetTeamName()
 {
@@ -69,31 +71,36 @@ int produce_state[2];   //第一个表示路，中路，中上，中下，上，下分别为0-4
 						//第二个表示生产情况，生产顺序为潜艇，驱逐舰，飞机，飞机，侦察机
 						//初始化为-1，0
 int unit_union[4];   //即将生产出来的潜艇，驱逐舰，飞机，侦察机从属的集团，初始化为0 ；对于飞机，初始化为1，变为-1，变为2,变为-2等
+vector<int>Enemy_Indexes;
 
 
 void AIMain()
 {  
-	//回合开始时的初始化
+	while(1)
+	{
+		Update();
+		//回合开始时的初始化
 		init(); 
-	for(int i=0;i<INFO->element_num;i++)
-		if(GetState(INFO->elements[i])->team == INFO->team_num)
-		{
-			State Element = *GetState(INFO->elements[i]);
-			Supply_Repair(i); //该补给或维修就去补给，维修
-			Difference(i);    //判断刚出现的单位的从属
-			Attack(i);        //攻击
-			if(Element.type == BASE)
-				BaseAct();     //基地维修及生产
-			else if(Element.type == CARGO)
-				Cargo_Supply(i);   //运输舰补给
-			else ;
-			Forward(i);       //前进
-		}
-	MoveCargo();      //运输舰运动
-	for(int i=0;i<Info()->element_num;i++)
-		if(GetState(Info()->elements[i])->team == Info()->team_num)
-			FormerElement[i] = Info()->elements[i];
-	delete []enemy_element;
+		for(int i=0;i<INFO->element_num;i++)
+			if(GetState(INFO->elements[i])->team == INFO->team_num)
+			{
+				State Element = *GetState(INFO->elements[i]);
+				Supply_Repair(i); //该补给或维修就去补给，维修
+				Difference(i);    //判断刚出现的单位的从属
+				Attack(i);        //攻击
+				if(Element.type == BASE)
+					BaseAct();     //基地维修及生产
+				else if(Element.type == CARGO)
+					Cargo_Supply(i);   //运输舰补给
+				else ;
+				Forward(i);       //前进
+			}
+		MoveCargo();      //运输舰运动
+		for(int i=0;i<Info()->element_num;i++)
+			if(GetState(Info()->elements[i])->team == Info()->team_num)
+				FormerElement[i] = Info()->elements[i];
+		delete []enemy_element;
+	}
 }
 
 //初始化定义各种量的函数
@@ -135,15 +142,16 @@ void init()
 	enemy_num =0;
 	for(int i=0;i<Info()->element_num;i++)
 		if(GetState(Info()->elements[i])->team != Info()->team_num  && GetState(Info()->elements[i])->type != MINE && GetState(Info()->elements[i])->type != OILFIELD)
-			enemy_num += 1;
-	enemy_element = new State[enemy_num];
-	for(int i=0,j=0;i<Info()->element_num;i++)
-		if(GetState(Info()->elements[i])->team == 1-Info()->team_num ||
-			(GetState(Info()->elements[i])->type == FORT && GetState(Info()->elements[i])->team != Info()->team_num))   //无主据点
 		{
-			enemy_element[j] = *GetState(Info()->elements[i]);
-			j++;
+			enemy_num += 1;
+			Enemy_Indexes.push_back(i);
+		}	
+	enemy_element = new State[enemy_num];
+	for(int i=0; i<enemy_num; i++)
+		{
+			enemy_element[i] = *GetState(Info()->elements[Enemy_Indexes[i]]);
 		}
+	Enemy_Indexes.clear();
 }
 
 /////该补充燃料或者弹药的时候，或者血量太少需要回基地维修
@@ -397,10 +405,10 @@ void Attack(int index)
 		State *enemy = &enemy_element[i];
 		if(enemy->type == BASE && enemy->team == 1-INFO->team_num
 			&& DisToBase(Element.pos, enemy->pos) <= kElementInfos[Element.type].fire_ranges[SURFACE]
-			&& if_command(index,CommandType(ATTACKBASE -(enemy->type-BASE)),ElementType(enemy->type)))
+			&& if_command(index, ATTACKBASE, BASE))
 		{												//敌方基地
 			AttackUnit(Element.index,enemy->index);
-			command[index][0] = CommandType(ATTACKBASE);
+			command[index][0] = ATTACKBASE;
 			if(if_command(index, FORWARD))
 			{
 				ChangeDest(Element.index,minus(Element.pos,enemy->pos,kElementInfos[Element.type].fire_ranges[SURFACE]));
@@ -410,20 +418,8 @@ void Attack(int index)
 		}
 		if(distance(Element.pos, enemy->pos) <= kElementInfos[Element.type].fire_ranges[kElementInfos[enemy->type].level])
 		{	
-			if(enemy->type == FORT && enemy->team == 1-INFO->team_num
-				&& if_command(index,CommandType(ATTACKBASE -(enemy->type-BASE)),ElementType(enemy->type)))         //对方是敌方据点
-			{
-				AttackUnit(Element.index,enemy->index);
-				command[index][0] = CommandType(ATTACKFORT);
-				if(if_command(index,FORWARD))
-				{
-					ChangeDest(Element.index,minus(Element.pos,enemy->pos,kElementInfos[Element.type].fire_ranges[SURFACE]));
-					command[index][1] = FORWARD;
-				}
-				return;
-			}
-			if(enemy->type == FORT && enemy->team != 1-INFO->team_num 
-				&& if_command(index,ATTACKFORT,FORT))                                     //无主据点
+			if(enemy->type == FORT
+				&& if_command(index,ATTACKFORT,FORT))                                     //据点
 			{
 				AttackUnit(Element.index,enemy->index);
 				command[index][0] = ATTACKFORT;
@@ -434,14 +430,14 @@ void Attack(int index)
 				}
 				return;
 			}
-			if(health>enemy->health)   
+			if(health>enemy->health && if_command(index, ATTACKUNIT, ElementType(GetState(INFO->elements[enemy_index])->type)))   
 			{
-				health=enemy->health;
+				health=enemy->health;					//寻找血量最少的敌方单位
 				enemy_index=i;
 			}
 		}
 	}
-	if(enemy_index != -1 && if_command(index, ATTACKUNIT, ElementType(GetState(INFO->elements[enemy_index])->type)))
+	if(enemy_index != -1)
 	{
 		AttackUnit(Element.index, INFO->elements[enemy_index]);
 		command[index][0] = ATTACKUNIT;
