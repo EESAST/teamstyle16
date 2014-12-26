@@ -297,20 +297,34 @@ int GetNear(Position pos, ElementType type)
 //判断对该成员的该命令是否可以下达（如果已经下达更高级的指令则不可）
 int if_command(int i,CommandType type,ElementType target)
 {
-	if(GetState(INFO->elements[i])->type != BASE && (type == PRODUCE || type == FIX))return 0;      //生产和维修操作
-	if((GetState(INFO->elements[i])->type >= FIGHTER || GetState(INFO->elements[i])->type == SUBMARINE) && type <= SUPPLYUNIT)return 0;    //补给操作
 	if(type < FORWARD && type > command[i][0])  //非移动指令
 	{
-		if((target == BASE || target == FORT || target == FIGHTER || target == SCOUT) && GetState(INFO->elements[i])->type == SUBMARINE)
+		if(type == PRODUCE || type == FIX)     //生产和维修操作
+		{
+			if(GetState(INFO->elements[i])->type == BASE) return 1;
+			return 0;
+		}
+		if(type <= SUPPLYUNIT)      //补给操作
+		{
+			if(GetState(INFO->elements[i])->type >= FIGHTER 
+				|| GetState(INFO->elements[i])->type == DESTROYER 
+				|| GetState(INFO->elements[i])->type == SUBMARINE)
+				return 0;
+			return 1;
+		}
+		if((target <= FORT || target >= FIGHTER) 
+			&& GetState(INFO->elements[i])->type == SUBMARINE)
 			return 0;                       // 潜艇打基地，据点，飞机不可
-		if((GetState(INFO->elements[i])->type == BASE || GetState(INFO->elements[i])->type == FORT ) && target == SUBMARINE)
+		if(GetState(INFO->elements[i])->type <= FORT && target == SUBMARINE)
 			return 0;                               //基地，据点打潜艇不可
-		if(GetState(INFO->elements[i])->type == CARGO && type < ATTACKUNIT) return 0; //运输舰没有攻击力
+		if(GetState(INFO->elements[i])->type == CARGO && type >= ATTACKUNIT)
+			return 0; //运输舰没有攻击力
 		return 1;
 	}
 	if(type >= FORWARD && type > command[i][1])  //移动指令
 	{   
-		if(GetState(INFO->elements[i])->type == BASE || GetState(INFO->elements[i])->type == FORT)return 0;//基地和据点不能移动
+		if(GetState(INFO->elements[i])->type <= FORT)
+			return 0;//基地和据点不能移动
 		return 1;
 	}
 	return 0;
