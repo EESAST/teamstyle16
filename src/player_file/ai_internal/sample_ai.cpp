@@ -79,8 +79,6 @@ vector<int>Enemy_Indexes;
 
 void AIMain()
 {  
-	while(1)
-	{
 		TryUpdate();
 		//回合开始时的初始化
 		init(); 
@@ -107,7 +105,6 @@ void AIMain()
 			if(GetState(Info()->elements[i])->team == Info()->team_num)
 				FormerElement[i] = Info()->elements[i];
 		delete []enemy_element;
-	}
 }
 
 //初始化定义各种量的函数

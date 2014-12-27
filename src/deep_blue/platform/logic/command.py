@@ -155,7 +155,7 @@ class Produce(Command):
     def result_event(self, game):
         for element in game.map_info.elements.values():
             if isinstance(element, Base) and element.team == self.team:
-                element.metal -= PROPERTY[self.kind]['health_max'] * METAL_PER_HEALTH
+                element.metal -= int(PROPERTY[self.kind]['health_max'] * METAL_PER_HEALTH)
                 break
         game.production_lists[self.team].append([self.kind, basic.PROPERTY[self.kind]['build_round']])
         return [event.AddProductionEntry(self.team, self.kind)]

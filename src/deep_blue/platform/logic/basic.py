@@ -26,7 +26,7 @@ FORT_NUM_MAX = 10    # 据点最大数量
 MINE_NUM_MAX = 12   # 矿场最大数量
 OILFIELD_NUM_MAX = 12    # 油田最大数量
 POPULATION_MAX = 60    # 单方最大人口数
-INFINITY = float('inf')     # 正无穷, 大于任何有限数
+INFINITY = 20000 #float('inf')     # 正无穷, 大于任何有限数
 
 # 积分规则
 FORT_SCORE = 1      # 占领据点每回合奖励积分
@@ -431,9 +431,9 @@ def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
     else:
         fuel_supply_limit = ammo_supply_limit = SUPPLY_LIMIT
     provides = [0, 0]    # 维修者提供的燃料, 弹药
-    provides[0] = min(fuel, giver.fuel - giver.fuel_max * fuel_supply_limit,
+    provides[0] = min(fuel, int(giver.fuel - giver.fuel_max * fuel_supply_limit),
                             receiver.fuel_max - receiver.fuel)
-    provides[1] = min(ammo, giver.ammo - giver.ammo_max * ammo_supply_limit,
+    provides[1] = min(ammo, int(giver.ammo - giver.ammo_max * ammo_supply_limit),
                             receiver.ammo_max - receiver.ammo)
     giver.fuel -= provides[0]
     giver.ammo -= provides[1]
@@ -473,10 +473,10 @@ class Base(Building):
     def repair(self, our_unit):
         """维修"""
         result_events = []
-        provide_metal = min(self.metal, (our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)
+        provide_metal = min(self.metal, int((our_unit.health_max - our_unit.health) * METAL_PER_HEALTH))
         self.metal -= provide_metal
-        our_unit.health += provide_metal / METAL_PER_HEALTH
-        result_events.append(Fix(self.index, our_unit.index, provide_metal, provide_metal / METAL_PER_HEALTH))
+        our_unit.health += int(provide_metal / METAL_PER_HEALTH)
+        result_events.append(Fix(self.index, our_unit.index, provide_metal, int(provide_metal / METAL_PER_HEALTH)))
         result_events += self.supply(our_unit)
         return result_events
 
