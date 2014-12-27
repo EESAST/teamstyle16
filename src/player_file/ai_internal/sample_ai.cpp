@@ -38,6 +38,7 @@ enum CommandType
 };
 
 void init();//初始化定义各种量的函数
+void enemy_init();//根据Info()初始化当时的敌人
 void Supply_Repair(int i);/////该补充燃料或者弹药的时候，或者血量太少需要回基地维修
 Position minus(Position pos1,Position pos2,int fire_range);//返回pos1距pos2恰好相距fire_range的一个位置
 int damage(State victim,State attacker);//计算攻击的伤害
@@ -80,7 +81,7 @@ void AIMain()
 {  
 	while(1)
 	{
-		Update();
+		TryUpdate();
 		//回合开始时的初始化
 		init(); 
 		for(int i=0;i<INFO->element_num;i++)
@@ -89,7 +90,11 @@ void AIMain()
 				State Element = *GetState(INFO->elements[i]);
 				Supply_Repair(i); //该补给或维修就去补给，维修
 				Difference(i);    //判断刚出现的单位的从属
+
+				TryUpdate();
+				enemy_init();
 				Attack(i);        //攻击
+
 				if(Element.type == BASE)
 					BaseAct();     //基地维修，补给，生产
 				else if(Element.type == CARGO)
@@ -144,10 +149,17 @@ void init()
 	for(int i = 0; i<INFO->element_num; i++)
 		for(int j=0;j<2;j++)
 			command[i][j] = -1; 
+	enemy_init();
+}
+
+//根据Info()初始化当时的敌人
+void enemy_init()
+{
 	//敌方单位构建包括敌方单位和无主据点，不包括矿场和油田
 	enemy_num =0;
 	for(int i=0;i<Info()->element_num;i++)
-		if(GetState(Info()->elements[i])->team != Info()->team_num  && GetState(Info()->elements[i])->type != MINE && GetState(Info()->elements[i])->type != OILFIELD)
+		if(GetState(Info()->elements[i])->team != Info()->team_num  
+			&& GetState(Info()->elements[i])->type != MINE && GetState(Info()->elements[i])->type != OILFIELD)
 		{
 			enemy_num += 1;
 			Enemy_Indexes.push_back(i);
