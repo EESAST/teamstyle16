@@ -26,7 +26,7 @@ FORT_NUM_MAX = 10    # 据点最大数量
 MINE_NUM_MAX = 12   # 矿场最大数量
 OILFIELD_NUM_MAX = 12    # 油田最大数量
 POPULATION_MAX = 60    # 单方最大人口数
-INFINITY = 20000 #float('inf')     # 正无穷, 大于任何有限数
+INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 # 积分规则
 FORT_SCORE = 1      # 占领据点每回合奖励积分
