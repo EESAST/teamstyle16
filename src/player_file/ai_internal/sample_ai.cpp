@@ -6,8 +6,9 @@
 
 // Remove this line if you konw C++, and don't want a dirty namespace
 using namespace teamstyle16;
-using namespace std;
+using std::vector;
 
+#define INF 100
 const char * GetTeamName()
 {
     return "teamstyle16";  // Name of your team
@@ -57,11 +58,12 @@ void BaseProduce();///基地的生产
 void Forward(int index);////寻找最近的敌军前进，如果是运输船
 void Difference(int index);//判断刚被生产出来的时候单位的从属
 
+
 const GameInfo *INFO = Info();
 int enemy_num,DISTANCE;
 State * enemy_element;
 int (*command)[2];  //本回合发出的指令，一个效果指令，一个移动指令
-double parameter[10];
+double parameter[4];
 int FormerElement[100];  //上回合本方单位的index数组
 int cargo_index[2];  //两个补给基地的     初始化为-2，-1表示在生产
 int resource_defender[2];  //守在资源点潜艇，初始化为-2，-1表示在生产
@@ -89,7 +91,7 @@ void AIMain()
 				Difference(i);    //判断刚出现的单位的从属
 				Attack(i);        //攻击
 				if(Element.type == BASE)
-					BaseAct();     //基地维修及生产
+					BaseAct();     //基地维修，补给，生产
 				else if(Element.type == CARGO)
 					Cargo_Supply(i);   //运输舰补给
 				else ;
@@ -109,7 +111,11 @@ void init()
 	
 	if(INFO->round == 1)
 	{
-		parameter[0] = 0.1; parameter[1] = 0.3; parameter[2] = 0.3; parameter[3] = 0.2; parameter[4] = 0.5; 
+		parameter[0] = 0.3; //血量
+		parameter[1] = 0.3; //金属
+		parameter[2] = 0.3; //燃料
+		parameter[3] = 0.4; //弹药
+
 		cargo_index[0] = -2; cargo_index[1] = -2;
 		resource_defender[0] = -2; resource_defender[1] = -2;
 		base_defender[0] = -2; base_defender[1] = -2;
@@ -342,25 +348,30 @@ int if_command(int i,CommandType type,ElementType target)
 //对于回合开始时相距为1的单位进行补给
 void Cargo_Supply(int index)                           
 {
+	const State * element, *target;
+	element = GetState(INFO->elements[index]);
 	for(int j=0;j<INFO->element_num;j++)
 	{
-		if(distance(GetState(INFO->elements[index])->pos,GetState(INFO->elements[j])->pos) <= 1 
-			&& index!=j && GetState(INFO->elements[j])->team == INFO->team_num)
+		target = GetState(INFO->elements[j]);
+		if(distance(element->pos,GetState(INFO->elements[j])->pos) <= 1 
+			&& index!=j 
+			&& target->team == INFO->team_num
+			&& target->type != CARGO)
 		{
-			if(GetState(INFO->elements[index])->type > OILFIELD)command[index][0] = SUPPLYUNIT;
-			else if(GetState(INFO->elements[index])->type == FORT)command[index][0] = SUPPLYFORT;
-			else if(GetState(INFO->elements[index])->type == BASE)command[index][0] = SUPPLYBASE;
+			if(target->type > OILFIELD)command[index][0] = SUPPLYUNIT;
+			else if(target->type == FORT)command[index][0] = SUPPLYFORT;
+			else if(target->type == BASE)command[index][0] = SUPPLYBASE;
 			else continue;
-			Supply(INFO->elements[index], INFO->elements[j],-1,-1,-1);
-			break;
+			Supply(INFO->elements[index], INFO->elements[j],INF,INF,INF);
+			return;
 		}
-		else if(GetState(INFO->elements[index])->type == BASE //基地距离计算和其他单位不同
-			&& GetState(INFO->elements[j])->team == INFO->team_num
-			&& DisToBase(GetState(INFO->elements[index])->pos, GetState(INFO->elements[j])->pos) <= 1)
+		if(element->type == BASE //基地距离计算和其他单位不同
+			&& target->team == INFO->team_num
+			&& DisToBase(element->pos,target->pos) <= 1)
 		{
 			command[index][0] = SUPPLYBASE;
-			Supply(INFO->elements[index], INFO->elements[j],-1,-1,-1);
-			break;
+			Supply(INFO->elements[index], INFO->elements[j],INF,INF,INF);
+			return;
 		}
 	}	
 }
@@ -453,24 +464,36 @@ void Attack(int index)
 //基地的维修，生产
 void BaseAct()
 {
-	int index,health=1000;
+	int index = -1;
+	const State *target;
 	for(int i=0;i<INFO->element_num;i++)
 	{
-		if(DisToBase(GetState(INFO->elements[i])->pos, GetState(INFO->elements[GetBase(INFO->team_num)])->pos)<=1 && 
-			GetState(INFO->elements[i])->health < parameter[5]*kElementInfos[GetState(INFO->elements[i])->type].health_max
-			&& health>GetState(INFO->elements[i])->health && GetState(INFO->elements[i])->team == INFO->team_num)
+		target = GetState(INFO->elements[i]);
+		if(DisToBase(target->pos, GetState(INFO->elements[GetBase(INFO->team_num)])->pos)<=1 
+			&& target->team == INFO->team_num)
 		{
-			index = i;
-			health = GetState(INFO->elements[i])->health;
+			if(target->health < parameter[0]*kElementInfos[target->type].health_max)
+			{
+				if(if_command(GetBase(INFO->team_num),FIX) && index != -1)
+				{	
+					Fix(INFO->elements[GetBase(INFO->team_num)], index);
+					command[GetBase(INFO->team_num)][0] = FIX;
+					return;
+				}
+			}
+			else if(target->fuel < parameter[2]*kElementInfos[target->type].fuel_max
+					|| target->ammo < parameter[3]*kElementInfos[target->type].ammo_max)
+			{
+				if(if_command(GetBase(INFO->team_num),SUPPLYUNIT) && index != -1)
+				{	
+					Supply(INFO->elements[GetBase(INFO->team_num)], INFO->elements[i], INF, INF, INF);
+					command[GetBase(INFO->team_num)][0] = SUPPLYUNIT;
+					return;
+				}
+			}
 		}
 	}
-	if(if_command(GetBase(INFO->team_num),FIX) && health != 1000)
-	{	
-		Fix(INFO->elements[GetBase(INFO->team_num)], index);
-		command[GetBase(INFO->team_num)][0] = FIX;
-		return;
-	}
-		BaseProduce();   //生产命令
+	BaseProduce();   //生产命令
 }
 
 ///基地的生产
