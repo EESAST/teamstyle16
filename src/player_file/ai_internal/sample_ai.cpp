@@ -79,32 +79,32 @@ vector<int>Enemy_Indexes;
 
 void AIMain()
 {  
-		TryUpdate();
-		//回合开始时的初始化
-		init(); 
-		for(int i=0;i<INFO->element_num;i++)
-			if(GetState(INFO->elements[i])->team == INFO->team_num)
-			{
-				State Element = *GetState(INFO->elements[i]);
-				Supply_Repair(i); //该补给或维修就去补给，维修
-				Difference(i);    //判断刚出现的单位的从属
+	TryUpdate();
+	//回合开始时的初始化
+	init(); 
+	for(int i=0;i<INFO->element_num;i++)
+		if(GetState(INFO->elements[i])->team == INFO->team_num)
+		{
+			State Element = *GetState(INFO->elements[i]);
+			Supply_Repair(i); //该补给或维修就去补给，维修
+			Difference(i);    //判断刚出现的单位的从属
 
-				TryUpdate();
-				enemy_init();
-				Attack(i);        //攻击
+			TryUpdate();
+			enemy_init();
+			Attack(i);        //攻击
 
-				if(Element.type == BASE)
-					BaseAct();     //基地维修，补给，生产
-				else if(Element.type == CARGO)
-					Cargo_Supply(i);   //运输舰补给
-				else ;
-				Forward(i);       //前进
-			}
-		MoveCargo();      //运输舰运动
-		for(int i=0;i<Info()->element_num;i++)
-			if(GetState(Info()->elements[i])->team == Info()->team_num)
-				FormerElement[i] = Info()->elements[i];
-		delete []enemy_element;
+			if(Element.type == BASE)
+				BaseAct();     //基地维修，补给，生产
+			else if(Element.type == CARGO)
+				Cargo_Supply(i);   //运输舰补给
+			else ;
+			Forward(i);       //前进
+		}
+	MoveCargo();      //运输舰运动
+	for(int i=0;i<Info()->element_num;i++)
+		if(GetState(Info()->elements[i])->team == Info()->team_num)
+			FormerElement[i] = Info()->elements[i];
+	delete []enemy_element;
 }
 
 //初始化定义各种量的函数
