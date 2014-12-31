@@ -190,7 +190,9 @@ class Supply(Command):
         elements = game.map_info.elements
         giver = elements.get(self.operand)
         receiver = elements.get(self.target)
-        return giver.supply(receiver, self.fuel, self.ammo, self.metal)
+        if isinstance(giver, (Building, Cargo, Carrier)):
+            return giver.supply(receiver, self.fuel, self.ammo, self.metal)
+        return None
 
 class Cancel(Command):
     """取消"""
