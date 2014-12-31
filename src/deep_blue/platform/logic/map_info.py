@@ -92,7 +92,7 @@ class MapInfo(object):
             pos = queue.pop(0)
             if pos.distance(dest) < nearest.distance(dest):
                 nearest = pos
-            if pos == dest or len(queue) == 0:
+            if pos.distance(dest) == 0 or len(queue) == 0:
                 if len(queue) == 0:
                     pos = nearest
                 while pos is not origin:
