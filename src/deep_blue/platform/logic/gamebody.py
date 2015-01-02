@@ -164,7 +164,7 @@ class GameBody(object):
         all_commands = self.commands[0] + self.commands[1]
         all_commands.sort(cmp = compare_commands)
         for cmd in all_commands:
-            events += cmd.result_event(self)
+                events += cmd.result_event(self)
         elements = self.map_info.elements
         l = [(element.index, element.speed) for element in elements.values()
                     if hasattr(element, 'speed') and element.speed != None]

@@ -8,7 +8,7 @@
 using namespace teamstyle16;
 using std::vector;
 
-#define INF 100
+#define INF 1000
 const char * GetTeamName()
 {
     return "teamstyle16";  // Name of your team
@@ -41,7 +41,6 @@ void init();//初始化定义各种量的函数
 void enemy_init();//根据Info()初始化当时的敌人
 void Supply_Repair(int i);/////该补充燃料或者弹药的时候，或者血量太少需要回基地维修
 Position minus(Position pos1,Position pos2,int fire_range);//返回pos1距pos2恰好相距fire_range的一个位置
-int damage(State victim,State attacker);//计算攻击的伤害
 int if_in(int i,int *a,int len);//判断某个数是否在数组中
 int GetBase(int team);//获得己方或对方基地的索引
 int distance(Position pos1, Position pos2);//两点之间的距离
@@ -52,10 +51,10 @@ int min(int x, int y);//最小值
 int GetNear(Position pos, ElementType type);//获得距该位置最近的某类型单位的索引
 int if_command(int i,CommandType type,ElementType target = kElementTypes);//判断对该成员的该命令是否可以下达（如果已经下达更高级的指令则不可）
 void Cargo_Supply(int index);//对于回合开始时相距为1的单位进行补给
-void MoveCargo();//对于程序最后仍然没有命令的运输船，去资源点收集，或者回基地补给，或者呆在前线
+void MoveCargo(int i);//对于程序最后仍然没有命令的运输船，去资源点收集，或者回基地补给，或者呆在前线
 void Attack(int index);//寻找射程内的基地或据点，或选择血量最少的单位攻击,攻击后运动到距敌人恰好射程的地方
-void BaseAct();//基地的维修，生产
-void BaseProduce();///基地的生产
+void BaseAct(int index);//基地的维修，生产
+void BaseProduce(int index);///基地的生产
 void Forward(int index);////寻找最近的敌军前进，如果是运输船
 void Difference(int index);//判断刚被生产出来的时候单位的从属
 
@@ -85,32 +84,35 @@ void AIMain()
 	for(int i=0;i<INFO->element_num;i++)
 		if(GetState(INFO->elements[i])->team == INFO->team_num)
 		{
-			State Element = *GetState(INFO->elements[i]);
+			const State *Element = GetState(INFO->elements[i]);
 			Supply_Repair(i); //该补给或维修就去补给，维修
 			Difference(i);    //判断刚出现的单位的从属
 
-			TryUpdate();
-			enemy_init();
+			//TryUpdate();
+			//enemy_init();
 			Attack(i);        //攻击
 
-			if(Element.type == BASE)
-				BaseAct();     //基地维修，补给，生产
-			else if(Element.type == CARGO)
+			if(Element->type == BASE)
+				BaseAct(i);     //基地维修，补给，生产
+			else if(Element->type == CARGO)
+			{
 				Cargo_Supply(i);   //运输舰补给
+				MoveCargo(i);      //运输舰运动
+			}	
 			else ;
+
 			Forward(i);       //前进
 		}
-	MoveCargo();      //运输舰运动
-	for(int i=0;i<Info()->element_num;i++)
+
+	for(int i=0;i<Info()->element_num;i++)   //记录一回合结束时的单位，方便下一回合确定新生产出来的单位
 		if(GetState(Info()->elements[i])->team == Info()->team_num)
 			FormerElement[i] = Info()->elements[i];
-	delete []enemy_element;
+	delete []enemy_element;	
 }
 
 //初始化定义各种量的函数
 void init()
 {
-	
 	if(INFO->round == 1)
 	{
 		parameter[0] = 0.3; //血量
@@ -118,29 +120,41 @@ void init()
 		parameter[2] = 0.3; //燃料
 		parameter[3] = 0.4; //弹药
 
-		cargo_index[0] = -2; cargo_index[1] = -2;
-		resource_defender[0] = -2; resource_defender[1] = -2;
-		base_defender[0] = -2; base_defender[1] = -2;
-		produce_state[0] = -1; produce_state[1] = 0;
-		unit_union[0] = 0; unit_union[1] = 0; unit_union[2] = 0; unit_union[3] = 0;
+		cargo_index[0] = -2;  //补给基地的运输舰
+		cargo_index[1] = -2;
+
+		resource_defender[0] = -2;   //护卫资源的飞机
+		resource_defender[1] = -2;
+
+		base_defender[0] = -2;  //防守基地的潜艇
+		base_defender[1] = -2;
+
+		produce_state[0] = -1;   //生产情况
+		produce_state[1] = 0;
+
+		unit_union[0] = 0;   //生产出来的战斗单位从属的集团
+		unit_union[1] = 0;
+		unit_union[2] = 0;
+		unit_union[3] = 0;
 
 		//初始目的地
-		origin_target[0].x = INFO->x_max/2; origin_target[0].y = INFO->y_max/2; origin_target[0].x = 1;
-		for(int i = 0; i <= 1; i++)
+		origin_target[0].x = INFO->x_max/2;   //中路目的地
+		origin_target[0].y = INFO->y_max/2;
+		origin_target[0].z = 1;
+
+		for(int i = 0; i <= 1; i++)        //中上，中下路目的地
 		{
 			origin_target[1 + i].x = INFO->x_max/2 + (2 * i - 1)*INFO->x_max/4; 
 			origin_target[1 + i].y = INFO->y_max/2 - (2 * i - 1)*INFO->y_max/4; 
 			origin_target[1 + i].z = 1;
 		}
-		for(int i = 0; i <= 1; i++)
+
+		for(int i = 0; i <= 1; i++)  //上下路目的地
 		{
 			origin_target[3 + i].x = min(INFO->x_max/2 + (2 * i - 1)*INFO->x_max/2, INFO->x_max - 1); 
 			origin_target[3 + i].y = min(INFO->y_max/2 - (2 * i - 1)*INFO->y_max/2, INFO->y_max - 1); 
 			origin_target[3 + i].z = 1;
 		}
-		for(int i=0;i<Info()->element_num;i++)
-			if(GetState(Info()->elements[i])->team == Info()->team_num)
-				FormerElement[i] = Info()->elements[i];
 	}
 	command = new int[INFO->element_num][2];    //命令列表初始化
 	for(int i = 0; i<INFO->element_num; i++)
@@ -172,20 +186,37 @@ void enemy_init()
 /////该补充燃料或者弹药的时候，或者血量太少需要回基地维修
 void Supply_Repair(int i)
 {
-	State Element = *GetState(INFO->elements[i]);
-	if(Element.health < parameter[0] * kElementInfos[Element.type].health_max && if_command(i, RETURNBASE))
+	const State *Element = GetState(INFO->elements[i]);
+	if(Element->health < parameter[0] * kElementInfos[Element->type].health_max 
+		&& if_command(i, RETURNBASE))
 	{
-		ChangeDest(Element.index, GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
-		command[i][1] = max(command[i][1], RETURNBASE);
+		ChangeDest(Element->index, GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
+		command[i][1] = RETURNBASE;
 	}
-	else if((Element.ammo <  parameter[1]*kElementInfos[Element.type].ammo_max ||   //金属不足
-		Element.fuel < parameter[2]*kElementInfos[Element.type].fuel_max)          //燃料不足
-		&& if_command(i, CARGOSUPPLY))                                           //if_command
-	    {
-			int cargo_index = GetNear(Element.pos,CARGO);
-			ChangeDest(INFO->elements[cargo_index], Element.pos);
-			command[i][1] = CARGOSUPPLY;
+	else if((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max ||   //金属不足
+			Element->fuel < parameter[2]*kElementInfos[Element->type].fuel_max))          //燃料不足
+	{
+		int cargo_index = GetNear(Element->pos, CARGO);
+		if(cargo_index >= 0)
+		{
+			if(if_command(cargo_index, CARGOSUPPLY))
+			{
+				ChangeDest(INFO->elements[cargo_index], Element->pos);
+				command[cargo_index][1] = CARGOSUPPLY;	
+			}
+			else
+			{
+				ChangeDest(Element->index, GetState(INFO->elements[cargo_index])->pos);
+				command[i][1] = CARGOSUPPLY;
+			}
 		}
+		else
+		{
+			ChangeDest(Element->index, GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
+			command[i][1] = RETURNBASE;
+		}
+		
+	}
 	else;
 }
 
@@ -200,15 +231,6 @@ Position minus(Position pos1,Position pos2,int fire_range)
 
 }
 
-//计算攻击的伤害
-int damage(State victim,State attacker)
-{
-	int fire_range = kElementInfos[attacker.type].fire_ranges[kElementInfos[victim.type].level];
-	double coefficient = 1 - (distance(victim.pos,attacker.pos) - fire_range / 2) / (fire_range + 1) ;
-	return (int)((kElementInfos[attacker.type].attacks[0] + kElementInfos[attacker.type].attacks[1])*coefficient 
-		- (kElementInfos[attacker.type].defences[0] + kElementInfos[attacker.type].defences[1]));
-}
-
 //判断某个数是否在数组中
 int if_in(int i,int *a,int len)
 {
@@ -221,7 +243,6 @@ int if_in(int i,int *a,int len)
 //获得己方或对方基地的索引
 int GetBase(int team)
 {
-	const GameInfo *INFO = Info();
 	int i;
 	for(i=0; i<INFO->element_num; i++)
 		if(GetState(INFO->elements[i])->type == BASE && GetState(INFO->elements[i])->team == team)
@@ -251,11 +272,11 @@ int DisToBase(Position pos1, Position pos2)  //pos2表示基地左上角
 	else if(pos1.x > pos2.x +2)
 	{
 		if(pos1.y > pos2.y)
-			return abs(pos1.x - pos2.x + 2) + abs(pos1.y - pos2.y);
+			return abs(pos1.x - pos2.x - 2) + abs(pos1.y - pos2.y);
 		else if(pos1.y < pos2.y - 2)
-			return abs(pos1.x - pos2.x + 2) + abs(pos1.y - pos2.y + 2);
+			return abs(pos1.x - pos2.x - 2) + abs(pos1.y - pos2.y + 2);
 		else 
-			return abs(pos1.x - pos2.x + 2);
+			return abs(pos1.x - pos2.x - 2);
 	}
 	else
 	{
@@ -294,59 +315,61 @@ int GetNear(Position pos, ElementType type)
 {
 	int i,near_index = -1,min_distance = 10000;
 	for(i=0;i<INFO->element_num;i++)
+	{
+		const State *target = GetState(INFO->elements[i]);
+		if(target->type == type &&  distance(target->pos, pos)<min_distance)
 		{
-		if(GetState(INFO->elements[i])->team == INFO->team_num && GetState(INFO->elements[i])->type == type &&  distance(GetState(INFO->elements[i])->pos, pos)<min_distance 
-			&& type != OILFIELD && type!=MINE)
+			if( type == OILFIELD && target->fuel >= kElementInfos[CARGO].fuel_max) //油田还有石油
 			{
 				near_index = i;
-				min_distance = distance(GetState(INFO->elements[i])->pos, pos);
+				min_distance = distance(target->pos, pos);
 			}
-		else if(GetState(INFO->elements[i])->type == type &&  distance(GetState(INFO->elements[i])->pos, pos)<min_distance   //保证油田有油
-			&& type == OILFIELD && GetState(INFO->elements[i])->fuel >= kElementInfos[CARGO].fuel_max)
-		{
-			near_index = i;
-			min_distance = distance(GetState(INFO->elements[i])->pos, pos);
+			else if(type == MINE  && target->metal >= kElementInfos[CARGO].metal_max)//保证矿场还有金属
+			{
+				near_index = i;
+				min_distance = distance(target->pos, pos);
+			}
+			else if(target->team == INFO->team_num && type != OILFIELD && type!=MINE)
+			{
+				near_index = i;
+				min_distance = distance(target->pos, pos);
+			}
+			else ;
 		}
-		else if(GetState(INFO->elements[i])->type == type &&  distance(GetState(INFO->elements[i])->pos, pos)<min_distance //保证矿场还有金属
-			&& type == MINE  && GetState(INFO->elements[i])->metal >= kElementInfos[CARGO].metal_max)
-		{
-			near_index = i;
-			min_distance = distance(GetState(INFO->elements[i])->pos, pos);
-		}
-		}
+	}
 	return near_index;
 }
 
 //判断对该成员的该命令是否可以下达（如果已经下达更高级的指令则不可）
 int if_command(int i,CommandType type,ElementType target)
 {
+	const State *element = GetState(INFO->elements[i]);
 	if(type < FORWARD && type > command[i][0])  //非移动指令
 	{
 		if(type == PRODUCE || type == FIX)     //生产和维修操作
 		{
-			if(GetState(INFO->elements[i])->type == BASE) return 1;
+			if(element->type == BASE) return 1;
 			return 0;
 		}
-		if(type <= SUPPLYUNIT)      //补给操作
+		else if(type <= SUPPLYUNIT)      //补给操作
 		{
-			if(GetState(INFO->elements[i])->type >= FIGHTER 
-				|| GetState(INFO->elements[i])->type == DESTROYER 
-				|| GetState(INFO->elements[i])->type == SUBMARINE)
+			if(element->type >= FIGHTER 
+				|| element->type == DESTROYER 
+				|| element->type == SUBMARINE)
 				return 0;
 			return 1;
 		}
-		if((target <= FORT || target >= FIGHTER) 
-			&& GetState(INFO->elements[i])->type == SUBMARINE)
-			return 0;                       // 潜艇打基地，据点，飞机不可
-		if(GetState(INFO->elements[i])->type <= FORT && target == SUBMARINE)
-			return 0;                               //基地，据点打潜艇不可
-		if(GetState(INFO->elements[i])->type == CARGO && type >= ATTACKUNIT)
-			return 0; //运输舰没有攻击力
+		else if(target == kElementTypes)
+			return 1;
+		else if(kElementInfos[element->type].attacks[0] <= kElementInfos[target].defences[0]
+				&& kElementInfos[element->type].attacks[1] <= kElementInfos[target].defences[1])
+			return 0;
+		else ;
 		return 1;
 	}
 	if(type >= FORWARD && type > command[i][1])  //移动指令
 	{   
-		if(GetState(INFO->elements[i])->type <= FORT)
+		if(element->type <= FORT)
 			return 0;//基地和据点不能移动
 		return 1;
 	}
@@ -357,7 +380,7 @@ int if_command(int i,CommandType type,ElementType target)
 //对于回合开始时相距为1的单位进行补给
 void Cargo_Supply(int index)                           
 {
-	const State * element, *target;
+	const State *element, *target;
 	element = GetState(INFO->elements[index]);
 	for(int j=0;j<INFO->element_num;j++)
 	{
@@ -374,83 +397,78 @@ void Cargo_Supply(int index)
 			Supply(INFO->elements[index], INFO->elements[j],INF,INF,INF);
 			return;
 		}
-		if(element->type == BASE //基地距离计算和其他单位不同
-			&& target->team == INFO->team_num
-			&& DisToBase(element->pos,target->pos) <= 1)
-		{
-			command[index][0] = SUPPLYBASE;
-			Supply(INFO->elements[index], INFO->elements[j],INF,INF,INF);
-			return;
-		}
 	}	
 }
 
 //对于程序最后仍然没有命令的运输船，去资源点收集，或者回基地补给，或者呆在前线
-void MoveCargo()        
+void MoveCargo(int i)        
 {
-	for(int i=0;i<INFO->element_num;i++)
-		if(GetState(INFO->elements[i])->type == CARGO && GetState(INFO->elements[i])->team == INFO->team_num)
-		{
-		State Element = *GetState(INFO->elements[i]);
-		if(command[i][1] == -1 )
-			{
-				if(Element.fuel < 0.5 * kElementInfos[CARGO].fuel_max)          //燃料不足
-				{    ChangeDest(Element.index,GetState(INFO->elements[GetNear(Element.pos,OILFIELD)])->pos);
-					 command[i][1] = CARGOSUPPLY;
-				}
-				else if(Element.metal < 0.5 * kElementInfos[CARGO].metal_max)     //金属不足
-				{	ChangeDest(Element.index,GetState(INFO->elements[GetNear(Element.pos,MINE)])->pos);
-					command[i][1] = CARGOSUPPLY;
-				}
-				else if(if_in(Element.index, cargo_index,2))         //是补给基地的船
-				{	ChangeDest(Element.index,GetState(INFO->elements[GetBase(INFO->team_num)])->pos);   
-					command[i][1] = RETURNBASE;
-				}	
-				else                   //是补给前线的船
-				{
-					Forward(i);
-				}
-			}
+	const State *Element = GetState(INFO->elements[i]);
+	if(command[i][1] == -1 )
+	{
+		if(Element->fuel < 0.5 * kElementInfos[CARGO].fuel_max)          //燃料不足
+		{   
+			ChangeDest(Element->index,GetState(INFO->elements[GetNear(Element->pos,OILFIELD)])->pos);
+			command[i][1] = CARGOSUPPLY;
 		}
+		else if(Element->metal < 0.5 * kElementInfos[CARGO].metal_max)     //金属不足
+		{	
+			ChangeDest(Element->index,GetState(INFO->elements[GetNear(Element->pos,MINE)])->pos);
+			command[i][1] = CARGOSUPPLY;
+		}
+		else if(if_in(Element->index, cargo_index, 2))         //是补给基地的船
+		{	
+			ChangeDest(Element->index,GetState(INFO->elements[GetBase(INFO->team_num)])->pos);   
+			command[i][1] = RETURNBASE;
+		}	
+		else                   //是补给前线的船
+			Forward(i);
+	}
 }
 
 //寻找射程内的基地或据点，或选择血量最少的单位攻击,攻击后运动到距敌人恰好射程的地方
 void Attack(int index)
 {
-	State	Element = *GetState(INFO->elements[index]);
+	const State	*Element = GetState(INFO->elements[index]);
 	int health = 1000,enemy_index = -1;
-	if(!if_command(index,ATTACKUNIT))return;
+	if(!if_command(index,ATTACKBASE))
+		return;
 	for(int i=0;i<enemy_num;i++)
 	{
 		State *enemy = &enemy_element[i];
 		if(enemy->type == BASE && enemy->team == 1-INFO->team_num
-			&& DisToBase(Element.pos, enemy->pos) <= kElementInfos[Element.type].fire_ranges[SURFACE]
+			&& DisToBase(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[SURFACE]
 			&& if_command(index, ATTACKBASE, BASE))
 		{												//敌方基地
-			AttackUnit(Element.index,enemy->index);
+			AttackUnit(Element->index,enemy->index);
 			command[index][0] = ATTACKBASE;
 			if(if_command(index, FORWARD))
 			{
-				ChangeDest(Element.index,minus(Element.pos,enemy->pos,kElementInfos[Element.type].fire_ranges[SURFACE]));
+				ChangeDest(Element->index,
+					minus(Element->pos,enemy->pos,kElementInfos[Element->type].fire_ranges[SURFACE]));
 				command[index][1] = FORWARD;
 			}
 			return;
 		}
-		if(distance(Element.pos, enemy->pos) <= kElementInfos[Element.type].fire_ranges[kElementInfos[enemy->type].level])
+		if(distance(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[kElementInfos[enemy->type].level])
 		{	
 			if(enemy->type == FORT
 				&& if_command(index,ATTACKFORT,FORT))                                     //据点
 			{
-				AttackUnit(Element.index,enemy->index);
+				AttackUnit(Element->index,enemy->index);
 				command[index][0] = ATTACKFORT;
 				if(if_command(index,FORWARD))
 				{
-					ChangeDest(Element.index,minus(Element.pos,enemy->pos,kElementInfos[Element.type].fire_ranges[SURFACE]));
+					ChangeDest(Element->index,
+						minus(Element->pos,enemy->pos,kElementInfos[Element->type].fire_ranges[SURFACE]));
 					command[index][1] = FORWARD;
 				}
 				return;
 			}
-			if(health>enemy->health && if_command(index, ATTACKUNIT, ElementType(GetState(INFO->elements[enemy_index])->type)))   
+			if(health>enemy->health 
+				&& (enemy_index == -1 
+					|| (enemy_index >=0 && 
+					if_command(index, ATTACKUNIT, ElementType(enemy_element[enemy_index].type)))))   
 			{
 				health=enemy->health;					//寻找血量最少的敌方单位
 				enemy_index=i;
@@ -459,58 +477,56 @@ void Attack(int index)
 	}
 	if(enemy_index != -1)
 	{
-		AttackUnit(Element.index, INFO->elements[enemy_index]);
+		AttackUnit(Element->index, enemy_element[enemy_index].index);
 		command[index][0] = ATTACKUNIT;
 		if(if_command(index,FORWARD))
 		{
-			ChangeDest(Element.index, minus(Element.pos,enemy_element[enemy_index].pos,
-				kElementInfos[Element.type].fire_ranges[kElementInfos[enemy_element[enemy_index].type].level]));
+			ChangeDest(Element->index, minus(Element->pos,enemy_element[enemy_index].pos,
+				kElementInfos[Element->type].fire_ranges[kElementInfos[enemy_element[enemy_index].type].level]));
 			command[index][1] = FORWARD;
 		}
 	}
 }
 
 //基地的维修，生产
-void BaseAct()
+void BaseAct(int index)
 {
-	int index = -1;
 	const State *target;
 	for(int i=0;i<INFO->element_num;i++)
 	{
 		target = GetState(INFO->elements[i]);
-		if(DisToBase(target->pos, GetState(INFO->elements[GetBase(INFO->team_num)])->pos)<=1 
+		if(DisToBase(target->pos, GetState(INFO->elements[index])->pos)<=1 
 			&& target->team == INFO->team_num)
 		{
 			if(target->health < parameter[0]*kElementInfos[target->type].health_max)
 			{
-				if(if_command(GetBase(INFO->team_num),FIX) && index != -1)
+				if(if_command(index, FIX))
 				{	
-					Fix(INFO->elements[GetBase(INFO->team_num)], index);
-					command[GetBase(INFO->team_num)][0] = FIX;
+					Fix(INFO->elements[index], INFO->elements[i]);
+					command[index][0] = FIX;
 					return;
 				}
 			}
 			else if(target->fuel < parameter[2]*kElementInfos[target->type].fuel_max
 					|| target->ammo < parameter[3]*kElementInfos[target->type].ammo_max)
 			{
-				if(if_command(GetBase(INFO->team_num),SUPPLYUNIT) && index != -1)
+				if(if_command(index, SUPPLYUNIT))
 				{	
-					Supply(INFO->elements[GetBase(INFO->team_num)], INFO->elements[i], INF, INF, INF);
-					command[GetBase(INFO->team_num)][0] = SUPPLYUNIT;
+					Supply(INFO->elements[index], INFO->elements[i], INF, INF, INF);
+					command[index][0] = SUPPLYUNIT;
 					return;
 				}
 			}
 		}
 	}
-	BaseProduce();   //生产命令
+	BaseProduce(index);   //生产命令
 }
 
 ///基地的生产
-void BaseProduce()
+void BaseProduce(int index)
 {
-	int index = GetBase(INFO->team_num);
-	State Element =*GetState(INFO->elements[index]);
-	if(!if_command(index,PRODUCE))return;
+	State Element = *GetState(INFO->elements[index]);
+	if(!if_command(index, PRODUCE))return;
 	for(int i=0; i<2;i++)        //判断补给基地的两条船是否存活，不存活则直接生产运输舰
 	{
 		if(cargo_index[i] == -2 || (cargo_index[i]>=0 && !if_alive(cargo_index[i])))
@@ -526,21 +542,42 @@ void BaseProduce()
 	if(produce_state[0]<3 && produce_state[1]<= 4)         
 		switch(produce_state[1])
 		{
-			case 0:Produce(SUBMARINE);command[index][0] = PRODUCE;produce_state[1] += 1;return;
-			case 1: Produce(DESTROYER);command[index][0] = PRODUCE;produce_state[1] += 1;return;
+			case 0: Produce(SUBMARINE);
+					command[index][0] = PRODUCE;
+					produce_state[1] += 1;
+					return;
+			case 1: Produce(DESTROYER);
+					command[index][0] = PRODUCE;
+					produce_state[1] += 1;
+					return;
 			case 2:
-			case 3: Produce(FIGHTER);command[index][0] = PRODUCE;produce_state[1] += 1;return;
-			case 4: Produce(SCOUT);command[index][0] = PRODUCE;produce_state[0] += 1; return;
+			case 3: Produce(FIGHTER);
+					command[index][0] = PRODUCE;
+					produce_state[1] += 1;
+					return;
+			case 4: Produce(SCOUT);
+					command[index][0] = PRODUCE;
+					produce_state[0] += 1; 
+					return;
 			default:;
 		}
 
 	 //上下路的生产
-	if(produce_state[0]>= 3 && produce_state[0]<5 && produce_state[1] <= 2)        
+	if(produce_state[0]>= 3 && produce_state[0]<5)        
 		switch(produce_state[1])
 		{
-			case 0:
-			case 1: Produce(FIGHTER);command[index][0] = PRODUCE;produce_state[1] += 1;return;
-			case 2: Produce(SCOUT);command[index][0] = PRODUCE;produce_state[1] += 1;return;
+			case 0: 
+			case 1:
+			case 2:
+			case 3: Produce(FIGHTER);
+					command[index][0] = PRODUCE;
+					produce_state[1] += 1;
+					return;
+			case 4: Produce(SCOUT);
+					command[index][0] = PRODUCE;
+					produce_state[0] = produce_state[0] == 4 ? 0 :4;
+					produce_state[1] = 0;
+					return;
 			default:;
 		}
 
@@ -555,26 +592,33 @@ void BaseProduce()
 	}
 
 	//在中上路，和上路生产完后，生产战斗机去防守资源
-	if((produce_state[0] == 2 || produce_state[0] == 4)&& produce_state[1] == 5 && resource_defender[1] == -2 )
+	if((produce_state[0] == 2 || produce_state[0] == 4)&& produce_state[1] == 5 
+		&& (resource_defender[1] == -2     //防守资源的单位没有或者已经死了
+			|| (resource_defender[1] >= 0
+			&& ! if_alive(resource_defender[1]))))
 	{															
 		int i = resource_defender[0] == -2 ? 0 : 1;
 		Produce(FIGHTER);
 		command[index][0] = PRODUCE;
 		resource_defender[i] = -1;
 		produce_state[0] += 1;
-		if(produce_state[0] == 5)produce_state[0] = 1;
+		if(produce_state[0] == 5)produce_state[0] = 0;
 		produce_state[1] = 0;
 		return;
 	}
 
 	//生产潜艇防守基地
-	if(INFO->round > 5 && produce_state[0] == 0 && produce_state[1] == 5 && base_defender[1] == -2) 
+	if(INFO->round > 5 && produce_state[0] == 0 && produce_state[1] == 5
+		&& (base_defender[1] == -2     //防守资源的单位没有或者已经死了
+			|| (base_defender[1] >= 0
+			&& ! if_alive(base_defender[1]))))
 	{
 		int i = base_defender[0] == -2 ? 0 : 1;
 		Produce(SUBMARINE);
 		command[index][0] = PRODUCE;
-		resource_defender[i] = -1;
+		base_defender[i] = -1;
 		produce_state[0] += 1;
+		produce_state[1] = 0;
 	}
 
 }
@@ -585,30 +629,34 @@ void Forward(int index)
 	State Element = *GetState(INFO->elements[index]);
 	int Distance=1000; 
 	Position target;
-	if(!if_command(index,FORWARD))return;
+	if(!if_command(index, FORWARD))return;
 	if(Element.type == BASE || Element.type == FORT)
 		return;
 	else if(Element.type == CARGO && ! if_in(Element.index, cargo_index, 2))
 	{
 		for(int i=0;i<INFO->element_num;i++)
 			if(distance(Element.pos,GetState(INFO->elements[i])->pos) < Distance 
-				&& index!=i && GetState(INFO->elements[index])->team == INFO->team_num)
+				&& index!=i 
+				&& GetState(INFO->elements[i])->team == INFO->team_num)
 			{
-				Distance = distance(Element.pos,GetState(INFO->elements[i])->pos) < Distance ? distance(Element.pos,GetState(INFO->elements[i])->pos) : Distance;
+				Distance =  distance(Element.pos,GetState(INFO->elements[i])->pos);
 				target = GetState(INFO->elements[i])->pos;
 			}
 	}
 	else
 	{
 		for(int i=0;i<enemy_num;i++)
-			if(distance(Element.pos,enemy_element[i].pos) < Distance)
+			if(distance(Element.pos, enemy_element[i].pos) < Distance)
 			{
-				Distance = distance(Element.pos,enemy_element[i].pos) < Distance ? distance(Element.pos,enemy_element[i].pos) : Distance;
+				Distance = distance(Element.pos,enemy_element[i].pos);
 				target = enemy_element[i].pos;
 			}
 	}
-	ChangeDest(Element.index,target);
-	command[index][1] = FORWARD;
+	if(Distance != 1000)
+	{
+		ChangeDest(Element.index, target);
+		command[index][1] = FORWARD;	
+	}
 }
 
 //判断刚被生产出来的时候单位的从属
@@ -664,5 +712,4 @@ void Difference(int index)
 		else unit_union[3] += 1;
 		return;
 	}
-
 }

@@ -52,9 +52,13 @@ class AttackUnit(Command):
 
     def add_to(self, game):
         elements = game.map_info.elements
+        if not self.operand in elements.keys():
+            return False
+        if not self.target in elements.keys():
+            return False
         attacker = elements.get(self.operand)
         defender = elements.get(self.target)
-        if attacker == None or defender == None or attacker.kind == CARRIER:
+        if attacker == None or defender == None or attacker.kind == CARRIER or attacker.kind == CARGO:
             return False
         if hasattr(defender, 'team') is False or defender.team == attacker.team:
             return False
@@ -70,6 +74,8 @@ class AttackUnit(Command):
         return True
 
     def result_event(self, game):
+        if  not self.operand in game.map_info.elements.keys():
+            return []
         attacker = game.map_info.elements[self.operand]
         defender = game.map_info.elements[self.target]
         return attacker.attack(game, defender.pos)
@@ -125,6 +131,8 @@ class ChangeDest(Command):
         return True
 
     def result_event(self, game):
+        if  not self.operand in game.map_info.elements.keys():
+            return []
         mover = game.map_info.elements[self.operand]
         x_max = game.map_info.x_max
         y_max = game.map_info.y_max
@@ -192,7 +200,7 @@ class Supply(Command):
         receiver = elements.get(self.target)
         if isinstance(giver, (Building, Cargo, Carrier)):
             return giver.supply(receiver, self.fuel, self.ammo, self.metal)
-        return None
+        return []
 
 class Cancel(Command):
     """取消"""

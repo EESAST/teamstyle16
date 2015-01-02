@@ -433,7 +433,10 @@ def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
     provides = [0, 0]    # 维修者提供的燃料, 弹药
     provides[0] = min(fuel, int(giver.fuel - giver.fuel_max * fuel_supply_limit),
                             receiver.fuel_max - receiver.fuel)
-    provides[1] = min(ammo, int(giver.ammo - giver.ammo_max * ammo_supply_limit),
+    if giver.ammo == INFINITY:
+        provides[1] = min(ammo, receiver.ammo_max - receiver.ammo)
+    else:
+        provides[1] = min(ammo, int(giver.ammo - giver.ammo_max * ammo_supply_limit),
                             receiver.ammo_max - receiver.ammo)
     giver.fuel -= provides[0]
     giver.ammo -= provides[1]
