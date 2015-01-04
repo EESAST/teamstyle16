@@ -7,6 +7,8 @@
 // Remove this line if you konw C++, and don't want a dirty namespace
 using namespace teamstyle16;
 using std::vector;
+using std::cout;
+using std::endl;
 
 #define INF 1000
 const char * GetTeamName()
@@ -188,13 +190,14 @@ void Supply_Repair(int i)
 {
 	const State *Element = GetState(INFO->elements[i]);
 	if(Element->health < parameter[0] * kElementInfos[Element->type].health_max 
+		&& Element->health != -1
 		&& if_command(i, RETURNBASE))
 	{
 		ChangeDest(Element->index, GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
 		command[i][1] = RETURNBASE;
 	}
-	else if((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max ||   //金属不足
-			Element->fuel < parameter[2]*kElementInfos[Element->type].fuel_max))          //燃料不足
+	else if((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max && Element->ammo != -1) ||   //金属不足
+			Element->fuel < parameter[2]*kElementInfos[Element->type].fuel_max)          //燃料不足
 	{
 		int cargo_index = GetNear(Element->pos, CARGO);
 		if(cargo_index >= 0)
@@ -361,8 +364,10 @@ int if_command(int i,CommandType type,ElementType target)
 		}
 		else if(target == kElementTypes)
 			return 1;
-		else if(kElementInfos[element->type].attacks[0] <= kElementInfos[target].defences[0]
-				&& kElementInfos[element->type].attacks[1] <= kElementInfos[target].defences[1])
+		else if((kElementInfos[element->type].attacks[0] <= kElementInfos[target].defences[0] 
+					|| kElementInfos[target].defences[0] == -1)
+			&& (kElementInfos[element->type].attacks[1] <= kElementInfos[target].defences[1]
+					|| kElementInfos[target].defences[1] == -1))
 			return 0;
 		else ;
 		return 1;
@@ -436,6 +441,9 @@ void Attack(int index)
 	for(int i=0;i<enemy_num;i++)
 	{
 		State *enemy = &enemy_element[i];
+		cout<<Element->type<<" "<<enemy->type<<" "<<kElementInfos[enemy->type].level<<endl;
+		cout<<distance(Element->pos, enemy->pos)<<" "<<kElementInfos[Element->type].fire_ranges[kElementInfos[enemy->type].level]<<endl;
+		cout<<endl;
 		if(enemy->type == BASE && enemy->team == 1-INFO->team_num
 			&& DisToBase(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[SURFACE]
 			&& if_command(index, ATTACKBASE, BASE))
@@ -465,7 +473,7 @@ void Attack(int index)
 				}
 				return;
 			}
-			if(health>enemy->health 
+			if(health > enemy->health 
 				&& (enemy_index == -1 
 					|| (enemy_index >=0 && 
 					if_command(index, ATTACKUNIT, ElementType(enemy_element[enemy_index].type)))))   
@@ -496,9 +504,11 @@ void BaseAct(int index)
 	{
 		target = GetState(INFO->elements[i]);
 		if(DisToBase(target->pos, GetState(INFO->elements[index])->pos)<=1 
+			&& target->index != INFO->elements[index]
 			&& target->team == INFO->team_num)
 		{
-			if(target->health < parameter[0]*kElementInfos[target->type].health_max)
+			if(target->health < parameter[0]*kElementInfos[target->type].health_max
+				&& target->health != -1)
 			{
 				if(if_command(index, FIX))
 				{	
