@@ -41,7 +41,16 @@ class AttackPos(Command):
         return True
 
     def result_event(self, game):
-        attacker = game.map_info.elements[self.operand]
+        elements = game.map_info.elements
+        attacker = elements.get(self.operand)
+        if attacker == None or attacker.kind == CARGO:
+            return []
+        if self.pos.inMap(game.map_info) is False:
+            return []
+        if attacker.pos.distance(self.pos) > attacker.fire_ranges[self.pos.z]:
+            return []
+        if attacker.ammo < attacker.ammo_once:
+            return []
         return attacker.attack(game, self.pos)
 
 class AttackUnit(Command):
@@ -52,10 +61,6 @@ class AttackUnit(Command):
 
     def add_to(self, game):
         elements = game.map_info.elements
-        if not self.operand in elements.keys():
-            return False
-        if not self.target in elements.keys():
-            return False
         attacker = elements.get(self.operand)
         defender = elements.get(self.target)
         if attacker == None or defender == None or attacker.kind == CARRIER or attacker.kind == CARGO:
@@ -74,10 +79,17 @@ class AttackUnit(Command):
         return True
 
     def result_event(self, game):
-        if  not self.operand in game.map_info.elements.keys():
+        elements = game.map_info.elements
+        attacker = elements.get(self.operand)
+        defender = elements.get(self.target)
+        if attacker == None or defender == None or attacker.kind == CARRIER or attacker.kind == CARGO:
             return []
-        attacker = game.map_info.elements[self.operand]
-        defender = game.map_info.elements[self.target]
+        if hasattr(defender, 'team') is False or defender.team == attacker.team:
+            return []
+        if attacker.pos.distance(defender.pos) > attacker.fire_ranges[defender.pos.z]:
+            return []
+        if attacker.ammo < attacker.ammo_once:
+            return []
         return attacker.attack(game, defender.pos)
 
 class Fix(Command):
@@ -107,8 +119,16 @@ class Fix(Command):
 
     def result_event(self, game):
         elements = game.map_info.elements
-        fixer = elements[self.operand]
-        broken = elements[self.target]
+        fixer = elements.get(self.operand)
+        broken = elements.get(self.target)
+        if fixer == None or broken == None or fixer.kind != BASE:
+            return []
+        if fixer.team != broken.team:
+            return []
+        if isinstance(broken, Plane) and fixer.pos.distance(broken.pos) > 0:
+            return []
+        if fixer.pos.distance(broken.pos) > 1:
+            return []
         return fixer.repair(broken)
         
 class ChangeDest(Command):
@@ -131,9 +151,9 @@ class ChangeDest(Command):
         return True
 
     def result_event(self, game):
-        if  not self.operand in game.map_info.elements.keys():
+        mover = game.map_info.elements.get(self.operand)
+        if mover == None or not isinstance(mover, Unit):
             return []
-        mover = game.map_info.elements[self.operand]
         x_max = game.map_info.x_max
         y_max = game.map_info.y_max
         self.dest.x = min(x_max, max(0, self.dest.x))
@@ -198,6 +218,12 @@ class Supply(Command):
         elements = game.map_info.elements
         giver = elements.get(self.operand)
         receiver = elements.get(self.target)
+        if giver == None or receiver == None or giver.kind not in [BASE, FORT, CARRIER, CARGO]:
+            return []
+        if giver.team != receiver.team:
+            return []
+        if (isinstance(receiver, Plane) and giver.pos.distance(receiver.pos) > 0) or giver.pos.distance(receiver.pos) > 1:
+            return []
         if isinstance(giver, (Building, Cargo, Carrier)):
             return giver.supply(receiver, self.fuel, self.ammo, self.metal)
         return []
