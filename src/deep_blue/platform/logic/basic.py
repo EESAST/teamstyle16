@@ -560,7 +560,7 @@ class Unit(UnitBase):
                 if isinstance(near_element, Resource):
                     collect_event = self.collect(near_element)
                     events += collect_event
-                    game.scores[self.team] += (max(collect_event[0].fuel, collect_event[0].metal)
+                    game.scores[self.team] += (max(collect_event[0].fuel, collect_event[0].metal) * COLLECT_SCORE
                         if len(collect_event) != 0)
 
         # fuel
