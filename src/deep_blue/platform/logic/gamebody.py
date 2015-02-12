@@ -203,6 +203,11 @@ class GameBody(object):
                                         events.append(Create(index, entry[0], point))
                                         break
                             break
+        # Fort score
+        for element in self.map_info.elements.keys():
+            if element.kind == FORT and (element.team == 0 or element.team == 1):
+                self.scores[element.team] += FORT_SCORE
+
         self.commands = [[], []]
 
         # Update state
