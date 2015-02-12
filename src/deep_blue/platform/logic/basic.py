@@ -558,7 +558,10 @@ class Unit(UnitBase):
             for point in self.pos.region(level = SURFACE, range = 1):
                 near_element = game.map_info.element(point)
                 if isinstance(near_element, Resource):
-                    events += self.collect(near_element)
+                    collect_event = self.collect(near_element)
+                    events += collect_event
+                    game.scores[self.team] += (max(collect_event[0].fuel, collect_event[0].metal)
+                        if len(collect_event) != 0)
 
         # fuel
         if isinstance(self, Plane):
