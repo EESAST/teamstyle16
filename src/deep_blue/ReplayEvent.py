@@ -155,14 +155,22 @@ class Replay(QGraphicsView):
 			pos = event.pos()
 			items = self.items(pos)
 			focus = None
+			temp = None
 			if not items:
 				return
 			if self.key_pressed == 0:
 				for it in items:
 					if isinstance(it, SoldierUnit):
-						self.emit(SIGNAL("unitSelected"),it.obj,self.HUMAN_REPLAY,self.battle)
-						self.SelectedIndex = it.obj #此变量的作用是识别被选定单位的队伍，以判定是否可以发出攻击指令，待修改
-						focus = it
+						if not temp:
+							temp = it.obj
+							self.emit(SIGNAL("unitSelected"),it.obj,self.HUMAN_REPLAY,self.battle)
+							self.SelectedIndex = it.obj #此变量的作用是识别被选定单位的队伍，以判定是否可以发出攻击指令，待修改
+							focus = it
+						else:
+							if it.obj.kind:
+								self.emit(SIGNAL("unitSelected"),it.obj,self.HUMAN_REPLAY,self.battle)
+								self.SelectedIndex = it.obj #此变量的作用是识别被选定单位的队伍，以判定是否可以发出攻击指令，待修改
+								focus = it
 					elif isinstance(it, MapUnit):
 						self.emit(SIGNAL("mapSelected"), it.obj)
 				if focus:
