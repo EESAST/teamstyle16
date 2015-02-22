@@ -15,6 +15,7 @@
 # 以下所有数据暂时并无理论依据...
 
 from copy import deepcopy
+from math import ceil
 from random import random, choice
 from Queue import Queue
 from event import *
@@ -476,10 +477,14 @@ class Base(Building):
     def repair(self, our_unit):
         """维修"""
         result_events = []
-        provide_metal = min(self.metal, int((our_unit.health_max - our_unit.health) * METAL_PER_HEALTH))
+
+        provide_metal = min(self.metal, int(ceil((our_unit.health_max - our_unit.health) * METAL_PER_HEALTH)))
         self.metal -= provide_metal
-        our_unit.health += int(provide_metal / METAL_PER_HEALTH)
-        result_events.append(Fix(self.index, our_unit.index, provide_metal, int(provide_metal / METAL_PER_HEALTH)))
+        new_health = min(our_unit.health_max,
+                         our_unit.health + int(provide_metal / METAL_PER_HEALTH))
+        result_events.append(Fix(self.index, our_unit.index, provide_metal, new_health - our_unit.health))
+        our_unit.health = new_health
+
         result_events += self.supply(our_unit)
         return result_events
 
