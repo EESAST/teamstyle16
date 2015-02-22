@@ -204,7 +204,7 @@ class GameBody(object):
                                         break
                             break
         # Fort score
-        for element in self.map_info.elements.keys():
+        for element in self.map_info.elements.values():
             if element.kind == FORT and (element.team == 0 or element.team == 1):
                 self.scores[element.team] += FORT_SCORE
 
