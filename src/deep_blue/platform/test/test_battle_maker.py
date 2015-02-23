@@ -96,8 +96,83 @@ def test_fix():
     save(b, "test_fix")
 
 
-# TODO: Test Attack
+def test_supply():
+    m = deepcopy(MAP)
+
+    fort0 = m.elements[8362]
+    fort1 = m.elements[7858]
+    base0 = m.elements[2351]
+    base1 = m.elements[2922]
+
+    fort0.team = 0
+    fort1.team = 1
+    fort0.metal = fort0.metal_max = 9999999
+    fort0.ammo = fort0.ammo_max = 9999999
+    fort0.fuel = fort0.fuel_max = 9999999
+    base0.metal = base0.metal_max = 9999999
+    base0.fuel = base0.fuel_max = 9999999
+    base1.metal = base1.fuel = 1
+
+
+    # Add Units
+    eles = []
+    # Supply from carrier
+    eles.append(
+        (add(m, Carrier, 0, (0, 0)),
+         add(m, Submarine, 0, (0, 0), ammo=1, fuel=1)))
+    eles.append(
+        (add(m, Carrier, 0, (2, 0)),
+         add(m, Fighter, 0, (2, 0), ammo=1, fuel=5)))
+    eles.append(
+        (add(m, Carrier, 0, (4, 0)),
+         add(m, Destroyer, 0, (4, 1), ammo=1, fuel=5)))
+    # Supply from cargo
+    eles.append(
+        (add(m, Cargo, 0, (8, 0)),
+         add(m, Submarine, 0, (8, 1), ammo=1, fuel=1)))
+    eles.append(
+        (add(m, Cargo, 0, (10, 0)),
+         add(m, Destroyer, 0, (10, 1), ammo=1, fuel=5)))
+    # Supply from base
+    eles.append(
+        (base0,
+         add(m, Submarine, 0, (30, 29), ammo=1, fuel=1)))
+    eles.append(
+        (base0,
+         add(m, Fighter, 0, (30, 31), ammo=1, fuel=5)))
+    eles.append(
+        (base0,
+         add(m, Cargo, 0, (31, 29), ammo=1, fuel=5, metal=1)))
+    # Supply from fort
+    eles.append(
+        (fort0,
+         add(m, Submarine, 0, (41, 40), ammo=1, fuel=1)))
+    eles.append(
+        (fort0,
+         add(m, Fighter, 0, (41, 41), ammo=1, fuel=5)))
+    eles.append(
+        (fort0,
+         add(m, Cargo, 0, (42, 40), ammo=1, fuel=5, metal=1)))
+    # Supply to base
+    eles.append(
+        (add(m, Cargo, 1, (59, 60)),
+         base1))
+
+    plans = [[0, 1, 2, 3, 4, 5, 8, 11], [6, 9], [7, 10]]
+
+    b = battle.Battle(m, 'Test team 1', 'Test team 2')
+
+    for plan in plans:
+        for i in plan:
+            operand, target = eles[i]
+            b.set_command(operand.team, command.Supply(operand.index,
+                                                       target.index))
+        b.next_round()
+
+    save(b, "test_supply")
+
 
 if __name__ == '__main__':
     test_move()
     test_fix()
+    test_supply()
