@@ -54,6 +54,8 @@ def test_move():
 
 def test_fix():
     m = deepcopy(MAP)
+
+    m.elements[2351].metal = 9999999  # Provide enough metal
     # Add Units
     eles = []
     eles.append(add(m, Submarine, 0, (29, 30), health=1))
@@ -67,9 +69,6 @@ def test_fix():
     scout = eles[4].index
 
     b = battle.Battle(m, 'Test team 1', 'Test team 2')
-
-    # Provide enough metal
-    b.gamebody.map_info.elements[2351].metal = 9999999
 
     while True:
         if b.round() % 2 == 0:
