@@ -243,7 +243,6 @@ class Replay(QGraphicsView):
 			if self.HUMAN_REPLAY in [0, 1]:
 				if self.SelectedIndex.team != self.HUMAN_REPLAY:
 					return
-			print "in right button! now:",self.HUMAN_REPLAY, self.SelectedIndex.team
 			pos = event.pos()
 			items = self.items(pos)
 			if not items:
@@ -425,7 +424,6 @@ class Replay(QGraphicsView):
 		#self.setUnit()
 
 	def setFrog(self, index):
-		print "paint frog"
 		self.resetFrog()
 		frog = self.battle.vision(index)
 		for k in range(3):
@@ -735,7 +733,7 @@ class Replay(QGraphicsView):
 		
 		ani = QPropertyAnimation(fix_label, "pos")
 		ani.setDuration(TOTAL_TIME)
-		pos1 = label.pos()
+		pos1 = fix_label.pos()
 		ani.setStartValue(pos1)
 		ani.setKeyValueAt(0.5, pos1)
 		ani.setEndValue(pos1 + QPointF(0, -10))
@@ -836,9 +834,6 @@ class Replay(QGraphicsView):
 
 	def destroyAnimation(self, destroyed_unit_index):
 		#要不要画个什么效果
-		print "unit destroyed!"
-		print
-		print
 
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
@@ -987,10 +982,6 @@ class Replay(QGraphicsView):
 					self.animation.addAnimation(ani)
 					self.CreateList.extend(item)
 				if isinstance(events, event.Destroy):
-					print "event destroyed!"
-					print
-					print 
-					print
 					ani, item = self.destroyAnimation(events.index)
 					self.animation.addAnimation(ani)
 					self.animationItem.extend(item)
@@ -1006,7 +997,6 @@ class Replay(QGraphicsView):
 		self.connect(self.animation, SIGNAL("finished()"), self.moveAnimEnd)
 		#self.connect(self.animation, SIGNAL("finished()"), self.animation, SLOT("deleteLater()"))
 		self.animation.start()
-		print "start animation"
 		eventgroup = None
 		if self.frogIndex == 0:
 			self.setFrog(0)
@@ -1015,7 +1005,6 @@ class Replay(QGraphicsView):
 		#self.moveAnimEnd.emit()
 			
 	def TerminateAni(self):
-		print "use TerminateAni"
 		if self.animation:
 			self.animation.stop()
 			self.animation.deleteLater()
