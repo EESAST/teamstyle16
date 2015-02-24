@@ -200,6 +200,7 @@ class GameBody(object):
                                         class_ = getattr(basic, class_name)
                                         new_element = class_(team_index, point)
                                         index = self.map_info.add_element(new_element)
+                                        self.populations[team_index] += new_element.population
                                         events.append(Create(index, entry[0], point))
                                         break
                             break
