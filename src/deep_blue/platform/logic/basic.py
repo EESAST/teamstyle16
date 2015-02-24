@@ -429,6 +429,9 @@ def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
     elif giver.kind == CARGO:
         fuel_supply_limit = SUPPLY_LIMIT
         ammo_supply_limit = 0
+    elif receiver.kind == BASE:
+        fuel_supply_limit = SUPPLY_LIMIT
+        ammo_supply_limit = 1
     else:
         fuel_supply_limit = ammo_supply_limit = SUPPLY_LIMIT
     provides = [0, 0]    # 维修者提供的燃料, 弹药
@@ -437,7 +440,7 @@ def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
     if giver.ammo == INFINITY:
         provides[1] = min(ammo, receiver.ammo_max - receiver.ammo)
     else:
-        provides[1] = min(ammo, int(giver.ammo - giver.ammo_max * ammo_supply_limit),
+        provides[1] = min(ammo, max(0, int(giver.ammo - giver.ammo_max * ammo_supply_limit)),
                             receiver.ammo_max - receiver.ammo)
     giver.fuel -= provides[0]
     giver.ammo -= provides[1]
