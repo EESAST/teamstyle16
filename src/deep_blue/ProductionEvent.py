@@ -70,7 +70,7 @@ class ProductionReplay(QGraphicsView):
 			items = self.items(pos)
 
 			for it in items:
-				if isinstance(it, SoldierUnit):
+				if isinstance(it, SoldierMakerUnit):
 					print "in mousePressEvent!4"
 					new_command = command.Produce(it.obj.kind)
 					self.battle.add_command(new_command)
@@ -124,21 +124,24 @@ class ProductionReplay(QGraphicsView):
 			self.scene.addItem(new_unit)
 
 
-		now_list = [[9999,9999,9999,9999,9999,9999],[9999,9999,9999,9999,9999,9999]]
+		now_list = [9999,9999,9999,9999,9999,9999]
 
-		for prod in battle.production_list(0):
-			if prod[1] < now_list[0][prod[0] - 4] and now_list[0][prod[0] - 4] != 0:
-				now_list[0][prod[0] - 4] = prod[1]
+		if self.HUMAN_REPLAY in [0, 1]:
+			if self.index == self.HUMAN_REPLAY:
+				for prod in battle.production_list(self.index):
+					if prod[1] < now_list[prod[0] - 4] and now_list[prod[0] - 4] != 0:
+						now_list[prod[0] - 4] = prod[1]
 
-		for prod in battle.production_list(1):
-			if prod[1] < now_list[1][prod[0] - 4] and now_list[1][prod[0] - 4] != 0:
-				now_list[1][prod[0] - 4] = prod[1]
+		else:
+			for prod in battle.production_list(self.index):
+					if prod[1] < now_list[prod[0] - 4] and now_list[prod[0] - 4] != 0:
+						now_list[prod[0] - 4] = prod[1]
 
 		for i in range(6):
-			if now_list[0][i] == 9999:
+			if now_list[i] == 9999:
 				number = EffectIndUnit("0")
 			else:
-				number = EffectIndUnit("%d" %now_list[0][i])
+				number = EffectIndUnit("%d" %now_list[i])
 			if i < 3:
 				number.setPos(i*60, 30)
 			else:

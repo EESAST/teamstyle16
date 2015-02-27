@@ -16,7 +16,6 @@ LINE_WIDTH = 1
 CHOSEN_WIDTH = 50
 CHOSEN_HEIGHT = 50
 #for test
-fil = open("test.txt","w")
 
 FILE_UNIT = [["base","fort","mine","oilfield","submarine","destroyer","carrier","cargo","fighter","scout"],["base2","fort2","mine2","oilfield2","submarine2","destroyer2","carrier2","cargo2","fighter2","scout2"],["base2","fort1","mine","oilfield","submarine2","destroyer2","carrier2","cargo2","fighter2","scout2"]]
 FILE_MAP = ["water","land"]

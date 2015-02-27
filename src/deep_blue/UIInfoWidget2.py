@@ -44,7 +44,7 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 			self.AmmoLineEdit.setText("%.1f/%.1f/%.1f" %(unit.ammo_once,unit.ammo,unit.ammo_max))
 		self.DefenceLineEdit.setText("%.1f/%.1f" %(unit.defences[0],unit.defences[1]))
 		self.SightRangeLineEdit.setText("%d/%d/%d" %(unit.sight_ranges[0],unit.sight_ranges[1],unit.sight_ranges[2]))
-		if flag >=4:
+		if flag >= 3:
 			if unit.kind != 1 and unit.kind != 0:
 				self.SpeedLineEdit.setText("%d" %unit.speed)
 				self.PopulationLineEdit.setText("%d" %unit.population)
@@ -53,9 +53,9 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 			if unit.team != flag:
 				return
 		self.FuelLineEdit.setText("%d/%d" %(unit.fuel,unit.fuel_max))
-		if unit.kind == 7:
+		if unit.kind == 7 or unit.kind == 0 or unit.kind == 1:
 			self.CarrySourceLineEdit.setText("%d/%d" %(unit.metal,unit.metal_max))
-		if flag >= 4:
+		if flag >= 3:
 			if unit.kind != 1 and unit.kind != 0:
 				self.MoveTargetLineEdit.setText("(%d, %d, %d)" %(unit.dest.x,unit.dest.y,unit.dest.z))
 
@@ -64,6 +64,7 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 
 	def resetUnitInfo(self):
 		self.show = False
+		self.TeamLineEdit.setText("")
 		self.CoordinateLineEdit.setText("")
 		self.TypeLineEdit.setText("")
 		self.HealthLineEdit.setText("")
