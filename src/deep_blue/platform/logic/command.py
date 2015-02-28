@@ -175,6 +175,7 @@ class Produce(Command):
             if isinstance(element, Base) and element.team == team:
                 if element.metal < int(PROPERTY[self.kind]['health_max'] * METAL_PER_HEALTH):
                     return False
+                break
         game.commands[team].append(self)
         self.team = team
         return True
