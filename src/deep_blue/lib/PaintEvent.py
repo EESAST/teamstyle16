@@ -166,9 +166,10 @@ class PointUnit(AbstractUnit):
 
 class ChosenIndUnit(AbstractUnit):
 	"""小地图选定框类"""
-	def __init__(self, x, y, z, parent = None):
+	def __init__(self, x, y, z, size, parent = None):
 		super(ChosenIndUnit, self).__init__(x, y, z, parent)
 		self.setZValue(0.7)
+		self.chosen = size
 
 	def boundingRect(self):
 		return QRectF(0, 0, CHOSEN_WIDTH, CHOSEN_HEIGHT)
@@ -181,7 +182,7 @@ class ChosenIndUnit(AbstractUnit):
 		pen.setJoinStyle(Qt.RoundJoin)
 		pen.setColor(QColor(Qt.blue).darker())
 		painter.setPen(pen)
-		painter.drawRect(QRect(0, 0, CHOSEN_WIDTH, CHOSEN_HEIGHT))
+		painter.drawRect(QRect(0, 0, self.chosen, self.chosen))
 		painter.restore()
 
 class SoldierUnit(AbstractUnit):

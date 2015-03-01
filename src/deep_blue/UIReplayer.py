@@ -67,6 +67,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.connect(self, SIGNAL("toPause()"),  partial(self.PlayPushButton.setChecked, False), Qt.QueuedConnection)
 		self.CenterWidget.moveAnimEnd.connect(self.on_animEnd)
 		self.connect(self.SmallMap, SIGNAL("areaChanged(QPoint)"), self.CenterWidget.setMapArea)
+		self.connect(self.CenterWidget, SIGNAL("Scaled"), self.SmallMap.ScaleMap)
 
 		self.updateUi()
 

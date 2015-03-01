@@ -52,6 +52,7 @@ class Replay(QGraphicsView):
 	moveAnimEnd = pyqtSignal()
 	unitSelected = pyqtSignal()
 	mapSelected = pyqtSignal()
+	Scaled = pyqtSignal()
 	def __init__(self, scene, parent = None):
 		super(Replay, self).__init__(parent)
 
@@ -299,8 +300,9 @@ class Replay(QGraphicsView):
 	'''
 
 	def wheelEvent(self, event):
-	    factor = 1.41 ** (event.delta() / 240.0)
+	    factor = 1.414213562373 ** (event.delta() / 240.0)
 	    self.scale(factor, factor)
+	    self.emit(SIGNAL("Scaled"), factor)
 
 	def keyPressEvent(self, event):
 		if not self.run:

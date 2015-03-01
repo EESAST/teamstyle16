@@ -16,7 +16,7 @@ class SmallMap(QGraphicsView):
 		self.scene = scene
 		self.setScene(self.scene)
 
-		self.chosenArea = ChosenIndUnit(0, 0, 0)
+		self.chosenArea = ChosenIndUnit(0, 0, 0, 50)
 		self.chosenArea.setVisible(False)
 		self.scene.addItem(self.chosenArea)
 
@@ -27,17 +27,22 @@ class SmallMap(QGraphicsView):
 		self.down = 0
 		self.init = False
 
+		self.chosenarea = 50
+
 		self.SmallMapList = []
 		self.UnitBase = [[],[],[]]
 		self.Unit_Info = [{},{},{}]
 
-	def setSmallMap(self):
+	def setSmallMap(self, m_x, m_y):
 		self.resetSmallMap()
 		self.run = True
 		self.left = (MAP_X - self.width)/2
 		self.right = (MAP_X + self.width)/2
 		self.up = (MAP_Y - self.height)/2
 		self.down = (MAP_Y + self.height)/2
+		if m_x == -1:
+			m_x = self.left
+			m_y = self.up
 		for i in range(self.left, self.right):
 			for j in range(self.up, self.down):
 				new_smallmap = SmallMapUnit(i - self.left, j - self.up, 2, self.Map_Info[i - self.left][j - self.up])
@@ -47,30 +52,30 @@ class SmallMap(QGraphicsView):
 		if not self.init:
 			if self.chosenArea in self.scene.items():
 				self.scene.removeItem(self.chosenArea)
-			self.chosenArea = ChosenIndUnit(self.left, self.up, 0)
+			self.chosenArea = ChosenIndUnit(m_x, m_y, 0, self.chosenarea)
 			self.scene.addItem(self.chosenArea)
-			self.chosenArea.setPos(self.left,self.up,0,flag = False)
+			self.chosenArea.setPos(m_x,m_y,0,flag = False)
 
 	'''待修改'''
 	def mousePressEvent(self, event):
 		if not self.run:
 			return
 		pos = event.pos()
-		if pos.x() < 25 + self.left * 2:
-			pos = QPoint(25 + self.left * 2, pos.y())
-		elif pos.x() > self.right * 2 - 25:
-			pos = QPoint(self.right * 2 - 25, pos.y())
-		if pos.y() < 25 + self.up * 2:
-			pos = QPoint(pos.x(), 25 + self.up * 2)
-		elif pos.y() > self.down * 2 - 25:
-			pos = QPoint(pos.x(), self.down * 2- 25)
-		pos = QPoint(pos.x() - 25, pos.y() - 25)
+		if pos.x() < self.chosenarea/2 + self.left * 2:
+			pos = QPoint(self.chosenarea/2 + self.left * 2, pos.y())
+		elif pos.x() > self.right * 2 - self.chosenarea/2:
+			pos = QPoint(self.right * 2 - self.chosenarea/2, pos.y())
+		if pos.y() < self.chosenarea/2 + self.up * 2:
+			pos = QPoint(pos.x(), self.chosenarea/2 + self.up * 2)
+		elif pos.y() > self.down * 2 - self.chosenarea/2:
+			pos = QPoint(pos.x(), self.down * 2- self.chosenarea/4)
+		pos = QPoint(pos.x() - self.chosenarea/2, pos.y() - self.chosenarea/2)
 		self.scene.removeItem(self.chosenArea)
-		self.chosenArea = ChosenIndUnit(pos.x(), pos.y(), 0)
+		self.chosenArea = ChosenIndUnit(pos.x(), pos.y(), 0, self.chosenarea)
 		self.scene.addItem(self.chosenArea)
 		pos = (int(pos.x()/2), int(pos.y()/2))
 		self.chosenArea.setPos(pos[0],pos[1],2,flag = False)
-		pos = QPoint(pos[0] - self.left, pos[1] - self.up)
+		pos = QPoint(pos[0] - self.left + (self.chosenarea - 50)/4, pos[1] - self.up + (self.chosenarea - 50)/4)
 		self.emit(SIGNAL("areaChanged(QPoint)"), pos)
 
 	def resetSmallMap(self):
@@ -90,6 +95,16 @@ class SmallMap(QGraphicsView):
 			if item.scene() == self.scene:
 				self.scene.removeItem(item)
 		self.UnitBase = [[],[],[]]
+
+	def ScaleMap(self, factor):
+		middle_x = self.chosenArea.corX + self.chosenarea/4
+		middle_y = self.chosenArea.corY + self.chosenarea/4
+		print "I get the signal:",self.chosenarea,
+		self.chosenarea = self.chosenarea / factor
+		print " to ",self.chosenarea
+		self.init = False
+		self.setSmallMap(middle_x - self.chosenarea/4, middle_y - self.chosenarea/4)
+		self.init = True
 
 	def reset(self):
 		self.resetSmallMap()
@@ -121,7 +136,7 @@ class SmallMap(QGraphicsView):
 			for i in range(MapInfo.x_max):
 				for j in range(MapInfo.y_max):
 					self.Map_Info[i][j] = MapInfo.map_type(i, j)
-			self.setSmallMap()
+			self.setSmallMap(-1,-1)
 		self.Unit_Info = [{},{},{}]
 		if index not in [0, 1]:
 			Elements = [battle.elements(0), battle.elements(1)]
@@ -140,5 +155,5 @@ class SmallMap(QGraphicsView):
 			rect = QRectF(0, 0, 200, 200)
 			self.scene.setSceneRect(rect)
 			self.fitInView(self.scene.sceneRect())
-		self.init = True
+			self.init = True
 
