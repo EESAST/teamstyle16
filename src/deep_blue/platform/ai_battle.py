@@ -158,6 +158,7 @@ def black_box_run(args):
         b.save_event_strings(args.out)
 
     del b  # Destroy the battle
+    return result
 
 
 if __name__ == '__main__':
@@ -197,4 +198,4 @@ if __name__ == '__main__':
     else:
         root.setLevel(logging.DEBUG)
 
-    black_box_run(args)
+    exit(black_box_run(args))
