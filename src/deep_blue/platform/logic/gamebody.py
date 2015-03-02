@@ -60,13 +60,13 @@ class GameBody(object):
                             sum([element.population for element in self.elements(1).values() if element.population != None])]
         self.production_lists = [[], []]
         self.commands = [[], []]
-        for kw in ['round', 'scores', 'production_lists', 'commands']:
+        self.state = STATE_CONTINUE
+        for kw in ['round', 'scores', 'production_lists', 'commands', "state"]:
             if kw in kwargs:
                 setattr(self, kw, kwargs[kw])
         self.round = max(self.round, 0)         # in case round < 0
         self.scores = [max(score, 0) for score in self.scores]      # in case score < 0
 
-        self.state = STATE_CONTINUE
         self.judge = judge
 
     @property
