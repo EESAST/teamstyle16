@@ -135,9 +135,7 @@ class AIProxy(threading.Thread):
     def __run_ai(self, filename, port):
         try:
             self.ai_program = subprocess.Popen([filename, 'localhost',
-                                                           str(port)],
-                                               stdout=subprocess.PIPE,
-                                               stderr=subprocess.STDOUT)
+                                                           str(port)])
         except OSError as e:
             raise AIFileError("Failed to start AI file (%s): %s" %
                               (filename, e))
