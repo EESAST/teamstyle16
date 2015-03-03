@@ -19,6 +19,7 @@ from math import ceil
 from random import random, choice
 from Queue import Queue
 from event import *
+import json
 
 # 基础参数限制
 ROUND_MAX = 500     # 最大回合数
@@ -90,7 +91,7 @@ names = {
    attacks = [FIRE, TORPEDO]
    defences = [FIRE, TORPEDO] """
 
-PROPERTY = [{
+DEFAULT_PROPERTY = [{
             'sight_ranges': [4, 10, 8], 'fire_ranges': [0, 7, 5],
             'health_max': 2000, 'fuel_max': 1000, 'ammo_max': INFINITY, 'ammo_once': 6, 'metal_max': 200,
             'speed': None, 'population': None, 'cost': None, 'build_round': None,
@@ -150,6 +151,34 @@ PROPERTY = [{
             'speed': 10, 'population': 1, 'cost': 10, 'build_round': 2,
             'attacks':[10, 5], 'defences': [7, INFINITY]
             }]  # Scout
+
+# get property from configure file
+NAMES = ['Base', 'Fort', 'Mine', 'Oilfield', 'Submarine', 'Destroyer', 'Carrier', 'Cargo', 'Fighter', 'Scout'];
+OBJ = json.loads(open('property.conf', 'r').read())
+PROPERTY = [OBJ[NAMES[i]] for i in range(10)]
+
+# cannot be changed
+CONSTANT = {
+    BASE: ['ammo_max', 'build_round', 'cost', 'population', 'speed']
+    CARGO: ['ammo_once', 'attacks', 'fire_ranges']
+    CARRIER: ['metal_max']
+    DESTROYER: ['metal_max']
+    FIGHTER: ['metal_max']
+    FORT: ['build_round', 'cost', 'population', 'speed']
+    SCOUT: ['metal_max']
+    SUBMARINE: ['metal_max']
+    }
+
+for index, list in CONSTANT:
+    for str in list:
+        PROPERTY[index][str] = DEFAULT_PROPERTY[index][str]
+
+TMP = PROPERTY[MINE]['metal_max']
+PROPERTY[MINE] = DEFAULT_PROPERTY[MINE]
+PROPERTY[MINE]['metal_max'] = TMP
+TMP = PROPERTY[OILFIELD]['fuel_max']
+PROPERTY[OILFIELD] = DEFAULT_PROPERTY[OILFIELD]
+PROPERTY[OILFIELD]['fuel_max'] = TMP
 
 
 # 攻击修正
