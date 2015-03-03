@@ -67,7 +67,8 @@ class MapInfo(object):
                          'fire_ranges', 'fuel_max', 'health_max',
                          'metal_max', 'population', 'sight_ranges',
                          'speed']:
-                del element.attr
+                if hasattr(element, attr):
+                    delattr(element, attr)
 
         return MyEncoder(sort_keys=True, separators=(',', ':')).encode(tmp)
 
