@@ -27,7 +27,8 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.flag = flag
 		self.show = True
 		self.resetUnitInfo()
-		self.TeamLineEdit.setText("%d" %unit.team)
+		if unit.kind not in [2,3]:
+			self.TeamLineEdit.setText("%d" %unit.team)
 		self.CoordinateLineEdit.setText("(%d, %d, %d)" %(unit.position.x,unit.position.y,unit.position.z))
 		self.TypeLineEdit.setText(QString.fromUtf8(NumToUnitType[unit.kind]))
 		if unit.kind == 2:
@@ -42,6 +43,8 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 			self.AttackLineEdit.setText("%d/%d" %(unit.attacks[0],unit.attacks[1]))
 			self.FireRangeLineEdit.setText("%d/%d/%d" %(unit.fire_ranges[0],unit.fire_ranges[1],unit.fire_ranges[2]))
 			self.AmmoLineEdit.setText("%.1f/%.1f/%.1f" %(unit.ammo_once,unit.ammo,unit.ammo_max))
+		if unit.kind == 7:
+			self.AmmoLineEdit.setText("%.1f/%.1f" %(unit.ammo,unit.ammo_max))
 		self.DefenceLineEdit.setText("%.1f/%.1f" %(unit.defences[0],unit.defences[1]))
 		self.SightRangeLineEdit.setText("%d/%d/%d" %(unit.sight_ranges[0],unit.sight_ranges[1],unit.sight_ranges[2]))
 		if flag >= 3:
