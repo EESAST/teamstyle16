@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 # map.py
 
+import sys
 from copy import deepcopy
 from basic import *
 from custom_json import *
@@ -59,7 +60,17 @@ class MapInfo(object):
 
     def saves(self):
         """Save map to string"""
-        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(self)
+        tmp = deepcopy(self)
+        for element in tmp.elements.values():
+            for attr in ['ammo_max', 'ammo_once', 'attacks',
+                         'build_round', 'cost', 'defences',
+                         'fire_ranges', 'fuel_max', 'health_max',
+                         'metal_max', 'population', 'sight_ranges',
+                         'speed']:
+                del element.attr
+
+        return MyEncoder(sort_keys=True, separators=(',', ':')).encode(tmp)
+
 
     def saves_elements(self):
         """Save elements to string"""
@@ -116,3 +127,7 @@ def loads(map_str):
     map_info = MyDecoder().decode(map_str)
     map_info.elements = {int(index_str): element for index_str, element in map_info.elements.items()}
     return map_info
+
+if __name__ == '__main__':
+    for filename in sys.argv[1:]:
+        save(load(filename), filename)
