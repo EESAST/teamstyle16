@@ -63,6 +63,7 @@ class MapInfo(object):
         tmp = deepcopy(self)
         for element in tmp.elements.values():
             for attr in ['ammo_max', 'ammo_once', 'attacks',
+                         'ammo', 'fuel', 'metal',
                          'build_round', 'cost', 'defences',
                          'fire_ranges', 'fuel_max', 'health_max',
                          'metal_max', 'population', 'sight_ranges',
