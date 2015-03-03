@@ -87,7 +87,7 @@ class HumanAIBattle(battle.Battle):
 
         cmds = self.ai.get_commands()
         for cmd in cmds:
-            self.gamebody.set_command(ai.team_num, cmd)
+            self.gamebody.set_command(self.ai.team_num, cmd)
 
         logger.info('AI commands feed')
 
