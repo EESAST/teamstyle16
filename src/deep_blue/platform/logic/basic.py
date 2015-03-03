@@ -557,8 +557,14 @@ class Unit(UnitBase):
         #             break
         #         else:
         #             raise RuntimeError()
-        if self.speed + 1 < len(nodes):
-            nodes = nodes[:self.speed + 1]
+
+        # The unit can reach nodes[self.speed] at most.
+        next_pos_index = min(self.speed, len(nodes) - 1)
+        # Avoid elements
+        while next_pos_index >= 0 && game.map_info.element(nodes[-1] is not None):
+            next_pos_index -= 1
+
+        nodes = nodes[:next_pos_index + 1]
         self.pos = nodes[-1]
         move_event = Move(self.index, nodes)
         events += [] if move_event.steps == 0 else [move_event]

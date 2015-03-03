@@ -98,14 +98,7 @@ class MapInfo(object):
                 while pos is not origin:
                     nodes.insert(1, pos)
                     pos = adjacent[pos]
-                while True:
-                    if len(nodes) == 1:
-                        return [origin]
-                    elif self.element(nodes[-1]) != None: # 目的地有其他单位
-                        nodes.pop(-1)
-                        continue
-                    else:
-                        return nodes
+                return nodes
 
 def load(filename):
     """Read map from file"""
