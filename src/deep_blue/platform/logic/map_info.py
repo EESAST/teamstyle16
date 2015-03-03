@@ -63,11 +63,13 @@ class MapInfo(object):
         tmp = deepcopy(self)
         for element in tmp.elements.values():
             for attr in ['ammo_max', 'ammo_once', 'attacks',
+                         'ammo', 'fuel', 'metal',
                          'build_round', 'cost', 'defences',
                          'fire_ranges', 'fuel_max', 'health_max',
                          'metal_max', 'population', 'sight_ranges',
                          'speed']:
-                del element.attr
+                if hasattr(element, attr):
+                    delattr(element, attr)
 
         return MyEncoder(sort_keys=True, separators=(',', ':')).encode(tmp)
 
@@ -130,4 +132,4 @@ def loads(map_str):
 
 if __name__ == '__main__':
     for filename in sys.argv[1:]:
-        save(load(filename), filename)
+        load(filename).save(filename)
