@@ -43,7 +43,11 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.CenterWidget = MapMakerReplayer(self.scene)
         self.CenterLayout.addWidget(self.CenterWidget)
 
+        self.RandomButton.setEnabled(True)
+
         self.create = False
+
+        self.base = True
 
     @pyqtSlot()
     def on_HelpButton_clicked(self):
@@ -160,14 +164,25 @@ class MapMaker(QWidget, Ui_Mapmaker):
     @pyqtSlot()
     def on_SaveButton_clicked(self):
         if self.create:
-            saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存地图"), REPLAY_FILE_DIR, "map files(*.map)")
-            try:
-                self.CenterWidget.save(unicode(saveFile))
-            except:
-                if saveFile != "":
-                    QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+            if self.CenterWidget.have_base[0] and self.CenterWidget.have_base[1]:
+                saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存地图"), REPLAY_FILE_DIR, "map files(*.map)")
+                try:
+                    self.CenterWidget.save(unicode(saveFile))
+                except:
+                    if saveFile != "":
+                        QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+            else:
+                QMessageBox.critical(self, QString.fromUtf8("储存失败"), QString.fromUtf8("必须有基地"), QMessageBox.Ok, QMessageBox.NoButton)
+                return
         else:
             QMessageBox.critical(self, QString.fromUtf8("储存失败"), QString.fromUtf8("您尚未生成地图。"), QMessageBox.Ok, QMessageBox.NoButton)
+        self.CenterWidget.reset()
+        self.RandomButton.setEnabled(True)
+        self.create = False
+        self.num = [0 for x in range(11)]
+        self.num[1] = (30, 30)
+        self.population = 60
+        self.round = 500
 
     @pyqtSlot()
     def on_RandomButton_clicked(self):
@@ -177,15 +192,166 @@ class MapMaker(QWidget, Ui_Mapmaker):
 
     @pyqtSlot()
     def on_ExitButton_clicked(self):
-        self.CenterWidget.reset()
+        self.on_ClosePushButton_clicked()
         self.goback.emit()
 
     @pyqtSlot()
-    def on_UpPushButton_clicked(self):
+    def on_OpenPushButton_clicked(self):
         if self.create:
-            self.CenterWidget.scale(1.1,1.1)
+            choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存地图文件吗？"), QMessageBox.Yes|QMessageBox.No)
+            if choice == QMessageBox.Yes:
+                saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存地图"), REPLAY_FILE_DIR, "map files(*.map)")
+                try:
+                    self.CenterWidget.save(unicode(saveFile))
+                except:
+                    if saveFile != "":
+                        QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+            else:
+                pass
+        self.CenterWidget.reset()
+        mapname = unicode(QFileDialog.getOpenFileName(self, QString.fromUtf8("加载地图"), REPLAY_FILE_DIR, "map files(*.map)"))
+        if mapname:
+            try:
+                mapInfo = map_info.load(mapname)
+            except:
+                if mapname != "":
+                    QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+            else:
+                self.CenterWidget.map = mapInfo
+                self.population = mapInfo.max_population
+                self.round = mapInfo.max_round
+                all_elements = mapInfo.elements
+                for element_ in all_elements.values():
+                    if element_.kind == 2 or element_.kind == 3:
+                        continue
+                    if element_.team:
+                        continue
+                    self.num[element_.kind] += 1
+                self.CenterWidget.now_population[0] = self.get_population()
+                for i in range(4, 10):
+                    self.num[i] = 0
+                for element_ in all_elements.values():
+                    if element_.kind == 2 or element_.kind == 3:
+                        continue
+                    if element_.team != 1:
+                        continue
+                    self.num[element_.kind] += 1
+                self.CenterWidget.now_population[1] = self.get_population()
+                self.create = True
+                self.CenterWidget.x_max = mapInfo.x_max
+                self.CenterWidget.y_max = mapInfo.y_max
+        self.CenterWidget.show()
+        self.RandomButton.setEnabled(False)
+        self.create = True
 
     @pyqtSlot()
-    def on_DownPushButton_clicked(self):
+    def on_ClosePushButton_clicked(self):
         if self.create:
-            self.CenterWidget.scale(0.9,0.9)
+            choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存地图文件吗？"), QMessageBox.Yes|QMessageBox.No)
+            if choice == QMessageBox.Yes:
+                saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存地图"), REPLAY_FILE_DIR, "map files(*.map)")
+                try:
+                    self.CenterWidget.save(unicode(saveFile))
+                except:
+                    if saveFile != "":
+                        QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+            else:
+                pass
+        self.CenterWidget.reset()
+        self.RandomButton.setEnabled(True)
+        self.num = [0 for x in range(11)]
+        self.num[1] = (30, 30)
+        self.population = 60
+        self.round = 500
+
+    @pyqtSlot(bool)
+    def on_ChangeRadioButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 0
+
+    @pyqtSlot(bool)
+    def on_FighterButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 9
+
+    @pyqtSlot(bool)
+    def on_ScoutButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 10
+
+    @pyqtSlot(bool)
+    def on_CargoButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 8
+
+    @pyqtSlot(bool)
+    def on_CarrierButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 7
+
+    @pyqtSlot(bool)
+    def on_DestroyerButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 6
+
+    @pyqtSlot(bool)
+    def on_SubmarineButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 5
+
+    @pyqtSlot(bool)
+    def on_OilfieldButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 4
+
+    @pyqtSlot(bool)
+    def on_MineButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 3
+
+    @pyqtSlot(bool)
+    def on_FortButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 2
+
+    @pyqtSlot(bool)
+    def on_BaseButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = 1
+
+    @pyqtSlot(bool)
+    def on_DeleteButton_clicked(self, check):
+        if check:
+            self.CenterWidget.RightState = -1
+
+    @pyqtSlot(bool)
+    def on_Team0Button_clicked(self, check):
+        if check:
+            self.CenterWidget.change_team = 0
+
+    @pyqtSlot(bool)
+    def on_Team1Button_clicked(self, check):
+        if check:
+            self.CenterWidget.change_team = 1
+
+    @pyqtSlot()
+    def on_NewButton_clicked(self):
+        if self.create:
+            choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存地图文件吗？"), QMessageBox.Yes|QMessageBox.No)
+            if choice == QMessageBox.Yes:
+                saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存地图"), REPLAY_FILE_DIR, "map files(*.map)")
+                try:
+                    self.CenterWidget.save(unicode(saveFile))
+                except:
+                    if saveFile != "":
+                        QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+            else:
+                pass
+        self.CenterWidget.reset()
+        self.CenterWidget.have_base = [False, False]
+        self.RandomButton.setEnabled(False)
+        self.CenterWidget.map = map_info.MapInfo(self.num[1][0], self.num[1][1], self.population, self.round, 1, 1.0, self.num[10])
+        self.CenterWidget.x_max = self.num[1][0]
+        self.CenterWidget.y_max = self.num[1][1]
+        self.CenterWidget.show()
+        self.create = True

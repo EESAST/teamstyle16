@@ -238,7 +238,6 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 	@pyqtSlot()
 	def on_LoadFilePushButton_clicked(self):
 		fname = unicode(QFileDialog.getOpenFileName(self, QString.fromUtf8("加载回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)"))
-		print fname
 		if fname and fname!= self.repFileName:
 			try:
 				fileInfo = replayer.load(fname)
@@ -378,6 +377,15 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.isPaused = True
 
 		else:
+			if self.loadMap and not self.mapInfo:
+				try:
+					mapInfo = map_info.load(self.mapFileName)
+				except:
+					if self.mapFileName != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				else:
+					self.mapInfo = mapInfo
 			if self.CenterWidget.HUMAN_REPLAY == 4:
 				self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
 			elif self.CenterWidget.HUMAN_REPLAY == 0:
@@ -416,7 +424,6 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			if self.CenterWidget.frogIndex != -1:
 				self.CenterWidget.setFrog(self.frogIndex)
 			self.CenterWidget.changed = False
-		print "over animation"
 		if self.isPaused:
 			return
 		if self.CenterWidget.nowRound == self.totalround:
@@ -457,37 +464,32 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.infoWidget2.updateInfo(self.fileInfo)
 
 	@pyqtSlot()
-	def on_UpPushButton_clicked(self):
-		self.CenterWidget.scale(1.25,1.25)
-
-	@pyqtSlot()
-	def on_DownPushButton_clicked(self):
-		self.CenterWidget.scale(0.8,0.8)
-
-	@pyqtSlot()
 	def on_StopPushButton_clicked(self):
+		self.started = False
+		self.isPaused = True
+		if self.CenterWidget.HUMAN_REPLAY != 3 and self.CenterWidget.HUMAN_REPLAY != -1:
+			choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
+			if choice == QMessageBox.Yes:
+				saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
+				try:
+					battle.Battle.save(self.fileInfo, saveFile)
+				except:
+					if saveFile != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+			else:
+				pass
 		self.CenterWidget.reset()
+		self.isPaused = False
+		self.mapInfo = None
 		self.SmallMap.reset()
 		self.CreateWidget.team1.reset()
 		self.CreateWidget.team2.reset()
 		self.infoWidget1.reset()
 		self.infoWidget2.resetUnitInfo()
-		self.started = False
 		self.PlayPushButton.setCheckable(False)
 		self.PlayPushButton.setEnabled(False)
 		self.RoundSlider.setRange(0, 0)
 		self.RoundLcdNumber.display(0)
-		if self.CenterWidget.HUMAN_REPLAY != 3:
-				choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
-				if choice == QMessageBox.Yes:
-					saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
-					try:
-						battle.Battle.save(self.fileInfo, saveFile)
-					except:
-						if saveFile != "":
-							QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
-				else:
-					pass
 		self.fileInfo = None
 		self.updateUi()
 

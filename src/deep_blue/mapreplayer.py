@@ -43,13 +43,18 @@ class MapMakerReplayer(QGraphicsView):
 		self.y_max = 0
 		self.MapList = []
 		self.size = 30
+		self.RightState = 0
+		self.now_population = [0, 0]
+		self.have_base = [True, True]
+		self.copy = 0
+		self.change_team = 0
 
 	def wheelEvent(self, event):
 	    factor = 1.41 ** (event.delta() / 240.0)
 	    self.scale(factor, factor)
 
 	def createMap(self, num, population, round_):#num: 0对称方式 1地图大小 2陆海对比 3资源数量 4-9：6单位数量
-		print "get round:", round_
+		self.copy = num[0]
 		if not self.mapcreate.running:
 			self.mapcreate.run()
 		self.map = map_info.MapInfo(num[1][0], num[1][1], population, round_, 1, 1.0, num[10])
@@ -282,8 +287,11 @@ class MapMakerReplayer(QGraphicsView):
 		self.show()
 
 	def show(self):
+		if not self.mapcreate.running:
+			self.mapcreate.run()
 		self.setSceneRect(0,0,30*self.x_max, 30*self.y_max)
 		Elements = self.map.elements
+		self.Unit_Info = {}
 		for element in Elements.values():
 			self.Unit_Info[element.position] = element
 		self.Map_Info = [[0 for y in range(self.map.y_max)] for x in range(self.map.x_max)]
@@ -343,5 +351,126 @@ class MapMakerReplayer(QGraphicsView):
 		self.map = None
 		self.Unit_Info = {}
 		self.Map_Info = [[]]
+		self.UnitBase = []
 		self.x_max = 0
 		self.y_max = 0
+		self.MapList = []
+		self.size = 30
+		self.RightState = 0
+		self.now_population = [0, 0]
+		self.have_base = [True, True]
+		self.copy = 0
+		self.change_team = 0
+
+	def mousePressEvent(self, event):
+		if not self.create:
+			QGraphicsView.mousePressEvent(self, event)
+			return
+
+		if event.button() == Qt.RightButton:
+			pos = event.pos()
+			items = self.items(pos)
+			c_pos = None
+			for it in items:
+				if isinstance(it, MapMakerUnit):
+					c_pos = (it.corX, it.corY, it.corZ)
+			if not c_pos:
+				return
+
+			if self.RightState == 0:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 0)) or self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					QMessageBox.critical(self, QString.fromUtf8("无法修改"), QString.fromUtf8("已有单位，请先删除再重新修改"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				self.map.set_map_type(c_pos[0], c_pos[1], 1 - self.map.map_type(c_pos[0], c_pos[1]))
+
+			elif self.RightState == 1:
+				have_sea = False
+				if self.have_base:
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("已有基地，请先删除再重新放置"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				for c_x in range(c_pos[0], c_pos[0] + 3):
+					for c_y in range(c_pos[1], c_pos[1] + 3):
+						if self.map.element(basic.Position(c_x, c_y, 1)) or not self.map.map_type(c_x, c_y):
+							QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("基地需要3*3的陆地空间"), QMessageBox.Ok, QMessageBox.NoButton)
+							return
+				for c_x in [c_pos[0] - 1, c_pos[0] + 3]:
+					for c_y in range(c_pos[1], c_pos[1] + 3):
+						if not self.map.map_type(c_x, c_y):
+							have_sea = True
+				for c_y in [c_pos[1] - 1, c_pos[1] + 3]:
+					for c_x in range(c_pos[0], c_pos[0] + 3):
+						if not self.map.map_type(c_x, c_y):
+							have_sea = True
+				if not have_sea:
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("基地周围需要有海洋"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				self.map.add_element(basic.Base(self.change_team, basic.Rectangle(basic.Position(c_pos[0], c_pos[1]), basic.Position(c_pos[0] + 2, c_pos[1] + 2))))
+
+			elif self.RightState == 2:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Fort(2, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 3:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if self.map.map_type(c_pos[0] + 1, c_pos[1]) and self.map.map_type(c_pos[0] - 1, c_pos[1]) and self.map.map_type(c_pos[0], c_pos[1] + 1) and self.map.map_type(c_pos[0] - 1, c_pos[1]):
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("资源周围需要有海洋"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				if self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Mine(basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 4:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if self.map.map_type(c_pos[0] + 1, c_pos[1]) and self.map.map_type(c_pos[0] - 1, c_pos[1]) and self.map.map_type(c_pos[0], c_pos[1] + 1) and self.map.map_type(c_pos[0] - 1, c_pos[1]):
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("资源周围需要有海洋"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				if self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Oilfield(basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 5:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 0)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Submarine(self.change_team, basic.Position(c_pos[0], c_pos[1], 0)))
+
+			elif self.RightState == 6:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Destroyer(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 7:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Carrier(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 8:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Cargo(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 9:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 2)):
+					return
+				self.map.add_element(basic.Fighter(self.change_team, basic.Position(c_pos[0], c_pos[1], 2)))
+
+			elif self.RightState == 10:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 2)):
+					return
+				self.map.add_element(basic.Scout(self.change_team, basic.Position(c_pos[0], c_pos[1], 2)))
+
+			elif self.RightState == -1:
+				for it in items:
+					if isinstance(it, SoldierMakerUnit):
+						if it.obj.kind == 0:
+							self.have_base[it.obj.team] = False
+						del self.map.elements[it.obj.index]
+			else:
+				return
+
+			self.show()
