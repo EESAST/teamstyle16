@@ -154,7 +154,7 @@ DEFAULT_PROPERTY = [{
 
 # get property from configure file
 NAMES = ['Base', 'Fort', 'Mine', 'Oilfield', 'Submarine', 'Destroyer', 'Carrier', 'Cargo', 'Fighter', 'Scout'];
-OBJ = json.loads(open('./platform/logic/property.conf', 'r').read())
+OBJ = json.loads(open('./property.conf', 'r').read())
 PROPERTY = [OBJ[NAMES[i]] for i in range(10)]
 
 # cannot be changed

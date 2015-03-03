@@ -193,6 +193,19 @@ class MapMaker(QWidget, Ui_Mapmaker):
     @pyqtSlot()
     def on_ExitButton_clicked(self):
         self.on_ClosePushButton_clicked()
+        self.CargoLineEdit.setText("0")
+        self.CarrierLineEdit.setText("0")
+        self.ScoutLineEdit.setText("0")
+        self.FighterLineEdit.setText("0")
+        self.DestroyerLineEdit.setText("0")
+        self.SubmarineLineEdit.setText("0")
+        self.WeatherLineEdit.setText("0")
+        self.RoundLineEdit.setText("500")
+        self.PopulationLineEdit.setText("60")
+        self.SizeCombo.setCurrentIndex(0)
+        self.CenterCombo.setCurrentIndex(0)
+        self.LandCombo.setCurrentIndex(0)
+        self.SourceCombo.setCurrentIndex(0)
         self.goback.emit()
 
     @pyqtSlot()
@@ -246,7 +259,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
 
     @pyqtSlot()
     def on_ClosePushButton_clicked(self):
-        if self.create:
+        if self.create and self.have_base:
             choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存地图文件吗？"), QMessageBox.Yes|QMessageBox.No)
             if choice == QMessageBox.Yes:
                 saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存地图"), REPLAY_FILE_DIR, "map files(*.map)")

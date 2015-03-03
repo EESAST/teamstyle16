@@ -478,7 +478,6 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 			else:
 				pass
-		self.CenterWidget.reset()
 		self.isPaused = False
 		self.mapInfo = None
 		self.SmallMap.reset()
@@ -492,6 +491,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.RoundLcdNumber.display(0)
 		self.fileInfo = None
 		self.updateUi()
+		self.CenterWidget.reset()
 
 	@pyqtSlot()
 	def on_HelpButton_clicked(self):
