@@ -260,7 +260,7 @@ class Replay(QGraphicsView):
 						if self.SelectedIndex.index in self.attack_list.keys():
 							del self.attack_list[self.SelectedIndex.index]
 						self.command_list.append(new_command)
-					elif it.obj.kind in [0, 1] and self.SelectedIndex.kind in [6,7]:
+					elif it.obj.kind in range(4, 10) and self.SelectedIndex.kind in [6,7]:
 						#如果之前选中航母或运输舰，在右击基地或据点，则补给
 						new_command = command.Supply(self.SelectedIndex.index, it.obj.index)
 						if self.SelectedIndex.index in self.attack_list.keys():
