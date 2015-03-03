@@ -130,4 +130,4 @@ def loads(map_str):
 
 if __name__ == '__main__':
     for filename in sys.argv[1:]:
-        save(load(filename), filename)
+        load(filename).save(filename)
