@@ -559,14 +559,7 @@ class Unit(UnitBase):
     def move(self, game):
         events = []
         # cover = 0 # 走过的长度
-        nodes = game.map_info.pathfinding(self.pos, self.dest, isinstance(self, Plane))
-
-        if isinstance(self, Plane) and self.fuel <= 0:  # plane crashed
-            self.health = 0
-            del game.map_info.elements[self.index]
-            game.populations[self.team] -= PROPERTY[self.kind]['population']
-            events.append(Destroy(self.index))
-            return events
+        nodes = game.map_info.pathfinding(self.pos, self.dest, isinstance(self, Plane))            
 
         if self.fuel <= 0:  # cannot move
             return events
@@ -606,6 +599,12 @@ class Unit(UnitBase):
         # fuel
         if isinstance(self, Plane):
             self.fuel -= max(1, len(nodes) - 1)     # plane consumes at least 1 unit fuel each movement
+            # crashed
+            if self.fuel <= 0:
+                self.health = 0
+                del game.map_info.elements[self.index]
+                game.populations[self.team] -= PROPERTY[self.kind]['population']
+                events.append(Destroy(self.index))
         else:
             self.fuel -= len(nodes) - 1
         self.fuel = max(0, self.fuel)
