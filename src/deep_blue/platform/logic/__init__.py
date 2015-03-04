@@ -3,4 +3,4 @@ import command
 import event
 import gamebody
 import map_info
-from testgame.testgame import Testgame
+from testgame.testgame import TestGame
