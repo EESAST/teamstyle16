@@ -443,6 +443,7 @@ class UnitBase(Element):
             else:
                 target_unit.health = 0  # killed
                 del game.map_info.elements[target_unit.index]
+                game.populations[target_unit.team] -= PROPERTY[target_unit.kind]['population']
                 result_events.append(Destroy(target_unit.index))
         else:
             target_unit.health -= damage
@@ -562,6 +563,7 @@ class Unit(UnitBase):
         if isinstance(self, Plane) and self.fuel <= 0:  # plane crashed
             self.health = 0
             del game.map_info.elements[self.index]
+            game.populations[self.team] -= PROPERTY[self.kind]['population']
             events.append(Destroy(self.index))
             return events
 
