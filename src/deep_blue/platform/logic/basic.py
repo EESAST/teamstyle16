@@ -441,8 +441,9 @@ class UnitBase(Element):
                 result_events.append(Capture(target_unit.index, self.team))
             else:
                 target_unit.health = 0  # killed
-                del game.map_info.elements[target_unit.index]
-                game.populations[target_unit.team] -= PROPERTY[target_unit.kind]['population']
+                if isinstance(target_unit, Unit):  # Remove only if it's a unit.
+                    del game.map_info.elements[target_unit.index]
+                    game.populations[target_unit.team] -= PROPERTY[target_unit.kind]['population']
                 result_events.append(Destroy(target_unit.index))
             game.scores[self.team] += target_unit.health * DAMAGE_SCORE
         else:
