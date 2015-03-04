@@ -433,7 +433,6 @@ class UnitBase(Element):
         # 考虑到 defence = INFINITY 可能无法破防
         torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
         damage = fire_damage + torpedo_damage
-        game.scores[self.team] += damage * DAMAGE_SCORE
         result_events.append(AttackUnit(self.index, target_unit.index, damage))
         if damage >= target_unit.health:
             if target_unit.kind == FORT:    # capture fort
@@ -445,8 +444,10 @@ class UnitBase(Element):
                 del game.map_info.elements[target_unit.index]
                 game.populations[target_unit.team] -= PROPERTY[target_unit.kind]['population']
                 result_events.append(Destroy(target_unit.index))
+            game.scores[self.team] += target_unit.health * DAMAGE_SCORE
         else:
             target_unit.health -= damage
+            game.scores[self.team] += damage * DAMAGE_SCORE
         return result_events
 
 
