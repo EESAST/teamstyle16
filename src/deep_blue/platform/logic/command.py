@@ -82,7 +82,7 @@ class AttackUnit(Command):
         elements = game.map_info.elements
         attacker = elements.get(self.operand)
         defender = elements.get(self.target)
-        if attacker == None or defender == None or attacker.kind == CARRIER or attacker.kind == CARGO:
+        if attacker == None or defender == None or attacker.kind == CARGO:
             return []
         if hasattr(defender, 'team') is False or defender.team == attacker.team:
             return []
