@@ -35,7 +35,6 @@ class SmallMap(QGraphicsView):
 
 	def setSmallMap(self, m_x, m_y):
 		self.resetSmallMap()
-		self.run = True
 		self.left = (MAP_X - self.width)/2
 		self.right = (MAP_X + self.width)/2
 		self.up = (MAP_Y - self.height)/2
@@ -97,14 +96,15 @@ class SmallMap(QGraphicsView):
 		self.UnitBase = [[],[],[]]
 
 	def ScaleMap(self, factor):
-		middle_x = self.chosenArea.corX + self.chosenarea/4
-		middle_y = self.chosenArea.corY + self.chosenarea/4
-		print "I get the signal:",self.chosenarea,
-		self.chosenarea = self.chosenarea / factor
-		print " to ",self.chosenarea
-		self.init = False
-		self.setSmallMap(middle_x - self.chosenarea/4, middle_y - self.chosenarea/4)
-		self.init = True
+		if self.run:
+			middle_x = self.chosenArea.corX + self.chosenarea/4
+			middle_y = self.chosenArea.corY + self.chosenarea/4
+			print "I get the signal:",self.chosenarea,
+			self.chosenarea = self.chosenarea / factor
+			print " to ",self.chosenarea
+			self.init = False
+			self.setSmallMap(middle_x - self.chosenarea/4, middle_y - self.chosenarea/4)
+			self.init = True
 
 	def reset(self):
 		self.resetSmallMap()
@@ -128,6 +128,7 @@ class SmallMap(QGraphicsView):
 				new_unit.setPos(new_unit.corX + self.left, new_unit.corY + self.up, new_unit.corZ, flag = False)
 
 	def Initialize(self, battle, index):
+		self.run = True
 		if not self.init:
 			MapInfo = battle.map_info()
 			self.width = MapInfo.x_max

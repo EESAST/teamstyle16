@@ -79,6 +79,7 @@ class Replay(QGraphicsView):
 		self.nowRound = 0
 		self.MapInfo = None
 		self.moveani = None
+		self.scale_num = 1.0
 
 		self.map_size = 0
 		self.height = 0
@@ -300,9 +301,11 @@ class Replay(QGraphicsView):
 	'''
 
 	def wheelEvent(self, event):
-	    factor = 1.414213562373 ** (event.delta() / 240.0)
-	    self.scale(factor, factor)
-	    self.emit(SIGNAL("Scaled"), factor)
+		if self.run:
+		    factor = 1.414213562373 ** (event.delta() / 240.0)
+		    self.scale(factor, factor)
+		    self.scale_num *= factor
+		    self.emit(SIGNAL("Scaled"), factor)
 
 	def keyPressEvent(self, event):
 		if not self.run:
@@ -1050,6 +1053,7 @@ class Replay(QGraphicsView):
 		self.map_size = 0
 		self.height = 0
 		self.width = 0
+		self.scale_num = 1.0
 		self.SelectedIndex = None
 		self.mouseUnit.setVisible(False)
 		self.unitIndexList = [{},{},{}]

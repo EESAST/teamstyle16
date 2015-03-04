@@ -386,6 +386,17 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 					return
 				else:
 					self.mapInfo = mapInfo
+			if self.loadRepFile and not self.fileInfo:
+				print "in reload"
+				try:
+					fileInfo = replayer.load(self.repFileName)
+					print self.repFileName
+				except:
+					if self.repFileName != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				else:
+					self.fileInfo = fileInfo
 			if self.CenterWidget.HUMAN_REPLAY == 4:
 				self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
 			elif self.CenterWidget.HUMAN_REPLAY == 0:
@@ -483,6 +494,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				pass
 		self.isPaused = False
 		self.mapInfo = None
+		self.CenterWidget.scale(1.0/self.CenterWidget.scale_num, 1.0/self.CenterWidget.scale_num)
+		self.CenterWidget.scale_num = 1.0
 		self.SmallMap.reset()
 		self.CreateWidget.team1.reset()
 		self.CreateWidget.team2.reset()
@@ -495,6 +508,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.fileInfo = None
 		self.updateUi()
 		self.CenterWidget.reset()
+		
 
 	@pyqtSlot()
 	def on_HelpButton_clicked(self):

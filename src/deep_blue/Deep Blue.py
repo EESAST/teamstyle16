@@ -12,6 +12,8 @@ from UITeamWidget import *
 from UIWebWidget import *
 from mainAnimation import *
 from UIBackWindow import *
+from UILoginWidget import *
+from UIWebPlay import *
 
 class MainWindow(QGraphicsView):
 	def __init__(self, sizex, sizey, parent = None):
@@ -79,11 +81,31 @@ class MainWindow(QGraphicsView):
 		self.webWindow.setZValue(0.5)
 		self.scene.addItem(self.webWindow)
 
+		#网络对战
+		self.webPlayWindow = QGraphicsProxyWidget()
+		self.webPlay = WebPlay()
+		self.webPlayWindow.setWidget(self.webPlay)
+		self.webPlayWindow.setX((sizex - self.webPlayWindow.geometry().width())/2)
+		self.webPlayWindow.setY((sizey - self.webPlayWindow.geometry().height())/2)
+		self.webPlayWindow.setZValue(0.5)
+		self.scene.addItem(self.webPlayWindow)
+
+		#登录界面
+		self.loginWindow = QGraphicsProxyWidget()
+		self.loginDialog = LoginDialog()
+		self.loginWindow.setWidget(self.loginDialog)
+		self.loginWindow.setX((sizex - self.loginWindow.geometry().width())/2)
+		self.loginWindow.setY((sizey - self.loginWindow.geometry().height())/2)
+		self.loginWindow.setZValue(0.5)
+		self.scene.addItem(self.loginWindow)
+
 		#关闭所有多余widget
 		self.replayerWindow.widget().close()
 		self.mapMakerWindow.widget().close()
 		self.teamWindow.widget().close()
 		self.webWindow.widget().close()
+		self.loginWindow.widget().close()
+		self.webPlayWindow.widget().close()
 
 		#背景涂黑
 		self.setBackgroundBrush(QBrush(QColor(0,0,0)))
@@ -95,17 +117,32 @@ class MainWindow(QGraphicsView):
 		self.ReplayState =  QState(self.stateMachine)
 		self.WebState =  QState(self.stateMachine)
 		self.MapState =  QState(self.stateMachine)
+		self.LoginState = QState(self.stateMachine)
+		self.WebPlayState = QState(self.stateMachine)
 		self.QuitState = QFinalState(self.stateMachine)
 
 		#states和windows映射的dict
 		self.stateDict = {self.MainState:self.beginWindow, self.TeamState:self.teamWindow,
 						  self.ReplayState:self.replayerWindow, self.MapState:self.mapMakerWindow,
-						  self.WebState:self.webWindow}
+						  self.WebState:self.webWindow, self.LoginState:self.loginWindow,
+						  self.WebPlayState:self.webPlayWindow}
 
 		#存下上一个state
 		self.preState = None
 
 		#建立转换与动画
+		self.trans_MainToLogin = self.MainState.addTransition(self.beginWidget.OnlinePlayButton,
+															SIGNAL("clicked()"),
+															self.LoginState)
+		self.trans_LoginToWebPlay = self.LoginState.addTransition(self.loginDialog,
+															SIGNAL("LoginSuccess()"),
+															self.WebPlayState)
+		self.trans_WebPlayToMain = self.WebPlayState.addTransition(self.webPlay.ReturnButton,
+															SIGNAL("clicked()"),
+															self.MainState)
+		self.trans_LoginToMain = self.LoginState.addTransition(self.loginDialog.ReturnPushButton,
+															SIGNAL("clicked()"),
+															self.MainState)
 		self.trans_MainToQuit = self.MainState.addTransition(self.beginWidget.ExitGameButton,
 															SIGNAL("clicked()"),
 															self.QuitState)
@@ -148,15 +185,22 @@ class MainWindow(QGraphicsView):
 
 		self.transitionList = [self.trans_MainToQuit, self.trans_MainToReplayer, self.trans_ReplayerToMain,
 								self.trans_MainToTeam, self.trans_TeamToMain, self.trans_MapToMain,
-								self.trans_MainToMap, self.trans_TeamToWeb, self.trans_WebToTeam]
+								self.trans_MainToMap, self.trans_TeamToWeb, self.trans_WebToTeam,
+								self.trans_MainToLogin, self.trans_LoginToMain, self.trans_LoginToWebPlay,
+								self.trans_WebPlayToMain]
 
 		for transition in self.transitionList:
 			self.connect(transition, SIGNAL("triggered()"), self.showWindow)
 
 		self.setAttribute(Qt.WA_DeleteOnClose)
 		self.connect(self.stateMachine, SIGNAL("finished()"), self, SLOT("close()"))
+		self.connect(self.loginDialog, SIGNAL("LoginSuccess()"), self.loginsuccess)
 		self.stateMachine.setInitialState(self.MainState)
 		self.stateMachine.start()
+
+	def loginsuccess(self):
+		print "in here"
+		self.webPlay.update_info(self.loginDialog.datas)
 
 	def closeWindow(self):
 		sender = self.sender()
