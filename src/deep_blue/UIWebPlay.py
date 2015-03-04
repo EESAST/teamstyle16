@@ -5,6 +5,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 from ui_webPlay import *
+from platform import *
+from platform.logic.testgame.testgame import *
 
 REPLAY_FILE_DIR = "."
 
@@ -21,6 +23,7 @@ class WebPlay(QWidget, Ui_Form):
 		self.AI3 = None
 		self.AI4 = None
 		self.AI5 = None
+		self.mapInfo = None
 
 	def update_info(self, datas):
 		print datas[1]
@@ -74,5 +77,28 @@ class WebPlay(QWidget, Ui_Form):
 	@pyqtSlot()
 	def on_U5Button_clicked(self):
 		self.AI5 = unicode(QFileDialog.getOpenFileName(self, QString.fromUtf8("加载ai"), REPLAY_FILE_DIR, "ai files(*.exe)"))
+
+	@pyqtSlot()
+	def on_F1Button_clicked(self):
+		self.mapInfo = map_info.load('platform/samples/small.map')
+		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI1), ai1_filename = 'ai/empty_ai.exe', judge = TestGame[0][0])
+		now_round = 0
+		while now_round < self.mapInfo.max_round and self.fileInfo.state not in [0,1]:
+			self.fileInfo.next_round()
+			now_round += 1
+		if self.fileInfo.state:
+			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
+		else:
+			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
+		choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
+		if choice == QMessageBox.Yes:
+			saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
+			try:
+				battle.Battle.save(self.fileInfo, saveFile)
+			except:
+				if saveFile != "":
+					QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+		else:
+			pass
 
 

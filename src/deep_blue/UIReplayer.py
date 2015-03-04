@@ -489,7 +489,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 					battle.Battle.save(self.fileInfo, saveFile)
 				except:
 					if saveFile != "":
-						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+						QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,储存失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 			else:
 				pass
 		self.isPaused = False
