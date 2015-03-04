@@ -15,8 +15,8 @@ class InfoWidget1(QWidget, Ui_GameInfo1):
 
 	def setText(self, battle):
 		self.RoundNumberLineEdit.setText("%d" %battle.round())
-		self.PeopleNumberLineEdit1.setText("%d" %battle.population(0))
-		self.PeopleNumberLineEdit2.setText("%d" %battle.population(1))
+		self.PeopleNumberLineEdit1.setText("%d/%d" %(battle.population(0),battle.map_info().max_population))
+		self.PeopleNumberLineEdit2.setText("%d/%d" %(battle.population(1),battle.map_info().max_population))
 		airUnit = 0
 		waterUnit = 0
 		underWaterUnit = 0

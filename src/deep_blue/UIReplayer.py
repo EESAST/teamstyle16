@@ -426,7 +426,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.changed = False
 		if self.isPaused:
 			return
-		if self.CenterWidget.nowRound == self.totalround:
+		print self.fileInfo.state()
+		print
+		print
+		if self.fileInfo.state() in [0, 1] or self.CenterWidget.nowRound == self.totalround:
 			sts = None
 			if self.fileInfo.state() == 0: 
 				sts = "0队获胜"
