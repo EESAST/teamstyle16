@@ -9,6 +9,12 @@ from platform import *
 
 REPLAY_FILE_DIR = "."
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
 class WebPlay(QWidget, Ui_Form):
 	def __init__(self, parent = None):
 		super(WebPlay, self).__init__(parent)
@@ -27,12 +33,12 @@ class WebPlay(QWidget, Ui_Form):
 	def update_info(self, datas):
 		print datas[1]
 		if datas[1]:
-			self.UserNameLabel.setText(" %s" %datas[1])
+			self.UserNameLabel.setText(_fromUtf8(datas[1]))
 		else:
 			self.UserNameLabel.setText("")
-		self.IDLabel.setText(" %s" %datas[0])
+		self.IDLabel.setText("%d" %datas[0])
 		if datas[3]:
-			self.TeamLabel.setText(" %s" %datas[3])
+			self.TeamLabel.setText(_fromUtf8(datas[3]))
 		else:
 			self.TeamLabel.setText("")
 		self.ScoreLabel.setText("")
@@ -82,14 +88,20 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI1:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		self.mapInfo = map_info.load('maps/small.map')
+		self.mapInfo = map_info.load('test_match_1.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI1), ai1_filename = 'ai/empty_ai.exe', judge = TestGame[0][0])
 		now_round = 0
-		while now_round < self.mapInfo.max_round and self.fileInfo.state not in [0,1]:
+		while now_round < self.mapInfo.max_round and self.fileInfo.state() not in [0,1]:
 			self.fileInfo.feed_ai_commands()
 			self.fileInfo.next_round()
 			now_round += 1
-		if self.fileInfo.state:
+			print
+			print
+			print "in WebPlay"
+			print "the state = ",self.fileInfo.state()
+			print
+			print
+		if self.fileInfo.state():
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
@@ -109,14 +121,14 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI2:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		self.mapInfo = map_info.load('maps/small.map')
+		self.mapInfo = map_info.load('test_match_1-3.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI2), ai1_filename = 'ai/empty_ai.exe', judge = TestGame[1][0])
 		now_round = 0
-		while now_round < self.mapInfo.max_round and self.fileInfo.state not in [0,1]:
+		while now_round < self.mapInfo.max_round and self.fileInfo.state() not in [0,1]:
 			self.fileInfo.feed_ai_commands()
 			self.fileInfo.next_round()
 			now_round += 1
-		if self.fileInfo.state:
+		if self.fileInfo.state():
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
@@ -136,14 +148,14 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI3:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		self.mapInfo = map_info.load('maps/small.map')
+		self.mapInfo = map_info.load('test_match_1-3.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI3), ai1_filename = 'ai/empty_ai.exe', judge = TestGame[2][0])
 		now_round = 0
-		while now_round < self.mapInfo.max_round and self.fileInfo.state not in [0,1]:
+		while now_round < self.mapInfo.max_round and self.fileInfo.state() not in [0,1]:
 			self.fileInfo.feed_ai_commands()
 			self.fileInfo.next_round()
 			now_round += 1
-		if self.fileInfo.state:
+		if self.fileInfo.state():
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
@@ -163,14 +175,14 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI4:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		self.mapInfo = map_info.load('maps/small.map')
+		self.mapInfo = map_info.load('map_for_level_4-5.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI4), ai1_filename = 'ai/sample_ai.exe', judge = TestGame[3][0])
 		now_round = 0
-		while now_round < self.mapInfo.max_round and self.fileInfo.state not in [0,1]:
+		while now_round < self.mapInfo.max_round and self.fileInfo.state() not in [0,1]:
 			self.fileInfo.feed_ai_commands()
 			self.fileInfo.next_round()
 			now_round += 1
-		if self.fileInfo.state:
+		if self.fileInfo.state():
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
@@ -190,14 +202,14 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI5:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		self.mapInfo = map_info.load('maps/small.map')
+		self.mapInfo = map_info.load('map_for_level_4-5.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI5), ai1_filename = 'ai/sample_ai.exe', judge = TestGame[4][0])
 		now_round = 0
-		while now_round < self.mapInfo.max_round and self.fileInfo.state not in [0,1]:
+		while now_round < self.mapInfo.max_round and self.fileInfo.state() not in [0,1]:
 			self.fileInfo.feed_ai_commands()
 			self.fileInfo.next_round()
 			now_round += 1
-		if self.fileInfo.state:
+		if self.fileInfo.state():
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)

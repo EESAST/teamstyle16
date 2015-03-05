@@ -7,6 +7,7 @@ import sys
 from ui_loginDialog import *
 import hashlib, requests, MySQLdb
 
+f = open("C:\\Users\\lenovo\\Desktop\\name.txt","w")
 
 class LoginDialog(QWidget, Ui_LoginDialog):
 	LoginSuccess = pyqtSignal()
@@ -37,7 +38,10 @@ class LoginDialog(QWidget, Ui_LoginDialog):
 			cursor.execute(sql)
 			print "success"
 			datas = cursor.fetchall()
-			print datas,datas[0][2]
+			print repr(datas)
+			print datas,datas[0][3].encode('utf-8')
+			f.write(datas[0][3])
+			f.close()
 			if datas[0][2] == self.pwd_MD5:
 				self.datas = datas[0]
 				self.emit(SIGNAL("LoginSuccess()"))

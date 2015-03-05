@@ -14,11 +14,29 @@ TEST_REAL_GAME = 4
 
 
 def testgame_produce(game, events):
+    print
+    print
+    print
+    print "here used"
+    print
+    print
     test_state = -1
     for event in events:
         if event.__class__.__name__ == 'Create':
-            test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
-                else game.map_info.elements[event.index].team
+            print
+            print
+            print
+            print "here create", game.map_info.elements[event.index].team
+            print
+            print
+            #test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
+            #   else game.map_info.elements[event.index].team
+            if not game.map_info.elements[event.index].team:
+                test_state = 0
+    print
+    print test_state
+    print
+    print
     if test_state >= 0:
         if test_state in [0, 1]:
             return test_state
