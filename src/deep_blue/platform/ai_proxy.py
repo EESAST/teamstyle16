@@ -1,6 +1,8 @@
 import threading, socket
 import subprocess
 import logging
+import os
+
 from logic import basic
 from logic import command
 import communicate_pb2
@@ -20,6 +22,39 @@ class AIConnectError(AIError):
     def __init__(self, what):
         super(AIConnectError, self).__init__(what)
 
+# Codes adapted from http://codereview.stackexchange.com/questions/6567/how-to-redirect-a-subprocesses-output-stdout-and-stderr-to-logging-module/17959#17959
+# Thanks @deuberger !
+class LogPipe(threading.Thread):
+    def __init__(self, logger, level):
+        """Setup the object with a logger and a loglevel
+        and start the thread
+        """
+        threading.Thread.__init__(self)
+        self.daemon = False
+        self.logger = logger
+        self.level = level
+        self.fdRead, self.fdWrite = os.pipe()
+        self.pipeReader = os.fdopen(self.fdRead)
+        self.start()
+
+    def fileno(self):
+        """Return the write file descriptor of the pipe
+        """
+        return self.fdWrite
+
+    def run(self):
+        """Run the thread, logging everything.
+        """
+        for line in iter(self.pipeReader.readline, ''):
+            self.logger.log(self.level, line.strip('\n'))
+
+        self.pipeReader.close()
+
+    def close(self):
+        """Close the write end of the pipe.
+        """
+        os.close(self.fdWrite)
+
 
 class AIProxy(threading.Thread):
     """Proxy for AI"""
@@ -30,6 +65,10 @@ class AIProxy(threading.Thread):
         self.commands = []
 
         self.logger = logging.getLogger('%s.ai%d' % (__name__, team_num))
+        self.std_logpipe = LogPipe(logging.getLogger('ai%d' % team_num),
+                                   logging.INFO)
+        self.err_logpipe = LogPipe(logging.getLogger('ai%d' % team_num),
+                                   logging.DEBUG)
         self.positive_close = False
 
         port = sock.getsockname()[1]
@@ -135,7 +174,12 @@ class AIProxy(threading.Thread):
     def __run_ai(self, filename, port):
         try:
             self.ai_program = subprocess.Popen([filename, 'localhost',
-                                                           str(port)])
+                                                           str(port)],
+                                               stdout=self.std_logpipe,
+                                               stderr=self.err_logpipe)
+            # Reason: see that website mentioned above.
+            self.std_logpipe.close()
+            self.err_logpipe.close()
         except OSError as e:
             raise AIFileError("Failed to start AI file (%s): %s" %
                               (filename, e))
