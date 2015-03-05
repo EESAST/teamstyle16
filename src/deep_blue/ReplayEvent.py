@@ -500,7 +500,7 @@ class Replay(QGraphicsView):
 	def attackAnimation(self, move_unit_index, attack_target_index, damage):
 		ATTACK_TIME = 10 * self.TIME_PER_STEP
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
-
+		move_unit = None
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == move_unit_index:
@@ -511,7 +511,8 @@ class Replay(QGraphicsView):
 				if soldier.obj.index == attack_target_index:
 					attack_target = soldier
 					break
-
+		if not move_unit:
+			return QPauseAnimation(10), []
 		showAtkAnim = QParallelAnimationGroup()
 		move_effect = AttackEffectUnit(move_unit.corX, move_unit.corY, move_unit.corZ)
 		move_effect.setPos(move_unit.corX, move_unit.corY, move_unit.corZ)
@@ -592,7 +593,7 @@ class Replay(QGraphicsView):
 					flag = True
 					break
 		if not flag:
-			return None, None, []
+			return QPauseAnimation(10), QPauseAnimation(10), []
 		if self.SelectedIndex:
 			if self.SelectedIndex.index == move_unit_index:
 				move_mouse_effect = self.mouseUnit

@@ -14,29 +14,13 @@ TEST_REAL_GAME = 4
 
 
 def testgame_produce(game, events):
-    print
-    print
-    print
-    print "here used"
-    print
-    print
     test_state = -1
     for event in events:
         if event.__class__.__name__ == 'Create':
-            print
-            print
-            print
-            print "here create", game.map_info.elements[event.index].team
-            print
-            print
             #test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
             #   else game.map_info.elements[event.index].team
             if not game.map_info.elements[event.index].team:
                 test_state = 0
-    print
-    print test_state
-    print
-    print
     if test_state >= 0:
         if test_state in [0, 1]:
             return test_state
@@ -48,20 +32,32 @@ def testgame_produce(game, events):
 
 
 def testgame_collect(game, events):
-    for element in game.map_info.elements.values():
-        if element.kind == basic.BASE and game.scores[element.team] > 0 and \
-                        element.fuel == basic.PROPERTY[basic.BASE]['fuel_max'] and \
-                        element.metal == basic.PROPERTY[basic.BASE]['metal_max']:
-            return element.team
+    test_state = -1
+    for event in events:
+        if event.__class__.__name__ == 'Collect':
+            test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
+                else game.map_info.elements[event.index].team
+    if test_state >= 0:
+        if test_state in [0, 1]:
+            return test_state
+        else:
+            return STATE_TIE
     if game.round >= game.max_round:
         return STATE_TIE
     return STATE_CONTINUE
 
 
 def testgame_capture(game, events):
-    for element in game.map_info.elements.values():
-        if game.scores[element.team] > 0 and element.kind == basic.FORT and element.team == game.team:
-            return element.team
+    test_state = -1
+    for event in events:
+        if event.__class__.__name__ == 'Capture':
+            test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
+                else game.map_info.elements[event.index].team
+    if test_state >= 0:
+        if test_state in [0, 1]:
+            return test_state
+        else:
+            return STATE_TIE
     if game.round >= game.max_round:
         return STATE_TIE
     return STATE_CONTINUE
@@ -70,7 +66,7 @@ def testgame_capture(game, events):
 def testgame_attackunit(game, events):
     test_state = -1
     for event in events:
-        if event.__class__.__name__ == 'AttackUnit' and not event.taregt in game.map_info.elements:
+        if event.__class__.__name__ == 'AttackUnit' and not event.taregt in game.map_info.elements.values():
             test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
                 else game.map_info.elements[event.index].team
     if test_state >= 0:
@@ -95,6 +91,7 @@ def testgame_realgame(game, events):
     if game.round >= game.max_round or dead_bases == 2:
         return 0 if game.score(0) > game.score(1) else (1 if game.score(1) > game.score(0) else STATE_TIE)
     return STATE_CONTINUE
+
 
 
 #TestGame列表

@@ -377,6 +377,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.isPaused = True
 
 		else:
+			self.updateUi()
 			if self.loadMap and not self.mapInfo:
 				try:
 					mapInfo = map_info.load(self.mapFileName)

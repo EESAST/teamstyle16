@@ -6,6 +6,8 @@ from PyQt4.QtCore import *
 import sys
 from ui_webPlay import *
 from deep_blue import *
+import requests
+import urllib
 
 REPLAY_FILE_DIR = "."
 
@@ -31,6 +33,7 @@ class WebPlay(QWidget, Ui_Form):
 		self.mapInfo = None
 
 	def update_info(self, datas):
+		self.data = datas
 		print datas[1]
 		if datas[1]:
 			self.UserNameLabel.setText(_fromUtf8(datas[1]))
@@ -224,4 +227,23 @@ class WebPlay(QWidget, Ui_Form):
 		else:
 			pass
 
+	@pyqtSlot()
+	def on_UPAIButton_clicked(self):
+		ai_name = unicode(QFileDialog.getOpenFileName(self, QString.fromUtf8("加载ai文件"), REPLAY_FILE_DIR, "c files(*.c);;cpp files(*.cpp)"))
+		if ai_name:
+			f = open(ai_name)
+		else:
+			return
+		payload = {'MAX_FILE_SIZE':50000}
+		files = {'file':f}
+		r = requests.post("http://deepblue.eesast.com/online_battle/uploads/TEST", data = payload, files = files)
+		if r.status_code != 200:
+			QMessageBox.critical(self, QString.fromUtf8("文件上传失败"), QString.fromUtf8("连接失败，ai未能正确上传。"), QMessageBox.Ok, QMessageBox.NoButton)
+			return
+		else:
+			QMessageBox.critical(self, QString.fromUtf8("文件上传成功"), QString.fromUtf8("文件上传成功。"), QMessageBox.Ok, QMessageBox.NoButton)
 
+
+	@pyqtSlot()
+	def on_CompileButton_clicked(self):
+		urllib.open("http://deepblue.eesast.com/online_battle/compile_action/"+str(self.data[3]))
