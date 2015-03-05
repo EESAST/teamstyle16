@@ -5,7 +5,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 from ui_webPlay import *
-from platform import *
+from deep_blue import *
 
 REPLAY_FILE_DIR = "."
 

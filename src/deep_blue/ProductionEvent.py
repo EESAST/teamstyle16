@@ -7,7 +7,7 @@ from PyQt4.QtCore import *
 from lib.ui_ProductionPaint import *
 import lib.qrc_source
 from lib.PaintEvent import *
-from platform import *
+from deep_blue import *
 
 UNIT_WIDTH = 60
 UNIT_HEIGHT = 45

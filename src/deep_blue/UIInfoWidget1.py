@@ -5,7 +5,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 from ui_gameinfo1 import *
-from platform import *
+from deep_blue import *
 
 
 class InfoWidget1(QWidget, Ui_GameInfo1):

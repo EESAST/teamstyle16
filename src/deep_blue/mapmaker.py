@@ -3,7 +3,7 @@
 #地图编辑器
 
 from lib.PaintEvent import *
-from platform import *
+from deep_blue import *
 from ui_mapmaker import *
 from mapreplayer import *
 from UIHelpdlg2 import *

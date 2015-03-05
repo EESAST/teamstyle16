@@ -3,7 +3,7 @@
 #小地图定义
 
 from PaintEvent import *
-from platform import *
+from deep_blue import *
 
 MAP_X = 100
 MAP_Y = 100

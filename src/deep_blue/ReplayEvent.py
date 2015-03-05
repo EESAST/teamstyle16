@@ -4,7 +4,7 @@
 
 from lib.PaintEvent import *
 import sys, time, copy
-from platform import *
+from deep_blue import *
 
 class ReplayThread(QThread):
 	def __init__(self, scene, parent = None):

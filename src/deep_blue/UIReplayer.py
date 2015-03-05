@@ -10,7 +10,7 @@ from UIInfoWidget2 import *
 from UIHelpdlg import *
 from ReplayEvent import *
 from lib.SmallMap import *
-from platform import *
+from deep_blue import *
 from functools import partial
 from ProductionEvent import *
 
