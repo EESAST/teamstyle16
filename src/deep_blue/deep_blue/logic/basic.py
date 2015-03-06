@@ -551,19 +551,21 @@ class Unit(UnitBase):
                                    health_max, fuel_max, ammo_max, ammo_once, metal_max,
                                    speed, population, cost, build_round,
                                    attacks, defences, **kwargs)
-        self.dest = kwargs['dest'] if 'dest' in kwargs else self.pos    # 目的地(初始为自身位置)
+        # Current path.
+        self.path = kwargs['path'] if 'path' in kwargs else [self.pos]
+
+    @property
+    def dest(self):
+        return self.path[-1] if self.path is not None else None
 
     def ghost(self):
         ghost = deepcopy(self)
         ghost.fuel = ghost.ammo = ghost.metal = 0   # no access
-        ghost.dest = None   # no access
+        ghost.path = None   # no access
         return ghost
 
     def move(self, game):
         events = []
-        # cover = 0 # 走过的长度
-        nodes = game.map_info.pathfinding(self.pos, self.dest, isinstance(self, Plane))            
-
         if self.fuel <= 0:  # cannot move
             return events
 
@@ -585,11 +587,22 @@ class Unit(UnitBase):
         #             break
         #         else:
         #             raise RuntimeError()
-        if self.speed + 1 < len(nodes):
-            nodes = nodes[:self.speed + 1]
+
+        path = self.path
+        # The unit can reach path[self.speed] at most.
+        next_pos_index = min(self.speed, len(path) - 1)
+        # Avoid elements.
+        while next_pos_index > 0 and game.map_info.element(path[next_pos_index]) is not None:
+            next_pos_index -= 1
+
+        # Move.
+        self.path = path[next_pos_index:]
+        nodes = self.path[:next_pos_index + 1]
         self.pos = nodes[-1]
         move_event = Move(self.index, nodes)
         events += [] if move_event.steps == 0 else [move_event]
+
+        # Collect if possible.
         if self.kind == CARGO:
             for point in self.pos.region(level = SURFACE, range = 1):
                 near_element = game.map_info.element(point)

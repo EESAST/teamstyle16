@@ -142,24 +142,29 @@ class ChangeDest(Command):
         mover = elements.get(self.operand)
         if mover == None or not isinstance(mover, Unit):
             return False
+        # Replace previous ChangeDest command (if exists)
         for command in game.commands[mover.team]:
             if self.operand == command.operand and isinstance(command, ChangeDest):
                 game.commands[mover.team].remove(command)
                 break
         game.commands[mover.team].append(self)
-        mover.dest = self.dest
         return True
 
     def result_event(self, game):
         mover = game.map_info.elements.get(self.operand)
         if mover == None or not isinstance(mover, Unit):
             return []
+        # Correct dest if needed.
         x_max = game.map_info.x_max
         y_max = game.map_info.y_max
         self.dest.x = min(x_max, max(0, self.dest.x))
         self.dest.y = min(y_max, max(0, self.dest.y))
         self.dest.z = mover.pos.z
-        mover.dest = self.dest
+        # Find path if needed.
+        if self.dest == mover.dest:
+            return []
+        mover.path = game.map_info.pathfinding(mover.pos, self.dest,
+                                               isinstance(mover, Plane))
         return [event.ChangeDest(self.operand, self.dest)]
 
 class Produce(Command):
