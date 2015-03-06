@@ -467,7 +467,7 @@ def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
     # not provide ammo for base
     if receiver.kind == BASE:
         ammo_supply_limit = 1
-        
+
     provides = [0, 0]    # 维修者提供的燃料, 弹药
     provides[0] = min(fuel, int(giver.fuel - giver.fuel_max * fuel_supply_limit),
                             receiver.fuel_max - receiver.fuel)
@@ -660,6 +660,7 @@ class Cargo(Ship):
         d = PROPERTY[CARGO].copy()
         d.update(kwargs)
         super(Cargo, self).__init__(team, pos, **d)
+        self.metal = 0
 
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
         """运输舰对周围单位补给燃料弹药, 可向基地, 据点, 运输舰补充金属"""
