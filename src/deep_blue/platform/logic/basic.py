@@ -565,7 +565,7 @@ class Unit(UnitBase):
         # The unit can reach path[self.speed] at most.
         next_pos_index = min(self.speed, len(path) - 1)
         # Avoid elements.
-        while next_pos_index > 0 and game.map_info.element(path[-1]) is not None:
+        while next_pos_index > 0 and game.map_info.element(path[next_pos_index]) is not None:
             next_pos_index -= 1
 
         # Move.
