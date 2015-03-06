@@ -26,6 +26,7 @@ class MainWindow(QGraphicsView):
 		self.setScene(self.scene)
 		self.setAttribute(55, True)
 
+
 		#背景界面
 		self.backWindow = QGraphicsProxyWidget()
 		self.backWidget = BackWidget()
@@ -228,6 +229,8 @@ if __name__ == "__main__":
 	palette.setBrush(QPalette.Active, QPalette.ButtonText, QColor(150,255,255))
 	palette.setBrush(QPalette.Disabled, QPalette.ButtonText, QColor(0,0,0))
 	QApplication.addLibraryPath(".")
+	cursor = QCursor(QPixmap(":cursor.png").scaled(30,30), 0, 0)
+	app.setOverrideCursor(cursor)
 	splash = QSplashScreen(QPixmap(":splash.png"), Qt.WindowStaysOnTopHint)
 	splash.show()
 	screen = QDesktopWidget().screenGeometry()

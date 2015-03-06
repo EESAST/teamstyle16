@@ -321,7 +321,7 @@ class EffectIndUnit(QGraphicsTextItem):
 		self.text = text
 		font = self.font()
 		self.setZValue(0.5)
-		self.setScale(0.7)
+		self.setScale(0.8)
 		self.setDefaultTextColor(QColor(Qt.red))
 		if text[0] == "-" :
 			font.setPointSize(font.pointSize())
@@ -335,7 +335,7 @@ class EffectIndUnit(QGraphicsTextItem):
 		self.setFont(font)
 		
 	def boundingRect(self):
-		return QRectF(0, 0, 30, 20)
+		return QRectF(0, 0, 100, 50)
 		
 	def setText(self, text):
 		if text[0] == "+" or text[0] == '-':
@@ -348,11 +348,11 @@ class EffectIndUnit(QGraphicsTextItem):
 class FixEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(FixEffectUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.6)
-		self.image = QImage(":fix.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
+		self.setZValue(0.8)
+		self.image = QImage(":fix.png").scaled(UNIT_WIDTH, UNIT_HEIGHT * 2, Qt.KeepAspectRatio)
 
 	def boundingRect(self):
-		return QRectF(0, 0, UNIT_WIDTH, UNIT_HEIGHT)
+		return QRectF(0, 0, 30, 30)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
@@ -374,17 +374,26 @@ class ColEffectUnit(AbstractUnit):
 		painter.restore()
 
 class SupEffectUnit(AbstractUnit):
-	def __init__(self, x, y, z, parent = None):
+	def __init__(self, x, y, z, x1, y1, z1, parent = None):
 		super(SupEffectUnit, self).__init__(x, y, z, parent)
 		self.setZValue(0.6)
+		self.pos = (x, y, z, x1, y1, z1)
 		self.image = QImage(":supply.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
 
 	def boundingRect(self):
-		return QRectF(0, 0, UNIT_WIDTH, UNIT_HEIGHT)
+		return QRectF(0, 0, 100, 100)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		painter.drawImage(QPoint(self.corX,self.corY), self.image)
+		pen = QPen()
+		pen.setWidth(2)
+		pen.setCapStyle(Qt.RoundCap)
+		pen.setJoinStyle(Qt.RoundJoin)
+		pen.setColor(QColor(Qt.green))
+		painter.setPen(pen)
+		painter.drawLine(QPointF(self.pos[0]*GRID_WIDTH + 15, self.pos[1]*GRID_HEIGHT + (2-self.pos[2])*UNIT_HEIGHT + 5),
+						 QPointF(self.pos[3]*GRID_WIDTH + 15, self.pos[4]*GRID_HEIGHT + (2-self.pos[5])*UNIT_HEIGHT + 5))
+		#painter.drawImage(QPoint(self.corX,self.corY), self.image)
 		painter.restore()
 
 class BoomEffectUnit(AbstractUnit):

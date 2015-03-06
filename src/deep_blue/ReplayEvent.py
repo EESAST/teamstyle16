@@ -5,6 +5,7 @@
 from lib.PaintEvent import *
 import sys, time, copy
 from deep_blue import *
+import qrc_source
 
 class ReplayThread(QThread):
 	def __init__(self, scene, parent = None):
@@ -199,7 +200,7 @@ class Replay(QGraphicsView):
 						self.attack_list[self.SelectedIndex.index] = new_command
 						self.key_pressed = 0
 						flag1 = True
-					if isinstance(it, MapUnit):
+					if isinstance(it, FrogUnit):
 						flag2 = True
 						pos = it.pos
 						#self.emit(SIGNAL("attackPosSelected"), it.pos)
@@ -208,6 +209,8 @@ class Replay(QGraphicsView):
 						self.command_list.append(new_command)
 						self.attack_list[self.SelectedIndex.index] = new_command
 				self.key_pressed = 0
+				cursor = QCursor(QPixmap(":cursor.png").scaled(30,30), 0, 0)
+				self.setCursor(cursor)
 			elif self.key_pressed == 2:
 				for it in items:
 					if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team and it.obj.kind in [4, 5, 6, 7, 8, 9]:
@@ -217,6 +220,8 @@ class Replay(QGraphicsView):
 							del self.attack_list[self.SelectedIndex.index]
 						self.command_list.append(new_command)
 				self.key_pressed = 0
+				cursor = QCursor(QPixmap(":cursor.png").scaled(30,30), 0, 0)
+				self.setCursor(cursor)
 			elif self.key_pressed == 3:
 				for it in items:
 					if isinstance(it, MapUnit):
@@ -225,6 +230,8 @@ class Replay(QGraphicsView):
 							del self.attack_list[self.SelectedIndex.index]
 						self.command_list.append(new_command)
 				self.key_pressed = 0
+				cursor = QCursor(QPixmap(":cursor.png").scaled(30,30), 0, 0)
+				self.setCursor(cursor)
 			elif self.key_pressed == 4:
 				for it in items:
 					if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team: #认为除了矿井和和油田外的对象均能被补给
@@ -234,6 +241,8 @@ class Replay(QGraphicsView):
 							del self.attack_list[self.SelectedIndex.index]
 						self.command_list.append(new_command)
 				self.key_pressed = 0
+				cursor = QCursor(QPixmap(":cursor.png").scaled(30,30), 0, 0)
+				self.setCursor(cursor)
 			
 		
 
@@ -249,19 +258,24 @@ class Replay(QGraphicsView):
 			items = self.items(pos)
 			if not items:
 				return
+			maprecord = False
+			get_unit = False
 			for it in items:
 				if isinstance(it, SoldierUnit) and it.obj.team != self.SelectedIndex.team:  #如果点击对象是单位，并且点击对象和被选中的单位不属于同一队伍，则攻击
+					get_unit = True
 					new_command = command.AttackUnit(self.SelectedIndex.index, it.obj.index)
 					self.command_list.append(new_command)
 					self.attack_list[self.SelectedIndex.index] = new_command
-				if isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team:
+				elif isinstance(it, SoldierUnit) and it.obj.team == self.SelectedIndex.team:
 					if it.obj.kind in [4, 5, 6, 7, 8, 9] and self.SelectedIndex.kind == 0:
+						get_unit = True
 						#如果之前选中了基地，再右击可被维修的单位，则发出维修指令
 						new_command = command.Fix(self.SelectedIndex.index, it.obj.index)
 						if self.SelectedIndex.index in self.attack_list.keys():
 							del self.attack_list[self.SelectedIndex.index]
 						self.command_list.append(new_command)
-					elif it.obj.kind in range(4, 10) and self.SelectedIndex.kind in [6,7]:
+					elif it.obj.kind in [0, 1, 4, 5, 6, 7, 8, 9] and self.SelectedIndex.kind in [1,6,7]:
+						get_unit = True
 						#如果之前选中航母或运输舰，在右击基地或据点，则补给
 						new_command = command.Supply(self.SelectedIndex.index, it.obj.index)
 						if self.SelectedIndex.index in self.attack_list.keys():
@@ -269,17 +283,17 @@ class Replay(QGraphicsView):
 						self.command_list.append(new_command)
 				#由于修理和补给指令的双方种类可能完全相同，所以只定义了右键点击可以修理以及单位向建筑物补给，对单位补给指令只能通过"s+左键"发出
 				elif isinstance(it, MapUnit):
-					if self.SelectedIndex.kind == 0 or self.SelectedIndex.kind == 1:
+					maprecord = True
+			if not get_unit and maprecord:
+				if self.SelectedIndex.kind == 0 or self.SelectedIndex.kind == 1:
 						new_command = command.AttackPos(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
 						self.command_list.append(new_command)
 						self.attack_list[self.SelectedIndex.index] = new_command
-					elif self.SelectedIndex.kind >= 4:
-						new_command = command.ChangeDest(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
-						if self.SelectedIndex.index in self.attack_list.keys():
-							del self.attack_list[self.SelectedIndex.index]
-						self.command_list.append(new_command)
-				else:
-					return
+				elif self.SelectedIndex.kind >= 4:
+					new_command = command.ChangeDest(self.SelectedIndex.index, basic.Position(it.pos[0], it.pos[1], it.pos[2]))
+					if self.SelectedIndex.index in self.attack_list.keys():
+						del self.attack_list[self.SelectedIndex.index]
+					self.command_list.append(new_command)
 	'''
 	def mouseMoveEvent(self, event):
 		if not self.run:
@@ -350,6 +364,15 @@ class Replay(QGraphicsView):
 				return
 			'''
 			if self.SelectedIndex.kind in [0, 1, 4, 5, 6, 8, 9]:          #不知道能不能实现，不能的话交由平台管？
+				cursor = QCursor(QPixmap(":cursor2.png").scaled(30,30), 0, 0)
+				self.setCursor(cursor)
+				print
+				print
+				print
+				print
+				print "we set cursor"
+				print
+				print
 				self.key_pressed = 1
 			else:
 				return
@@ -361,7 +384,16 @@ class Replay(QGraphicsView):
 				return
 			if self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
 				return
-			if self.SelectedIndex.kind == 0:          
+			if self.SelectedIndex.kind == 0:
+				cursor = QCursor(QPixmap(":cursor2.png").scaled(30,30), 0, 0)
+				self.setCursor(cursor)
+				print
+				print
+				print
+				print
+				print "we set cursor"
+				print
+				print      
 				self.key_pressed = 2
 			else:
 				return
@@ -374,6 +406,15 @@ class Replay(QGraphicsView):
 			if self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
 				return
 			if self.SelectedIndex.kind >= 4:
+				cursor = QCursor(QPixmap(":cursor2.png").scaled(30,30), 0, 0)
+				self.setCursor(cursor)
+				print
+				print
+				print
+				print
+				print "we set cursor"
+				print
+				print
 				self.key_pressed = 3
 			else:
 				return
@@ -386,6 +427,15 @@ class Replay(QGraphicsView):
 			if self.HUMAN_REPLAY in [0, 1] and self.SelectedIndex.team != self.HUMAN_REPLAY:
 				return
 			if self.SelectedIndex.kind in [0, 1, 6, 7]:
+				cursor = QCursor(QPixmap(":cursor2.png").scaled(30,30), 0, 0)
+				print
+				print
+				print
+				print
+				print "we set cursor"
+				print
+				print
+				self.setCursor(cursor)
 				self.key_pressed = 4
 			else:
 				return
@@ -640,6 +690,8 @@ class Replay(QGraphicsView):
 
 	def supplyAnimation(self, supply_unit_index, supply_target_index, fuel_supply, ammo_supply, metal_supply):
 		TOTAL_TIME=20 * self.TIME_PER_STEP
+		supply_unit = None
+		supply_target = None
 
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
@@ -651,26 +703,28 @@ class Replay(QGraphicsView):
 				if soldier.obj.index == supply_target_index:
 					supply_target = soldier
 					break
+		if not supply_target or not supply_unit:
+			return QPropertyAnimation(10), []
 		
 		showSplAnim = QParallelAnimationGroup()
 		
-		move_unit = SupEffectUnit(supply_unit.corX, supply_unit.corY, supply_unit.corZ)
-		move_unit.setPos(supply_unit.corX, supply_unit.corY, supply_unit.corZ)
+		move_unit = SupEffectUnit(supply_unit.corX, supply_unit.corY, supply_unit.corZ, supply_target.corX, supply_target.corY, supply_target.corZ)
+		#move_unit.setPos(supply_unit.corX, supply_unit.corY, supply_unit.corZ)
 		self.scene.addItem(move_unit)
 		
 		ani = QPropertyAnimation(move_unit, "opacity")
 		ani.setDuration(TOTAL_TIME) 
 		ani.setStartValue(0)
-		ani.setKeyValueAt(0.3, 1)
-		ani.setKeyValueAt(0.7, 1)
+		ani.setKeyValueAt(0.2, 1)
+		ani.setKeyValueAt(0.8, 1)
 		ani.setEndValue(0)
 		showSplAnim.addAnimation(ani)
 		
-		label = EffectIndUnit("F +%d\nA +%d\nM +%d" %(fuel_supply, ammo_supply, metal_supply))
+		label = EffectIndUnit("F +%d A +%d M +%d" %(fuel_supply, ammo_supply, metal_supply))
 		label.setColor(Qt.green)
 		label.setOpacity(0)
 		self.scene.addItem(label)
-		label.setPos(QPointF((supply_target.corX)* 30, (supply_target.corY)* 30 + 5))
+		label.setPos(QPointF((supply_target.corX)* 30 - 10, (supply_target.corY)* 30 + (2 - supply_target.corZ) * 10 - 15))
 		ani = QPropertyAnimation(label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
@@ -709,16 +763,25 @@ class Replay(QGraphicsView):
 		showFixAnim = QParallelAnimationGroup()
 		
 		#位置可能不对，再调
-		effect_unit = FixEffectUnit(fix_unit.corX, fix_unit.corY, fix_unit.corZ)
-		effect_unit.setPos(fix_unit.corX, fix_unit.corY, fix_unit.corZ)
+		effect_unit = FixEffectUnit(fix_target.corX, fix_target.corY, fix_target.corZ)
+		effect_unit.setPos(fix_target.corX, fix_target.corY, fix_target.corZ)
 		self.scene.addItem(effect_unit)
 		
+		ani = QPropertyAnimation(effect_unit, "rotation")
+		ani.setDuration(TOTAL_TIME)
+		ani.setStartValue(0)
+		ani.setKeyValueAt(0.3,60)
+		ani.setKeyValueAt(0.6, -60)
+		ani.setKeyValueAt(0.9,60)
+		ani.setEndValue(0)
+		showFixAnim.addAnimation(ani)
+
 		ani = QPropertyAnimation(effect_unit, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
-		ani.setKeyValueAt(0.1,0.8)
-		ani.setKeyValueAt(0.5, 1)
-		ani.setKeyValueAt(0.9,0.8)
+		ani.setKeyValueAt(0.3,1)
+		ani.setKeyValueAt(0.8,1)
+		ani.setKeyValueAt(0.9,0)
 		ani.setEndValue(0)
 		showFixAnim.addAnimation(ani)
 
@@ -750,14 +813,21 @@ class Replay(QGraphicsView):
 		effect_label.setDefaultTextColor(Qt.green)
 		effect_label.setOpacity = (0)
 		self.scene.addItem(effect_label)
-		effect_label.setPos(QPointF((fix_target.corX)* 30, (fix_target.corY)* 30))
+		effect_label.setPos(QPointF((fix_target.corX)* 30, (fix_target.corY)* 30 + (2 - fix_target.corZ) * 10 - 10))
+		ani = QPropertyAnimation(effect_label, "pos")
+		ani.setDuration(TOTAL_TIME)
+		ani.setStartValue(effect_label.pos())
+		ani.setKeyValueAt(0.2,effect_label.pos())
+		ani.setEndValue(effect_label.pos() + QPointF(0, 10))
+		showFixAnim.addAnimation(ani)
+
 		ani = QPropertyAnimation(effect_label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
-		ani.setKeyValueAt(0.1,0.8)
-		ani.setKeyValueAt(0.5, 1)
-		ani.setKeyValueAt(0.9,0.8)
+		ani.setKeyValueAt(0.2,1)
+		ani.setKeyValueAt(0.8,1)
 		ani.setEndValue(0)
+
 		showFixAnim.addAnimation(ani)
 		
 		return showFixAnim,[effect_unit,fix_label,effect_label]

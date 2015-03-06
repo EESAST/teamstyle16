@@ -7,5 +7,7 @@
     <file alias="5.png">image/5.png</file>
     <file alias="jiemian.jpg">image/jiemian.jpg</file>
     <file alias="splash.png">image/splash.png</file>
+    <file alias="cursor.png">image/cursor.png</file>
+    <file alias="cursor2.png">image/cursor2.png</file>
    </qresource>
 </RCC>
