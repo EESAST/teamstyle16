@@ -704,7 +704,7 @@ class Replay(QGraphicsView):
 					supply_target = soldier
 					break
 		if not supply_target or not supply_unit:
-			return QPropertyAnimation(10), []
+			return QPauseAnimation(10), []
 		
 		showSplAnim = QParallelAnimationGroup()
 		
@@ -861,7 +861,7 @@ class Replay(QGraphicsView):
 		showColAnim.addAnimation(ani)
 		
 		effect_label = EffectIndUnit("Fuel+%d\n Metal+%d" %(fuel_collect, metal_collect))
-		effect_label.setColor(Qt.green)
+		effect_label.setColor(Qt.blue)
 		self.scene.addItem(effect_label)
 		effect_label.setPos(QPointF((collect_unit.corX)* 30, (collect_unit.corY) * 30))
 		ani = QPropertyAnimation(effect_label, "opacity")
@@ -910,12 +910,14 @@ class Replay(QGraphicsView):
 
 	def destroyAnimation(self, destroyed_unit_index):
 		#要不要画个什么效果
-
+		destroyed_effect = None
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == destroyed_unit_index:
 					destroyed_effect = soldier
-					break			
+					break		
+		if not destroyed_effect:
+			return QPauseAnimation(10), []
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 		
 		destroyAnim = QPropertyAnimation(destroyed_effect, "opacity")
@@ -929,9 +931,10 @@ class Replay(QGraphicsView):
 
 	def captureAnimation(self, target_unit_index, team):		
 		TOTAL_TIME=20 * self.TIME_PER_STEP
-
+		target_unit = None
 		target_unit = self.battle.map_info().elements[target_unit_index]
-		
+		if not target_unit:
+			return QPauseAnimation(10), []
 		label = EffectIndUnit("Team %d has gained possession." %team)
 		label.setOpacity = (0)
 		self.scene.addItem(label)
@@ -953,13 +956,13 @@ class Replay(QGraphicsView):
 		move_effect = None
 		move_unit = None
 		label = None
-
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == move_unit_index:
 					move_unit = soldier
 					break
-
+		if not move_unit:
+			return QPauseAnimation(10), []
 		showAtkAnim = QParallelAnimationGroup()
 		move_effect = AttackEffectUnit(move_unit.corX, move_unit.corY, move_unit.corZ)
 		move_effect.setPos(move_unit.corX, move_unit.corY, move_unit.corZ)
