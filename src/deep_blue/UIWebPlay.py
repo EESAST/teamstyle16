@@ -236,7 +236,7 @@ class WebPlay(QWidget, Ui_Form):
 			return
 		payload = {'MAX_FILE_SIZE':50000}
 		files = {'file':f}
-		r = requests.post("http://deepblue.eesast.com/online_battle/uploads/TEST", data = payload, files = files)
+		r = requests.post("http://deepblue.eesast.com/online_battle/uploads/"+self.data[3], data = payload, files = files)
 		if r.status_code != 200:
 			QMessageBox.critical(self, QString.fromUtf8("文件上传失败"), QString.fromUtf8("连接失败，ai未能正确上传。"), QMessageBox.Ok, QMessageBox.NoButton)
 			return
@@ -246,4 +246,5 @@ class WebPlay(QWidget, Ui_Form):
 
 	@pyqtSlot()
 	def on_CompileButton_clicked(self):
-		urllib.open("http://deepblue.eesast.com/online_battle/compile_action/"+str(self.data[3]))
+		print "clicked"
+		print urllib.urlopen("http://deepblue.eesast.com/online_battle/compile_action/"+str(self.data[3])).read()

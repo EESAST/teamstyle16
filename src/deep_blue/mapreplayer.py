@@ -45,7 +45,7 @@ class MapMakerReplayer(QGraphicsView):
 		self.size = 30
 		self.RightState = 0
 		self.now_population = [0, 0]
-		self.have_base = [True, True]
+		self.have_base = [False, False]
 		self.copy = 0
 		self.change_team = 0
 
@@ -54,6 +54,7 @@ class MapMakerReplayer(QGraphicsView):
 	    self.scale(factor, factor)
 
 	def createMap(self, num, population, round_):#num: 0对称方式 1地图大小 2陆海对比 3资源数量 4-9：6单位数量
+		self.have_base = [False, False]
 		self.copy = num[0]
 		if not self.mapcreate.running:
 			self.mapcreate.run()
@@ -358,7 +359,7 @@ class MapMakerReplayer(QGraphicsView):
 		self.size = 30
 		self.RightState = 0
 		self.now_population = [0, 0]
-		self.have_base = [True, True]
+		self.have_base = [False, False]
 		self.copy = 0
 		self.change_team = 0
 
@@ -405,6 +406,7 @@ class MapMakerReplayer(QGraphicsView):
 					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("基地周围需要有海洋"), QMessageBox.Ok, QMessageBox.NoButton)
 					return
 				self.map.add_element(basic.Base(self.change_team, basic.Rectangle(basic.Position(c_pos[0], c_pos[1]), basic.Position(c_pos[0] + 2, c_pos[1] + 2))))
+				self.have_base[self.change_team] = True
 
 			elif self.RightState == 2:
 				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):

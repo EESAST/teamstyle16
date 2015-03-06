@@ -253,13 +253,14 @@ class MapMaker(QWidget, Ui_Mapmaker):
                 self.create = True
                 self.CenterWidget.x_max = mapInfo.x_max
                 self.CenterWidget.y_max = mapInfo.y_max
+                self.CenterWidget.have_base = [True, True]
         self.CenterWidget.show()
         self.RandomButton.setEnabled(False)
         self.create = True
 
     @pyqtSlot()
     def on_ClosePushButton_clicked(self):
-        if self.create and self.have_base:
+        if self.create and self.CenterWidget.have_base[0] and self.CenterWidget.have_base[1]:
             choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存地图文件吗？"), QMessageBox.Yes|QMessageBox.No)
             if choice == QMessageBox.Yes:
                 saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存地图"), REPLAY_FILE_DIR, "map files(*.map)")
