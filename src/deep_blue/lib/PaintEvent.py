@@ -222,11 +222,11 @@ class SoldierMakerUnit(AbstractUnit):
 		self.image = QImage(filename)
 
 	def boundingRect(self):
-		return QRectF(0, 0, self.size, self.size/3)
+		return QRectF(0, 0, self.size * self.obj.size[0], self.size * self.obj.size[1]/3)
 
 	def paint(self, painter, option, widget = None):
 		painter.save()
-		painter.drawImage(QPoint(0,0), self.image.scaled(self.size, self.size/3, Qt.IgnoreAspectRatio))
+		painter.drawImage(QPoint(0,0), self.image.scaled(self.size*self.obj.size[0], self.size*self.obj.size[1]/3, Qt.IgnoreAspectRatio))
 		painter.restore()
 
 

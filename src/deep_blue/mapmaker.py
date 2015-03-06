@@ -189,6 +189,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.CenterWidget.reset()
         self.CenterWidget.createMap(self.num, self.population, self.round)
         self.create = True
+        self.CenterWidget.have_base = [True, True]
 
     @pyqtSlot()
     def on_ExitButton_clicked(self):

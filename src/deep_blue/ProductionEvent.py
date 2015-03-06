@@ -54,6 +54,9 @@ class ProductionReplay(QGraphicsView):
 		self.stateMachine.setInitialState(self.State_Run)
 		self.State_Final = QFinalState(self.stateMachine)
 
+
+		self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.statelist = []
 
 	def mousePressEvent(self, event):
@@ -98,29 +101,29 @@ class ProductionReplay(QGraphicsView):
 		self.num()
 		self.battle = battle
 		if not self.objects1:
-			new_unit = SoldierMakerUnit(basic.Submarine(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Submarine(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(0,0,2)
+			new_unit.setPos(0,0,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Destroyer(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Destroyer(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(2,0,2)
+			new_unit.setPos(2,0,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Carrier(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Carrier(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(4,0,2)
+			new_unit.setPos(4,0,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Cargo(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Cargo(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(0,2,2)
+			new_unit.setPos(0,2,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Fighter(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Fighter(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(2,2,2)
+			new_unit.setPos(2,2,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Scout(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Scout(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(4,2,2)
+			new_unit.setPos(4,2,2,40)
 			self.scene.addItem(new_unit)
 
 
@@ -143,9 +146,9 @@ class ProductionReplay(QGraphicsView):
 			else:
 				number = EffectIndUnit("%d" %now_list[i])
 			if i < 3:
-				number.setPos(i*60, 30)
+				number.setPos(i*80, 35)
 			else:
-				number.setPos((i-3)*60, 80)
+				number.setPos((i-3)*80, 95)
 			number.setScale(1.2)
 			number.setDefaultTextColor(QColor(Qt.blue))
 			self.scene.addItem(number)
