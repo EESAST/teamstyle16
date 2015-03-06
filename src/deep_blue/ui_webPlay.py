@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'WebPlay.ui'
 #
-# Created: Thu Mar 05 00:05:18 2015
+# Created: Fri Mar 06 15:25:14 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -140,22 +140,22 @@ class Ui_Form(object):
         self.tab2 = QtGui.QWidget()
         self.tab2.setObjectName(_fromUtf8("tab2"))
         self.label_20 = QtGui.QLabel(self.tab2)
-        self.label_20.setGeometry(QtCore.QRect(280, 10, 54, 12))
+        self.label_20.setGeometry(QtCore.QRect(230, 10, 54, 12))
         self.label_20.setObjectName(_fromUtf8("label_20"))
         self.MapCombo = QtGui.QComboBox(self.tab2)
-        self.MapCombo.setGeometry(QtCore.QRect(340, 10, 69, 22))
+        self.MapCombo.setGeometry(QtCore.QRect(290, 10, 161, 22))
         self.MapCombo.setObjectName(_fromUtf8("MapCombo"))
         self.label_21 = QtGui.QLabel(self.tab2)
-        self.label_21.setGeometry(QtCore.QRect(280, 50, 54, 12))
+        self.label_21.setGeometry(QtCore.QRect(230, 50, 54, 12))
         self.label_21.setObjectName(_fromUtf8("label_21"))
         self.EnemyCombo = QtGui.QComboBox(self.tab2)
-        self.EnemyCombo.setGeometry(QtCore.QRect(340, 50, 69, 22))
+        self.EnemyCombo.setGeometry(QtCore.QRect(290, 50, 161, 22))
         self.EnemyCombo.setObjectName(_fromUtf8("EnemyCombo"))
         self.textBrowser = QtGui.QTextBrowser(self.tab2)
         self.textBrowser.setGeometry(QtCore.QRect(10, 80, 571, 341))
         self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
         self.FightButton = QtGui.QPushButton(self.tab2)
-        self.FightButton.setGeometry(QtCore.QRect(440, 30, 75, 23))
+        self.FightButton.setGeometry(QtCore.QRect(490, 30, 75, 23))
         self.FightButton.setObjectName(_fromUtf8("FightButton"))
         self.UPAIButton = QtGui.QPushButton(self.tab2)
         self.UPAIButton.setGeometry(QtCore.QRect(10, 10, 75, 23))
@@ -167,7 +167,7 @@ class Ui_Form(object):
         self.label_22.setGeometry(QtCore.QRect(100, 10, 81, 16))
         self.label_22.setObjectName(_fromUtf8("label_22"))
         self.AILabel = QtGui.QLabel(self.tab2)
-        self.AILabel.setGeometry(QtCore.QRect(130, 40, 141, 16))
+        self.AILabel.setGeometry(QtCore.QRect(90, 40, 141, 16))
         self.AILabel.setText(_fromUtf8(""))
         self.AILabel.setObjectName(_fromUtf8("AILabel"))
         self.tabWidget.addTab(self.tab2, _fromUtf8(""))

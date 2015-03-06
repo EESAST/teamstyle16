@@ -202,6 +202,7 @@ class MainWindow(QGraphicsView):
 	def loginsuccess(self):
 		print "in here"
 		self.webPlay.update_info(self.loginDialog.datas)
+		self.webPlay.Initialize_online()
 
 	def closeWindow(self):
 		sender = self.sender()

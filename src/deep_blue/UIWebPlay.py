@@ -7,7 +7,7 @@ import sys
 from ui_webPlay import *
 from deep_blue import *
 import requests
-import urllib
+import urllib, MySQLdb
 
 REPLAY_FILE_DIR = "."
 
@@ -247,4 +247,37 @@ class WebPlay(QWidget, Ui_Form):
 	@pyqtSlot()
 	def on_CompileButton_clicked(self):
 		print "clicked"
-		print urllib.urlopen("http://deepblue.eesast.com/online_battle/compile_action/"+str(self.data[3])).read()
+		urllib.urlopen("http://deepblue.eesast.com/online_battle/compile_action/"+str(self.data[3]))
+
+	def Initialize_online(self):
+		db = MySQLdb.connect("teamstyle16.eesast.com","duishi16","******","info")
+		cursor = db.cursor()
+		sql="select round,name from maps;"
+		try:
+			cursor.execute(sql)
+			maps_ = cursor.fetchall()
+			print maps_
+			for maps__ in maps_:
+				self.MapCombo.addItem(QString.fromUtf8(maps__[1]+" 回合数：%d" %maps__[0]), maps__[1])
+		except:
+			QMessageBox.critical(self, QString.fromUtf8("连接错误"), QString.fromUtf8("未能正确获取信息"), QMessageBox.Ok, QMessageBox.NoButton)
+			db.rollback()
+
+		sql="select with_ai,team_name,score from teams;"
+		try:
+			cursor.execute(sql)
+			teams_ = cursor.fetchall()
+			print teams_
+			for teams__ in teams_:
+				if teams__[0]:
+					self.EnemyCombo.addItem(QString.fromUtf8(teams__[1]+" 积分：%d" %teams__[2]), teams__[1])
+		except:
+			QMessageBox.critical(self, QString.fromUtf8("连接错误"), QString.fromUtf8("未能正确获取信息"), QMessageBox.Ok, QMessageBox.NoButton)
+			db.rollback()
+		db.close()
+
+	@pyqtSlot()
+	def on_FightButton_clicked(self):
+		print self.MapCombo.itemData(self.MapCombo.currentIndex()).toString(), self.EnemyCombo.itemData(self.EnemyCombo.currentIndex()).toString()
+		payload = {'map':self.MapCombo.itemData(self.MapCombo.currentIndex()).toString(), 'player':self.EnemyCombo.itemData(self.EnemyCombo.currentIndex()).toString()}
+		r = requests.post("http://deepblue.eesast.com/online_battle/battle/"+self.data[3],data = payload)
