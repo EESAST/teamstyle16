@@ -209,7 +209,9 @@ class Supply(Command):
         elements = game.map_info.elements
         giver = elements.get(self.operand)
         receiver = elements.get(self.target)
-        if giver == None or receiver == None or giver.kind not in [BASE, FORT, CARRIER, CARGO]:
+        if (giver == None or receiver == None
+            or giver.kind not in [BASE, FORT, CARRIER, CARGO]
+            or receiver.kind in [MINE, OILFIELD]):
             return False
         if giver.team != receiver.team:
             return False
