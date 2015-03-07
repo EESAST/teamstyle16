@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'AIReplayer.ui'
 #
-# Created: Sun Dec 21 19:18:09 2014
+# Created: Sun Mar 08 00:18:14 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -196,6 +196,9 @@ class Ui_AIReplayer(object):
         self.DownPushButton = QtGui.QPushButton(AIReplayer)
         self.DownPushButton.setGeometry(QtCore.QRect(170, 560, 75, 23))
         self.DownPushButton.setObjectName(_fromUtf8("DownPushButton"))
+        self.OneStepButton = QtGui.QPushButton(AIReplayer)
+        self.OneStepButton.setGeometry(QtCore.QRect(140, 450, 75, 23))
+        self.OneStepButton.setObjectName(_fromUtf8("OneStepButton"))
 
         self.retranslateUi(AIReplayer)
         QtCore.QMetaObject.connectSlotsByName(AIReplayer)
@@ -220,4 +223,5 @@ class Ui_AIReplayer(object):
         self.label.setText(_translate("AIReplayer", "缩放：", None))
         self.UpPushButton.setText(_translate("AIReplayer", "↑", None))
         self.DownPushButton.setText(_translate("AIReplayer", "↓", None))
+        self.OneStepButton.setText(_translate("AIReplayer", "单步调试", None))
 
