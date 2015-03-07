@@ -76,6 +76,8 @@ class InfoWidget1(QWidget, Ui_GameInfo1):
 		self.ShipNumberLineEdit2.setText("")
 		self.PlaneNumberLineEdit2.setText("")
 		self.FortNumberLineEdit2.setText("")
+		self.ScoreLineEdit1.setText("")
+		self.ScoreLineEdit2.setText("")
 
 
 

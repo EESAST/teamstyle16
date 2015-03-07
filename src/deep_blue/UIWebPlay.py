@@ -48,11 +48,11 @@ class WebPlay(QWidget, Ui_Form):
 
 	@pyqtSlot()
 	def on_B1Button_clicked(self):
-		QMessageBox.information(self, QString.fromUtf8("第一关"), QString.fromUtf8("选手生产出单位即为胜利"), QMessageBox.Ok)
+		QMessageBox.information(self, QString.fromUtf8("第一关"), QString.fromUtf8("选手生产出单位"), QMessageBox.Ok)
 
 	@pyqtSlot()
 	def on_B2Button_clicked(self):
-		QMessageBox.information(self, QString.fromUtf8("第二关"), QString.fromUtf8("选手收集到资源补充给基地使得基地各资源达到最大值"), QMessageBox.Ok)
+		QMessageBox.information(self, QString.fromUtf8("第二关"), QString.fromUtf8("选手收集到资源"), QMessageBox.Ok)
 
 	@pyqtSlot()
 	def on_B3Button_clicked(self):
@@ -60,11 +60,11 @@ class WebPlay(QWidget, Ui_Form):
 
 	@pyqtSlot()
 	def on_B4Button_clicked(self):
-		QMessageBox.information(self, QString.fromUtf8("第四关"), QString.fromUtf8("选手在自己方单位没有死亡的前提下攻击敌方单位并使其死亡(对手为空AI)"), QMessageBox.Ok)
+		QMessageBox.information(self, QString.fromUtf8("第四关"), QString.fromUtf8("选手在自己方单位没有死亡的前提下攻击敌方单位并使其死亡(对手为AI)"), QMessageBox.Ok)
 
 	@pyqtSlot()
 	def on_B5Button_clicked(self):
-		QMessageBox.information(self, QString.fromUtf8("第五关"), QString.fromUtf8("胜利条件与正式赛相同(对手为空AI)"), QMessageBox.Ok)
+		QMessageBox.information(self, QString.fromUtf8("第五关"), QString.fromUtf8("胜利条件与正式赛相同(对手为AI)"), QMessageBox.Ok)
 
 	@pyqtSlot()
 	def on_U1Button_clicked(self):
