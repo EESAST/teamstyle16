@@ -588,7 +588,7 @@ class Unit(UnitBase):
         #         else:
         #             raise RuntimeError()
 
-        path = self.path
+        path = deepcopy(self.path)
         # The unit can reach path[self.speed] at most.
         next_pos_index = min(self.speed, len(path) - 1)
         # Avoid elements.
@@ -597,7 +597,7 @@ class Unit(UnitBase):
 
         # Move.
         self.path = path[next_pos_index:]
-        nodes = self.path[:next_pos_index + 1]
+        nodes = path[:next_pos_index + 1]
         self.pos = nodes[-1]
         move_event = Move(self.index, nodes)
         events += [] if move_event.steps == 0 else [move_event]
