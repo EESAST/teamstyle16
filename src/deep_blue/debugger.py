@@ -10,7 +10,7 @@ def debug(args):
     if args.timeout:
         kw['timeout'] = args.timeout
 
-    if args.map.endswith('.battle')
+    if args.map.endswith('.battle'):
         b = load(args.map, **kw)
     else:  # Construct a new battle
         m = map_info.load(args.map)
