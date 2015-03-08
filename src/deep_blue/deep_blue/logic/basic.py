@@ -590,7 +590,7 @@ class Unit(UnitBase):
 
         path = deepcopy(self.path)
         # The unit can reach path[self.speed] at most.
-        next_pos_index = min(self.speed, len(path) - 1)
+        next_pos_index = min(self.speed, len(path) - 1, self.fuel)
         # Avoid elements.
         while next_pos_index > 0 and game.map_info.element(path[next_pos_index]) is not None:
             next_pos_index -= 1
