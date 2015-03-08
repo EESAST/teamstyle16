@@ -16,13 +16,14 @@ class AIBattle(battle.Battle):
     """Represent a battle between two AIs"""
     def __init__(self, map_info, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
                  ai0_filename=None, ai1_filename=None, prev_info=None,
-                 **kw):
+                 fixed_port=False, **kw):
         """Construct an AIBattle from a map, or from previous infos.
         port is the port number used for listening.
         If filename is given, AIBattle is responsible for starting & closing
         the AI program.
         If prev_info is given, restore from it instead of constructing a new
         one.
+        If fixed_port is True, will only listen on DEFAULT_PORT.
         """
         # Start battle
         super(AIBattle, self).__init__(map_info, prev_info=prev_info, **kw)
@@ -33,9 +34,13 @@ class AIBattle(battle.Battle):
             try:
                 sock.bind(('', port))
             except socket.error:
-                logger.warning('Port %d has already been taken, trying port %d',
-                               port, port + 1)
-                port += 1
+                if fixed_port:
+                    logger.error('Port %d has already been taken, aborting', port)
+                    exit(1)
+                else:
+                    logger.warning('Port %d has already been taken, trying port %d',
+                                   port, port + 1)
+                    port += 1
             else:  # binding succeeds
                 break
         sock.listen(2)
