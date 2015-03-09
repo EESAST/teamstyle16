@@ -107,7 +107,7 @@ class AIProxy(threading.Thread):
             self.conn.close()
             self.logger.info('Connection closed')
         # Terminate AI program if needed
-        if self.ai_program and self.ai_program.poll():
+        if self.ai_program and not self.ai_program.poll():
             self.logger.debug("Terminaing AI")
             self.ai_program.terminate()
             self.logger.info('AI terminated')
