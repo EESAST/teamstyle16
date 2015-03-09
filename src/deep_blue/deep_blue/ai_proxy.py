@@ -126,8 +126,6 @@ class AIProxy(threading.Thread):
                 self.logger.error('Receiving failed: %s', e)
                 # Clean up
                 self.stop(socket.SHUT_WR)  # Prevent write from main thread
-                raise AIConnectError('Receiving from AI %d failed: %s' %
-                                     (self.team_num, e))
 
             if len(data) == 0:
                 if self.positive_close:
@@ -144,8 +142,6 @@ class AIProxy(threading.Thread):
                         self.logger.info('AI has not stopped yet')
                 # Clean up
                 self.stop(socket.SHUT_WR)  # Prevent write from main thread
-                raise AIConnectError('Connection shutdown orderly by AI %d'
-                                     % self.team_num)
 
             self.logger.debug('Data received (size: %d)', len(data))
             cmds = self.__decode_commands(data.decode())
