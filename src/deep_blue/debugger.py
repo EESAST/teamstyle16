@@ -10,6 +10,8 @@ def debug(args):
     kw = dict(ai1_filename=args.opponent, fixed_port=True)
     if args.timeout:
         kw['timeout'] = args.timeout
+    else:
+        kw['timeout'] = None  # Just block
 
     print "Please start the AI you want to debug..."
     try:
@@ -63,7 +65,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--save', metavar='<file>',
                         help='Save the game to <file> after it ends')
     parser.add_argument('-t', '--timeout', type=float,
-                        help='Set timeout when waiting for AI connection')
+                        help='Set timeout for AI connection (default: forever)')
     parser.add_argument('-v', '--verbose', action='count',
                         help='increase output verbosity')
 
