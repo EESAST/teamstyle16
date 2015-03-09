@@ -13,24 +13,26 @@ def debug(args):
     else:
         kw['timeout'] = None  # Just block
 
-    print "Please start the AI you want to debug..."
-    try:
-        if args.map.endswith('.battle'):
-            b = ai_battle.load(args.map, **kw)
-        else:  # Construct a new battle
-            m = map_info.load(args.map)
-            b = ai_battle.AIBattle(m, **kw)
-    except AIConnectError as e:
-        print "Have you start your AI?"
-        exit(2)
-    except KeyboardInterrupt:
-        logger.error("KeyboardInterrupt received, aborting")
-        os.abort()
-
-    # override time_per_round of the map
-    b.gamebody.map_info.time_per_round = 0
 
     try:
+        print "Please start the AI you want to debug..."
+        try:
+            if args.map.endswith('.battle'):
+                b = ai_battle.load(args.map, **kw)
+            else:  # Construct a new battle
+                m = map_info.load(args.map)
+                b = ai_battle.AIBattle(m, **kw)
+        except AIConnectError as e:
+            print e
+            print "Have you start your AI?"
+            os.abort()
+        except AIFileError as e:
+            print e
+            print "Can not find opponent AI (%s)" % args.opponent
+            os.abort()
+
+        # override time_per_round of the map
+        b.gamebody.map_info.time_per_round = 0
         while b.gamebody.state == gamebody.STATE_CONTINUE:
             raw_input('Round %d (press Enter to advance)' % b.round())
             b.feed_ai_commands()
