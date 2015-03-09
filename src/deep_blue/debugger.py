@@ -1,4 +1,5 @@
 import logging
+import os
 
 from deep_blue import *
 
@@ -20,14 +21,21 @@ def debug(args):
     except AIConnectError as e:
         print "Have you start your AI?"
         exit(2)
+    except KeyboardInterrupt:
+        logger.error("KeyboardInterrupt received, aborting")
+        os.abort()
 
     # override time_per_round of the map
     b.gamebody.map_info.time_per_round = 0
 
-    while b.gamebody.state == gamebody.STATE_CONTINUE:
-        raw_input('Round %d (press Enter to advance)' % b.round())
-        b.feed_ai_commands()
-        b.next_round()
+    try:
+        while b.gamebody.state == gamebody.STATE_CONTINUE:
+            raw_input('Round %d (press Enter to advance)' % b.round())
+            b.feed_ai_commands()
+            b.next_round()
+    except KeyboardInterrupt:
+        logger.error("KeyboardInterrupt received, aborting")
+        os.abort()
 
     # Print result
     print b.round(), 'round(s) passed'
