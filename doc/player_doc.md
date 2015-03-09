@@ -27,11 +27,33 @@ AI则随时可以向平台发送指令
 
 
 ### Mac
-1. 安装 Homebrew
+1. 打开终端
 
-    在终端中输入
+2. 安装 Command Line Tools
+
+    一些和开发相关的重要工具
+
+    *（如果你安装过 Xcode，则可以跳过此步）*
+
+        xcode-select --install
+
+    若未安装 Command Line Tools，则会弹出对话框
+
+    此时可以选择安装 Xcode，也可以只安装 Command Line Tools
+
+3. 安装 Homebrew
+
+    Homebrew 是 OS X 的包管理工具
     ```bash
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    ```
+
+4. 安装 Boost 库
+
+    编译依赖
+
+    ```bash
+    brew install boost
     ```
 
 ### Linux
