@@ -39,144 +39,144 @@ enum CommandType
     kCommandTypes
 };
 
-void init();//³õÊ¼»¯¶¨Òå¸÷ÖÖÁ¿µÄº¯Êı
-void enemy_init();//¸ù¾İInfo()³õÊ¼»¯µ±Ê±µÄµĞÈË
-void Supply_Repair(int i);/////¸Ã²¹³äÈ¼ÁÏ»òÕßµ¯Ò©µÄÊ±ºò£¬»òÕßÑªÁ¿Ì«ÉÙĞèÒª»Ø»ùµØÎ¬ĞŞ
-Position minus(Position pos1,Position pos2,int fire_range);//·µ»Øpos1¾àpos2Ç¡ºÃÏà¾àfire_rangeµÄÒ»¸öÎ»ÖÃ
-int if_in(int i,int *a,int len);//ÅĞ¶ÏÄ³¸öÊıÊÇ·ñÔÚÊı×éÖĞ
-int GetBase(int team);//»ñµÃ¼º·½»ò¶Ô·½»ùµØµÄË÷Òı
-int distance(Position pos1, Position pos2);//Á½µãÖ®¼äµÄ¾àÀë
-int DisToBase(Position pos1, Position pos2);  ////·µ»Øµ½»ùµØµÄ¾àÀë£¬ pos2±íÊ¾»ùµØ×óÉÏ½Ç
-int if_alive(int operand);//ÅĞ¶ÏÄ³µ¥Î»ÊÇ·ñÈÔ´æ»î
-int max(int x, int y);//×î´óÖµ
-int min(int x, int y);//×îĞ¡Öµ
-int GetNear(Position pos, ElementType type);//»ñµÃ¾à¸ÃÎ»ÖÃ×î½üµÄÄ³ÀàĞÍµ¥Î»µÄË÷Òı
-int if_command(int i,CommandType type,ElementType target = kElementTypes);//ÅĞ¶Ï¶Ô¸Ã³ÉÔ±µÄ¸ÃÃüÁîÊÇ·ñ¿ÉÒÔÏÂ´ï£¨Èç¹ûÒÑ¾­ÏÂ´ï¸ü¸ß¼¶µÄÖ¸ÁîÔò²»¿É£©
-void Cargo_Supply(int index);//¶ÔÓÚ»ØºÏ¿ªÊ¼Ê±Ïà¾àÎª1µÄµ¥Î»½øĞĞ²¹¸ø
-void MoveCargo(int i);//¶ÔÓÚ³ÌĞò×îºóÈÔÈ»Ã»ÓĞÃüÁîµÄÔËÊä´¬£¬È¥×ÊÔ´µãÊÕ¼¯£¬»òÕß»Ø»ùµØ²¹¸ø£¬»òÕß´ôÔÚÇ°Ïß
-void Attack(int index);//Ñ°ÕÒÉä³ÌÄÚµÄ»ùµØ»ò¾İµã£¬»òÑ¡ÔñÑªÁ¿×îÉÙµÄµ¥Î»¹¥»÷,¹¥»÷ºóÔË¶¯µ½¾àµĞÈËÇ¡ºÃÉä³ÌµÄµØ·½
-void BaseAct(int index);//»ùµØµÄÎ¬ĞŞ£¬Éú²ú
-void BaseProduce(int index);///»ùµØµÄÉú²ú
-void Forward(int index);////Ñ°ÕÒ×î½üµÄµĞ¾üÇ°½ø£¬Èç¹ûÊÇÔËÊä´¬
-void Difference(int index);//ÅĞ¶Ï¸Õ±»Éú²ú³öÀ´µÄÊ±ºòµ¥Î»µÄ´ÓÊô
+void init();//åˆå§‹åŒ–å®šä¹‰å„ç§é‡çš„å‡½æ•°
+void enemy_init();//æ ¹æ®Info()åˆå§‹åŒ–å½“æ—¶çš„æ•Œäºº
+void Supply_Repair(int i);/////è¯¥è¡¥å……ç‡ƒæ–™æˆ–è€…å¼¹è¯çš„æ—¶å€™ï¼Œæˆ–è€…è¡€é‡å¤ªå°‘éœ€è¦å›åŸºåœ°ç»´ä¿®
+Position minus(Position pos1,Position pos2,int fire_range);//è¿”å›pos1è·pos2æ°å¥½ç›¸è·fire_rangeçš„ä¸€ä¸ªä½ç½®
+int if_in(int i,int *a,int len);//åˆ¤æ–­æŸä¸ªæ•°æ˜¯å¦åœ¨æ•°ç»„ä¸­
+int GetBase(int team);//è·å¾—å·±æ–¹æˆ–å¯¹æ–¹åŸºåœ°çš„ç´¢å¼•
+int distance(Position pos1, Position pos2);//ä¸¤ç‚¹ä¹‹é—´çš„è·ç¦»
+int DisToBase(Position pos1, Position pos2);  ////è¿”å›åˆ°åŸºåœ°çš„è·ç¦»ï¼Œ pos2è¡¨ç¤ºåŸºåœ°å·¦ä¸Šè§’
+int if_alive(int operand);//åˆ¤æ–­æŸå•ä½æ˜¯å¦ä»å­˜æ´»
+int max(int x, int y);//æœ€å¤§å€¼
+int min(int x, int y);//æœ€å°å€¼
+int GetNear(Position pos, ElementType type);//è·å¾—è·è¯¥ä½ç½®æœ€è¿‘çš„æŸç±»å‹å•ä½çš„ç´¢å¼•
+int if_command(int i,CommandType type,ElementType target = kElementTypes);//åˆ¤æ–­å¯¹è¯¥æˆå‘˜çš„è¯¥å‘½ä»¤æ˜¯å¦å¯ä»¥ä¸‹è¾¾ï¼ˆå¦‚æœå·²ç»ä¸‹è¾¾æ›´é«˜çº§çš„æŒ‡ä»¤åˆ™ä¸å¯ï¼‰
+void Cargo_Supply(int index);//å¯¹äºå›åˆå¼€å§‹æ—¶ç›¸è·ä¸º1çš„å•ä½è¿›è¡Œè¡¥ç»™
+void MoveCargo(int i);//å¯¹äºç¨‹åºæœ€åä»ç„¶æ²¡æœ‰å‘½ä»¤çš„è¿è¾“èˆ¹ï¼Œå»èµ„æºç‚¹æ”¶é›†ï¼Œæˆ–è€…å›åŸºåœ°è¡¥ç»™ï¼Œæˆ–è€…å‘†åœ¨å‰çº¿
+void Attack(int index);//å¯»æ‰¾å°„ç¨‹å†…çš„åŸºåœ°æˆ–æ®ç‚¹ï¼Œæˆ–é€‰æ‹©è¡€é‡æœ€å°‘çš„å•ä½æ”»å‡»,æ”»å‡»åè¿åŠ¨åˆ°è·æ•Œäººæ°å¥½å°„ç¨‹çš„åœ°æ–¹
+void BaseAct(int index);//åŸºåœ°çš„ç»´ä¿®ï¼Œç”Ÿäº§
+void BaseProduce(int index);///åŸºåœ°çš„ç”Ÿäº§
+void Forward(int index);////å¯»æ‰¾æœ€è¿‘çš„æ•Œå†›å‰è¿›ï¼Œå¦‚æœæ˜¯è¿è¾“èˆ¹
+void Difference(int index);//åˆ¤æ–­åˆšè¢«ç”Ÿäº§å‡ºæ¥çš„æ—¶å€™å•ä½çš„ä»å±
 
 
 const GameInfo *INFO = Info();
 int enemy_num,DISTANCE;
 State * enemy_element;
-int (*command)[2];  //±¾»ØºÏ·¢³öµÄÖ¸Áî£¬Ò»¸öĞ§¹ûÖ¸Áî£¬Ò»¸öÒÆ¶¯Ö¸Áî
+int (*command)[2];  //æœ¬å›åˆå‘å‡ºçš„æŒ‡ä»¤ï¼Œä¸€ä¸ªæ•ˆæœæŒ‡ä»¤ï¼Œä¸€ä¸ªç§»åŠ¨æŒ‡ä»¤
 double parameter[4];
-int FormerElement[100];  //ÉÏ»ØºÏ±¾·½µ¥Î»µÄindexÊı×é
-int cargo_index[2];  //Á½¸ö²¹¸ø»ùµØµÄ     ³õÊ¼»¯Îª-2£¬-1±íÊ¾ÔÚÉú²ú
-int resource_defender[2];  //ÊØÔÚ×ÊÔ´µãÇ±Í§£¬³õÊ¼»¯Îª-2£¬-1±íÊ¾ÔÚÉú²ú
-int base_defender[2];      //ÁôÊØ»ùµØµÄÇ±Í§£¬³õÊ¼»¯Îª -2£¬-1±íÊ¾ÔÚÉú²ú
-Position origin_target[5];  //ÖĞÈıÂ·ÇıÖğ½¢+Ç±Í§+·É»ú*2+Õì²ì»ú,Á½²à·É»ú*2+Õì²ì»ú  µÄÄ¿µÄµØ
-int produce_state[2];   //µÚÒ»¸ö±íÊ¾Â·£¬ÖĞÂ·£¬ÖĞÉÏ£¬ÖĞÏÂ£¬ÉÏ£¬ÏÂ·Ö±ğÎª0-4
-						//µÚ¶ş¸ö±íÊ¾Éú²úÇé¿ö£¬Éú²úË³ĞòÎªÇ±Í§£¬ÇıÖğ½¢£¬·É»ú£¬·É»ú£¬Õì²ì»ú
-						//³õÊ¼»¯Îª-1£¬0
-int unit_union[4];   //¼´½«Éú²ú³öÀ´µÄÇ±Í§£¬ÇıÖğ½¢£¬·É»ú£¬Õì²ì»ú´ÓÊôµÄ¼¯ÍÅ£¬³õÊ¼»¯Îª0 £»¶ÔÓÚ·É»ú£¬³õÊ¼»¯Îª1£¬±äÎª-1£¬±äÎª2,±äÎª-2µÈ
+int FormerElement[100];  //ä¸Šå›åˆæœ¬æ–¹å•ä½çš„indexæ•°ç»„
+int cargo_index[2];  //ä¸¤ä¸ªè¡¥ç»™åŸºåœ°çš„     åˆå§‹åŒ–ä¸º-2ï¼Œ-1è¡¨ç¤ºåœ¨ç”Ÿäº§
+int resource_defender[2];  //å®ˆåœ¨èµ„æºç‚¹æ½œè‰‡ï¼Œåˆå§‹åŒ–ä¸º-2ï¼Œ-1è¡¨ç¤ºåœ¨ç”Ÿäº§
+int base_defender[2];      //ç•™å®ˆåŸºåœ°çš„æ½œè‰‡ï¼Œåˆå§‹åŒ–ä¸º -2ï¼Œ-1è¡¨ç¤ºåœ¨ç”Ÿäº§
+Position origin_target[5];  //ä¸­ä¸‰è·¯é©±é€èˆ°+æ½œè‰‡+é£æœº*2+ä¾¦å¯Ÿæœº,ä¸¤ä¾§é£æœº*2+ä¾¦å¯Ÿæœº  çš„ç›®çš„åœ°
+int produce_state[2];   //ç¬¬ä¸€ä¸ªè¡¨ç¤ºè·¯ï¼Œä¸­è·¯ï¼Œä¸­ä¸Šï¼Œä¸­ä¸‹ï¼Œä¸Šï¼Œä¸‹åˆ†åˆ«ä¸º0-4
+						//ç¬¬äºŒä¸ªè¡¨ç¤ºç”Ÿäº§æƒ…å†µï¼Œç”Ÿäº§é¡ºåºä¸ºæ½œè‰‡ï¼Œé©±é€èˆ°ï¼Œé£æœºï¼Œé£æœºï¼Œä¾¦å¯Ÿæœº
+						//åˆå§‹åŒ–ä¸º-1ï¼Œ0
+int unit_union[4];   //å³å°†ç”Ÿäº§å‡ºæ¥çš„æ½œè‰‡ï¼Œé©±é€èˆ°ï¼Œé£æœºï¼Œä¾¦å¯Ÿæœºä»å±çš„é›†å›¢ï¼Œåˆå§‹åŒ–ä¸º0 ï¼›å¯¹äºé£æœºï¼Œåˆå§‹åŒ–ä¸º1ï¼Œå˜ä¸º-1ï¼Œå˜ä¸º2,å˜ä¸º-2ç­‰
 vector<int>Enemy_Indexes;
 
 
 void AIMain()
-{  
+{
 	TryUpdate();
-	//»ØºÏ¿ªÊ¼Ê±µÄ³õÊ¼»¯
-	init(); 
+	//å›åˆå¼€å§‹æ—¶çš„åˆå§‹åŒ–
+	init();
 	for(int i=0;i<INFO->element_num;i++)
 		if(GetState(INFO->elements[i])->team == INFO->team_num)
 		{
 			const State *Element = GetState(INFO->elements[i]);
-			Supply_Repair(i); //¸Ã²¹¸ø»òÎ¬ĞŞ¾ÍÈ¥²¹¸ø£¬Î¬ĞŞ
-			Difference(i);    //ÅĞ¶Ï¸Õ³öÏÖµÄµ¥Î»µÄ´ÓÊô
+			Supply_Repair(i); //è¯¥è¡¥ç»™æˆ–ç»´ä¿®å°±å»è¡¥ç»™ï¼Œç»´ä¿®
+			Difference(i);    //åˆ¤æ–­åˆšå‡ºç°çš„å•ä½çš„ä»å±
 
 			//TryUpdate();
 			//enemy_init();
-			Attack(i);        //¹¥»÷
+			Attack(i);        //æ”»å‡»
 
 			if(Element->type == BASE)
-				BaseAct(i);     //»ùµØÎ¬ĞŞ£¬²¹¸ø£¬Éú²ú
+				BaseAct(i);     //åŸºåœ°ç»´ä¿®ï¼Œè¡¥ç»™ï¼Œç”Ÿäº§
 			else if(Element->type == CARGO)
 			{
-				Cargo_Supply(i);   //ÔËÊä½¢²¹¸ø
-				MoveCargo(i);      //ÔËÊä½¢ÔË¶¯
-			}	
+				Cargo_Supply(i);   //è¿è¾“èˆ°è¡¥ç»™
+				MoveCargo(i);      //è¿è¾“èˆ°è¿åŠ¨
+			}
 			else ;
 
-			Forward(i);       //Ç°½ø
+			Forward(i);       //å‰è¿›
 		}
 
-	for(int i=0;i<Info()->element_num;i++)   //¼ÇÂ¼Ò»»ØºÏ½áÊøÊ±µÄµ¥Î»£¬·½±ãÏÂÒ»»ØºÏÈ·¶¨ĞÂÉú²ú³öÀ´µÄµ¥Î»
+	for(int i=0;i<Info()->element_num;i++)   //è®°å½•ä¸€å›åˆç»“æŸæ—¶çš„å•ä½ï¼Œæ–¹ä¾¿ä¸‹ä¸€å›åˆç¡®å®šæ–°ç”Ÿäº§å‡ºæ¥çš„å•ä½
 		if(GetState(Info()->elements[i])->team == Info()->team_num)
 			FormerElement[i] = Info()->elements[i];
-	delete []enemy_element;	
+	delete []enemy_element;
 }
 
-//³õÊ¼»¯¶¨Òå¸÷ÖÖÁ¿µÄº¯Êı
+//åˆå§‹åŒ–å®šä¹‰å„ç§é‡çš„å‡½æ•°
 void init()
 {
 	if(INFO->round == 1)
 	{
-		parameter[0] = 0.3; //ÑªÁ¿
-		parameter[1] = 0.3; //½ğÊô
-		parameter[2] = 0.3; //È¼ÁÏ
-		parameter[3] = 0.4; //µ¯Ò©
+		parameter[0] = 0.3; //è¡€é‡
+		parameter[1] = 0.3; //é‡‘å±
+		parameter[2] = 0.3; //ç‡ƒæ–™
+		parameter[3] = 0.4; //å¼¹è¯
 
-		cargo_index[0] = -2;  //²¹¸ø»ùµØµÄÔËÊä½¢
+		cargo_index[0] = -2;  //è¡¥ç»™åŸºåœ°çš„è¿è¾“èˆ°
 		cargo_index[1] = -2;
 
-		resource_defender[0] = -2;   //»¤ÎÀ×ÊÔ´µÄ·É»ú
+		resource_defender[0] = -2;   //æŠ¤å«èµ„æºçš„é£æœº
 		resource_defender[1] = -2;
 
-		base_defender[0] = -2;  //·ÀÊØ»ùµØµÄÇ±Í§
+		base_defender[0] = -2;  //é˜²å®ˆåŸºåœ°çš„æ½œè‰‡
 		base_defender[1] = -2;
 
-		produce_state[0] = -1;   //Éú²úÇé¿ö
+		produce_state[0] = -1;   //ç”Ÿäº§æƒ…å†µ
 		produce_state[1] = 0;
 
-		unit_union[0] = 0;   //Éú²ú³öÀ´µÄÕ½¶·µ¥Î»´ÓÊôµÄ¼¯ÍÅ
+		unit_union[0] = 0;   //ç”Ÿäº§å‡ºæ¥çš„æˆ˜æ–—å•ä½ä»å±çš„é›†å›¢
 		unit_union[1] = 0;
 		unit_union[2] = 0;
 		unit_union[3] = 0;
 
-		//³õÊ¼Ä¿µÄµØ
-		origin_target[0].x = INFO->x_max/2;   //ÖĞÂ·Ä¿µÄµØ
+		//åˆå§‹ç›®çš„åœ°
+		origin_target[0].x = INFO->x_max/2;   //ä¸­è·¯ç›®çš„åœ°
 		origin_target[0].y = INFO->y_max/2;
 		origin_target[0].z = 1;
 
-		for(int i = 0; i <= 1; i++)        //ÖĞÉÏ£¬ÖĞÏÂÂ·Ä¿µÄµØ
+		for(int i = 0; i <= 1; i++)        //ä¸­ä¸Šï¼Œä¸­ä¸‹è·¯ç›®çš„åœ°
 		{
-			origin_target[1 + i].x = INFO->x_max/2 + (2 * i - 1)*INFO->x_max/4; 
-			origin_target[1 + i].y = INFO->y_max/2 - (2 * i - 1)*INFO->y_max/4; 
+			origin_target[1 + i].x = INFO->x_max/2 + (2 * i - 1)*INFO->x_max/4;
+			origin_target[1 + i].y = INFO->y_max/2 - (2 * i - 1)*INFO->y_max/4;
 			origin_target[1 + i].z = 1;
 		}
 
-		for(int i = 0; i <= 1; i++)  //ÉÏÏÂÂ·Ä¿µÄµØ
+		for(int i = 0; i <= 1; i++)  //ä¸Šä¸‹è·¯ç›®çš„åœ°
 		{
-			origin_target[3 + i].x = min(INFO->x_max/2 + (2 * i - 1)*INFO->x_max/2, INFO->x_max - 1); 
-			origin_target[3 + i].y = min(INFO->y_max/2 - (2 * i - 1)*INFO->y_max/2, INFO->y_max - 1); 
+			origin_target[3 + i].x = min(INFO->x_max/2 + (2 * i - 1)*INFO->x_max/2, INFO->x_max - 1);
+			origin_target[3 + i].y = min(INFO->y_max/2 - (2 * i - 1)*INFO->y_max/2, INFO->y_max - 1);
 			origin_target[3 + i].z = 1;
 		}
 	}
-	command = new int[INFO->element_num][2];    //ÃüÁîÁĞ±í³õÊ¼»¯
+	command = new int[INFO->element_num][2];    //å‘½ä»¤åˆ—è¡¨åˆå§‹åŒ–
 	for(int i = 0; i<INFO->element_num; i++)
 		for(int j=0;j<2;j++)
-			command[i][j] = -1; 
+			command[i][j] = -1;
 	enemy_init();
 }
 
-//¸ù¾İInfo()³õÊ¼»¯µ±Ê±µÄµĞÈË
+//æ ¹æ®Info()åˆå§‹åŒ–å½“æ—¶çš„æ•Œäºº
 void enemy_init()
 {
-	//µĞ·½µ¥Î»¹¹½¨°üÀ¨µĞ·½µ¥Î»ºÍÎŞÖ÷¾İµã£¬²»°üÀ¨¿ó³¡ºÍÓÍÌï
+	//æ•Œæ–¹å•ä½æ„å»ºåŒ…æ‹¬æ•Œæ–¹å•ä½å’Œæ— ä¸»æ®ç‚¹ï¼Œä¸åŒ…æ‹¬çŸ¿åœºå’Œæ²¹ç”°
 	enemy_num =0;
 	for(int i=0;i<Info()->element_num;i++)
-		if(GetState(Info()->elements[i])->team != Info()->team_num  
+		if(GetState(Info()->elements[i])->team != Info()->team_num
 			&& GetState(Info()->elements[i])->type != MINE && GetState(Info()->elements[i])->type != OILFIELD)
 		{
 			enemy_num += 1;
 			Enemy_Indexes.push_back(i);
-		}	
+		}
 	enemy_element = new State[enemy_num];
 	for(int i=0; i<enemy_num; i++)
 		{
@@ -185,19 +185,19 @@ void enemy_init()
 	Enemy_Indexes.clear();
 }
 
-/////¸Ã²¹³äÈ¼ÁÏ»òÕßµ¯Ò©µÄÊ±ºò£¬»òÕßÑªÁ¿Ì«ÉÙĞèÒª»Ø»ùµØÎ¬ĞŞ
+/////è¯¥è¡¥å……ç‡ƒæ–™æˆ–è€…å¼¹è¯çš„æ—¶å€™ï¼Œæˆ–è€…è¡€é‡å¤ªå°‘éœ€è¦å›åŸºåœ°ç»´ä¿®
 void Supply_Repair(int i)
 {
 	const State *Element = GetState(INFO->elements[i]);
-	if(Element->health < parameter[0] * kElementInfos[Element->type].health_max 
+	if(Element->health < parameter[0] * kElementInfos[Element->type].health_max
 		&& Element->health != -1
 		&& if_command(i, RETURNBASE))
 	{
 		ChangeDest(Element->index, GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
 		command[i][1] = RETURNBASE;
 	}
-	else if((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max && Element->ammo != -1) ||   //½ğÊô²»×ã
-			Element->fuel < parameter[2]*kElementInfos[Element->type].fuel_max)          //È¼ÁÏ²»×ã
+	else if((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max && Element->ammo != -1) ||   //é‡‘å±ä¸è¶³
+			Element->fuel < parameter[2]*kElementInfos[Element->type].fuel_max)          //ç‡ƒæ–™ä¸è¶³
 	{
 		int cargo_index = GetNear(Element->pos, CARGO);
 		if(cargo_index >= 0)
@@ -205,7 +205,7 @@ void Supply_Repair(int i)
 			if(if_command(cargo_index, CARGOSUPPLY))
 			{
 				ChangeDest(INFO->elements[cargo_index], Element->pos);
-				command[cargo_index][1] = CARGOSUPPLY;	
+				command[cargo_index][1] = CARGOSUPPLY;
 			}
 			else
 			{
@@ -218,12 +218,12 @@ void Supply_Repair(int i)
 			ChangeDest(Element->index, GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
 			command[i][1] = RETURNBASE;
 		}
-		
+
 	}
 	else;
 }
 
-//·µ»Øpos1¾àpos2Ç¡ºÃÏà¾àfire_rangeµÄÒ»¸öÎ»ÖÃ
+//è¿”å›pos1è·pos2æ°å¥½ç›¸è·fire_rangeçš„ä¸€ä¸ªä½ç½®
 Position minus(Position pos1,Position pos2,int fire_range)
 {
 	Position target;
@@ -234,7 +234,7 @@ Position minus(Position pos1,Position pos2,int fire_range)
 
 }
 
-//ÅĞ¶ÏÄ³¸öÊıÊÇ·ñÔÚÊı×éÖĞ
+//åˆ¤æ–­æŸä¸ªæ•°æ˜¯å¦åœ¨æ•°ç»„ä¸­
 int if_in(int i,int *a,int len)
 {
 	for(int j=0;j<len;j++)
@@ -243,33 +243,33 @@ int if_in(int i,int *a,int len)
 	return 0;
 }
 
-//»ñµÃ¼º·½»ò¶Ô·½»ùµØµÄË÷Òı
+//è·å¾—å·±æ–¹æˆ–å¯¹æ–¹åŸºåœ°çš„ç´¢å¼•
 int GetBase(int team)
 {
 	int i;
 	for(i=0; i<INFO->element_num; i++)
 		if(GetState(INFO->elements[i])->type == BASE && GetState(INFO->elements[i])->team == team)
-			return i; 
+			return i;
 	return -1;
 }
 
-//Á½µãÖ®¼äµÄ¾àÀë
+//ä¸¤ç‚¹ä¹‹é—´çš„è·ç¦»
 int distance(Position pos1, Position pos2)
 {
 	return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y);
 }
 
-//·µ»Øµ½»ùµØµÄ¾àÀë
-int DisToBase(Position pos1, Position pos2)  //pos2±íÊ¾»ùµØ×óÉÏ½Ç
+//è¿”å›åˆ°åŸºåœ°çš„è·ç¦»
+int DisToBase(Position pos1, Position pos2)  //pos2è¡¨ç¤ºåŸºåœ°å·¦ä¸Šè§’
 {
 	int min = 1000;
-	if(pos1.x < pos2.x)//·ÖÎª¾Å¿é
+	if(pos1.x < pos2.x)//åˆ†ä¸ºä¹å—
 	{
 		if(pos1.y > pos2.y)
 			return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y);
 		else if(pos1.y < pos2.y - 2)
 			return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y + 2);
-		else 
+		else
 			return abs(pos1.x - pos2.x);
 	}
 	else if(pos1.x > pos2.x +2)
@@ -278,7 +278,7 @@ int DisToBase(Position pos1, Position pos2)  //pos2±íÊ¾»ùµØ×óÉÏ½Ç
 			return abs(pos1.x - pos2.x - 2) + abs(pos1.y - pos2.y);
 		else if(pos1.y < pos2.y - 2)
 			return abs(pos1.x - pos2.x - 2) + abs(pos1.y - pos2.y + 2);
-		else 
+		else
 			return abs(pos1.x - pos2.x - 2);
 	}
 	else
@@ -287,12 +287,12 @@ int DisToBase(Position pos1, Position pos2)  //pos2±íÊ¾»ùµØ×óÉÏ½Ç
 			return abs(pos1.y - pos2.y);
 		else if(pos1.y < pos2.y -2)
 			return abs(pos1.y - pos2.y +2);
-		else 
+		else
 			return 0;
 	}
 }
 
-//ÅĞ¶ÏÄ³µ¥Î»ÊÇ·ñÈÔ´æ»î
+//åˆ¤æ–­æŸå•ä½æ˜¯å¦ä»å­˜æ´»
 int if_alive(int operand)
 {
 	for(int i=0;i<INFO->element_num;i++)
@@ -301,19 +301,19 @@ int if_alive(int operand)
 	return 0;
 }
 
-//×î´óÖµ
+//æœ€å¤§å€¼
 int max(int x, int y)
 {
 	return x>y?x:y;
 }
 
-//×îĞ¡Öµ
+//æœ€å°å€¼
 int min(int x, int y)
 {
 	return x<y?x:y;
 }
 
-//»ñµÃ¾à¸ÃÎ»ÖÃ×î½üµÄÄ³ÀàĞÍµ¥Î»µÄË÷Òı
+//è·å¾—è·è¯¥ä½ç½®æœ€è¿‘çš„æŸç±»å‹å•ä½çš„ç´¢å¼•
 int GetNear(Position pos, ElementType type)
 {
 	int i,near_index = -1,min_distance = 10000;
@@ -322,12 +322,12 @@ int GetNear(Position pos, ElementType type)
 		const State *target = GetState(INFO->elements[i]);
 		if(target->type == type &&  distance(target->pos, pos)<min_distance)
 		{
-			if( type == OILFIELD && target->fuel >= kElementInfos[CARGO].fuel_max) //ÓÍÌï»¹ÓĞÊ¯ÓÍ
+			if( type == OILFIELD && target->fuel >= kElementInfos[CARGO].fuel_max) //æ²¹ç”°è¿˜æœ‰çŸ³æ²¹
 			{
 				near_index = i;
 				min_distance = distance(target->pos, pos);
 			}
-			else if(type == MINE  && target->metal >= kElementInfos[CARGO].metal_max)//±£Ö¤¿ó³¡»¹ÓĞ½ğÊô
+			else if(type == MINE  && target->metal >= kElementInfos[CARGO].metal_max)//ä¿è¯çŸ¿åœºè¿˜æœ‰é‡‘å±
 			{
 				near_index = i;
 				min_distance = distance(target->pos, pos);
@@ -343,28 +343,28 @@ int GetNear(Position pos, ElementType type)
 	return near_index;
 }
 
-//ÅĞ¶Ï¶Ô¸Ã³ÉÔ±µÄ¸ÃÃüÁîÊÇ·ñ¿ÉÒÔÏÂ´ï£¨Èç¹ûÒÑ¾­ÏÂ´ï¸ü¸ß¼¶µÄÖ¸ÁîÔò²»¿É£©
+//åˆ¤æ–­å¯¹è¯¥æˆå‘˜çš„è¯¥å‘½ä»¤æ˜¯å¦å¯ä»¥ä¸‹è¾¾ï¼ˆå¦‚æœå·²ç»ä¸‹è¾¾æ›´é«˜çº§çš„æŒ‡ä»¤åˆ™ä¸å¯ï¼‰
 int if_command(int i,CommandType type,ElementType target)
 {
 	const State *element = GetState(INFO->elements[i]);
-	if(type < FORWARD && type > command[i][0])  //·ÇÒÆ¶¯Ö¸Áî
+	if(type < FORWARD && type > command[i][0])  //éç§»åŠ¨æŒ‡ä»¤
 	{
-		if(type == PRODUCE || type == FIX)     //Éú²úºÍÎ¬ĞŞ²Ù×÷
+		if(type == PRODUCE || type == FIX)     //ç”Ÿäº§å’Œç»´ä¿®æ“ä½œ
 		{
 			if(element->type == BASE) return 1;
 			return 0;
 		}
-		else if(type <= SUPPLYUNIT)      //²¹¸ø²Ù×÷
+		else if(type <= SUPPLYUNIT)      //è¡¥ç»™æ“ä½œ
 		{
-			if(element->type >= FIGHTER 
-				|| element->type == DESTROYER 
+			if(element->type >= FIGHTER
+				|| element->type == DESTROYER
 				|| element->type == SUBMARINE)
 				return 0;
 			return 1;
 		}
 		else if(target == kElementTypes)
 			return 1;
-		else if((kElementInfos[element->type].attacks[0] <= kElementInfos[target].defences[0] 
+		else if((kElementInfos[element->type].attacks[0] <= kElementInfos[target].defences[0]
 					|| kElementInfos[target].defences[0] == -1)
 			&& (kElementInfos[element->type].attacks[1] <= kElementInfos[target].defences[1]
 					|| kElementInfos[target].defences[1] == -1))
@@ -372,26 +372,26 @@ int if_command(int i,CommandType type,ElementType target)
 		else ;
 		return 1;
 	}
-	if(type >= FORWARD && type > command[i][1])  //ÒÆ¶¯Ö¸Áî
-	{   
+	if(type >= FORWARD && type > command[i][1])  //ç§»åŠ¨æŒ‡ä»¤
+	{
 		if(element->type <= FORT)
-			return 0;//»ùµØºÍ¾İµã²»ÄÜÒÆ¶¯
+			return 0;//åŸºåœ°å’Œæ®ç‚¹ä¸èƒ½ç§»åŠ¨
 		return 1;
 	}
 	return 0;
 }
 
 
-//¶ÔÓÚ»ØºÏ¿ªÊ¼Ê±Ïà¾àÎª1µÄµ¥Î»½øĞĞ²¹¸ø
-void Cargo_Supply(int index)                           
+//å¯¹äºå›åˆå¼€å§‹æ—¶ç›¸è·ä¸º1çš„å•ä½è¿›è¡Œè¡¥ç»™
+void Cargo_Supply(int index)
 {
 	const State *element, *target;
 	element = GetState(INFO->elements[index]);
 	for(int j=0;j<INFO->element_num;j++)
 	{
 		target = GetState(INFO->elements[j]);
-		if(distance(element->pos,GetState(INFO->elements[j])->pos) <= 1 
-			&& index!=j 
+		if(distance(element->pos,GetState(INFO->elements[j])->pos) <= 1
+			&& index!=j
 			&& target->team == INFO->team_num
 			&& target->type != CARGO)
 		{
@@ -402,36 +402,36 @@ void Cargo_Supply(int index)
 			Supply(INFO->elements[index], INFO->elements[j],INF,INF,INF);
 			return;
 		}
-	}	
+	}
 }
 
-//¶ÔÓÚ³ÌĞò×îºóÈÔÈ»Ã»ÓĞÃüÁîµÄÔËÊä´¬£¬È¥×ÊÔ´µãÊÕ¼¯£¬»òÕß»Ø»ùµØ²¹¸ø£¬»òÕß´ôÔÚÇ°Ïß
-void MoveCargo(int i)        
+//å¯¹äºç¨‹åºæœ€åä»ç„¶æ²¡æœ‰å‘½ä»¤çš„è¿è¾“èˆ¹ï¼Œå»èµ„æºç‚¹æ”¶é›†ï¼Œæˆ–è€…å›åŸºåœ°è¡¥ç»™ï¼Œæˆ–è€…å‘†åœ¨å‰çº¿
+void MoveCargo(int i)
 {
 	const State *Element = GetState(INFO->elements[i]);
 	if(command[i][1] == -1 )
 	{
-		if(Element->fuel < 0.5 * kElementInfos[CARGO].fuel_max)          //È¼ÁÏ²»×ã
-		{   
+		if(Element->fuel < 0.5 * kElementInfos[CARGO].fuel_max)          //ç‡ƒæ–™ä¸è¶³
+		{
 			ChangeDest(Element->index,GetState(INFO->elements[GetNear(Element->pos,OILFIELD)])->pos);
 			command[i][1] = CARGOSUPPLY;
 		}
-		else if(Element->metal < 0.5 * kElementInfos[CARGO].metal_max)     //½ğÊô²»×ã
-		{	
+		else if(Element->metal < 0.5 * kElementInfos[CARGO].metal_max)     //é‡‘å±ä¸è¶³
+		{
 			ChangeDest(Element->index,GetState(INFO->elements[GetNear(Element->pos,MINE)])->pos);
 			command[i][1] = CARGOSUPPLY;
 		}
-		else if(if_in(Element->index, cargo_index, 2))         //ÊÇ²¹¸ø»ùµØµÄ´¬
-		{	
-			ChangeDest(Element->index,GetState(INFO->elements[GetBase(INFO->team_num)])->pos);   
+		else if(if_in(Element->index, cargo_index, 2))         //æ˜¯è¡¥ç»™åŸºåœ°çš„èˆ¹
+		{
+			ChangeDest(Element->index,GetState(INFO->elements[GetBase(INFO->team_num)])->pos);
 			command[i][1] = RETURNBASE;
-		}	
-		else                   //ÊÇ²¹¸øÇ°ÏßµÄ´¬
+		}
+		else                   //æ˜¯è¡¥ç»™å‰çº¿çš„èˆ¹
 			Forward(i);
 	}
 }
 
-//Ñ°ÕÒÉä³ÌÄÚµÄ»ùµØ»ò¾İµã£¬»òÑ¡ÔñÑªÁ¿×îÉÙµÄµ¥Î»¹¥»÷,¹¥»÷ºóÔË¶¯µ½¾àµĞÈËÇ¡ºÃÉä³ÌµÄµØ·½
+//å¯»æ‰¾å°„ç¨‹å†…çš„åŸºåœ°æˆ–æ®ç‚¹ï¼Œæˆ–é€‰æ‹©è¡€é‡æœ€å°‘çš„å•ä½æ”»å‡»,æ”»å‡»åè¿åŠ¨åˆ°è·æ•Œäººæ°å¥½å°„ç¨‹çš„åœ°æ–¹
 void Attack(int index)
 {
 	const State	*Element = GetState(INFO->elements[index]);
@@ -447,7 +447,7 @@ void Attack(int index)
 		if(enemy->type == BASE && enemy->team == 1-INFO->team_num
 			&& DisToBase(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[SURFACE]
 			&& if_command(index, ATTACKBASE, BASE))
-		{												//µĞ·½»ùµØ
+		{												//æ•Œæ–¹åŸºåœ°
 			AttackUnit(Element->index,enemy->index);
 			command[index][0] = ATTACKBASE;
 			if(if_command(index, FORWARD))
@@ -459,9 +459,9 @@ void Attack(int index)
 			return;
 		}
 		if(distance(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[kElementInfos[enemy->type].level])
-		{	
+		{
 			if(enemy->type == FORT
-				&& if_command(index,ATTACKFORT,FORT))                                     //¾İµã
+				&& if_command(index,ATTACKFORT,FORT))                                     //æ®ç‚¹
 			{
 				AttackUnit(Element->index,enemy->index);
 				command[index][0] = ATTACKFORT;
@@ -473,12 +473,12 @@ void Attack(int index)
 				}
 				return;
 			}
-			if(health > enemy->health 
-				&& (enemy_index == -1 
-					|| (enemy_index >=0 && 
-					if_command(index, ATTACKUNIT, ElementType(enemy_element[enemy_index].type)))))   
+			if(health > enemy->health
+				&& (enemy_index == -1
+					|| (enemy_index >=0 &&
+					if_command(index, ATTACKUNIT, ElementType(enemy_element[enemy_index].type)))))
 			{
-				health=enemy->health;					//Ñ°ÕÒÑªÁ¿×îÉÙµÄµĞ·½µ¥Î»
+				health=enemy->health;					//å¯»æ‰¾è¡€é‡æœ€å°‘çš„æ•Œæ–¹å•ä½
 				enemy_index=i;
 			}
 		}
@@ -496,14 +496,14 @@ void Attack(int index)
 	}
 }
 
-//»ùµØµÄÎ¬ĞŞ£¬Éú²ú
+//åŸºåœ°çš„ç»´ä¿®ï¼Œç”Ÿäº§
 void BaseAct(int index)
 {
 	const State *target;
 	for(int i=0;i<INFO->element_num;i++)
 	{
 		target = GetState(INFO->elements[i]);
-		if(DisToBase(target->pos, GetState(INFO->elements[index])->pos)<=1 
+		if(DisToBase(target->pos, GetState(INFO->elements[index])->pos)<=1
 			&& target->index != INFO->elements[index]
 			&& target->team == INFO->team_num)
 		{
@@ -511,7 +511,7 @@ void BaseAct(int index)
 				&& target->health != -1)
 			{
 				if(if_command(index, FIX))
-				{	
+				{
 					Fix(INFO->elements[index], INFO->elements[i]);
 					command[index][0] = FIX;
 					return;
@@ -521,7 +521,7 @@ void BaseAct(int index)
 					|| target->ammo < parameter[3]*kElementInfos[target->type].ammo_max)
 			{
 				if(if_command(index, SUPPLYUNIT))
-				{	
+				{
 					Supply(INFO->elements[index], INFO->elements[i], INF, INF, INF);
 					command[index][0] = SUPPLYUNIT;
 					return;
@@ -529,15 +529,15 @@ void BaseAct(int index)
 			}
 		}
 	}
-	BaseProduce(index);   //Éú²úÃüÁî
+	BaseProduce(index);   //ç”Ÿäº§å‘½ä»¤
 }
 
-///»ùµØµÄÉú²ú
+///åŸºåœ°çš„ç”Ÿäº§
 void BaseProduce(int index)
 {
 	State Element = *GetState(INFO->elements[index]);
 	if(!if_command(index, PRODUCE))return;
-	for(int i=0; i<2;i++)        //ÅĞ¶Ï²¹¸ø»ùµØµÄÁ½Ìõ´¬ÊÇ·ñ´æ»î£¬²»´æ»îÔòÖ±½ÓÉú²úÔËÊä½¢
+	for(int i=0; i<2;i++)        //åˆ¤æ–­è¡¥ç»™åŸºåœ°çš„ä¸¤æ¡èˆ¹æ˜¯å¦å­˜æ´»ï¼Œä¸å­˜æ´»åˆ™ç›´æ¥ç”Ÿäº§è¿è¾“èˆ°
 	{
 		if(cargo_index[i] == -2 || (cargo_index[i]>=0 && !if_alive(cargo_index[i])))
 		{
@@ -546,10 +546,10 @@ void BaseProduce(int index)
 			cargo_index[i] = -1;
 			return;
 		}
-	} 
+	}
 
-	//ÖĞ¼äÈıÂ·µÄÉú²ú
-	if(produce_state[0]<3 && produce_state[1]<= 4)         
+	//ä¸­é—´ä¸‰è·¯çš„ç”Ÿäº§
+	if(produce_state[0]<3 && produce_state[1]<= 4)
 		switch(produce_state[1])
 		{
 			case 0: Produce(SUBMARINE);
@@ -567,16 +567,16 @@ void BaseProduce(int index)
 					return;
 			case 4: Produce(SCOUT);
 					command[index][0] = PRODUCE;
-					produce_state[0] += 1; 
+					produce_state[0] += 1;
 					return;
 			default:;
 		}
 
-	 //ÉÏÏÂÂ·µÄÉú²ú
-	if(produce_state[0]>= 3 && produce_state[0]<5)        
+	 //ä¸Šä¸‹è·¯çš„ç”Ÿäº§
+	if(produce_state[0]>= 3 && produce_state[0]<5)
 		switch(produce_state[1])
 		{
-			case 0: 
+			case 0:
 			case 1:
 			case 2:
 			case 3: Produce(FIGHTER);
@@ -591,8 +591,8 @@ void BaseProduce(int index)
 			default:;
 		}
 
-	 //ÔÚÖĞÂ·ºÍÖĞÏÂÂ·Éú²úÍêºó¸÷Éú²úÒ»ÌõÔËÊä´¬
-	if((produce_state[0] == 1 || produce_state[0] == 3 )&& produce_state[1] == 5)    
+	 //åœ¨ä¸­è·¯å’Œä¸­ä¸‹è·¯ç”Ÿäº§å®Œåå„ç”Ÿäº§ä¸€æ¡è¿è¾“èˆ¹
+	if((produce_state[0] == 1 || produce_state[0] == 3 )&& produce_state[1] == 5)
 	{
 		Produce(CARGO);
 		command[index][0] = PRODUCE;
@@ -601,12 +601,12 @@ void BaseProduce(int index)
 		return;
 	}
 
-	//ÔÚÖĞÉÏÂ·£¬ºÍÉÏÂ·Éú²úÍêºó£¬Éú²úÕ½¶·»úÈ¥·ÀÊØ×ÊÔ´
-	if((produce_state[0] == 2 || produce_state[0] == 4)&& produce_state[1] == 5 
-		&& (resource_defender[1] == -2     //·ÀÊØ×ÊÔ´µÄµ¥Î»Ã»ÓĞ»òÕßÒÑ¾­ËÀÁË
+	//åœ¨ä¸­ä¸Šè·¯ï¼Œå’Œä¸Šè·¯ç”Ÿäº§å®Œåï¼Œç”Ÿäº§æˆ˜æ–—æœºå»é˜²å®ˆèµ„æº
+	if((produce_state[0] == 2 || produce_state[0] == 4)&& produce_state[1] == 5
+		&& (resource_defender[1] == -2     //é˜²å®ˆèµ„æºçš„å•ä½æ²¡æœ‰æˆ–è€…å·²ç»æ­»äº†
 			|| (resource_defender[1] >= 0
 			&& ! if_alive(resource_defender[1]))))
-	{															
+	{
 		int i = resource_defender[0] == -2 ? 0 : 1;
 		Produce(FIGHTER);
 		command[index][0] = PRODUCE;
@@ -617,9 +617,9 @@ void BaseProduce(int index)
 		return;
 	}
 
-	//Éú²úÇ±Í§·ÀÊØ»ùµØ
+	//ç”Ÿäº§æ½œè‰‡é˜²å®ˆåŸºåœ°
 	if(INFO->round > 5 && produce_state[0] == 0 && produce_state[1] == 5
-		&& (base_defender[1] == -2     //·ÀÊØ×ÊÔ´µÄµ¥Î»Ã»ÓĞ»òÕßÒÑ¾­ËÀÁË
+		&& (base_defender[1] == -2     //é˜²å®ˆèµ„æºçš„å•ä½æ²¡æœ‰æˆ–è€…å·²ç»æ­»äº†
 			|| (base_defender[1] >= 0
 			&& ! if_alive(base_defender[1]))))
 	{
@@ -633,11 +633,11 @@ void BaseProduce(int index)
 
 }
 
-////Ñ°ÕÒ×î½üµÄµĞ¾üÇ°½ø£¬Èç¹ûÊÇÔËÊä´¬¾Í´ò
+////å¯»æ‰¾æœ€è¿‘çš„æ•Œå†›å‰è¿›ï¼Œå¦‚æœæ˜¯è¿è¾“èˆ¹å°±æ‰“
 void Forward(int index)
 {
 	State Element = *GetState(INFO->elements[index]);
-	int Distance=1000; 
+	int Distance=1000;
 	Position target;
 	if(!if_command(index, FORWARD))return;
 	if(Element.type == BASE || Element.type == FORT)
@@ -645,8 +645,8 @@ void Forward(int index)
 	else if(Element.type == CARGO && ! if_in(Element.index, cargo_index, 2))
 	{
 		for(int i=0;i<INFO->element_num;i++)
-			if(distance(Element.pos,GetState(INFO->elements[i])->pos) < Distance 
-				&& index!=i 
+			if(distance(Element.pos,GetState(INFO->elements[i])->pos) < Distance
+				&& index!=i
 				&& GetState(INFO->elements[i])->team == INFO->team_num)
 			{
 				Distance =  distance(Element.pos,GetState(INFO->elements[i])->pos);
@@ -665,15 +665,15 @@ void Forward(int index)
 	if(Distance != 1000)
 	{
 		ChangeDest(Element.index, target);
-		command[index][1] = FORWARD;	
+		command[index][1] = FORWARD;
 	}
 }
 
-//ÅĞ¶Ï¸Õ±»Éú²ú³öÀ´µÄÊ±ºòµ¥Î»µÄ´ÓÊô
+//åˆ¤æ–­åˆšè¢«ç”Ÿäº§å‡ºæ¥çš„æ—¶å€™å•ä½çš„ä»å±
 void Difference(int index)
 {
 	State Element = *GetState(INFO->elements[index]);
-	for(int i=0;i<INFO->element_num - enemy_num;i++)  //ÅĞ¶ÏËüÊÇ·ñÊÇÔ­À´¾Í´æÔÚµÄ
+	for(int i=0;i<INFO->element_num - enemy_num;i++)  //åˆ¤æ–­å®ƒæ˜¯å¦æ˜¯åŸæ¥å°±å­˜åœ¨çš„
 		if(index == FormerElement[i])
 			return ;
 	switch(Element.type)
@@ -681,7 +681,7 @@ void Difference(int index)
 	case BASE:break;
 	case FORT:break;
 	case CARGO:
-		for(int i=0;i<=1;i++)     //ÅĞ¶ÏÊÇ·ñÎª¸ÕÉú²ú³öÀ´µÄ²¹¸ø»ùµØµÄÔËÊä´¬
+		for(int i=0;i<=1;i++)     //åˆ¤æ–­æ˜¯å¦ä¸ºåˆšç”Ÿäº§å‡ºæ¥çš„è¡¥ç»™åŸºåœ°çš„è¿è¾“èˆ¹
 			if(cargo_index[i] == -1 && DisToBase(Element.pos,GetState(INFO->elements[GetBase(INFO->team_num)])->pos) <= 1)
 			{
 				cargo_index[i] = Element.index;
@@ -710,9 +710,9 @@ void Difference(int index)
 		ChangeDest(Element.index,origin_target[abs(unit_union[1])-1]);
 		if(unit_union[2] > 0)
 			unit_union[2] = -unit_union[2];
-		else if(unit_union[2] == -5) 
+		else if(unit_union[2] == -5)
 			unit_union[2] = 1;
-		else 
+		else
 			unit_union[2] = -unit_union[2] + 1;
 		return;
 	case SCOUT:
