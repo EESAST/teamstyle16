@@ -1,30 +1,39 @@
 # Deep Blue 选手文档
 
 ## API
+暂时只提供了 C++ 接口
+
+C/C++ 程序请写在 ai.cpp 内
+
 平台每隔一定时间（默认1s）向AI发送当前状态
 
 AI则随时可以向平台发送指令
 
-指令发送方式为 **函数调用**
+指令产生方式为 **函数调用**
 
 详见 `basic.h`
 
 ## 构建项目
+依赖：
+* 标准 C++ 编译器
+* Boost库
+
 ### Windows
-你面前有两种选择
-1. 使用特定的 MSVC 版本
+请安装合适版本的 VC++ / VS
 
-    支持的版本有
-    * 8.0
-    * 9.0
-    * 10.0
-    * 11.0
-    * 12.0-32位
-    * 12.0-64位
+支持版本：
+* 8.0 (VC++/VS 2005)
+* 9.0 (VC++/VS 2008)
+* 10.0 (VC++/VS 2010)
+* 11.0 (VC++/VS 2012)
+* 12.0 (VC++/VS 2013)
 
-2. 不行，我就是要用 Cygwin / MinGW / whatever
+其中 12.0 有 32/64 位版本，其他只有 32 位版本
 
 
+#### 不行，我就是要用 Cygwin / MinGW / whatever
+
+见 “用 CMake 手动构建项目” 一节
 
 ### Mac
 1. 打开终端
@@ -43,27 +52,42 @@ AI则随时可以向平台发送指令
 
 3. 安装 Homebrew
 
-    Homebrew 是 OS X 的包管理工具
+    OS X 的一个包管理工具
     ```bash
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     ```
 
 4. 安装 Boost 库
 
-    编译依赖
-
     ```bash
     brew install boost
     ```
 
+5. 使用 Xcode/Makefile 管理项目
+
 ### Linux
+1. 用你最喜欢的包管理系统解决依赖
+2. 使用提供的 Makefile / 用 CMake 自行构件项目
+
 
 ### 用 CMake 手动构建项目
+1. 安装 Boost 1.55 或更高版本
+2. 安装 CMake
+3. 在选手文件夹下创建 build 文件夹
+4. 在 build 文件夹下 cmake .. （用 -G 指定生成器）
 
 ## Debug
 
 1. 运行 debugger
 
-        debugger [-h] [-s <file>] [-t TIMEOUT] [-v] map opponent
+    基本用法：
 
-2. 用你喜欢的姿势调试
+        debugger [-s <file>] map opponent
+
+    * -s: 保存存档的位置
+    * map: 地图（.map 或 .battle 文件）
+    * opponent: 敌方 AI（作为 1号AI）
+
+    程序打开后会等待待测 AI 运行
+
+2. 用你喜欢的姿势开始调试
