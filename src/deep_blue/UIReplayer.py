@@ -61,6 +61,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.loadAi1 = False
 		self.loadAi2 = False
 		self.totalround = 0
+		self.one_step = False
 
 		self.connect(self.CenterWidget, SIGNAL("unitSelected"), self.infoWidget2.newUnitInfo)
 		self.connect(self.CenterWidget, SIGNAL("mapSelected"), self.infoWidget2.newMapInfo)
@@ -249,9 +250,12 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 	def on_ExitButton_clicked(self):
 		self.HumanCheckBox1.setChecked(False)
 		self.HumanCheckBox2.setChecked(False)
+		self.ModeCheck1.setChecked(False)
+		self.ModeCheck2.setChecked(False)
 		self.isPaused = False
 		self.started = False
 		self.playing = False
+		self.one_step = False
 		self.fileInfo = None
 		self.mapInfo = None
 		self.repFileName = ""
