@@ -18,11 +18,17 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.show = False
 
 	def newUnitInfo(self, unit, flag, battle):
+		'''
 		Elements = [battle.elements(0), battle.elements(1), battle.elements(2)]
 		for i in range(3):
 			for element in Elements[i].values():
 				if element.index == unit.index:
 					unit = element
+		'''
+		Elements = battle.map_info().elements
+		for element_ in Elements.values():
+			if element_.index == unit.index:
+				unit = element_
 		self.unit = unit
 		self.flag = flag
 		self.show = True
@@ -66,7 +72,9 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.TerrainLineEdit.setText(QString.fromUtf8(NumToMapType[kind]))
 
 	def resetUnitInfo(self):
+		self.unit = None
 		self.show = False
+		self.flag = -1
 		self.TeamLineEdit.setText("")
 		self.CoordinateLineEdit.setText("")
 		self.TypeLineEdit.setText("")

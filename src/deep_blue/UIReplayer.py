@@ -93,9 +93,39 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.HUMAN_REPLAY = 4
 			self.CreateWidget.team1.HUMAN_REPLAY = 4
 			self.CreateWidget.team2.HUMAN_REPLAY = 4
-		if self.CenterWidget.HUMAN_REPLAY != -1:
+		elif self.loadMap and self.loadAi1 and self.ModeCheck2.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 4
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 4
+			self.CreateWidget.team2.HUMAN_REPLAY = 4
+		elif self.loadMap and self.ModeCheck1.isChecked() and self.ModeCheck2.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 4
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 4
+			self.CreateWidget.team2.HUMAN_REPLAY = 4
+		elif self.loadMap and self.loadAi2 and self.ModeCheck1.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 4
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 4
+			self.CreateWidget.team2.HUMAN_REPLAY = 4
+		elif self.loadMap and self.HumanCheckBox1.isChecked() and self.ModeCheck2.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 0
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 0
+			self.CreateWidget.team2.HUMAN_REPLAY = 0
+		elif self.loadMap and self.HumanCheckBox2.isChecked() and self.ModeCheck1.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 1
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 1
+			self.CreateWidget.team2.HUMAN_REPLAY = 1
+		if self.CenterWidget.HUMAN_REPLAY != -1 and not self.one_step:
 			self.PlayPushButton.setCheckable(True)
 			self.PlayPushButton.setEnabled(True)
+			self.OneStepButton.setCheckable(True)
+			self.OneStepButton.setEnabled(True)
+		elif self.CenterWidget.HUMAN_REPLAY != -1 and self.one_step:
+			self.PlayPushButton.setCheckable(False)
+			self.PlayPushButton.setEnabled(False)
 			self.OneStepButton.setCheckable(True)
 			self.OneStepButton.setEnabled(True)
 		else:
@@ -151,6 +181,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox1.setChecked(False)
+			self.ModeCheck1.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot(QString)
@@ -165,6 +196,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox2.setChecked(False)
+			self.ModeCheck2.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot(QString)
@@ -302,6 +334,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox1.setChecked(False)
+			self.ModeCheck1.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot()
@@ -317,6 +350,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox2.setChecked(False)
+			self.ModeCheck2.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot(int)
@@ -329,7 +363,22 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.OpenFileComboBox1.setCurrentIndex(-1)
 			self.aiFileName1 = ""
 			self.loadAi1 = False
+			self.ModeCheck1.setChecked(False)
 		self.updateUi()
+
+	@pyqtSlot(int)
+	def on_ModeCheck1_stateChanged(self):
+		if self.ModeCheck1.isChecked():
+			self.ReplayComboBox.setCurrentIndex(-1)
+			self.loadRepFile = False
+			self.fileInfo = None
+			self.repFileName = ""
+			self.OpenFileComboBox1.setCurrentIndex(-1)
+			self.aiFileName1 = ""
+			self.loadAi1 = False
+			self.HumanCheckBox1.setChecked(False)
+		self.updateUi()
+
 
 	@pyqtSlot(int)
 	def on_HumanCheckBox2_stateChanged(self):
@@ -341,6 +390,20 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.OpenFileComboBox2.setCurrentIndex(-1)
 			self.aiFileName2 = ""
 			self.loadAi2 = False
+			self.ModeCheck2.setChecked(False)
+		self.updateUi()
+
+	@pyqtSlot(int)
+	def on_ModeCheck2_stateChanged(self):
+		if self.ModeCheck2.isChecked():
+			self.ReplayComboBox.setCurrentIndex(-1)
+			self.loadRepFile = False
+			self.fileInfo = None
+			self.repFileName = ""
+			self.OpenFileComboBox2.setCurrentIndex(-1)
+			self.aiFileName2 = ""
+			self.loadAi2 = False
+			self.HumanCheckBox2.setChecked(False)
 		self.updateUi()
 
 	@pyqtSlot(bool)
@@ -402,11 +465,24 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				else:
 					self.fileInfo = fileInfo
 			if self.CenterWidget.HUMAN_REPLAY == 4:
-				self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
+				if self.ModeCheck2.isChecked() and self.loadAi1:
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, timeout = None, ai0_filename = str(self.aiFileName1), fixed_port = True)
+				elif self.ModeCheck1.isChecked() and self.loadAi2:
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, timeout = None, ai1_filename = str(self.aiFileName2), fixed_port = True)
+				elif self.ModeCheck1.isChecked() and self.ModeCheck2.isChecked():
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, timeout = None, fixed_port = True)
+				else:
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
 			elif self.CenterWidget.HUMAN_REPLAY == 0:
-				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName2))
+				if self.ModeCheck2.isChecked():
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, timeout = None, fixed_port = True)
+				else:
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName2))
 			elif self.CenterWidget.HUMAN_REPLAY == 1:
-				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1))
+				if self.ModeCheck1.isChecked():
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, timeout = None, fixed_port = True, ai_team_num = 0)
+				else:
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1), 0)
 			elif self.CenterWidget.HUMAN_REPLAY == 2:
 				QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("人人对战即将推出，敬请期待"), QMessageBox.Ok)
 				self.HumanCheckBox2.setChecked(False)
@@ -477,7 +553,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			elif self.CenterWidget.HUMAN_REPLAY == 0:
 				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName2))
 			elif self.CenterWidget.HUMAN_REPLAY == 1:
-				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1))
+				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1), 0)
 			elif self.CenterWidget.HUMAN_REPLAY == 2:
 				QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("人人对战即将推出，敬请期待"), QMessageBox.Ok)
 				self.HumanCheckBox2.setChecked(False)

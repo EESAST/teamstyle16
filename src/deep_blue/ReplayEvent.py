@@ -896,6 +896,11 @@ class Replay(QGraphicsView):
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 		
 		created_unit = self.battle.map_info().elements[created_unit_index]
+		print
+		print created_unit.position.x, created_unit.position.y, created_unit.position.z
+		print
+		print
+		print
 		created_effect = SoldierUnit(created_unit)
 		self.scene.addItem(created_effect)
 		self.UnitBase[created_unit.team].append(created_effect)

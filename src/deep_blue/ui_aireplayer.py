@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'AIReplayer.ui'
 #
-# Created: Sun Mar 08 00:18:14 2015
+# Created: Thu Mar 12 15:04:38 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -56,11 +56,11 @@ class Ui_AIReplayer(object):
         self.OpenFileComboBox1.setStyleSheet(_fromUtf8(""))
         self.OpenFileComboBox1.setObjectName(_fromUtf8("OpenFileComboBox1"))
         self.OpenFileComboBox2 = QtGui.QComboBox(AIReplayer)
-        self.OpenFileComboBox2.setGeometry(QtCore.QRect(1100, 80, 131, 22))
+        self.OpenFileComboBox2.setGeometry(QtCore.QRect(1100, 80, 110, 22))
         self.OpenFileComboBox2.setStyleSheet(_fromUtf8(""))
         self.OpenFileComboBox2.setObjectName(_fromUtf8("OpenFileComboBox2"))
         self.layoutWidget_2 = QtGui.QWidget(AIReplayer)
-        self.layoutWidget_2.setGeometry(QtCore.QRect(1240, 80, 99, 25))
+        self.layoutWidget_2.setGeometry(QtCore.QRect(1220, 80, 130, 25))
         self.layoutWidget_2.setStyleSheet(_fromUtf8(""))
         self.layoutWidget_2.setObjectName(_fromUtf8("layoutWidget_2"))
         self.horizontalLayout_4 = QtGui.QHBoxLayout(self.layoutWidget_2)
@@ -75,8 +75,11 @@ class Ui_AIReplayer(object):
         self.HumanCheckBox2.setStyleSheet(_fromUtf8(""))
         self.HumanCheckBox2.setObjectName(_fromUtf8("HumanCheckBox2"))
         self.horizontalLayout_4.addWidget(self.HumanCheckBox2)
+        self.ModeCheck2 = QtGui.QCheckBox(self.layoutWidget_2)
+        self.ModeCheck2.setObjectName(_fromUtf8("ModeCheck2"))
+        self.horizontalLayout_4.addWidget(self.ModeCheck2)
         self.layoutWidget = QtGui.QWidget(AIReplayer)
-        self.layoutWidget.setGeometry(QtCore.QRect(150, 80, 107, 25))
+        self.layoutWidget.setGeometry(QtCore.QRect(150, 80, 140, 25))
         self.layoutWidget.setStyleSheet(_fromUtf8(""))
         self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
         self.horizontalLayout_2 = QtGui.QHBoxLayout(self.layoutWidget)
@@ -91,6 +94,9 @@ class Ui_AIReplayer(object):
         self.HumanCheckBox1.setStyleSheet(_fromUtf8(""))
         self.HumanCheckBox1.setObjectName(_fromUtf8("HumanCheckBox1"))
         self.horizontalLayout_2.addWidget(self.HumanCheckBox1)
+        self.ModeCheck1 = QtGui.QCheckBox(self.layoutWidget)
+        self.ModeCheck1.setObjectName(_fromUtf8("ModeCheck1"))
+        self.horizontalLayout_2.addWidget(self.ModeCheck1)
         self.LoadFilePushButton = QtGui.QPushButton(AIReplayer)
         self.LoadFilePushButton.setGeometry(QtCore.QRect(210, 10, 75, 23))
         self.LoadFilePushButton.setStyleSheet(_fromUtf8(""))
@@ -209,8 +215,10 @@ class Ui_AIReplayer(object):
         self.ExitButton.setText(_translate("AIReplayer", "后退", None))
         self.HelpButton.setText(_translate("AIReplayer", "帮助", None))
         self.AILabel2.setText(_translate("AIReplayer", "2号AI：", None))
-        self.HumanCheckBox2.setText(_translate("AIReplayer", "Human", None))
-        self.HumanCheckBox1.setText(_translate("AIReplayer", "Human", None))
+        self.HumanCheckBox2.setText(_translate("AIReplayer", "人", None))
+        self.ModeCheck2.setText(_translate("AIReplayer", "调试", None))
+        self.HumanCheckBox1.setText(_translate("AIReplayer", "人", None))
+        self.ModeCheck1.setText(_translate("AIReplayer", "调试", None))
         self.LoadFilePushButton.setText(_translate("AIReplayer", "加载回放文件", None))
         self.LoadMapPushButton.setText(_translate("AIReplayer", "加载地图", None))
         self.Frog1RadioButton.setText(_translate("AIReplayer", "1号迷雾", None))
