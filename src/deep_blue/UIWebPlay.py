@@ -31,20 +31,39 @@ class WebPlay(QWidget, Ui_Form):
 		self.AI4 = None
 		self.AI5 = None
 		self.mapInfo = None
+		self.score = 0
+		self.data = None
+
+	def on_ReturnButton_clicked(self):
+		self.AI1 = None
+		self.AI2 = None
+		self.AI3 = None
+		self.AI4 = None
+		self.AI5 = None
+		self.mapInfo = None
+		self.score = 0
+		self.data = None
+		self.UserNameLabel.setText("")
+		self.TeamLabel.setText("")
+		self.ScoreLabel.setText("")
+		self.MapCombo.clear()
+		self.EnemyCombo.clear()
 
 	def update_info(self, datas):
 		self.data = datas
+		if datas[5]:
+			self.score = datas[5]
 		print datas[1]
 		if datas[1]:
 			self.UserNameLabel.setText(_fromUtf8(datas[1]))
 		else:
 			self.UserNameLabel.setText("")
-		self.IDLabel.setText("%d" %datas[0])
+		self.IDLabel.setText(" %d" %datas[0])
 		if datas[3]:
 			self.TeamLabel.setText(_fromUtf8(datas[3]))
 		else:
 			self.TeamLabel.setText("")
-		self.ScoreLabel.setText("")
+		self.ScoreLabel.setText(" %d" %self.score)
 
 	@pyqtSlot()
 	def on_B1Button_clicked(self):
@@ -108,6 +127,8 @@ class WebPlay(QWidget, Ui_Form):
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
+			self.score |= 1
+			self.update_score()
 		choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
 		if choice == QMessageBox.Yes:
 			saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
@@ -135,6 +156,8 @@ class WebPlay(QWidget, Ui_Form):
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
+			self.score |= 2
+			self.update_score()
 		choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
 		if choice == QMessageBox.Yes:
 			saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
@@ -162,6 +185,8 @@ class WebPlay(QWidget, Ui_Form):
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
+			self.score |= 4
+			self.update_score()
 		choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
 		if choice == QMessageBox.Yes:
 			saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
@@ -189,6 +214,8 @@ class WebPlay(QWidget, Ui_Form):
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
+			self.score |= 8
+			self.update_score()
 		choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
 		if choice == QMessageBox.Yes:
 			saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
@@ -216,6 +243,8 @@ class WebPlay(QWidget, Ui_Form):
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:
 			QMessageBox.information(self, QString.fromUtf8("恭喜"), QString.fromUtf8("测试成功"), QMessageBox.Ok)
+			self.score |= 16
+			self.update_score()
 		choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
 		if choice == QMessageBox.Yes:
 			saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
@@ -281,3 +310,15 @@ class WebPlay(QWidget, Ui_Form):
 		print self.MapCombo.itemData(self.MapCombo.currentIndex()).toString(), self.EnemyCombo.itemData(self.EnemyCombo.currentIndex()).toString()
 		payload = {'map':self.MapCombo.itemData(self.MapCombo.currentIndex()).toString(), 'player':self.EnemyCombo.itemData(self.EnemyCombo.currentIndex()).toString()}
 		r = requests.post("http://deepblue.eesast.com/online_battle/battle/"+self.data[3],data = payload)
+
+	def update_score(self):
+		db = MySQLdb.connect("teamstyle16.eesast.com","duishi16","******","info")
+		cursor = db.cursor()
+		sql="update users set test_battle="+str(self.score)+" where user_id="+str(self.data[0])+";"
+		try:
+			cursor.execute(sql)
+			self.ScoreLabel.setText(" %d" %self.score)
+			db.commit()
+		except:
+			db.rollback()
+		db.close()

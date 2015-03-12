@@ -31,7 +31,7 @@ class LoginDialog(QWidget, Ui_LoginDialog):
 		print self.pwd_MD5
 		db = MySQLdb.connect("teamstyle16.eesast.com","duishi16","******","info")
 		cursor = db.cursor()
-		sql="select user_id,user_nickname,user_password_hash,user_team,user_email from users where user_nickname='"+self.name+"' or user_email='"+self.name+"'"
+		sql="select user_id,user_nickname,user_password_hash,user_team,user_email,test_battle from users where user_nickname='"+self.name+"' or user_email='"+self.name+"'"
 		try:
 			cursor.execute(sql)
 			print "success"
@@ -41,6 +41,10 @@ class LoginDialog(QWidget, Ui_LoginDialog):
 				self.emit(SIGNAL("LoginSuccess()"))
 				self.UserNameLineEdit.setText("")
 				self.PasswordLineEdit.setText("")
+				self.name = None
+				self.pwd = None
+				self.pwd_MD5 = None
+				self.datas = None
 			else:
 				QMessageBox.critical(self, QString.fromUtf8("登录失败"), QString.fromUtf8("密码错误"), QMessageBox.Ok, QMessageBox.NoButton)
 			db.commit()
@@ -54,3 +58,7 @@ class LoginDialog(QWidget, Ui_LoginDialog):
 	def on_ReturnPushButton_clicked(self):
 		self.UserNameLineEdit.setText("")
 		self.PasswordLineEdit.setText("")
+		self.name = None
+		self.pwd = None
+		self.pwd_MD5 = None
+		self.datas = None

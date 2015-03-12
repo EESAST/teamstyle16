@@ -270,10 +270,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.loadAi1 = False
 		self.loadAi2 = False
 		self.on_StopPushButton_clicked()
-		self.MapComboBox.setCurrentIndex(-1)
-		self.ReplayComboBox.setCurrentIndex(-1)
-		self.OpenFileComboBox1.setCurrentIndex(-1)
-		self.OpenFileComboBox2.setCurrentIndex(-1)
+		self.MapComboBox.clear()
+		self.ReplayComboBox.clear()
+		self.OpenFileComboBox1.clear()
+		self.OpenFileComboBox2.clear()
 		self.updateUi()
 		self.willreturn.emit()
 
