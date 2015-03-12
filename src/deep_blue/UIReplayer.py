@@ -144,6 +144,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.LoadMapPushButton.setEnabled(not self.started)
 		self.HumanCheckBox1.setEnabled(not self.started)
 		self.HumanCheckBox2.setEnabled(not self.started)
+		self.ModeCheck1.setEnabled(not self.started)
+		self.ModeCheck2.setEnabled(not self.started)
 		self.StopPushButton.setEnabled(self.started)
 		self.UpPushButton.setEnabled(self.started)
 		self.DownPushButton.setEnabled(self.started)

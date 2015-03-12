@@ -26,7 +26,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.num = [0 for x in range(11)]
         self.num[1] = (30, 30)
         self.population = 60
-        self.round = 500
+        self.round = 200
 
         vali = QIntValidator(0, 10)
         self.SubmarineLineEdit.setValidator(vali)
@@ -182,7 +182,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.num = [0 for x in range(11)]
         self.num[1] = (30, 30)
         self.population = 60
-        self.round = 500
+        self.round = 200
 
     @pyqtSlot()
     def on_RandomButton_clicked(self):
@@ -201,7 +201,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.DestroyerLineEdit.setText("0")
         self.SubmarineLineEdit.setText("0")
         self.WeatherLineEdit.setText("0")
-        self.RoundLineEdit.setText("500")
+        self.RoundLineEdit.setText("200")
         self.PopulationLineEdit.setText("60")
         self.SizeCombo.setCurrentIndex(0)
         self.CenterCombo.setCurrentIndex(0)
@@ -277,7 +277,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.num = [0 for x in range(11)]
         self.num[1] = (30, 30)
         self.population = 60
-        self.round = 500
+        self.round = 200
 
     @pyqtSlot(bool)
     def on_ChangeRadioButton_clicked(self, check):
