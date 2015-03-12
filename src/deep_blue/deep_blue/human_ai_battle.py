@@ -16,7 +16,7 @@ class HumanAIBattle(battle.Battle):
     """Represent a battle between two AIs"""
     def __init__(self, map_info, port=DEFAULT_PORT, timeout=DEFAULT_TIMEOUT,
                  human_team_name=None, ai_filename=None, ai_team_num=1,
-                 prev_info=None):
+                 prev_info=None, fixed_port=False, **kw):
         """Construct an HumanAIBattle from a map, or from previous infos.
         port is the port number used for listening.
         If ai_filename is given, HumanAIBattle is responsible for
@@ -24,9 +24,10 @@ class HumanAIBattle(battle.Battle):
         ai_team_num should be 0 or 1.
         If prev_info is given, restore from it instead of constructing a new
         one.
+        If fixed_port is True, will only listen on DEFAULT_PORT.
         """
         # Start battle
-        super(HumanAIBattle, self).__init__(map_info, prev_info=prev_info)
+        super(HumanAIBattle, self).__init__(map_info, prev_info=prev_info, **kw)
         # build the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(timeout)
@@ -34,9 +35,13 @@ class HumanAIBattle(battle.Battle):
             try:
                 sock.bind(('', port))
             except socket.error:
-                logger.warning('Port %d has already been taken, trying port %d',
-                               port, port + 1)
-                port += 1
+                if fixed_port:
+                    logger.error('Port %d has already been taken, aborting', port)
+                    exit(1)
+                else:
+                    logger.warning('Port %d has already been taken, trying port %d',
+                                   port, port + 1)
+                    port += 1
             else:  # binding succeeds
                 break
         sock.listen(1)
