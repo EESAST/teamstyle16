@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Mapmaker.ui'
 #
-# Created: Tue Mar 03 19:43:42 2015
+# Created: Sat Mar 14 00:17:52 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -315,7 +315,7 @@ class Ui_Mapmaker(object):
         self.ExitButton.setText(_translate("Mapmaker", "后退", None))
         self.HelpButton.setText(_translate("Mapmaker", "帮助", None))
         self.PopulationLineEdit.setText(_translate("Mapmaker", "60", None))
-        self.RoundLineEdit.setText(_translate("Mapmaker", "500", None))
+        self.RoundLineEdit.setText(_translate("Mapmaker", "200", None))
         self.label_6.setText(_translate("Mapmaker", "最大回合数(1-1000)：", None))
         self.label_12.setText(_translate("Mapmaker", "最大人口数(30-200)：", None))
         self.label_15.setText(_translate("Mapmaker", "天气（-1~1）：", None))

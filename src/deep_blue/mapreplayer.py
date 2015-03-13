@@ -77,9 +77,11 @@ class MapMakerReplayer(QGraphicsView):
 			for j in range(6):
 				water.remove((base_island[0][0] + i + 1,base_island[0][1] + j + 1))
 				land_list.append((base_island[0][0] + i + 1,base_island[0][1] + j + 1))
+		randomset = []
 		for i in [0,7]:
 			for j in range(6):
-				if random.randint(0, 1):
+				if not random.randint(0, 2):
+					randomset.append((i,j))
 					water.remove((base_island[0][0] + i, base_island[0][1] + j + 1))
 					land_list.append((base_island[0][0] + i, base_island[0][1] + j + 1))
 					near_sea_list.append((base_island[0][0] + i, base_island[0][1] + j + 1))
@@ -89,7 +91,8 @@ class MapMakerReplayer(QGraphicsView):
 					near_sea_list.append((base_island[0][0] + i - 1, base_island[0][1] + j + 1))
 		for j in [0,7]:
 			for i in range(6):
-				if random.randint(0, 1):
+				if not random.randint(0, 2):
+					randomset.append((i,j))
 					water.remove((base_island[0][0] + i + 1, base_island[0][1] + j))
 					land_list.append((base_island[0][0] + i + 1, base_island[0][1] + j))
 					near_sea_list.append((base_island[0][0] + i + 1, base_island[0][1] + j))
@@ -97,6 +100,14 @@ class MapMakerReplayer(QGraphicsView):
 					near_sea_list.append((base_island[0][0] + i + 1, base_island[0][1] + j + 1))
 				else:
 					near_sea_list.append((base_island[0][0] + i + 1, base_island[0][1] + j - 1))
+		if len(randomset) == 24:
+			water.append((base_island[0][0], base_island[0][1] + 2))
+			water.append((base_island[0][0] + 2, base_island[0][1]))
+			land_list.remove((base_island[0][0], base_island[0][1] + 2))
+			land_list.remove((base_island[0][0] + 2, base_island[0][1]))
+			near_sea_list.append((base_island[0][0] + 1, base_island[0][1] + 2))
+			near_sea_list.append((base_island[0][0] + 2, base_island[0][1] + 1))
+		randomset = []
 		self.water_list = copy.deepcopy(water)
 		self.land_list = copy.deepcopy(land_list)
 		self.near_sea_list = copy.deepcopy(near_sea_list)
@@ -386,7 +397,7 @@ class MapMakerReplayer(QGraphicsView):
 
 			elif self.RightState == 1:
 				have_sea = False
-				if self.have_base:
+				if self.have_base[self.change_team]:
 					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("已有基地，请先删除再重新放置"), QMessageBox.Ok, QMessageBox.NoButton)
 					return
 				for c_x in range(c_pos[0], c_pos[0] + 3):

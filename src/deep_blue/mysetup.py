@@ -14,4 +14,4 @@ setup(  name = "teamstyle16",
         version = "1.0",
         description = "Teamstyle Sixteen",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("Deep Blue.py", base=base)])
+        executables = [Executable("Deep Blue.py", base=base), Executable("debugger.py")])

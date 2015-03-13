@@ -117,12 +117,6 @@ class WebPlay(QWidget, Ui_Form):
 			self.fileInfo.feed_ai_commands()
 			self.fileInfo.next_round()
 			now_round += 1
-			print
-			print
-			print "in WebPlay"
-			print "the state = ",self.fileInfo.state()
-			print
-			print
 		if self.fileInfo.state():
 			QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("测试失败"), QMessageBox.Ok)
 		else:

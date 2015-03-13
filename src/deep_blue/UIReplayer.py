@@ -460,10 +460,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				else:
 					self.mapInfo = mapInfo
 			if self.loadRepFile and not self.fileInfo:
-				print "in reload"
 				try:
 					fileInfo = replayer.load(self.repFileName)
-					print self.repFileName
 				except:
 					if self.repFileName != "":
 						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
@@ -544,10 +542,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				else:
 					self.mapInfo = mapInfo
 			if self.loadRepFile and not self.fileInfo:
-				print "in reload"
 				try:
 					fileInfo = replayer.load(self.repFileName)
-					print self.repFileName
 				except:
 					if self.repFileName != "":
 						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
@@ -594,9 +590,6 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.changed = False
 		if self.isPaused:
 			return
-		print self.fileInfo.state()
-		print
-		print
 		if self.fileInfo.state() in [0, 1] or self.CenterWidget.nowRound == self.totalround:
 			sts = None
 			if self.fileInfo.state() == 0: 
@@ -658,6 +651,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.CreateWidget.team2.reset()
 		self.infoWidget1.reset()
 		self.infoWidget2.resetUnitInfo()
+		self.infoWidget2.reset()
 		self.PlayPushButton.setCheckable(False)
 		self.PlayPushButton.setEnabled(False)
 		self.RoundSlider.setRange(0, 0)

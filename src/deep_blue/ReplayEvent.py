@@ -366,13 +366,6 @@ class Replay(QGraphicsView):
 			if self.SelectedIndex.kind in [0, 1, 4, 5, 6, 8, 9]:          #不知道能不能实现，不能的话交由平台管？
 				cursor = QCursor(QPixmap(":cursor2.png").scaled(30,30), 0, 0)
 				self.setCursor(cursor)
-				print
-				print
-				print
-				print
-				print "we set cursor"
-				print
-				print
 				self.key_pressed = 1
 			else:
 				return
@@ -386,14 +379,7 @@ class Replay(QGraphicsView):
 				return
 			if self.SelectedIndex.kind == 0:
 				cursor = QCursor(QPixmap(":cursor2.png").scaled(30,30), 0, 0)
-				self.setCursor(cursor)
-				print
-				print
-				print
-				print
-				print "we set cursor"
-				print
-				print      
+				self.setCursor(cursor)    
 				self.key_pressed = 2
 			else:
 				return
@@ -896,11 +882,6 @@ class Replay(QGraphicsView):
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 		
 		created_unit = self.battle.map_info().elements[created_unit_index]
-		print
-		print created_unit.position.x, created_unit.position.y, created_unit.position.z
-		print
-		print
-		print
 		created_effect = SoldierUnit(created_unit)
 		self.scene.addItem(created_effect)
 		self.UnitBase[created_unit.team].append(created_effect)

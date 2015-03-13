@@ -15,7 +15,6 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.setupUi(self)
 		self.unit = None
 		self.flag = -1
-		self.show = False
 
 	def newUnitInfo(self, unit, flag, battle):
 		'''
@@ -31,7 +30,6 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 				unit = element_
 		self.unit = unit
 		self.flag = flag
-		self.show = True
 		self.resetUnitInfo()
 		if unit.kind not in [2,3]:
 			self.TeamLineEdit.setText("%d" %unit.team)
@@ -72,9 +70,6 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.TerrainLineEdit.setText(QString.fromUtf8(NumToMapType[kind]))
 
 	def resetUnitInfo(self):
-		self.unit = None
-		self.show = False
-		self.flag = -1
 		self.TeamLineEdit.setText("")
 		self.CoordinateLineEdit.setText("")
 		self.TypeLineEdit.setText("")
@@ -92,9 +87,21 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		self.MoveTargetLineEdit.setText("")
 		self.TerrainLineEdit.setText("")
 
+	def reset(self):
+		self.unit = None
+		self.flag = None
+
 	def updateInfo(self, battle):
+		print "in update info"
+		print 
+		print
+		print
 		if not self.unit:
 			return
+		print "update info"
+		print 
+		print
+		print
 		Elements = [battle.elements(0), battle.elements(1), battle.elements(2)]
 		for i in range(3):
 			for element in Elements[i].values():
