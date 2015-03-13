@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'AIReplayer.ui'
 #
-# Created: Thu Mar 12 15:04:38 2015
+# Created: Sat Mar 14 00:28:55 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -211,18 +211,18 @@ class Ui_AIReplayer(object):
 
     def retranslateUi(self, AIReplayer):
         AIReplayer.setWindowTitle(_translate("AIReplayer", "AIReplayer", None))
-        self.AILabel1.setText(_translate("AIReplayer", "1号AI：", None))
+        self.AILabel1.setText(_translate("AIReplayer", "0号AI：", None))
         self.ExitButton.setText(_translate("AIReplayer", "后退", None))
         self.HelpButton.setText(_translate("AIReplayer", "帮助", None))
-        self.AILabel2.setText(_translate("AIReplayer", "2号AI：", None))
+        self.AILabel2.setText(_translate("AIReplayer", "1号AI：", None))
         self.HumanCheckBox2.setText(_translate("AIReplayer", "人", None))
         self.ModeCheck2.setText(_translate("AIReplayer", "调试", None))
         self.HumanCheckBox1.setText(_translate("AIReplayer", "人", None))
         self.ModeCheck1.setText(_translate("AIReplayer", "调试", None))
         self.LoadFilePushButton.setText(_translate("AIReplayer", "加载回放文件", None))
         self.LoadMapPushButton.setText(_translate("AIReplayer", "加载地图", None))
-        self.Frog1RadioButton.setText(_translate("AIReplayer", "1号迷雾", None))
-        self.Frog2RadioButton.setText(_translate("AIReplayer", "2号迷雾", None))
+        self.Frog1RadioButton.setText(_translate("AIReplayer", "0号迷雾", None))
+        self.Frog2RadioButton.setText(_translate("AIReplayer", "1号迷雾", None))
         self.GodVisionRadioButton.setText(_translate("AIReplayer", "上帝视角", None))
         self.PlayPushButton.setText(_translate("AIReplayer", "播放", None))
         self.StopPushButton.setText(_translate("AIReplayer", "停止", None))

@@ -44,7 +44,7 @@
     <string notr="true"/>
    </property>
    <property name="text">
-    <string>1号AI：</string>
+    <string>0号AI：</string>
    </property>
   </widget>
   <widget class="QPushButton" name="ExitButton">
@@ -92,7 +92,7 @@
     <string notr="true"/>
    </property>
    <property name="text">
-    <string>2号AI：</string>
+    <string>1号AI：</string>
    </property>
   </widget>
   <widget class="QComboBox" name="OpenFileComboBox1">
@@ -256,7 +256,7 @@
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>1号迷雾</string>
+       <string>0号迷雾</string>
       </property>
      </widget>
     </item>
@@ -266,7 +266,7 @@
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>2号迷雾</string>
+       <string>1号迷雾</string>
       </property>
      </widget>
     </item>

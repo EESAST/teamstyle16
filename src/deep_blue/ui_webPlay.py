@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'WebPlay.ui'
 #
-# Created: Fri Mar 06 15:25:14 2015
+# Created: Sat Mar 14 00:55:48 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -188,7 +188,7 @@ class Ui_Form(object):
         self.ReturnButton.setObjectName(_fromUtf8("ReturnButton"))
 
         self.retranslateUi(Form)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
