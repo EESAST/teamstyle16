@@ -18,7 +18,7 @@ void ParseToState(const teamstyle16::communicate::Element &element,
     state.size.x_length = element.size().x();
     state.size.y_length = element.size().y();
 
-    state.type = element.type();
+    state.type = teamstyle16::ElementType(element.type());
     state.team = element.team();
     state.visible = element.visible();
     state.health = element.health();

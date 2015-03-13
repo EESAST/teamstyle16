@@ -75,7 +75,7 @@ struct State
 
     Position pos;  // position of the upper-left corner
     Size size;
-    int type;
+    ElementType type;
     int team;
     bool visible;
 
