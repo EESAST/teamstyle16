@@ -139,7 +139,7 @@ void Connection::ReadRoundInfo()
     {
         const communicate::Element &element = round_info_.element(i);
         ParseToState(element, elements_[element.index()]);
-        game_info_.elements[i] = element.index();
+        game_info_.elements[i] = &element;
     }
     std::clog << "States read (" << game_info_.element_num << " entry(s))\n";
 
