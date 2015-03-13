@@ -39,49 +39,49 @@ enum CommandType
     kCommandTypes
 };
 
-void init();//³õÊ¼»¯¶¨Òå¸÷ÖÖÁ¿µÄº¯Êı
-void enemy_init();//¸ù¾İInfo()³õÊ¼»¯µ±Ê±µÄµĞÈË
-void Supply_Repair(int i);/////¸Ã²¹³äÈ¼ÁÏ»òÕßµ¯Ò©µÄÊ±ºò£¬»òÕßÑªÁ¿Ì«ÉÙĞèÒª»Ø»ùµØÎ¬ĞŞ
-Position minus(Position pos1,Position pos2,int fire_range);//·µ»Øpos1¾àpos2Ç¡ºÃÏà¾àfire_rangeµÄÒ»¸öÎ»ÖÃ
-int if_in(int i,int *a,int len);//ÅĞ¶ÏÄ³¸öÊıÊÇ·ñÔÚÊı×éÖĞ
-int GetBase(int team);//»ñµÃ¼º·½»ò¶Ô·½»ùµØµÄË÷Òı
-int distance(Position pos1, Position pos2);//Á½µãÖ®¼äµÄ¾àÀë
-int DisToBase(Position pos1, Position pos2);  ////·µ»Øµ½»ùµØµÄ¾àÀë£¬ pos2±íÊ¾»ùµØ×óÉÏ½Ç
-int if_alive(int operand);//ÅĞ¶ÏÄ³µ¥Î»ÊÇ·ñÈÔ´æ»î
-int max(int x, int y);//×î´óÖµ
-int min(int x, int y);//×îĞ¡Öµ
-int GetNear(Position pos, ElementType type);//»ñµÃ¾à¸ÃÎ»ÖÃ×î½üµÄÄ³ÀàĞÍµ¥Î»µÄË÷Òı
-int if_command(int i,CommandType type,ElementType target = kElementTypes);//ÅĞ¶Ï¶Ô¸Ã³ÉÔ±µÄ¸ÃÃüÁîÊÇ·ñ¿ÉÒÔÏÂ´ï£¨Èç¹ûÒÑ¾­ÏÂ´ï¸ü¸ß¼¶µÄÖ¸ÁîÔò²»¿É£©
-void Cargo_Supply(int index);//¶ÔÓÚ»ØºÏ¿ªÊ¼Ê±Ïà¾àÎª1µÄµ¥Î»½øĞĞ²¹¸ø
-void MoveCargo(int i);//¶ÔÓÚ³ÌĞò×îºóÈÔÈ»Ã»ÓĞÃüÁîµÄÔËÊä´¬£¬È¥×ÊÔ´µãÊÕ¼¯£¬»òÕß»Ø»ùµØ²¹¸ø£¬»òÕß´ôÔÚÇ°Ïß
-void Attack(int index);//Ñ°ÕÒÉä³ÌÄÚµÄ»ùµØ»ò¾İµã£¬»òÑ¡ÔñÑªÁ¿×îÉÙµÄµ¥Î»¹¥»÷,¹¥»÷ºóÔË¶¯µ½¾àµĞÈËÇ¡ºÃÉä³ÌµÄµØ·½
-void BaseAct(int index);//»ùµØµÄÎ¬ĞŞ£¬Éú²ú
-void BaseProduce(int index);///»ùµØµÄÉú²ú
-void Forward(int index);////Ñ°ÕÒ×î½üµÄµĞ¾üÇ°½ø£¬Èç¹ûÊÇÔËÊä´¬
+void init();//åˆå§‹åŒ–å®šä¹‰å„ç§é‡çš„å‡½æ•°
+void enemy_init();//æ ¹æ®Info()åˆå§‹åŒ–å½“æ—¶çš„æ•Œäºº
+void Supply_Repair(int i);/////è¯¥è¡¥å……ç‡ƒæ–™æˆ–è€…å¼¹è¯çš„æ—¶å€™ï¼Œæˆ–è€…è¡€é‡å¤ªå°‘éœ€è¦å›åŸºåœ°ç»´ä¿®
+Position minus(Position pos1,Position pos2,int fire_range);//è¿”å›pos1è·pos2æ°å¥½ç›¸è·fire_rangeçš„ä¸€ä¸ªä½ç½®
+int if_in(int i,int *a,int len);//åˆ¤æ–­æŸä¸ªæ•°æ˜¯å¦åœ¨æ•°ç»„ä¸­
+int GetBase(int team);//è·å¾—å·±æ–¹æˆ–å¯¹æ–¹åŸºåœ°çš„ç´¢å¼•
+int distance(Position pos1, Position pos2);//ä¸¤ç‚¹ä¹‹é—´çš„è·ç¦»
+int DisToBase(Position pos1, Position pos2);  ////è¿”å›åˆ°åŸºåœ°çš„è·ç¦»ï¼Œ pos2è¡¨ç¤ºåŸºåœ°å·¦ä¸Šè§’
+int if_alive(int operand);//åˆ¤æ–­æŸå•ä½æ˜¯å¦ä»å­˜æ´»
+int max(int x, int y);//æœ€å¤§å€¼
+int min(int x, int y);//æœ€å°å€¼
+int GetNear(Position pos, ElementType type);//è·å¾—è·è¯¥ä½ç½®æœ€è¿‘çš„æŸç±»å‹å•ä½çš„ç´¢å¼•
+int if_command(int i,CommandType type,ElementType target = kElementTypes);//åˆ¤æ–­å¯¹è¯¥æˆå‘˜çš„è¯¥å‘½ä»¤æ˜¯å¦å¯ä»¥ä¸‹è¾¾ï¼ˆå¦‚æœå·²ç»ä¸‹è¾¾æ›´é«˜çº§çš„æŒ‡ä»¤åˆ™ä¸å¯ï¼‰
+void Cargo_Supply(int index);//å¯¹äºå›åˆå¼€å§‹æ—¶ç›¸è·ä¸º1çš„å•ä½è¿›è¡Œè¡¥ç»™
+void MoveCargo(int i);//å¯¹äºç¨‹åºæœ€åä»ç„¶æ²¡æœ‰å‘½ä»¤çš„è¿è¾“èˆ¹ï¼Œå»èµ„æºç‚¹æ”¶é›†ï¼Œæˆ–è€…å›åŸºåœ°è¡¥ç»™ï¼Œæˆ–è€…å‘†åœ¨å‰çº¿
+void Attack(int index);//å¯»æ‰¾å°„ç¨‹å†…çš„åŸºåœ°æˆ–æ®ç‚¹ï¼Œæˆ–é€‰æ‹©è¡€é‡æœ€å°‘çš„å•ä½æ”»å‡»,æ”»å‡»åè¿åŠ¨åˆ°è·æ•Œäººæ°å¥½å°„ç¨‹çš„åœ°æ–¹
+void BaseAct(int index);//åŸºåœ°çš„ç»´ä¿®ï¼Œç”Ÿäº§
+void BaseProduce(int index);///åŸºåœ°çš„ç”Ÿäº§
+void Forward(int index);////å¯»æ‰¾æœ€è¿‘çš„æ•Œå†›å‰è¿›ï¼Œå¦‚æœæ˜¯è¿è¾“èˆ¹
 void DefineUnit();
-Position findOcean(Position pos);//ÕÒµ½pos×î½üµÄ²»ÁÙ´óÂ½µÄµØ·½
-int AwayToLand(Position pos);//ÅĞ¶ÏÄ³¸öÎ»ÖÃÊÇ²»²»ÁÙ´óÂ½
+Position findOcean(Position pos);//æ‰¾åˆ°posæœ€è¿‘çš„ä¸ä¸´å¤§é™†çš„åœ°æ–¹
+int AwayToLand(Position pos);//åˆ¤æ–­æŸä¸ªä½ç½®æ˜¯ä¸ä¸ä¸´å¤§é™†
 
 const GameInfo *INFO = Info();
 int enemy_num;
 State *enemy_element;
-int (*command)[2];  //±¾»ØºÏ·¢³öµÄÖ¸Áî£¬Ò»¸öĞ§¹ûÖ¸Áî£¬Ò»¸öÒÆ¶¯Ö¸Áî
+int (*command)[2];  //æœ¬å›åˆå‘å‡ºçš„æŒ‡ä»¤ï¼Œä¸€ä¸ªæ•ˆæœæŒ‡ä»¤ï¼Œä¸€ä¸ªç§»åŠ¨æŒ‡ä»¤
 double parameter[4];
 
-int BaseMineCargo = -2, BaseFuelCargo = -2;  //Èı¸ö²¹¸ø»ùµØµÄ     ³õÊ¼»¯Îª-2£¬-1±íÊ¾ÔÚÉú²ú
-int base_defender[3] = {-2, -2, -2};      //ÁôÊØ»ùµØµÄÇıÖğ½¢£¬³õÊ¼»¯Îª -2£¬-1±íÊ¾ÔÚÉú²ú
+int BaseMineCargo = -2, BaseFuelCargo = -2;  //ä¸‰ä¸ªè¡¥ç»™åŸºåœ°çš„     åˆå§‹åŒ–ä¸º-2ï¼Œ-1è¡¨ç¤ºåœ¨ç”Ÿäº§
+int base_defender[3] = {-2, -2, -2};      //ç•™å®ˆåŸºåœ°çš„é©±é€èˆ°ï¼Œåˆå§‹åŒ–ä¸º -2ï¼Œ-1è¡¨ç¤ºåœ¨ç”Ÿäº§
 
 vector<int>Enemy_Indexes;
 
 int DISTANCE_NEAR_BASE = 20;
 int BEGINGAME = 0;
-Position BaseDefendPos;//·ÅÖÃÊØÎÀ»ùµØµÄÇıÖğ½¢µÄÎ»ÖÃ
-//Position PassWay;  //Ë«·½»ùµØ¼äµÄÖØÒªÍ¨µÀ
+Position BaseDefendPos;//æ”¾ç½®å®ˆå«åŸºåœ°çš„é©±é€èˆ°çš„ä½ç½®
+//Position PassWay;  //åŒæ–¹åŸºåœ°é—´çš„é‡è¦é€šé“
 
 void AIMain()
 {  
 	TryUpdate();
-	//»ØºÏ¿ªÊ¼Ê±µÄ³õÊ¼»¯
+	//å›åˆå¼€å§‹æ—¶çš„åˆå§‹åŒ–
 	init();
 
 	DefineUnit();
@@ -89,36 +89,36 @@ void AIMain()
 		if(INFO->elements[i]->team == INFO->team_num)
 		{
 			const State *Element = INFO->elements[i];
-			Supply_Repair(i);//¸Ã²¹¸ø»òÎ¬ĞŞ¾ÍÈ¥²¹¸ø£¬Î¬ĞŞ
+			Supply_Repair(i);//è¯¥è¡¥ç»™æˆ–ç»´ä¿®å°±å»è¡¥ç»™ï¼Œç»´ä¿®
 	
 			//TryUpdate();
 			//enemy_init();
-			Attack(i);        //¹¥»÷
+			Attack(i);        //æ”»å‡»
 
 			if(Element->type == BASE)
-				BaseAct(i);     //»ùµØÎ¬ĞŞ£¬²¹¸ø£¬Éú²ú
+				BaseAct(i);     //åŸºåœ°ç»´ä¿®ï¼Œè¡¥ç»™ï¼Œç”Ÿäº§
 			else if(Element->type == CARGO)
 			{
-				Cargo_Supply(i);   //ÔËÊä½¢²¹¸ø
-				MoveCargo(i);      //ÔËÊä½¢ÔË¶¯
+				Cargo_Supply(i);   //è¿è¾“èˆ°è¡¥ç»™
+				MoveCargo(i);      //è¿è¾“èˆ°è¿åŠ¨
 			}	
 			else ;
 
-			Forward(i);       //Ç°½ø
+			Forward(i);       //å‰è¿›
 		}
 	//Update();
 	delete []enemy_element;
 }
 
-//³õÊ¼»¯¶¨Òå¸÷ÖÖÁ¿µÄº¯Êı
+//åˆå§‹åŒ–å®šä¹‰å„ç§é‡çš„å‡½æ•°
 void init()
 {
 	if(BEGINGAME == 0)
 	{
-		parameter[0] = 0.3; //ÑªÁ¿
-		parameter[1] = 0.3; //½ğÊô
-		parameter[2] = 0.3; //È¼ÁÏ
-		parameter[3] = 0.4; //µ¯Ò©
+		parameter[0] = 0.3; //è¡€é‡
+		parameter[1] = 0.3; //é‡‘å±
+		parameter[2] = 0.3; //ç‡ƒæ–™
+		parameter[3] = 0.4; //å¼¹è¯
 	
 		const State *Base = INFO->elements[GetBase(INFO->team_num)];
 		const State *EnemyBase = INFO->elements[GetBase(1-INFO->team_num)];
@@ -135,17 +135,17 @@ void init()
 	}
 	/*if(BEGINGAME == 1)
 		BEGINGAME == 2;*/
-	command = new int[INFO->element_num][2];    //ÃüÁîÁĞ±í³õÊ¼»¯
+	command = new int[INFO->element_num][2];    //å‘½ä»¤åˆ—è¡¨åˆå§‹åŒ–
 	for(int i = 0; i<INFO->element_num; i++)
 		for(int j=0;j<2;j++)
 			command[i][j] = -1; 
 	enemy_init();
 }
 
-//¸ù¾İInfo()³õÊ¼»¯µ±Ê±µÄµĞÈË
+//æ ¹æ®Info()åˆå§‹åŒ–å½“æ—¶çš„æ•Œäºº
 void enemy_init()
 {
-	//µĞ·½µ¥Î»¹¹½¨°üÀ¨µĞ·½µ¥Î»ºÍÎŞÖ÷¾İµã£¬²»°üÀ¨¿ó³¡ºÍÓÍÌï
+	//æ•Œæ–¹å•ä½æ„å»ºåŒ…æ‹¬æ•Œæ–¹å•ä½å’Œæ— ä¸»æ®ç‚¹ï¼Œä¸åŒ…æ‹¬çŸ¿åœºå’Œæ²¹ç”°
 	enemy_num =0;
 	for(int i=0;i<Info()->element_num;i++)
 		if(Info()->elements[i]->team != Info()->team_num  
@@ -162,7 +162,7 @@ void enemy_init()
 	Enemy_Indexes.clear();
 }
 
-//ÕÒµ½pos×î½üµÄ²»ÁÙ´óÂ½µÄµØ·½
+//æ‰¾åˆ°posæœ€è¿‘çš„ä¸ä¸´å¤§é™†çš„åœ°æ–¹
 Position findOcean(Position pos)
 {
 	Position sea;
@@ -178,13 +178,13 @@ Position findOcean(Position pos)
 	return pos;
 }
 
-//ÅĞ¶ÏÄ³¸öÎ»ÖÃÊÇ²»²»ÁÙ´óÂ½
+//åˆ¤æ–­æŸä¸ªä½ç½®æ˜¯ä¸ä¸ä¸´å¤§é™†
 int AwayToLand(Position pos)
 {
 	return 1-Map(pos.x-1, pos.y-1)||Map(pos.x-1, pos.y)||Map(pos.x-1, pos.y+1)||Map(pos.x, pos.y-1)
 			||Map(pos.x, pos.y)||Map(pos.x, pos.y+1)||Map(pos.x+1, pos.y-1)||Map(pos.x+1, pos.y)||Map(pos.x+1, pos.y);
 }
-/////¸Ã²¹³äÈ¼ÁÏ»òÕßµ¯Ò©µÄÊ±ºò£¬»òÕßÑªÁ¿Ì«ÉÙĞèÒª»Ø»ùµØÎ¬ĞŞ
+/////è¯¥è¡¥å……ç‡ƒæ–™æˆ–è€…å¼¹è¯çš„æ—¶å€™ï¼Œæˆ–è€…è¡€é‡å¤ªå°‘éœ€è¦å›åŸºåœ°ç»´ä¿®
 void Supply_Repair(int i)
 {
 	const State *Element = INFO->elements[i];
@@ -240,11 +240,11 @@ void Supply_Repair(int i)
 		}
 	}
 	else if(Element->type > FORT 
-			&& ((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max && Element->ammo != -1) ||   //½ğÊô²»×ã
+			&& ((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max && Element->ammo != -1) ||   //é‡‘å±ä¸è¶³
 			(Element->fuel < distance(Element->pos, INFO->elements[GetBase(INFO->team_num)]->pos) + 9
-			&& Element->type != CARGO)))          //È¼ÁÏ²»×ã
+			&& Element->type != CARGO)))          //ç‡ƒæ–™ä¸è¶³
 	{
-		//»Ø»ùµØ
+		//å›åŸºåœ°
 		int base_index = GetBase(INFO->team_num);
 		if(DisToBase(Element->pos, INFO->elements[base_index]->pos) < DISTANCE_NEAR_BASE)
 			if(if_command(i, RETURNBASE))
@@ -279,7 +279,7 @@ void Supply_Repair(int i)
 	else;
 }
 
-//·µ»Øpos1¾àpos2Ç¡ºÃÏà¾àfire_rangeµÄÒ»¸öÎ»ÖÃ
+//è¿”å›pos1è·pos2æ°å¥½ç›¸è·fire_rangeçš„ä¸€ä¸ªä½ç½®
 Position minus(Position pos1,Position pos2,int fire_range)
 {
 	Position target;
@@ -290,7 +290,7 @@ Position minus(Position pos1,Position pos2,int fire_range)
 
 }
 
-//ÅĞ¶ÏÄ³¸öÊıÊÇ·ñÔÚÊı×éÖĞ
+//åˆ¤æ–­æŸä¸ªæ•°æ˜¯å¦åœ¨æ•°ç»„ä¸­
 int if_in(int i,int *a,int len)
 {
 	for(int j=0;j<len;j++)
@@ -299,7 +299,7 @@ int if_in(int i,int *a,int len)
 	return 0;
 }
 
-//»ñµÃ¼º·½»ò¶Ô·½»ùµØµÄË÷Òı
+//è·å¾—å·±æ–¹æˆ–å¯¹æ–¹åŸºåœ°çš„ç´¢å¼•
 int GetBase(int team)
 {
 	int i;
@@ -309,17 +309,17 @@ int GetBase(int team)
 	return -1;
 }
 
-//Á½µãÖ®¼äµÄ¾àÀë
+//ä¸¤ç‚¹ä¹‹é—´çš„è·ç¦»
 int distance(Position pos1, Position pos2)
 {
 	return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y);
 }
 
-//·µ»Øµ½»ùµØµÄ¾àÀë
-int DisToBase(Position pos1, Position pos2)  //pos2±íÊ¾»ùµØ×óÉÏ½Ç
+//è¿”å›åˆ°åŸºåœ°çš„è·ç¦»
+int DisToBase(Position pos1, Position pos2)  //pos2è¡¨ç¤ºåŸºåœ°å·¦ä¸Šè§’
 {
 	int min = 1000;
-	if(pos1.x < pos2.x)//·ÖÎª¾Å¿é
+	if(pos1.x < pos2.x)//åˆ†ä¸ºä¹å—
 	{
 		if(pos1.y > pos2.y)
 			return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y);
@@ -348,7 +348,7 @@ int DisToBase(Position pos1, Position pos2)  //pos2±íÊ¾»ùµØ×óÉÏ½Ç
 	}
 }
 
-//ÅĞ¶ÏÄ³µ¥Î»ÊÇ·ñÈÔ´æ»î
+//åˆ¤æ–­æŸå•ä½æ˜¯å¦ä»å­˜æ´»
 int if_alive(int operand)
 {
 	for(int i=0;i<INFO->element_num;i++)
@@ -357,19 +357,19 @@ int if_alive(int operand)
 	return 0;
 }
 
-//×î´óÖµ
+//æœ€å¤§å€¼
 int max(int x, int y)
 {
 	return x>y?x:y;
 }
 
-//×îĞ¡Öµ
+//æœ€å°å€¼
 int min(int x, int y)
 {
 	return x<y?x:y;
 }
 
-//»ñµÃ¾à¸ÃÎ»ÖÃ×î½üµÄÄ³ÀàĞÍµ¥Î»µÄË÷Òı
+//è·å¾—è·è¯¥ä½ç½®æœ€è¿‘çš„æŸç±»å‹å•ä½çš„ç´¢å¼•
 int GetNear(Position pos, ElementType type)
 {
 	int i,near_index = -1,min_distance = 1000;
@@ -378,12 +378,12 @@ int GetNear(Position pos, ElementType type)
 		const State *target = INFO->elements[i];
 		if(target->type == type &&  distance(target->pos, pos)<min_distance)
 		{
-			if( type == OILFIELD && target->fuel >= kElementInfos[CARGO].fuel_max) //ÓÍÌï»¹ÓĞÊ¯ÓÍ
+			if( type == OILFIELD && target->fuel >= kElementInfos[CARGO].fuel_max) //æ²¹ç”°è¿˜æœ‰çŸ³æ²¹
 			{
 				near_index = i;
 				min_distance = distance(target->pos, pos);
 			}
-			else if(type == MINE  && target->metal >= kElementInfos[CARGO].metal_max)//±£Ö¤¿ó³¡»¹ÓĞ½ğÊô
+			else if(type == MINE  && target->metal >= kElementInfos[CARGO].metal_max)//ä¿è¯çŸ¿åœºè¿˜æœ‰é‡‘å±
 			{
 				near_index = i;
 				min_distance = distance(target->pos, pos);
@@ -399,18 +399,18 @@ int GetNear(Position pos, ElementType type)
 	return near_index;
 }
 
-//ÅĞ¶Ï¶Ô¸Ã³ÉÔ±µÄ¸ÃÃüÁîÊÇ·ñ¿ÉÒÔÏÂ´ï£¨Èç¹ûÒÑ¾­ÏÂ´ï¸ü¸ß¼¶µÄÖ¸ÁîÔò²»¿É£©
+//åˆ¤æ–­å¯¹è¯¥æˆå‘˜çš„è¯¥å‘½ä»¤æ˜¯å¦å¯ä»¥ä¸‹è¾¾ï¼ˆå¦‚æœå·²ç»ä¸‹è¾¾æ›´é«˜çº§çš„æŒ‡ä»¤åˆ™ä¸å¯ï¼‰
 int if_command(int i,CommandType type, ElementType target)
 {
 	const State *element = INFO->elements[i];
-	if(type < FORWARD && type > command[i][0])  //·ÇÒÆ¶¯Ö¸Áî
+	if(type < FORWARD && type > command[i][0])  //éç§»åŠ¨æŒ‡ä»¤
 	{
-		if(type == PRODUCE || type == FIX)     //Éú²úºÍÎ¬ĞŞ²Ù×÷
+		if(type == PRODUCE || type == FIX)     //ç”Ÿäº§å’Œç»´ä¿®æ“ä½œ
 		{
 			if(element->type == BASE) return 1;
 			return 0;
 		}
-		else if(type <= SUPPLYUNIT)      //²¹¸ø²Ù×÷
+		else if(type <= SUPPLYUNIT)      //è¡¥ç»™æ“ä½œ
 		{
 			if(element->type >= FIGHTER 
 				|| element->type == DESTROYER 
@@ -429,17 +429,17 @@ int if_command(int i,CommandType type, ElementType target)
 		else ;
 		return 1;
 	}
-	if(type >= FORWARD && type > command[i][1])  //ÒÆ¶¯Ö¸Áî
+	if(type >= FORWARD && type > command[i][1])  //ç§»åŠ¨æŒ‡ä»¤
 	{   
 		if(element->type <= FORT)
-			return 0;//»ùµØºÍ¾İµã²»ÄÜÒÆ¶¯
+			return 0;//åŸºåœ°å’Œæ®ç‚¹ä¸èƒ½ç§»åŠ¨
 		return 1;
 	}
 	return 0;
 }
 
 
-//¶ÔÓÚ»ØºÏ¿ªÊ¼Ê±Ïà¾àÎª1µÄµ¥Î»½øĞĞ²¹¸ø
+//å¯¹äºå›åˆå¼€å§‹æ—¶ç›¸è·ä¸º1çš„å•ä½è¿›è¡Œè¡¥ç»™
 void Cargo_Supply(int index)
 {
 	const State *element, *target;
@@ -517,14 +517,14 @@ void Cargo_Supply(int index)
 	}	
 }
 
-//¶ÔÓÚ³ÌĞò×îºóÈÔÈ»Ã»ÓĞÃüÁîµÄÔËÊä´¬£¬È¥×ÊÔ´µãÊÕ¼¯£¬»òÕß»Ø»ùµØ²¹¸ø£¬»òÕß´ôÔÚÇ°Ïß
+//å¯¹äºç¨‹åºæœ€åä»ç„¶æ²¡æœ‰å‘½ä»¤çš„è¿è¾“èˆ¹ï¼Œå»èµ„æºç‚¹æ”¶é›†ï¼Œæˆ–è€…å›åŸºåœ°è¡¥ç»™ï¼Œæˆ–è€…å‘†åœ¨å‰çº¿
 void MoveCargo(int i)        
 {
 	const State *Element = INFO->elements[i];
 	const State *base = INFO->elements[GetBase(INFO->team_num)];
 	if(Element->type == CARGO && if_command(i, RETURNBASE))
 	{
-		if(Element->fuel < 0.4 * kElementInfos[CARGO].fuel_max)          //È¼ÁÏ²»×ã
+		if(Element->fuel < 0.4 * kElementInfos[CARGO].fuel_max)          //ç‡ƒæ–™ä¸è¶³
 		{
 			if(Element->index == BaseMineCargo)
 			{
@@ -542,7 +542,7 @@ void MoveCargo(int i)
 				}
 			}
 		}
-		else if(Element->metal < 0.5 * kElementInfos[CARGO].metal_max)     //½ğÊô²»×ã
+		else if(Element->metal < 0.5 * kElementInfos[CARGO].metal_max)     //é‡‘å±ä¸è¶³
 		{	
 			ChangeDest(Element->index, INFO->elements[GetNear(Element->pos,MINE)]->pos);
 			command[i][1] = CARGOSUPPLY;
@@ -561,7 +561,7 @@ void MoveCargo(int i)
 		else ;
 	}
 
-	if(if_command(i, FORWARD))                   //ÊÇ²¹¸øÇ°ÏßµÄ´¬
+	if(if_command(i, FORWARD))                   //æ˜¯è¡¥ç»™å‰çº¿çš„èˆ¹
 	{
         int MinAmmo = 1000;
         Position target;
@@ -583,9 +583,9 @@ void MoveCargo(int i)
     }
 }
 
-//Ñ°ÕÒÉä³ÌÄÚµÄ»ùµØ»ò¾İµã£¬»òÑ¡ÔñÑªÁ¿×îÉÙµÄµ¥Î»¹¥»÷
-//Èç¹ûÊÇ»ùµØ¡¢¾İµã£»»òÕß¹¥»÷·¶Î§Ğ¡ÓÚµĞÈË¾ÍÏòÇ°×ß
-//Èç¹û¹¥»÷·¶Î§´óÓÚµĞÈË¾ÍÏòºó×ß
+//å¯»æ‰¾å°„ç¨‹å†…çš„åŸºåœ°æˆ–æ®ç‚¹ï¼Œæˆ–é€‰æ‹©è¡€é‡æœ€å°‘çš„å•ä½æ”»å‡»
+//å¦‚æœæ˜¯åŸºåœ°ã€æ®ç‚¹ï¼›æˆ–è€…æ”»å‡»èŒƒå›´å°äºæ•Œäººå°±å‘å‰èµ°
+//å¦‚æœæ”»å‡»èŒƒå›´å¤§äºæ•Œäººå°±å‘åèµ°
 void Attack(int index)
 {
 	const State	*Element = INFO->elements[index];
@@ -599,7 +599,7 @@ void Attack(int index)
 		if(enemy->type == BASE && enemy->team == 1-INFO->team_num
 			&& DisToBase(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[SURFACE]
 			&& if_command(index, ATTACKBASE, BASE))
-		{												//µĞ·½»ùµØ
+		{												//æ•Œæ–¹åŸºåœ°
 			AttackUnit(Element->index,enemy->index);
 			command[index][0] = ATTACKBASE;
 			if(if_command(index, FORWARD))
@@ -613,7 +613,7 @@ void Attack(int index)
 		{	
 			if(enemy->type == FORT
 				&& enemy->team == 1-INFO->team_num
-				&& if_command(index,ATTACKFORT, FORT))                                     //¾İµã
+				&& if_command(index,ATTACKFORT, FORT))                                     //æ®ç‚¹
 			{
 				AttackUnit(Element->index,enemy->index);
 				command[index][0] = ATTACKFORT;
@@ -633,7 +633,7 @@ void Attack(int index)
 			if(health > enemy->health 
 					&& if_command(index, ATTACKUNIT, ElementType(enemy->type)))
 			{
-				health=enemy->health;					//Ñ°ÕÒÑªÁ¿×îÉÙµÄµĞ·½µ¥Î»
+				health=enemy->health;					//å¯»æ‰¾è¡€é‡æœ€å°‘çš„æ•Œæ–¹å•ä½
 				enemy_index=i;
 			}
 		}
@@ -645,12 +645,12 @@ void Attack(int index)
 		if(if_command(index,FORWARD)
 			&& !if_in(INFO->elements[index]->index, base_defender, 3))
 		{
-			//Éä³ÌÔ¶ÓÚµĞ·½
+			//å°„ç¨‹è¿œäºæ•Œæ–¹
 			if(kElementInfos[Element->type].fire_ranges[kElementInfos[enemy_element[enemy_index].type].level]
 				> kElementInfos[enemy_element[enemy_index].type].fire_ranges[kElementInfos[Element->type].level])
 				ChangeDest(Element->index, minus(Element->pos,enemy_element[enemy_index].pos,
 					kElementInfos[Element->type].fire_ranges[kElementInfos[enemy_element[enemy_index].type].level]));
-			//Éä³Ì½üÓÚµĞ·½
+			//å°„ç¨‹è¿‘äºæ•Œæ–¹
 			else 
 				ChangeDest(Element->index, enemy_element[enemy_index].pos);
 			command[index][1] = FORWARD;
@@ -679,7 +679,7 @@ void Attack(int index)
 	
 }
 
-//»ùµØµÄÎ¬ĞŞ£¬Éú²ú
+//åŸºåœ°çš„ç»´ä¿®ï¼Œç”Ÿäº§
 void BaseAct(int index)
 {
 	const State *target;
@@ -728,10 +728,10 @@ void BaseAct(int index)
 		}
 	}
 
-	BaseProduce(index);   //Éú²úÃüÁî
+	BaseProduce(index);   //ç”Ÿäº§å‘½ä»¤
 }
 
-///»ùµØµÄÉú²ú
+///åŸºåœ°çš„ç”Ÿäº§
 void BaseProduce(int index)
 {
 	if(!if_command(index, PRODUCE))return;
@@ -795,8 +795,8 @@ void BaseProduce(int index)
 	else;
 }
 
-void DefineUnit() //flag = 0,1,2¶ÔÓ¦BaseMineCargo, BaseFuelCargo, base_defender
- //i¶ÔÓ¦base_defenderµÄ±êºÅ
+void DefineUnit() //flag = 0,1,2å¯¹åº”BaseMineCargo, BaseFuelCargo, base_defender
+ //iå¯¹åº”base_defenderçš„æ ‡å·
 {
     const State *Element, *base; 
     base = INFO->elements[GetBase(INFO->team_num)];
@@ -852,7 +852,7 @@ void DefineUnit() //flag = 0,1,2¶ÔÓ¦BaseMineCargo, BaseFuelCargo, base_defender
 			BaseFuelCargo = index;
 	}
 }
-////Ñ°ÕÒ×î½üµÄµĞ¾üÇ°½ø£¬Èç¹ûÊÇÔËÊä´¬¾Í´ò
+////å¯»æ‰¾æœ€è¿‘çš„æ•Œå†›å‰è¿›ï¼Œå¦‚æœæ˜¯è¿è¾“èˆ¹å°±æ‰“
 void Forward(int index)
 {
 	const State *Element = INFO->elements[index];
