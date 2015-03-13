@@ -537,6 +537,7 @@ class Replay(QGraphicsView):
 		ATTACK_TIME = 10 * self.TIME_PER_STEP
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
 		move_unit = None
+		attack_target = None
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == move_unit_index:
@@ -547,7 +548,7 @@ class Replay(QGraphicsView):
 				if soldier.obj.index == attack_target_index:
 					attack_target = soldier
 					break
-		if not move_unit:
+		if not move_unit or not attack_target:
 			return QPauseAnimation(10), []
 		showAtkAnim = QParallelAnimationGroup()
 		move_effect = AttackEffectUnit(move_unit.corX, move_unit.corY, move_unit.corZ)
@@ -734,7 +735,8 @@ class Replay(QGraphicsView):
 
 	def fixAnimation(self, fix_unit_index, fix_target_index, metal_consumption, health_increase):
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
-
+		fix_target = None
+		fix_unit = None
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == fix_unit_index:
@@ -744,8 +746,9 @@ class Replay(QGraphicsView):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == fix_target_index:
 					fix_target = soldier
-					break			
-		
+					break
+		if not fix_target or not fix_unit:
+			return QPauseAnimation(10), []
 		showFixAnim = QParallelAnimationGroup()
 		
 		#位置可能不对，再调
@@ -820,7 +823,8 @@ class Replay(QGraphicsView):
 
 	def collectAnimation(self, collect_unit_index, collect_target_index, fuel_collect, metal_collect):
 		TOTAL_TIME = 20 * self.TIME_PER_STEP
-
+		collect_target = None
+		collect_unit = None
 		for i in range(2):
 			for soldier in self.UnitBase[i]:
 				if soldier.obj.index == collect_unit_index:
@@ -830,7 +834,8 @@ class Replay(QGraphicsView):
 			if soldier.obj.index == collect_target_index:
 				collect_target = soldier
 				break			
-
+		if not collect_target or not collect_unit:
+			return QPauseAnimation(10), []
 		showColAnim = QParallelAnimationGroup()
 
 		effect_unit = ColEffectUnit(collect_target.corX, collect_target.corY , collect_target.corZ)
