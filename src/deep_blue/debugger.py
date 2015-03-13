@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 
 from deep_blue import *
 
@@ -82,4 +83,4 @@ if __name__ == '__main__':
     else:
         root.setLevel(logging.DEBUG)
 
-    exit(debug(args))
+    sys.exit(debug(args))
