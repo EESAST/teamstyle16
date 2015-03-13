@@ -198,13 +198,9 @@ void Supply_Repair(int i)
 	}
 	else if(Element->type == BASE)
 	{
-		if(Element->metal < 0.4*kElementInfos[BASE].metal_max && BaseMineCargo>0)
+		if(Element->metal < 0.4*kElementInfos[BASE].metal_max && if_alive(BaseMineCargo))
 		{
-			/*if(kElementInfos[CARGO].metal_max >= 0)
-			{
-				int i;
-			}*/
-			if(GetState(BaseMineCargo)->metal > 0.4 * kElementInfos[CARGO].metal_max)
+			if(GetState(BaseMineCargo)->metal > (int)(0.4 * kElementInfos[CARGO].metal_max))
 				ChangeDest(BaseMineCargo, Element->pos);
 			else
 			{
@@ -220,7 +216,7 @@ void Supply_Repair(int i)
 					return;
 				}
 		}
-		if(Element->fuel < 0.4*kElementInfos[BASE].fuel_max && BaseFuelCargo>0)
+		if(Element->fuel < 0.4*kElementInfos[BASE].fuel_max && if_alive(BaseFuelCargo))
 		{
 			if(GetState(BaseFuelCargo)->fuel > 0.5*kElementInfos[CARGO].fuel_max)
 				ChangeDest(BaseFuelCargo, Element->pos);
