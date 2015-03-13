@@ -83,7 +83,7 @@ void ShowRoundInfo()
     cout << "elements:\n";
     for (int i = 0; i < info->element_num; i++)
     {
-        const teamstyle16::State &state = *teamstyle16::GetState(info->elements[i]);
+        const teamstyle16::State &state = *info->elements[i];
         cout << "  " << i << ": \n";
         ShowElement(state);
     }
