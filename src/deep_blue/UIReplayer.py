@@ -443,7 +443,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CreateWidget.team2.Initialize(self.fileInfo)
 			self.CenterWidget.Play(self.fileInfo)
 			self.isPaused = True
-			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
 			self.RoundLcdNumber.display(self.fileInfo.round())
@@ -503,7 +503,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.Initialize(self.fileInfo)
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.CenterWidget.Play(self.fileInfo)
 			self.isPaused = True
 			self.infoWidget1.setText(self.fileInfo)
@@ -522,7 +522,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
 				self.CenterWidget.Play(self.fileInfo)
-				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
+				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 				self.infoWidget1.setText(self.fileInfo)
 				self.infoWidget2.updateInfo(self.fileInfo)
 				self.RoundLcdNumber.display(self.fileInfo.round())
@@ -572,7 +572,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.Initialize(self.fileInfo)
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.CenterWidget.Play(self.fileInfo)
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
@@ -603,7 +603,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			return
 		self.synRoundSlider()
 		self.CenterWidget.Play(self.fileInfo)
-		self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
+		self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 		self.CreateWidget.team1.Initialize(self.fileInfo)
 		self.CreateWidget.team2.Initialize(self.fileInfo)
 		self.infoWidget2.updateInfo(self.fileInfo)
@@ -620,7 +620,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.CenterWidget.Initialize(self.fileInfo)
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
-				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.HUMAN_REPLAY)
+				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 				if not self.isPaused:
 					self.CenterWidget.Play(self.fileInfo)
 				self.RoundLcdNumber.display(round_)
