@@ -110,6 +110,10 @@ struct GameInfo  // Necessary informations about the game
     int population;
 
     int element_num;
+    // WARNING: Do NOT keep these pointers!
+    // Pointers from previous rounds are dangling!!!
+    // If you want to keep track of an element, keep its index and find it
+    //     using GetState().
     const State *elements[kMaxElementNum];  // array of States
 
     int production_num;
