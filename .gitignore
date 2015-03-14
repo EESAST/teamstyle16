@@ -6,6 +6,7 @@
 
 # CMake build files
 src/player_file/build
+src/player_file/projects
 
 # Package
 src/deep_blue/build
