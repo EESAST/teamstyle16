@@ -463,14 +463,20 @@ void Cargo_Supply(int index)
 
 				if(element->index == BaseMineCargo)
 				{	
-					ChangeDest(element->index, INFO->elements[GetNear(element->pos,MINE)]->pos);
+					int mine = GetNear(element->pos, MINE);
+					if(mine < 0)
+						return;
+					ChangeDest(element->index, INFO->elements[mine]->pos);
 					command[index][1] = CARGOSUPPLY;
 					return;
 				}
 
 				if(element->index == BaseFuelCargo)
 				{
-					ChangeDest(element->index, INFO->elements[GetNear(element->pos,OILFIELD)]->pos);
+					int fuel = GetNear(element->pos,OILFIELD);
+					if(fuel < 0)
+						return;
+					ChangeDest(element->index, INFO->elements[fuel]->pos);
 					command[index][1] = CARGOSUPPLY;
 					return;
 				}
@@ -526,13 +532,19 @@ void MoveCargo(int i)
 			{
 				if(Element->metal > 0.5 * kProperty[CARGO].metal_max || Element->fuel < 0.3*kProperty[CARGO].fuel_max)
 				{
-					ChangeDest(Element->index, INFO->elements[GetNear(Element->pos,OILFIELD)]->pos);
+					int fuel = GetNear(Element->pos,OILFIELD);
+					if(fuel < 0)
+						return;
+					ChangeDest(Element->index, INFO->elements[fuel]->pos);
 					command[i][1] = CARGOSUPPLY;
 					return;
 				}
 				else
 				{
-					ChangeDest(Element->index, INFO->elements[GetNear(Element->pos,MINE)]->pos);
+					int mine = GetNear(Element->pos, MINE);
+					if(mine < 0)
+						return;
+					ChangeDest(Element->index, INFO->elements[mine]->pos);
 					command[i][1] = CARGOSUPPLY;
 					return;
 				}
