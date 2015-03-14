@@ -9,3 +9,6 @@ src/player_file/build
 
 # Package
 src/deep_blue/build
+
+# Binaries
+src/deep_blue/dist
