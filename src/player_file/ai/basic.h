@@ -131,8 +131,7 @@ extern const int kFortScore;
 extern const int kDamageScore;     // Score reward per damage made.
 extern const int kCollectScore;    // Score reward per resource collected.
 
-extern const Property kElementInfos[kElementTypes];
-
+extern const Property kProperty[kElementTypes];
 
 const GameInfo * Info();  // Get game information
 MapType Map(int x, int y);

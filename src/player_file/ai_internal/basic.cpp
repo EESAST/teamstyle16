@@ -16,7 +16,7 @@ extern const int kFortScore = 1;
 extern const int kDamageScore = 1;
 extern const int kCollectScore = 1;
 
-extern const Property kElementInfos[kElementTypes] = 
+extern const Property kProperty[kElementTypes] = 
 {
 	{SURFACE,    {4, 10, 8}, {0, 7, 5}, 2000, 1000,  -1,  6, 200,  {40, 0},  {15, -1}, 0,  0,  0, 0},
 	{SURFACE,    {3, 8, 6},  {0, 5, 4}, 800,  200,   300, 4, 200,  {25, 0},  {12, -1}, 0,  0,  0, 0},
@@ -127,7 +127,7 @@ const Property * GetProperty(int type)
     if (type < 0)
         return NULL;
     if (type < kElementTypes)
-        return &kElementInfos[type];
+        return &kProperty[type];
 
     // may need to calculate property for planes
 
