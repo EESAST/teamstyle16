@@ -287,6 +287,10 @@ class Rectangle(object):
     def level(self, value):
         self.upper_left.level = self.lower_right.level = value
 
+    @property
+    def center(self):
+        return Position(self.x, self.y, self.z)
+
     def bound(self):
         """返回矩形区域的边界点集list"""
         bound_points = []
@@ -340,7 +344,7 @@ class Element(object):
 
     @property
     def position(self):
-        return self.pos if isinstance(self.pos, Position) else self.pos.upper_left
+        return self.pos if isinstance(self.pos, Position) else self.pos.center
 
     @property
     def size(self):
