@@ -75,22 +75,27 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	def updateUi(self):
 		if self.loadRepFile:
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 3
 			self.CreateWidget.team1.HUMAN_REPLAY = 3
 			self.CreateWidget.team2.HUMAN_REPLAY = 3
 		elif self.loadMap and self.loadAi1 and self.HumanCheckBox2.isChecked():
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 1
 			self.CreateWidget.team1.HUMAN_REPLAY = 1
 			self.CreateWidget.team2.HUMAN_REPLAY = 1
 		elif self.loadMap and self.loadAi2 and self.HumanCheckBox1.isChecked():
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 0
 			self.CreateWidget.team1.HUMAN_REPLAY = 0
 			self.CreateWidget.team2.HUMAN_REPLAY = 0
 		elif self.loadMap and self.HumanCheckBox1.isChecked() and self.HumanCheckBox2.isChecked():
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 2
 			self.CreateWidget.team1.HUMAN_REPLAY = 2
 			self.CreateWidget.team2.HUMAN_REPLAY = 2
 		elif self.loadMap and self.loadAi2 and self.loadAi1:
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 4
 			self.CreateWidget.team1.HUMAN_REPLAY = 4
 			self.CreateWidget.team2.HUMAN_REPLAY = 4
@@ -147,8 +152,6 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.ModeCheck1.setEnabled(not self.started)
 		self.ModeCheck2.setEnabled(not self.started)
 		self.StopPushButton.setEnabled(self.started)
-		self.UpPushButton.setEnabled(self.started)
-		self.DownPushButton.setEnabled(self.started)
 		self.RoundSlider.blockSignals(not self.started)
 		if self.CenterWidget.HUMAN_REPLAY in [0,1,2,4]:
 			self.RoundSlider.blockSignals(True)
