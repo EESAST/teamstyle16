@@ -188,7 +188,7 @@ int AwayToLand(Position pos)
 void Supply_Repair(int i)
 {
 	const State *Element = INFO->elements[i];
-	if(Element->health < parameter[0] * kElementInfos[Element->type].health_max 
+	if(Element->health < parameter[0] * kProperty[Element->type].health_max 
 		&& Element->health != -1
 		&& if_command(i, RETURNBASE))
 	{
@@ -198,9 +198,9 @@ void Supply_Repair(int i)
 	}
 	else if(Element->type == BASE)
 	{
-		if(Element->metal < 0.4*kElementInfos[BASE].metal_max && if_alive(BaseMineCargo))
+		if(Element->metal < 0.4*kProperty[BASE].metal_max && if_alive(BaseMineCargo))
 		{
-			if(GetState(BaseMineCargo)->metal > (int)(0.4 * kElementInfos[CARGO].metal_max))
+			if(GetState(BaseMineCargo)->metal > (int)(0.4 * kProperty[CARGO].metal_max))
 				ChangeDest(BaseMineCargo, Element->pos);
 			else
 			{
@@ -216,9 +216,9 @@ void Supply_Repair(int i)
 					return;
 				}
 		}
-		if(Element->fuel < 0.4*kElementInfos[BASE].fuel_max && if_alive(BaseFuelCargo))
+		if(Element->fuel < 0.4*kProperty[BASE].fuel_max && if_alive(BaseFuelCargo))
 		{
-			if(GetState(BaseFuelCargo)->fuel > 0.5*kElementInfos[CARGO].fuel_max)
+			if(GetState(BaseFuelCargo)->fuel > 0.5*kProperty[CARGO].fuel_max)
 				ChangeDest(BaseFuelCargo, Element->pos);
 			else
 			{
@@ -236,7 +236,7 @@ void Supply_Repair(int i)
 		}
 	}
 	else if(Element->type > FORT 
-			&& ((Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max && Element->ammo != -1) ||   //金属不足
+			&& ((Element->ammo <  parameter[1]*kProperty[Element->type].ammo_max && Element->ammo != -1) ||   //金属不足
 			(Element->fuel < distance(Element->pos, INFO->elements[GetBase(INFO->team_num)]->pos) + 9
 			&& Element->type != CARGO)))          //燃料不足
 	{
@@ -266,7 +266,7 @@ void Supply_Repair(int i)
 				return;
 			}
 		}
-		if(Element->ammo <  parameter[1]*kElementInfos[Element->type].ammo_max && Element->ammo != -1)
+		if(Element->ammo <  parameter[1]*kProperty[Element->type].ammo_max && Element->ammo != -1)
 		{
 			ChangeDest(Element->index, INFO->elements[GetBase(INFO->team_num)]->pos);
 			command[i][1] = RETURNBASE;
@@ -374,12 +374,12 @@ int GetNear(Position pos, ElementType type)
 		const State *target = INFO->elements[i];
 		if(target->type == type &&  distance(target->pos, pos)<min_distance)
 		{
-			if( type == OILFIELD && target->fuel >= kElementInfos[CARGO].fuel_max) //油田还有石油
+			if( type == OILFIELD && target->fuel >= kProperty[CARGO].fuel_max) //油田还有石油
 			{
 				near_index = i;
 				min_distance = distance(target->pos, pos);
 			}
-			else if(type == MINE  && target->metal >= kElementInfos[CARGO].metal_max)//保证矿场还有金属
+			else if(type == MINE  && target->metal >= kProperty[CARGO].metal_max)//保证矿场还有金属
 			{
 				near_index = i;
 				min_distance = distance(target->pos, pos);
@@ -417,10 +417,10 @@ int if_command(int i,CommandType type, ElementType target)
 		}
 		else if(target == kElementTypes)
 			return 1;
-		else if((kElementInfos[element->type].attacks[0] <= kElementInfos[target].defences[0] 
-					|| kElementInfos[(int)target].defences[0] == -1)
-			&& (kElementInfos[element->type].attacks[1] <= kElementInfos[target].defences[1]
-					|| kElementInfos[(int)target].defences[1] == -1))
+		else if((kProperty[element->type].attacks[0] <= kProperty[target].defences[0] 
+					|| kProperty[(int)target].defences[0] == -1)
+			&& (kProperty[element->type].attacks[1] <= kProperty[target].defences[1]
+					|| kProperty[(int)target].defences[1] == -1))
 			return 0;
 		else ;
 		return 1;
@@ -451,10 +451,10 @@ void Cargo_Supply(int index)
 		{
 			if(target->type == BASE)
 			{
-				if((target->fuel + 0.5*element->fuel < kElementInfos[BASE].fuel_max
-					&& element->fuel >= 0.4*kElementInfos[element->type].fuel_max)
-				|| (target->metal + 0.7*element->metal < kElementInfos[BASE].metal_max
-					&& element->metal >= 0.4*kElementInfos[element->type].metal_max))
+				if((target->fuel + 0.5*element->fuel < kProperty[BASE].fuel_max
+					&& element->fuel >= 0.4*kProperty[element->type].fuel_max)
+				|| (target->metal + 0.7*element->metal < kProperty[BASE].metal_max
+					&& element->metal >= 0.4*kProperty[element->type].metal_max))
 				{
 					//Supply(INFO->elements[index], target->index, 0, element->fuel, element->fuel);
 					command[index][0] = SUPPLYBASE;
@@ -496,14 +496,14 @@ void Cargo_Supply(int index)
 		
 			else if(target->type > OILFIELD)
             {
-				if((target->fuel + 0.3*element->fuel < kElementInfos[target->type].fuel_max
-					&& element->fuel >= 0.4*kElementInfos[element->type].fuel_max)
-				|| (target->ammo + 0.3*element->ammo < kElementInfos[BASE].ammo_max
-					&& element->ammo >= 0.3*kElementInfos[element->type].ammo_max))
+				if((target->fuel + 0.3*element->fuel < kProperty[target->type].fuel_max
+					&& element->fuel >= 0.4*kProperty[element->type].fuel_max)
+				|| (target->ammo + 0.3*element->ammo < kProperty[BASE].ammo_max
+					&& element->ammo >= 0.3*kProperty[element->type].ammo_max))
 				{
 					command[index][0] = SUPPLYUNIT;
-					Supply(INFO->elements[index]->index, INFO->elements[j]->index, kElementInfos[target->type].fuel_max - target->fuel,
-							kElementInfos[target->type].ammo_max - target->ammo, 0);
+					Supply(INFO->elements[index]->index, INFO->elements[j]->index, kProperty[target->type].fuel_max - target->fuel,
+							kProperty[target->type].ammo_max - target->ammo, 0);
 					return;
 				}
             }
@@ -520,11 +520,11 @@ void MoveCargo(int i)
 	const State *base = INFO->elements[GetBase(INFO->team_num)];
 	if(Element->type == CARGO && if_command(i, RETURNBASE))
 	{
-		if(Element->fuel < 0.4 * kElementInfos[CARGO].fuel_max)          //燃料不足
+		if(Element->fuel < 0.4 * kProperty[CARGO].fuel_max)          //燃料不足
 		{
 			if(Element->index == BaseMineCargo)
 			{
-				if(Element->metal > 0.5 * kElementInfos[CARGO].metal_max || Element->fuel < 0.3*kElementInfos[CARGO].fuel_max)
+				if(Element->metal > 0.5 * kProperty[CARGO].metal_max || Element->fuel < 0.3*kProperty[CARGO].fuel_max)
 				{
 					ChangeDest(Element->index, INFO->elements[GetNear(Element->pos,OILFIELD)]->pos);
 					command[i][1] = CARGOSUPPLY;
@@ -538,17 +538,17 @@ void MoveCargo(int i)
 				}
 			}
 		}
-		else if(Element->metal < 0.5 * kElementInfos[CARGO].metal_max)     //金属不足
+		else if(Element->metal < 0.5 * kProperty[CARGO].metal_max)     //金属不足
 		{	
 			ChangeDest(Element->index, INFO->elements[GetNear(Element->pos,MINE)]->pos);
 			command[i][1] = CARGOSUPPLY;
 			return;
 		}
 		else if((Element->index == BaseMineCargo || Element->index == BaseFuelCargo)
-			&& ((base->metal + 0.8*Element->metal < kElementInfos[BASE].metal_max
-				&& Element->metal > 0.4*kElementInfos[Element->type].metal_max)
-			|| (base->fuel + (int)(0.7*Element->fuel) < kElementInfos[BASE].fuel_max
-				&& Element->fuel >0.6*kElementInfos[Element->type].fuel_max)))
+			&& ((base->metal + 0.8*Element->metal < kProperty[BASE].metal_max
+				&& Element->metal > 0.4*kProperty[Element->type].metal_max)
+			|| (base->fuel + (int)(0.7*Element->fuel) < kProperty[BASE].fuel_max
+				&& Element->fuel >0.6*kProperty[Element->type].fuel_max)))
 		{
 			ChangeDest(Element->index, base->pos);
 			command[i][1] = CARGOSUPPLY;
@@ -593,7 +593,7 @@ void Attack(int index)
 	{
 		State *enemy = &enemy_element[i];
 		if(enemy->type == BASE && enemy->team == 1-INFO->team_num
-			&& DisToBase(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[SURFACE]
+			&& DisToBase(Element->pos, enemy->pos) <= kProperty[Element->type].fire_ranges[SURFACE]
 			&& if_command(index, ATTACKBASE, BASE))
 		{												//敌方基地
 			AttackUnit(Element->index,enemy->index);
@@ -605,7 +605,7 @@ void Attack(int index)
 			}
 			return;
 		}
-		if(distance(Element->pos, enemy->pos) <= kElementInfos[Element->type].fire_ranges[kElementInfos[enemy->type].level])
+		if(distance(Element->pos, enemy->pos) <= kProperty[Element->type].fire_ranges[kProperty[enemy->type].level])
 		{	
 			if(enemy->type == FORT
 				&& enemy->team == 1-INFO->team_num
@@ -642,10 +642,10 @@ void Attack(int index)
 			&& !if_in(INFO->elements[index]->index, base_defender, 3))
 		{
 			//射程远于敌方
-			if(kElementInfos[Element->type].fire_ranges[kElementInfos[enemy_element[enemy_index].type].level]
-				> kElementInfos[enemy_element[enemy_index].type].fire_ranges[kElementInfos[Element->type].level])
+			if(kProperty[Element->type].fire_ranges[kProperty[enemy_element[enemy_index].type].level]
+				> kProperty[enemy_element[enemy_index].type].fire_ranges[kProperty[Element->type].level])
 				ChangeDest(Element->index, minus(Element->pos,enemy_element[enemy_index].pos,
-					kElementInfos[Element->type].fire_ranges[kElementInfos[enemy_element[enemy_index].type].level]));
+					kProperty[Element->type].fire_ranges[kProperty[enemy_element[enemy_index].type].level]));
 			//射程近于敌方
 			else 
 				ChangeDest(Element->index, enemy_element[enemy_index].pos);
@@ -688,7 +688,7 @@ void BaseAct(int index)
 			&& target->index != INFO->elements[index]->index
 			&& target->team == INFO->team_num)
 		{
-			if(target->health < parameter[0]*kElementInfos[target->type].health_max
+			if(target->health < parameter[0]*kProperty[target->type].health_max
 				&& target->health != -1)
 			{
 				if(if_command(index, FIX))
@@ -710,13 +710,13 @@ void BaseAct(int index)
 			&& target->type != CARGO
 			&& target->team == INFO->team_num)
 		{
-			if(target->fuel < parameter[2]*kElementInfos[target->type].fuel_max
-					|| target->ammo < parameter[3]*kElementInfos[target->type].ammo_max)
+			if(target->fuel < parameter[2]*kProperty[target->type].fuel_max
+					|| target->ammo < parameter[3]*kProperty[target->type].ammo_max)
 			{
 				if(if_command(index, SUPPLYUNIT))
 				{	
-					Supply(INFO->elements[index]->index, INFO->elements[i]->index, kElementInfos[target->type].fuel_max-target->fuel, 
-                                                        kElementInfos[target->type].ammo_max-target->ammo, 0);
+					Supply(INFO->elements[index]->index, INFO->elements[i]->index, kProperty[target->type].fuel_max-target->fuel, 
+                                                        kProperty[target->type].ammo_max-target->ammo, 0);
 					command[index][0] = SUPPLYUNIT;
 					return;
 				}
