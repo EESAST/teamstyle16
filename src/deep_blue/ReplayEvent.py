@@ -949,6 +949,7 @@ class Replay(QGraphicsView):
 		if not target_unit:
 			return None, []
 		self.UnitBase[team_].remove(target_unit)
+		self.scene.removeItem(target_unit)
 		new_target_unit = self.battle.map_info().elements[target_unit_index]
 		capture_effect = SoldierUnit(new_target_unit)
 		capture_effect.setOpacity(0)
@@ -961,7 +962,7 @@ class Replay(QGraphicsView):
 		label = EffectIndUnit("Team %d has gained possession." %team)
 		label.setOpacity(0)
 		self.scene.addItem(label)
-		label.setPos(QPointF((target_unit.position.x)* 30, (target_unit.position.y)* 30))
+		label.setPos(QPointF((new_target_unit.position.x)* 30, (new_target_unit.position.y)* 30))
 		Wani = QPropertyAnimation(label, "opacity")
 		Wani.setDuration(TOTAL_TIME)
 		Wani.setStartValue(0)
@@ -1117,7 +1118,7 @@ class Replay(QGraphicsView):
 					if ani:
 						self.animation.addAnimation(ani)
 					self.animationItem.extend(item)
-		self.animation.addAnimation(QPauseAnimation(300))
+		self.animation.addAnimation(QPauseAnimation(30))
 		self.connect(self.animation, SIGNAL("finished()"), self.moveAnimEnd)
 		#self.connect(self.animation, SIGNAL("finished()"), self.animation, SLOT("deleteLater()"))
 		self.animation.start()

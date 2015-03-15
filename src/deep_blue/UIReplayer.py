@@ -173,7 +173,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	@pyqtSlot(int)
 	def on_SpeedSlider_valueChanged(self, speed):
-		self.CenterWidget.TIME_PER_STEP = 100 - speed * 0.5
+		self.CenterWidget.TIME_PER_STEP = 100 - speed * 0.8
 
 	@pyqtSlot(QString)
 	def on_OpenFileComboBox1_currentIndexChanged(self, text):
