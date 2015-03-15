@@ -534,8 +534,8 @@ class Replay(QGraphicsView):
 		'''
 
 	def attackAnimation(self, move_unit_index, attack_target_index, damage):
-		ATTACK_TIME = 10 * self.TIME_PER_STEP
-		TOTAL_TIME = 20 * self.TIME_PER_STEP
+		ATTACK_TIME = 8 * self.TIME_PER_STEP
+		TOTAL_TIME = 16 * self.TIME_PER_STEP
 		move_unit = None
 		attack_target = None
 		for i in range(2):
@@ -676,7 +676,7 @@ class Replay(QGraphicsView):
 		return moveAnim, moveAnim_mouse, []
 
 	def supplyAnimation(self, supply_unit_index, supply_target_index, fuel_supply, ammo_supply, metal_supply):
-		TOTAL_TIME=20 * self.TIME_PER_STEP
+		TOTAL_TIME=30 * self.TIME_PER_STEP
 		supply_unit = None
 		supply_target = None
 
@@ -734,7 +734,7 @@ class Replay(QGraphicsView):
 		return showSplAnim,item
 
 	def fixAnimation(self, fix_unit_index, fix_target_index, metal_consumption, health_increase):
-		TOTAL_TIME = 20 * self.TIME_PER_STEP
+		TOTAL_TIME = 30 * self.TIME_PER_STEP
 		fix_target = None
 		fix_unit = None
 		for i in range(2):
@@ -822,7 +822,7 @@ class Replay(QGraphicsView):
 		return showFixAnim,[effect_unit,fix_label,effect_label]
 
 	def collectAnimation(self, collect_unit_index, collect_target_index, fuel_collect, metal_collect):
-		TOTAL_TIME = 20 * self.TIME_PER_STEP
+		TOTAL_TIME = 30 * self.TIME_PER_STEP
 		collect_target = None
 		collect_unit = None
 		for i in range(2):
@@ -845,7 +845,7 @@ class Replay(QGraphicsView):
 		ani = QPropertyAnimation(effect_unit, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
-		ani.setKeyValueAt(0.1,0.8)
+		ani.setKeyValueAt(0.3,0)
 		ani.setKeyValueAt(0.5, 1)
 		ani.setKeyValueAt(0.9,0.8)
 		ani.setEndValue(0)
@@ -858,7 +858,7 @@ class Replay(QGraphicsView):
 		ani = QPropertyAnimation(effect_label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
-		ani.setKeyValueAt(0.1,0.8)
+		ani.setKeyValueAt(0.3,0)
 		ani.setKeyValueAt(0.5, 1)
 		ani.setKeyValueAt(0.9,0.8)
 		ani.setEndValue(0)
@@ -869,7 +869,7 @@ class Replay(QGraphicsView):
 
 	def addProductionEntryAnimation(self, team, kind):
 		
-		TOTAL_TIME = 20 * self.TIME_PER_STEP
+		TOTAL_TIME = 30 * self.TIME_PER_STEP
 
 		aPE_effect = EffectIndUnit("Team: %d\nKind: %d\n" %(team, kind))
 		aPE_effect.setPos(QPointF(300, 300))
@@ -884,7 +884,7 @@ class Replay(QGraphicsView):
 	def createAnimation(self, created_unit_index):
 		#要不要画个什么效果
 		
-		TOTAL_TIME = 20 * self.TIME_PER_STEP
+		TOTAL_TIME = 30 * self.TIME_PER_STEP
 		
 		created_unit = self.battle.map_info().elements[created_unit_index]
 		created_effect = SoldierUnit(created_unit)
@@ -894,7 +894,7 @@ class Replay(QGraphicsView):
 		createAnim = QPropertyAnimation(created_effect, "opacity")
 		createAnim.setDuration(TOTAL_TIME)
 		createAnim.setStartValue(0)
-		createAnim.setKeyValueAt(0.5, 0.5)
+		createAnim.setKeyValueAt(0.3, 0)
 		createAnim.setEndValue(1)
 			
 		return createAnim,[]
@@ -909,23 +909,34 @@ class Replay(QGraphicsView):
 					break		
 		if not destroyed_effect:
 			return QPauseAnimation(10), []
-		TOTAL_TIME = 20 * self.TIME_PER_STEP
+		TOTAL_TIME = 30 * self.TIME_PER_STEP
 		
 		destroyAnim = QPropertyAnimation(destroyed_effect, "opacity")
 		destroyAnim.setDuration(TOTAL_TIME)
 		destroyAnim.setStartValue(1)
-		destroyAnim.setKeyValueAt(0.5, 0.5)
+		destroyAnim.setKeyValueAt(0.5, 0)
 		destroyAnim.setEndValue(0)
 		self.UnitBase[destroyed_effect.obj.team].remove(destroyed_effect)
 		
 		return destroyAnim,[]
 
 	def captureAnimation(self, target_unit_index, team):		
-		TOTAL_TIME=20 * self.TIME_PER_STEP
+		TOTAL_TIME=30 * self.TIME_PER_STEP
 		target_unit = None
-		target_unit = self.battle.map_info().elements[target_unit_index]
+		for i in range(3):
+			for soldier in self.UnitBase[i]:
+				if soldier.obj.index == target_unit_index:
+					team_ = soldier.obj.team
+					target_unit = soldier
+					break
 		if not target_unit:
 			return QPauseAnimation(10), []
+		self.UnitBase[team_].remove(target_unit)
+		new_target_unit = self.battle.map_info().elements[target_unit_index]
+		capture_effect = SoldierUnit(new_target_unit)
+		self.scene.addItem(capture_effect)
+		self.UnitBase[new_target_unit.team].append(capture_effect)
+		created_effect.setPos(created_unit.position.x, created_unit.position.y, created_unit.position.z)
 		label = EffectIndUnit("Team %d has gained possession." %team)
 		label.setOpacity = (0)
 		self.scene.addItem(label)
@@ -941,8 +952,8 @@ class Replay(QGraphicsView):
 		return ani,[label]
 
 	def attackMissAnimation(self, move_unit_index, attack_target):
-		ATTACK_TIME = 10 * self.TIME_PER_STEP
-		TOTAL_TIME = 20 * self.TIME_PER_STEP
+		ATTACK_TIME = 8 * self.TIME_PER_STEP
+		TOTAL_TIME = 16 * self.TIME_PER_STEP
 		ani = None
 		move_effect = None
 		move_unit = None
@@ -1022,14 +1033,16 @@ class Replay(QGraphicsView):
 		#print "len:",len(eventgroup)
 		self.nowRound += 1
 		self.animation = QParallelAnimationGroup()
+		self.animation2 = QParallelAnimationGroup()
+		self.animation3 = QSequentialAnimationGroup()
 		if eventgroup:
 			for events in eventgroup:
 				if isinstance(events, event.AttackUnit):
 					ani, item = self.attackAnimation(events.index, events.target, events.damage)
-					self.animation.addAnimation(ani)
+					self.animation2.addAnimation(ani)
 					self.animationItem.extend(item)
 				if isinstance(events, event.Supply):
-					ani, item = self.supplyAnimation(events.index, events.target, events.fuel, events.metal, events.ammo)
+					ani, item = self.supplyAnimation(events.index, events.target, events.fuel, events.ammo, events.metal)
 					self.animation.addAnimation(ani)
 					self.animationItem.extend(item)
 				if isinstance(events, event.Fix):
@@ -1061,12 +1074,14 @@ class Replay(QGraphicsView):
 					self.animationItem.extend(item)
 				if isinstance(events, event.AttackMiss):
 					ani, item = self.attackMissAnimation(events.index, events.target_pos)
-					self.animation.addAnimation(ani)
+					self.animation2.addAnimation(ani)
 					self.animationItem.extend(item)
-		self.animation.addAnimation(QPauseAnimation(300))
-		self.connect(self.animation, SIGNAL("finished()"), self.moveAnimEnd)
+		self.animation3.addAnimation(self.animation2)
+		self.animation3.addAnimation(QPauseAnimation(10))
+		self.animation3.addAnimation(self.animation)
+		self.connect(self.animation3, SIGNAL("finished()"), self.moveAnimEnd)
 		#self.connect(self.animation, SIGNAL("finished()"), self.animation, SLOT("deleteLater()"))
-		self.animation.start()
+		self.animation3.start()
 		eventgroup = None
 		if self.frogIndex == 0:
 			self.setFrog(0)
@@ -1075,10 +1090,18 @@ class Replay(QGraphicsView):
 		#self.moveAnimEnd.emit()
 			
 	def TerminateAni(self):
+		if self.animation3:
+			self.animation3.stop()
+			self.animation3.deleteLater()
+			self.animation3 = None
 		if self.animation:
 			self.animation.stop()
 			self.animation.deleteLater()
 			self.animation = None
+		if self.animation2:
+			self.animation2.stop()
+			self.animation2.deleteLater()
+			self.animation2 = None
 		for item in self.animationItem:
 			if item.scene() == self.scene:
 				self.scene.removeItem(item)

@@ -115,6 +115,7 @@ class SmallMap(QGraphicsView):
 		self.right = 0
 		self.up = 0
 		self.down = 0
+		self.chosenarea = 50
 		self.init = False
 		self.scene.removeItem(self.chosenArea)
 

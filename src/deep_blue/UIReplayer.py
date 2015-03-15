@@ -170,7 +170,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	@pyqtSlot(int)
 	def on_SpeedSlider_valueChanged(self, speed):
-		self.CenterWidget.TIME_PER_STEP = 100 - speed * 1
+		self.CenterWidget.TIME_PER_STEP = 100 - speed * 0.5
 
 	@pyqtSlot(QString)
 	def on_OpenFileComboBox1_currentIndexChanged(self, text):
@@ -477,6 +477,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 					self.fileInfo = ai_battle.AIBattle(self.mapInfo, timeout = None, fixed_port = True)
 				else:
 					self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
+				self.GodVisionRadioButton.setChecked(True)
 			elif self.CenterWidget.HUMAN_REPLAY == 0:
 				if self.ModeCheck2.isChecked():
 					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, timeout = None, fixed_port = True)
@@ -492,6 +493,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.HumanCheckBox2.setChecked(False)
 				self.HumanCheckBox1.setChecked(False)
 				self.on_StopPushButton_clicked()
+			else:
+				self.GodVisionRadioButton.setChecked(True)
 			self.started = True
 			if self.CenterWidget.HUMAN_REPLAY == 3:
 				self.totalround = self.fileInfo.max_round
@@ -552,6 +555,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 					self.fileInfo = fileInfo
 			if self.CenterWidget.HUMAN_REPLAY == 4:
 				self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
+				self.GodVisionRadioButton.setChecked(True)
 			elif self.CenterWidget.HUMAN_REPLAY == 0:
 				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName2))
 			elif self.CenterWidget.HUMAN_REPLAY == 1:
@@ -561,6 +565,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.HumanCheckBox2.setChecked(False)
 				self.HumanCheckBox1.setChecked(False)
 				self.on_StopPushButton_clicked()
+			else:
+				self.GodVisionRadioButton.setChecked(True)
 			self.started = True
 			if self.CenterWidget.HUMAN_REPLAY == 3:
 				self.totalround = self.fileInfo.max_round
