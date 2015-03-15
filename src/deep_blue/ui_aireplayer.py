@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'AIReplayer.ui'
 #
-# Created: Sat Mar 14 00:28:55 2015
+# Created: Sun Mar 15 13:17:26 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -193,15 +193,6 @@ class Ui_AIReplayer(object):
         self.MapComboBox.setGeometry(QtCore.QRect(90, 40, 111, 22))
         self.MapComboBox.setStyleSheet(_fromUtf8(""))
         self.MapComboBox.setObjectName(_fromUtf8("MapComboBox"))
-        self.label = QtGui.QLabel(AIReplayer)
-        self.label.setGeometry(QtCore.QRect(130, 550, 54, 12))
-        self.label.setObjectName(_fromUtf8("label"))
-        self.UpPushButton = QtGui.QPushButton(AIReplayer)
-        self.UpPushButton.setGeometry(QtCore.QRect(170, 530, 75, 23))
-        self.UpPushButton.setObjectName(_fromUtf8("UpPushButton"))
-        self.DownPushButton = QtGui.QPushButton(AIReplayer)
-        self.DownPushButton.setGeometry(QtCore.QRect(170, 560, 75, 23))
-        self.DownPushButton.setObjectName(_fromUtf8("DownPushButton"))
         self.OneStepButton = QtGui.QPushButton(AIReplayer)
         self.OneStepButton.setGeometry(QtCore.QRect(140, 450, 75, 23))
         self.OneStepButton.setObjectName(_fromUtf8("OneStepButton"))
@@ -228,8 +219,5 @@ class Ui_AIReplayer(object):
         self.StopPushButton.setText(_translate("AIReplayer", "停止", None))
         self.RoundNumberLabel.setText(_translate("AIReplayer", "回合数", None))
         self.SpeedSliderLabel.setText(_translate("AIReplayer", "播放速度", None))
-        self.label.setText(_translate("AIReplayer", "缩放：", None))
-        self.UpPushButton.setText(_translate("AIReplayer", "↑", None))
-        self.DownPushButton.setText(_translate("AIReplayer", "↓", None))
         self.OneStepButton.setText(_translate("AIReplayer", "单步调试", None))
 

@@ -447,7 +447,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
 			self.RoundLcdNumber.display(self.fileInfo.round())
-
+			self.OneStepButton.setEnabled(False)
 		else:
 			self.updateUi()
 			if self.loadMap and not self.mapInfo:
@@ -513,6 +513,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.infoWidget2.updateInfo(self.fileInfo)
 			self.RoundLcdNumber.display(self.fileInfo.round())
 			self.updateUi()
+			self.OneStepButton.setEnabled(False)
 
 	@pyqtSlot(bool)
 	def on_PlayPushButton_toggled(self, trigger):
@@ -587,6 +588,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	def on_animEnd(self):
 		self.CenterWidget.TerminateAni()
+		self.OneStepButton.setEnabled(True)
 		if self.CenterWidget.changed:
 			self.CenterWidget.setMap()
 			self.CenterWidget.setUnit()
@@ -642,6 +644,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			if choice == QMessageBox.Yes:
 				saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
 				try:
+					self.fileInfo.map_info().max_round = self.CenterWidget.nowRound
 					battle.Battle.save(self.fileInfo, saveFile)
 				except:
 					if saveFile != "":
