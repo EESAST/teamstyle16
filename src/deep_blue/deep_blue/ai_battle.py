@@ -1,3 +1,4 @@
+import argparse
 import json
 import logging
 import socket
@@ -166,8 +167,7 @@ def black_box_run(args):
     return result
 
 
-if __name__ == '__main__':
-    import argparse
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('map', help='map file')
     parser.add_argument('ai_0', help='file name of AI 0')
@@ -204,3 +204,6 @@ if __name__ == '__main__':
         root.setLevel(logging.DEBUG)
 
     exit(black_box_run(args))
+
+if __name__ == '__main__':
+    main()
