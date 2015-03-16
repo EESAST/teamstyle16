@@ -25,6 +25,7 @@ class MainWindow(QGraphicsView):
 		self.scene.setSceneRect(self.scene.itemsBoundingRect())
 		self.setScene(self.scene)
 		self.setAttribute(55, True)
+		self.setFixedSize(QSize(sizex, sizey))
 
 
 		#背景界面
@@ -69,7 +70,6 @@ class MainWindow(QGraphicsView):
 		self.teamWindow.setWidget(self.teamWidget)
 		self.teamWindow.setX((sizex - self.teamWindow.geometry().width())/2)
 		self.teamWindow.setY((sizey - self.teamWindow.geometry().height())/2)
-		self.teamWindow.resize(sizex, sizey)
 		self.teamWindow.setZValue(0.5)
 		self.scene.addItem(self.teamWindow)
 
@@ -234,19 +234,34 @@ if __name__ == "__main__":
 	app.setOverrideCursor(cursor)
 	splash = QSplashScreen(QPixmap(":splash.png"), Qt.WindowStaysOnTopHint)
 	splash.show()
-	screen = QDesktopWidget().screenGeometry()
-	form = MainWindow(screen.width(), screen.height())
-	time.sleep(0.5)
-	delta_x = float(screen.width())/1366.0
-	delta_y = float(screen.height())/768.0
-	print delta_x, delta_y
-	if delta_x > delta_y:
-		scale_number = delta_y
+	if len(sys.argv) > 1:
+		if sys.argv[1] == '-w':
+			form = MainWindow(1366, 768)
+			form.show()	
+		else:
+			screen = QDesktopWidget().screenGeometry()
+			form = MainWindow(screen.width(), screen.height())
+			time.sleep(0.5)
+			delta_x = float(screen.width())/1366.0
+			delta_y = float(screen.height())/768.0
+			if delta_x > delta_y:
+				scale_number = delta_y
+			else:
+				scale_number = delta_x
+			form.scale(scale_number, scale_number)
+			form.showFullScreen()
 	else:
-		scale_number = delta_x
-	form.scale(scale_number, scale_number)
-	form.showFullScreen()
-	print screen.width(), screen.height()
+		screen = QDesktopWidget().screenGeometry()
+		form = MainWindow(screen.width(), screen.height())
+		time.sleep(0.5)
+		delta_x = float(screen.width())/1366.0
+		delta_y = float(screen.height())/768.0
+		if delta_x > delta_y:
+			scale_number = delta_y
+		else:
+			scale_number = delta_x
+		form.scale(scale_number, scale_number)
+		form.showFullScreen()
 	splash.finish(form)
 	del splash
 	sys.exit(app.exec_())

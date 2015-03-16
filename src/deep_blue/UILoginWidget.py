@@ -29,7 +29,7 @@ class LoginDialog(QWidget, Ui_LoginDialog):
 		print self.pwd
 		self.pwd_MD5 = hashlib.md5(self.pwd).hexdigest()
 		print self.pwd_MD5
-		db = MySQLdb.connect("teamstyle16.eesast.com","duishi16","******","info")
+		db = MySQLdb.connect("teamstyle16.eesast.com","duishi16","******","info",charset='utf8')
 		cursor = db.cursor()
 		sql="select user_id,user_nickname,user_password_hash,user_team,user_email,test_battle from users where user_nickname='"+self.name+"' or user_email='"+self.name+"'"
 		try:
