@@ -439,6 +439,7 @@ class UnitBase(Element):
         damage = fire_damage + torpedo_damage
         result_events.append(AttackUnit(self.index, target_unit.index, damage))
         if damage >= target_unit.health:
+            game.scores[self.team] += target_unit.health * DAMAGE_SCORE
             if target_unit.kind == FORT:    # capture fort
                 target_unit.team = self.team
                 target_unit.health = target_unit.health_max
@@ -449,7 +450,6 @@ class UnitBase(Element):
                     del game.map_info.elements[target_unit.index]
                     game.populations[target_unit.team] -= PROPERTY[target_unit.kind]['population']
                 result_events.append(Destroy(target_unit.index))
-            game.scores[self.team] += target_unit.health * DAMAGE_SCORE
         else:
             target_unit.health -= damage
             game.scores[self.team] += damage * DAMAGE_SCORE
