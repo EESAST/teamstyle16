@@ -16,6 +16,8 @@ extern const int kFortScore = 1;
 extern const int kDamageScore = 1;
 extern const int kCollectScore = 1;
 
+extern const int kHealthPerMetal = 5;
+
 extern const Property kProperty[kElementTypes] = 
 {
 	{SURFACE,    {4, 10, 8}, {0, 7, 5}, 700, 1000,   -1,  6, 200,  {40, 0},  {15, -1}, 0,  0,  0, 0},
