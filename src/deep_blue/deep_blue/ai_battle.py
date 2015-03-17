@@ -142,7 +142,7 @@ def black_box_run(args):
 
     if args.debug:
         while b.gamebody.state == gamebody.STATE_CONTINUE:
-            raw_input('Round %d (press Enter to advance)' % g.round())
+            raw_input('Round %d (press Enter to advance)' % b.round())
             b.feed_ai_commands()
             b.next_round()
     else:
