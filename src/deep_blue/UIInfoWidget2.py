@@ -119,6 +119,8 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 		Elements = [battle.elements(0), battle.elements(1), battle.elements(2)]
 		for i in range(3):
 			for element_ in Elements[i].values():
+				if hasattr(element_, "metal"):
+					print "(", element_.index, ", ", element_.__class__.__name__, ",  ", element_.metal, ")"
 				if element_.index == self.unit.index:
 					print "update info"
 					self.unit = element_
@@ -126,7 +128,7 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 						print self.unit.metal
 					self.newUnitInfo(self.unit, self.flag, battle)
 					self.newMapInfo(battle.map_info().types[self.unit.position.x][self.unit.position.y], self.unit.position.x, self.unit.position.y)
-					return
+					#return
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
