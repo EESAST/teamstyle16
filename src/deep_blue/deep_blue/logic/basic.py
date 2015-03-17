@@ -677,7 +677,6 @@ class Cargo(Ship):
         d = PROPERTY[CARGO].copy()
         d.update(kwargs)
         super(Cargo, self).__init__(team, pos, **d)
-        self.metal = 0
 
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
         """运输舰对周围单位补给燃料弹药, 可向基地, 据点, 运输舰补充金属"""
