@@ -1,6 +1,7 @@
 import json
 import logging
 import socket
+import sys
 import time
 
 from logic import gamebody
@@ -37,7 +38,7 @@ class HumanAIBattle(battle.Battle):
             except socket.error:
                 if fixed_port:
                     logger.error('Port %d has already been taken, aborting', port)
-                    exit(1)
+                    sys.exit(1)
                 else:
                     logger.warning('Port %d has already been taken, trying port %d',
                                    port, port + 1)
