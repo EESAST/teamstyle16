@@ -81,6 +81,8 @@ class InfoWidget2(QWidget, Ui_GameInfo2):
 					self.resetUnitInfo()
 					self.CoordinateLineEdit.setText("(%d, %d)" %(corx, cory))
 					self.unit = None
+		else:
+			self.CoordinateLineEdit.setText("(%d, %d)" %(corx, cory))
 		self.TerrainLineEdit.setText(QString.fromUtf8(NumToMapType[kind]))
 
 	def resetUnitInfo(self):

@@ -174,6 +174,7 @@ class Replay(QGraphicsView):
 								self.emit(SIGNAL("unitSelected"),it.obj,self.HUMAN_REPLAY,self.battle)
 								self.SelectedIndex = it.obj #此变量的作用是识别被选定单位的队伍，以判定是否可以发出攻击指令，待修改
 								focus = it
+						break
 					elif isinstance(it, MapUnit):
 						self.emit(SIGNAL("mapSelected"), it.obj, it.corX, it.corY)
 				if focus:

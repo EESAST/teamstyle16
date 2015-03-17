@@ -440,10 +440,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 					if self.CenterWidget.nowRound == self.fileInfo.max_round:
 						return
 			self.PlayPushButton.setChecked(False)
-			if not self.isPaused:
-				self.isPaused = True
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
+			if not self.isPaused:
+				self.isPaused = True
 			self.CenterWidget.Play(self.fileInfo)
 			self.isPaused = True
 			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
@@ -506,11 +506,11 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.synRoundSlider()
 			else:
 				self.totalround = self.fileInfo.map_info().max_round
-			self.CenterWidget.Initialize(self.fileInfo)
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.CenterWidget.Play(self.fileInfo)
+			self.CenterWidget.Initialize(self.fileInfo)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.isPaused = True
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
@@ -528,7 +528,6 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 						return
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
-				self.CenterWidget.Play(self.fileInfo)
 				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 				self.infoWidget1.setText(self.fileInfo)
 				self.infoWidget2.updateInfo(self.fileInfo)
@@ -579,11 +578,11 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.synRoundSlider()
 			else:
 				self.totalround = self.fileInfo.map_info().max_round
-			self.CenterWidget.Initialize(self.fileInfo)
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.CenterWidget.Play(self.fileInfo)
+			self.CenterWidget.Initialize(self.fileInfo)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
 			self.RoundLcdNumber.display(self.fileInfo.round())
@@ -613,10 +612,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.on_StopPushButton_clicked()
 			return
 		self.synRoundSlider()
-		self.CenterWidget.Play(self.fileInfo)
-		self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 		self.CreateWidget.team1.Initialize(self.fileInfo)
 		self.CreateWidget.team2.Initialize(self.fileInfo)
+		self.CenterWidget.Play(self.fileInfo)
+		self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 		self.infoWidget2.updateInfo(self.fileInfo)
 		self.infoWidget1.setText(self.fileInfo)
 		self.RoundLcdNumber.display(self.fileInfo.round())
@@ -627,13 +626,13 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			if round_ != self.CenterWidget.nowRound:
 				self.CenterWidget.mouseUnit.setVisible(False)
 				self.fileInfo.goto(round_)
-				self.CenterWidget.nowRound = round_
-				self.CenterWidget.Initialize(self.fileInfo)
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
-				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
+				self.CenterWidget.nowRound = round_
 				if not self.isPaused:
 					self.CenterWidget.Play(self.fileInfo)
+				self.CenterWidget.Initialize(self.fileInfo)
+				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 				self.RoundLcdNumber.display(round_)
 				self.infoWidget1.setText(self.fileInfo)
 				self.infoWidget2.updateInfo(self.fileInfo)
