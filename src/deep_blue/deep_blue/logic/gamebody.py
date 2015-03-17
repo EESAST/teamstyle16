@@ -202,16 +202,12 @@ class GameBody(object):
                                         index = self.map_info.add_element(new_element)
                                         self.populations[team_index] += new_element.population
                                         events.append(Create(index, entry[0], point))
-                                        new_element.fuel = 0
+                                        new_element.fuel = 1 if isinstance(new_element, Plane) else 0
                                         if new_element.kind == CARGO:
                                             new_element.metal = 0
                                             events += element.supply(new_element, fuel=new_element.fuel_max / 2, metal=0)
                                         else:
                                             events += element.supply(new_element, metal=0)
-                                            if isinstance(new_element, Plane) and new_element.fuel == 0:
-                                                del game.map_info.elements[new_element.index]
-                                                self.populations[team_index] -= new_element.population
-                                                events.append(Destroy(new_element.index))
                                         break
                             break
         # Fort score
