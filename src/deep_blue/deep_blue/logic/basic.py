@@ -31,9 +31,10 @@ POPULATION_MAX = 60    # 单方最大人口数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 # 积分规则
-FORT_SCORE = 1      # 占领据点每回合奖励积分
+CAPTURE_SCORE = 100  # 攻下据点一次性奖励积分
+FORT_SCORE = 10      # 占领据点每回合奖励积分
 DAMAGE_SCORE = 1    # 每点伤害奖励积分
-COLLECT_SCORE = 1   # 采集一单位资源奖励积分
+COLLECT_SCORE = 10   # 采集一次奖励积分
 
 # 维修代价
 METAL_PER_HEALTH = 0.2    # 恢复1点生命所需金属
@@ -445,6 +446,7 @@ class UnitBase(Element):
                 target_unit.team = self.team
                 target_unit.health = target_unit.health_max
                 result_events.append(Capture(target_unit.index, self.team))
+                game.scores[self.team] += CAPTURE_SCORE
             else:
                 target_unit.health = 0  # killed
                 if isinstance(target_unit, Unit):  # Remove only if it's a unit.
@@ -452,7 +454,7 @@ class UnitBase(Element):
                     game.populations[target_unit.team] -= PROPERTY[target_unit.kind]['population']
                 result_events.append(Destroy(target_unit.index))
         else:
-            target_unit.health -= damage
+            tar get_unit.health -= damage
             game.scores[self.team] += damage * DAMAGE_SCORE
             result_events.append(AttackUnit(self.index, target_unit.index, damage))
         return result_events
@@ -615,8 +617,8 @@ class Unit(UnitBase):
                 if isinstance(near_element, Resource):
                     collect_event = self.collect(near_element)
                     events += collect_event
-                    game.scores[self.team] += (max(collect_event[0].fuel, collect_event[0].metal) * COLLECT_SCORE
-                        if len(collect_event) != 0 else 0)
+                    game.scores[self.team] += (COLLECT_SCORE if (len(collect_event) != 0
+                        and max(collect_event[0].fuel, collect_event[0].metal) != 0) else 0)
 
         # fuel
         if isinstance(self, Plane):

@@ -12,9 +12,10 @@ extern const int kMaxMapSize = 80;
 extern const int kMaxRoundLimit = 200;
 extern const int kMaxPopulationLimit = 60;
 
-extern const int kFortScore = 1;
-extern const int kDamageScore = 1;
-extern const int kCollectScore = 1;
+extern const int kCaptureScore = 100;   // 攻下据点一次性奖励积分
+extern const int kFortScore = 10;       // 占领据点每回合奖励积分
+extern const int kDamageScore = 1;      // 每造成一点伤害奖励积分
+extern const int kCollectScore = 10;    // 有效采集一次资源奖励积分
 
 extern const int kHealthPerMetal = 5;
 
