@@ -618,7 +618,7 @@ class Unit(UnitBase):
                     collect_event = self.collect(near_element)
                     events += collect_event
                     game.scores[self.team] += (COLLECT_SCORE if (len(collect_event) != 0
-                        and max(collect_event[0].fuel, collect_event[0].metal) != 0) else 0)
+                        and max(collect_event[0].fuel, collect_event[0].metal) >= 10) else 0)
 
         # fuel
         if isinstance(self, Plane):
