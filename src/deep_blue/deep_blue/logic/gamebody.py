@@ -174,6 +174,7 @@ class GameBody(object):
         # update production_lists and create new elements
         for team_index in [0, 1]:
             production_list = self.production_lists[team_index]
+            out_entry = []
             for entry in production_list:
                 entry[1] -= 1 if entry[1] > 0 else 0
                 if (entry[1] == 0 and
@@ -194,7 +195,7 @@ class GameBody(object):
                             for point in check_region:
                                 if self.map_info.element(point) == None:
                                     if entry[0] == FIGHTER or entry[0] == SCOUT or self.map_info.map_type(point.x, point.y) == OCEAN:
-                                        production_list.remove(entry)
+                                        out_entry.append(entry)
                                         class_name = {SUBMARINE: 'Submarine', DESTROYER: 'Destroyer', CARRIER: 'Carrier', 
                                                       CARGO: 'Cargo', FIGHTER: 'Fighter', SCOUT: 'Scout'}[entry[0]]
                                         class_ = getattr(basic, class_name)
@@ -210,6 +211,8 @@ class GameBody(object):
                                             events += element.supply(new_element, metal=0)
                                         break
                             break
+            for item in out_entry:
+                production_list.remove(item)
         # Fort score
         for element in self.map_info.elements.values():
             if element.kind == FORT and (element.team == 0 or element.team == 1):
