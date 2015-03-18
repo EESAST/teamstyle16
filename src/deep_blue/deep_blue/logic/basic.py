@@ -454,7 +454,7 @@ class UnitBase(Element):
                     game.populations[target_unit.team] -= PROPERTY[target_unit.kind]['population']
                 result_events.append(Destroy(target_unit.index))
         else:
-            tar get_unit.health -= damage
+            target_unit.health -= damage
             game.scores[self.team] += damage * DAMAGE_SCORE
             result_events.append(AttackUnit(self.index, target_unit.index, damage))
         return result_events
