@@ -8,7 +8,7 @@
 ## 游戏模式 
 
 * 游戏按回合进行, 但侧重**即时战略**
-* 对战双方各拥有一基地`Base`, **己方基地被摧毁**则战败
+* 对战双方各拥有一基地 `Base`, **己方基地被摧毁**则战败
 * 回合数达到上限时, 若双方基地均为被摧毁, 则**积分高者获胜**, 积分相等则平局
 
 ### 回合
@@ -21,12 +21,12 @@
 * 四方格地图
 * 地图最大边长`map_size_max = 80`
 * 地形:
-    * 海洋`OCEAN`
-    * 陆地`LAND`
+    * 海洋 `OCEAN` 
+    * 陆地 `LAND` 
 * 地图分层:
-    * 水下`UNDERWATER`
-    * 水面或地面`SURFACE`
-    * 空中`AIR`
+    * 水下 `UNDERWATER` 
+    * 水面或地面 `SURFACE` 
+    * 空中 `AIR` 
 * 海洋的三层均可停留单位
 * 陆地的水下层不可停留单位
 * 单位不可在不同层次间穿越
@@ -34,35 +34,36 @@
 
 ### 人口
 
-* 人口限制默认`population_max = 60'
+* 人口限制默认`population_max = 60`
 
 ### 积分
 
-* 攻下据点`Fort`一次性奖励积分`capture_score = 100`
+* 攻下据点 `Fort` 一次性奖励积分`capture_score = 100`
 * 占领据点每回合奖励积分`fort_score = 10`
 * 每造成一点伤害奖励积分`damage_score = 1`
 * 对资源进行一次有效采集(采集到的资源 >= 10)奖励积分`collect_score = 10`
 
 
-## 单位`Element`
+## 单位 `Element` 
 
-***单位属性***:
-    * 三层视野`sight_ranges`
-    * 三层射程`fire_ranges`
-    * 生命值上限`health_max`
-    * 燃料上限`fuel_max`
-    * 弹药上限`ammo_max`
-    * 单次攻击消耗弹药量`ammo_once`
-    * 金属上限`metal_max`
-    * 金属`metal`
-    * 速度`speed`
-    * 人口`population`
-    * 生产花费金属`cost`
-    * 生产所需回合`build_round`
-    * 火力和鱼雷攻击力`attacks`
-    * 对火力和鱼雷防御力`defences`
+###单位属性 `Property`
 
-### 基地`Base`
+* 三层视野 `sight_ranges` 
+* 三层射程 `fire_ranges` 
+* 生命值上限 `health_max` 
+* 燃料上限 `fuel_max` 
+* 弹药上限 `ammo_max` 
+* 单次攻击消耗弹药量 `ammo_once` 
+* 金属上限 `metal_max` 
+* 金属 `metal` 
+* 速度 `speed` 
+* 人口 `population` 
+* 生产花费金属 `cost` 
+* 生产所需回合 `build_round` 
+* 火力和鱼雷攻击力 `attacks` 
+* 对火力和鱼雷防御力 `defences` 
+
+### 基地 `Base` 
 
 * 陆地建筑
 * 地面层
@@ -72,7 +73,7 @@
 * 可储存金属, 用以生产单位
 * 自身不可再生, 掉血后不可恢复
 
-### 据点`Fort`
+### 据点 `Fort` 
 
 * 陆地建筑 
 * 地面层
@@ -84,7 +85,7 @@
 * 被占领的据点生命值立刻回满
 * 无主据点不会自动反击
 
-### 矿场`Mine`
+### 矿场 `Mine` 
 
 * 陆地建筑
 * 金属资源点
@@ -92,7 +93,7 @@
 * 通过运输船采集其中的资源
 * 无归属, 不可占领
 
-### 油田`Oilfield`
+### 油田 `Oilfield` 
 
 * 陆地建筑
 * 燃料资源点
@@ -100,21 +101,21 @@
 * 通过运输船采集其中的资源
 * 无归属, 不可占领
 
-### 潜艇`Submarine`
+### 潜艇 `Submarine` 
 
-* 可移动单位`Unit`
+* 可移动单位 `Unit` 
 * 水下层
 * 不可造成火力伤害, 只能造成鱼雷伤害
 * 免疫火力伤害
 * 不可运输金属
 
-### 驱逐舰`Destroyer`
+### 驱逐舰 `Destroyer` 
 
 * 可移动单位
 * 水面层
 * 不可运输金属
 
-### 航母`Carrier`
+### 航母 `Carrier` 
 
 * 可移动单位
 * 水面层
@@ -122,7 +123,7 @@
 * 不可运输金属
 * 可补给各种单位, 包括飞机
 
-### 运输舰`Cargo`
+### 运输舰 `Cargo` 
 
 * 可移动单位
 * 水面层
@@ -131,16 +132,16 @@
 * 可采集资源
 * 可补给除飞机外的单位
 
-### 战斗机`Fighter`
+### 战斗机 `Fighter` 
 
 * 可移动单位
-* 飞机`Plane`
+* 飞机 `Plane` 
 * 空中层
 * 可以攻击潜艇
 * 免疫鱼雷伤害
 * 不可运输金属
 
-### 侦察机`Scout`
+### 侦察机 `Scout` 
 
 * 可移动单位
 * 飞机
@@ -155,20 +156,21 @@
 ### 攻击`AttackPos & AttackUnit`
 
 * 两种伤害类型
-    * 火力伤害`FIRE`
-    * 鱼雷伤害`TORPEDO`
+    * 火力伤害 `FIRE` 
+    * 鱼雷伤害 `TORPEDO` 
 * 潜艇只能造成和接受鱼雷伤害
 * 陆地建筑只能造成和受到火力伤害
 * 飞机对鱼雷伤害免疫
-* 根据距目标距离`distance`, 对目标所在地图层射程`fire_range`对理论攻击力`attack`进行修正`modifiedAttack = int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack)`
+* 根据攻防双方距离 `distance` 以及攻方射程 `fire_range` 对理论攻击力 `attack` 进行修正`modifiedAttack = int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack)`
+* 上式攻方射程 `fire_range` 为攻方在目标所在地图层的射程
 * 修正系数可能 > 1
 
-### 维修`Fix`
+### 维修 `Fix` 
 
 * 每恢复1点生命所需金属`metal_per_health = 0.2`
 * or 1单位金属可恢复生命值`health_per_metal = 5`
 
-### 补给`Supply`
+### 补给 `Supply` 
 
 * 不同单位补给操作有不同的默认补给量, 提供了接口, 选手可根据实战需要灵活调整补给量
 ```cpp
