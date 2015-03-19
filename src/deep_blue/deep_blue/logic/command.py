@@ -217,6 +217,8 @@ class Supply(Command):
             return False
         if (isinstance(receiver, Plane) and giver.pos.distance(receiver.pos) > 0) or giver.pos.distance(receiver.pos) > 1:
             return False
+        if giver.kind == CARGO and isinstance(receiver, Plane):
+            return False
         for command in game.commands[giver.team]:
             if self.operand == command.operand and not isinstance(command, ChangeDest):
                 game.commands[giver.team].remove(command)
@@ -233,6 +235,8 @@ class Supply(Command):
         if giver.team != receiver.team:
             return []
         if (isinstance(receiver, Plane) and giver.pos.distance(receiver.pos) > 0) or giver.pos.distance(receiver.pos) > 1:
+            return []
+        if giver.kind == CARGO and isinstance(receiver, Plane):
             return []
         if isinstance(giver, (Building, Cargo, Carrier)):
             return giver.supply(receiver, self.fuel, self.ammo, self.metal)
