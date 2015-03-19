@@ -208,7 +208,13 @@
 * 潜艇只能造成和接受鱼雷伤害
 * 陆地建筑只能造成和受到火力伤害
 * 飞机对鱼雷伤害免疫
-* 根据攻防双方距离 `distance` 以及攻方射程 `fire_range` 对理论攻击力 `attack` 进行修正`modifiedAttack = int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack)`
+* 根据攻防双方距离 `distance` 以及攻方射程 `fire_range` 对理论攻击力 `attack` 进行修正
+
+        modifiedAttack = int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack)
+
+    修正系数随fire_range的变化：
+    ![修正系数](fire_range.gif)
+
 * 上式攻方射程 `fire_range` 为攻方在目标所在地图层的射程
 * 修正系数可能 > 1
 * 航母修正系数恒为1
