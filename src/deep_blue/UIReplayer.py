@@ -611,7 +611,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
 			self.on_StopPushButton_clicked()
 			return
-		self.synRoundSlider()
+		if self.CenterWidget.HUMAN_REPLAY == 3:
+			self.synRoundSlider()
 		self.CreateWidget.team1.Initialize(self.fileInfo)
 		self.CreateWidget.team2.Initialize(self.fileInfo)
 		self.CenterWidget.Play(self.fileInfo)

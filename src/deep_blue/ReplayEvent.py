@@ -737,7 +737,10 @@ class Replay(QGraphicsView):
 		label.setColor(Qt.green)
 		label.setOpacity(0)
 		self.scene.addItem(label)
-		label.setPos(QPointF((supply_target.corX)* 30 - 10, (supply_target.corY)* 30 + (2 - supply_target.corZ) * 10 - 15))
+		if supply_target.obj.kind:
+			label.setPos(QPointF((supply_target.corX)* 30 - 10, (supply_target.corY)* 30 + (2 - supply_target.corZ) * 10 - 15))
+		else:
+			label.setPos(QPointF((supply_target.corX + 1)* 30 - 10, (supply_target.corY + 1)* 30 + (2 - supply_target.corZ) * 10 - 15))
 		ani = QPropertyAnimation(label, "opacity")
 		ani.setDuration(TOTAL_TIME)
 		ani.setStartValue(0)
