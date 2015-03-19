@@ -39,7 +39,7 @@ class WebPlay(QWidget, Ui_Form):
 		self.md5_map4_5 = '95757db098e9507849f17375b3f70b71'
 		self.md5_map1_3 = '72ccf53a8d8b4b1b899c91cc0978209b'
 		self.md5_map1 = 'b5b2870e20ee0b1ee0e160e3bfbdcf51'
-		self.md5_pro = 'fb2c324c2b4e4c9574b5e1604e28a5b9'
+		self.md5_pro = '42811d7e870f3528ab26f14ca8c99562'
 
 	def GetFileMd5(self, strFile):
 	    file_ = None
