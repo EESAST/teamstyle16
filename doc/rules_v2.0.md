@@ -236,7 +236,7 @@
 
 * 全局指令
 * 可同时生产多个单位
-* 生产消耗金属 `metal = cost = Ceiling(health_max * metal_per_health)`
+* 生产消耗金属 `metal = cost`
 * 消耗的金属从基地扣除
 * 生产单位需要经过 `round = build_round`
 * 基地 `metal < cost` 时, 加入生产队列失败
