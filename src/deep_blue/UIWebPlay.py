@@ -34,7 +34,7 @@ class WebPlay(QWidget, Ui_Form):
 		self.mapInfo = None
 		self.score = 0
 		self.data = None
-		self.md5_sample = '6a4afc5a1a4491429cc4a6ee6e24ce32'
+		self.md5_sample = '1b3ac9fc64bbf6b3be7efa270da5eca7'
 		self.md5_empty = '47c8eb7d9899fd90c7805c0898d318d2'
 		self.md5_map4_5 = '95757db098e9507849f17375b3f70b71'
 		self.md5_map1_3 = '72ccf53a8d8b4b1b899c91cc0978209b'

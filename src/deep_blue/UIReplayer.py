@@ -600,17 +600,31 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.changed = False
 		if self.isPaused:
 			return
-		if self.fileInfo.state() in [0, 1] or self.CenterWidget.nowRound == self.totalround:
-			sts = None
-			if self.fileInfo.state() == 0: 
-				sts = "0队获胜"
-			elif self.fileInfo.state() == 1:
-				sts = "1队获胜"
-			else:
-				sts = "平局"
-			QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
-			self.on_StopPushButton_clicked()
-			return
+		print "now:",self.CenterWidget.nowRound, "total is:		",self.totalround," state:",self.fileInfo.state()
+		if self.CenterWidget.HUMAN_REPLAY == 3:
+			if self.CenterWidget.nowRound == self.totalround:
+				sts = None
+				if self.fileInfo.state() == 0: 
+					sts = "0队获胜"
+				elif self.fileInfo.state() == 1:
+					sts = "1队获胜"
+				else:
+					sts = "平局"
+				QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
+				self.on_StopPushButton_clicked()
+				return
+		else:
+			if self.fileInfo.state() in [0, 1] or self.CenterWidget.nowRound == self.totalround:
+				sts = None
+				if self.fileInfo.state() == 0: 
+					sts = "0队获胜"
+				elif self.fileInfo.state() == 1:
+					sts = "1队获胜"
+				else:
+					sts = "平局"
+				QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
+				self.on_StopPushButton_clicked()
+				return
 		if self.CenterWidget.HUMAN_REPLAY == 3:
 			self.synRoundSlider()
 		self.CreateWidget.team1.Initialize(self.fileInfo)

@@ -716,10 +716,12 @@ class Replay(QGraphicsView):
 			return None, []
 		
 		showSplAnim = QParallelAnimationGroup()
-		if supply_unit.obj.kind:
+		if supply_unit.obj.kind and supply_target.obj.kind:
 			move_unit = SupEffectUnit(supply_unit.corX, supply_unit.corY, supply_unit.corZ, supply_target.corX, supply_target.corY, supply_target.corZ)
-		else:
+		elif supply_unit.obj.kind == 0:
 			move_unit = SupEffectUnit(supply_unit.corX + 1, supply_unit.corY + 1, supply_unit.corZ, supply_target.corX, supply_target.corY, supply_target.corZ)
+		else:
+			move_unit = SupEffectUnit(supply_unit.corX, supply_unit.corY, supply_unit.corZ, supply_target.corX + 1, supply_target.corY + 1, supply_target.corZ)
 		#move_unit.setPos(supply_unit.corX, supply_unit.corY, supply_unit.corZ)
 		move_unit.setOpacity(0)
 		self.scene.addItem(move_unit)
