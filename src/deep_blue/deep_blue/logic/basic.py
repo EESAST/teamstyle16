@@ -310,16 +310,16 @@ class Rectangle(object):
         """返回矩形区域向外延伸range范围的区域点集list"""
         region_points = []
         for i in xrange(self.upper_left.x, self.upper_left.x + self.size[0]):
-            for j in xrange(self.y, self.y + self.size[1]):
+            for j in xrange(self.upper_left.y, self.upper_left.y + self.size[1]):
                 region_points.append(Position(i, j, level))
         if range == 0:
             return region_points
-        region_points += Rectangle(Position(self.upper_left.x, self.y - range), Position(self.lower_right.x, self.y - 1)).region(level, 0)
-        region_points += Rectangle(Position(self.lower_right.x + 1, self.y), Position(self.lower_right.x + range, self.lower_right.y)).region(level, 0)
+        region_points += Rectangle(Position(self.upper_left.x, self.upper_left.y - range), Position(self.lower_right.x, self.upper_left.y - 1)).region(level, 0)
+        region_points += Rectangle(Position(self.lower_right.x + 1, self.upper_left.y), Position(self.lower_right.x + range, self.lower_right.y)).region(level, 0)
         region_points += Rectangle(Position(self.upper_left.x, self.lower_right.y + 1), Position(self.lower_right.x, self.lower_right.y + range)).region(level, 0)
-        region_points += Rectangle(Position(self.upper_left.x - range, self.y), Position(self.upper_left.x - 1, self.lower_right.y)).region(level, 0)
+        region_points += Rectangle(Position(self.upper_left.x - range, self.upper_left.y), Position(self.upper_left.x - 1, self.lower_right.y)).region(level, 0)
         region_points += self.upper_left.region(level, range)
-        region_points += Position(self.lower_right.x, self.y).region(level, range)
+        region_points += Position(self.lower_right.x, self.upper_left.y).region(level, range)
         region_points += self.lower_right.region(level, range)
         region_points += Position(self.upper_left.x, self.lower_right.y).region(level, range)
         return region_points
