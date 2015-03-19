@@ -614,7 +614,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.on_StopPushButton_clicked()
 				return
 		else:
-			if self.fileInfo.state() in [0, 1] or self.CenterWidget.nowRound == self.totalround:
+			if self.fileInfo.state() in [0, 1, 2] or self.CenterWidget.nowRound == self.totalround:
 				sts = None
 				if self.fileInfo.state() == 0: 
 					sts = "0队获胜"
