@@ -433,7 +433,7 @@ class UnitBase(Element):
         if target_unit == None or hasattr(target_unit, 'team') is False or target_unit.team == self.team:
             result_events.append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
             return result_events
-        modified_attacks = modifiedAttacks(distance, range, self.attacks)
+        modified_attacks = modifiedAttacks(distance, range, self.attacks) if self.kind != CARRIER else self.attacks
         fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE])
         # 考虑到 defence = INFINITY 可能无法破防
         torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
