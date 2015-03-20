@@ -879,6 +879,28 @@ body .markdown-body
 <p>简洁易懂有木有有木有 ！！！！！！</p>
 
 <h2>
+<a id="user-content-all_build-无法运行" class="anchor" href="#all_build-%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>ALL_BUILD 无法运行？</h2>
+
+<p>运行 / 调试 AI 时，请从 ALL_BUILD 项目切换到 ai 项目，方法如下：</p>
+
+<ul>
+<li>VS: 在解决方案资源管理器找到 ai 项目，右键 =&gt; 设为启动项目。此时列表中 ai 变为黑体字说明切换成功</li>
+<li>Xcode: 点击左上方 Build/Stop 按钮右方的 ALL_BUILD，从下拉菜单里选择 ai</li>
+</ul>
+
+<h2>
+<a id="user-content-命令行上的-ai_battledebugger-不会玩" class="anchor" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8A%E7%9A%84-ai_battledebugger-%E4%B8%8D%E4%BC%9A%E7%8E%A9" aria-hidden="true"><span class="octicon octicon-link"></span></a>命令行上的 ai_battle/debugger 不会玩？</h2>
+
+<p>使用 <code>easy_ai_battle</code> / <code>easy_debugger</code> 文件夹下的 <code>.bat</code> 文件</p>
+
+<p>默认使用 <code>1.map</code> 作为地图，<code>ai0.exe</code> &amp; <code>ai1.exe</code> 作为双方 AI，保存回放文件为 <code>replay.battle</code></p>
+
+<p>例如，要使用 easy_debugger 调试，则要将你想用的地图 &amp; 对手AI复制进 easy_debugger 文件夹，
+并将地图改名成 <code>1.map</code>，对手AI改名成 <code>ai1.exe</code>，然后双击 <code>easy_debugger.bat</code>，再从VS里开始调试</p>
+
+<p>带 <code>_verbose</code> 后缀的版本会输出更详细的平台调试信息</p>
+
+<h2>
 <a id="user-content-api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
 
 <p>暂时只提供了 C++ 接口</p>

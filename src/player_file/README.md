@@ -20,6 +20,16 @@
 * VS: 在解决方案资源管理器找到 ai 项目，右键 => 设为启动项目。此时列表中 ai 变为黑体字说明切换成功
 * Xcode: 点击左上方 Build/Stop 按钮右方的 ALL_BUILD，从下拉菜单里选择 ai
 
+## 命令行上的 ai_battle/debugger 不会玩？
+使用 `easy_ai_battle` / `easy_debugger` 文件夹下的 `.bat` 文件
+
+默认使用 `1.map` 作为地图，`ai0.exe` & `ai1.exe` 作为双方 AI，保存回放文件为 `replay.battle`
+
+例如，要使用 easy_debugger 调试，则要将你想用的地图 & 对手AI复制进 easy_debugger 文件夹，
+并将地图改名成 `1.map`，对手AI改名成 `ai1.exe`，然后双击 `easy_debugger.bat`，再从VS里开始调试
+
+带 `_verbose` 后缀的版本会输出更详细的平台调试信息
+
 
 ## API
 暂时只提供了 C++ 接口
