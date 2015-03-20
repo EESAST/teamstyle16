@@ -34,13 +34,14 @@ class WebPlay(QWidget, Ui_Form):
 		self.mapInfo = None
 		self.score = 0
 		self.data = None
-		self.md5_sample = '6a4afc5a1a4491429cc4a6ee6e24ce32'
+		self.md5_sample = '1b3ac9fc64bbf6b3be7efa270da5eca7'
 		self.md5_empty = '47c8eb7d9899fd90c7805c0898d318d2'
 		self.md5_map4_5 = '95757db098e9507849f17375b3f70b71'
 		self.md5_map1_3 = '72ccf53a8d8b4b1b899c91cc0978209b'
 		self.md5_map1 = 'b5b2870e20ee0b1ee0e160e3bfbdcf51'
+		self.md5_pro = '59a26b25e8ddad4ee353274d3aef379d'
 
-	def GetFileMd5(strFile):
+	def GetFileMd5(self, strFile):
 	    file_ = None
 	    bRet = False
 	    strMd5 = ""
@@ -85,14 +86,13 @@ class WebPlay(QWidget, Ui_Form):
 		self.data = datas
 		if datas[5]:
 			self.score = datas[5]
-		print datas[1]
 		if datas[1]:
-			self.UserNameLabel.setText(_fromUtf8(datas[1]))
+			self.UserNameLabel.setText(_fromUtf8(" " + datas[1].encode('utf-8')))
 		else:
 			self.UserNameLabel.setText("")
-		self.IDLabel.setText(" %d" %datas[0])
+		self.IDLabel.setText(" %d" %int(datas[0]))
 		if datas[3]:
-			self.TeamLabel.setText(_fromUtf8(datas[3]))
+			self.TeamLabel.setText( _fromUtf8(" " + datas[3].encode('utf-8')))
 		else:
 			self.TeamLabel.setText("")
 		self.ScoreLabel.setText(" %d" %self.score)
@@ -142,14 +142,18 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI1:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5('test_match_1.map') != self.md5_map1:
+		if self.GetFileMd5('test_match_1.map') != self.md5_map1:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改地图"), QMessageBox.Ok)
 			return
-		if GetFileMd5('ai/empty_ai') != self.md5_empty:
+		print self.GetFileMd5('ai/empty_ai.exe')
+		if self.GetFileMd5('ai/empty_ai.exe') != self.md5_empty:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改ai文件夹下的ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5(str(self.AI1)) == self.md5_sample:
+		if self.GetFileMd5(str(self.AI1)) == self.md5_sample:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改使用sample_ai"), QMessageBox.Ok)
+			return
+		if self.GetFileMd5('property.conf') != self.md5_pro:
+			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改配置文件"), QMessageBox.Ok)
 			return
 		self.mapInfo = map_info.load('test_match_1.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI1), ai1_filename = 'ai/empty_ai.exe', judge = TestGame[0][0])
@@ -180,14 +184,17 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI2:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5('test_match_1-3.map') != self.md5_map1:
+		if self.GetFileMd5('test_match_1-3.map') != self.md5_map1_3:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改地图"), QMessageBox.Ok)
 			return
-		if GetFileMd5('ai/empty_ai') != self.md5_empty:
+		if self.GetFileMd5('ai/empty_ai.exe') != self.md5_empty:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改ai文件夹下的ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5(str(self.AI1)) == self.md5_sample:
+		if self.GetFileMd5(str(self.AI2)) == self.md5_sample:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改使用sample_ai"), QMessageBox.Ok)
+			return
+		if self.GetFileMd5('property.conf') != self.md5_pro:
+			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改配置文件"), QMessageBox.Ok)
 			return
 		self.mapInfo = map_info.load('test_match_1-3.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI2), ai1_filename = 'ai/empty_ai.exe', judge = TestGame[1][0])
@@ -218,14 +225,17 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI3:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5('test_match_1-3.map') != self.md5_map1:
+		if self.GetFileMd5('test_match_1-3.map') != self.md5_map1_3:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改地图"), QMessageBox.Ok)
 			return
-		if GetFileMd5('ai/empty_ai') != self.md5_empty:
+		if self.GetFileMd5('ai/empty_ai.exe') != self.md5_empty:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改ai文件夹下的ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5(str(self.AI1)) == self.md5_sample:
+		if self.GetFileMd5(str(self.AI3)) == self.md5_sample:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改使用sample_ai"), QMessageBox.Ok)
+			return
+		if self.GetFileMd5('property.conf') != self.md5_pro:
+			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改配置文件"), QMessageBox.Ok)
 			return
 		self.mapInfo = map_info.load('test_match_1-3.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI3), ai1_filename = 'ai/empty_ai.exe', judge = TestGame[2][0])
@@ -256,14 +266,17 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI4:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5('map_for_level_4-5.map') != self.md5_map1:
+		if self.GetFileMd5('map_for_level_4-5.map') != self.md5_map4_5:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改地图"), QMessageBox.Ok)
 			return
-		if GetFileMd5('ai/sample_ai') != self.md5_empty:
+		if self.GetFileMd5('ai/sample_ai.exe') != self.md5_sample:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改ai文件夹下的ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5(str(self.AI1)) == self.md5_sample:
+		if self.GetFileMd5(str(self.AI4)) == self.md5_sample:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改使用sample_ai"), QMessageBox.Ok)
+			return
+		if self.GetFileMd5('property.conf') != self.md5_pro:
+			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改配置文件"), QMessageBox.Ok)
 			return
 		self.mapInfo = map_info.load('map_for_level_4-5.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI4), ai1_filename = 'ai/sample_ai.exe', judge = TestGame[3][0])
@@ -294,14 +307,17 @@ class WebPlay(QWidget, Ui_Form):
 		if not self.AI5:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("未加载ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5('map_for_level_4-5.map') != self.md5_map1:
+		if self.GetFileMd5('map_for_level_4-5.map') != self.md5_map4_5:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改地图"), QMessageBox.Ok)
 			return
-		if GetFileMd5('ai/sample_ai') != self.md5_empty:
+		if self.GetFileMd5('ai/sample_ai.exe') != self.md5_sample:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改ai文件夹下的ai"), QMessageBox.Ok)
 			return
-		if GetFileMd5(str(self.AI1)) == self.md5_sample:
+		if self.GetFileMd5(str(self.AI5)) == self.md5_sample:
 			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改使用sample_ai"), QMessageBox.Ok)
+			return
+		if self.GetFileMd5('property.conf') != self.md5_pro:
+			QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("请勿更改配置文件"), QMessageBox.Ok)
 			return
 		self.mapInfo = map_info.load('map_for_level_4-5.map')
 		self.fileInfo = ai_battle.AIBattle(map_info = self.mapInfo, ai0_filename = str(self.AI5), ai1_filename = 'ai/sample_ai.exe', judge = TestGame[4][0])
@@ -378,6 +394,8 @@ class WebPlay(QWidget, Ui_Form):
 
 	@pyqtSlot()
 	def on_FightButton_clicked(self):
+		QMessageBox.critical(self, QString.fromUtf8("抱歉"), QString.fromUtf8("暂未开放"), QMessageBox.Ok, QMessageBox.NoButton)
+		return
 		print self.MapCombo.itemData(self.MapCombo.currentIndex()).toString(), self.EnemyCombo.itemData(self.EnemyCombo.currentIndex()).toString()
 		payload = {'map':self.MapCombo.itemData(self.MapCombo.currentIndex()).toString(), 'player':self.EnemyCombo.itemData(self.EnemyCombo.currentIndex()).toString()}
 		r = requests.post("http://deepblue.eesast.com/online_battle/battle/"+self.data[3],data = payload)

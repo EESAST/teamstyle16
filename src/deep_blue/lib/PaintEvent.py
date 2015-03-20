@@ -211,7 +211,7 @@ class SoldierUnit(AbstractUnit):
 class SoldierMakerUnit(AbstractUnit):
 	"""单位基类"""
 	def __init__(self, unit, size, parent = None):
-		super(SoldierMakerUnit, self).__init__(unit.position.x, unit.position.y, unit.position.z, parent)
+		super(SoldierMakerUnit, self).__init__(unit.position.x if unit.kind else unit.position.x - 1, unit.position.y if unit.kind else unit.position.y - 1, unit.position.z, parent)
 		self.obj = unit
 		self.setZValue(0.6)
 		self.size = size
@@ -303,7 +303,7 @@ class DieIndUnit(AbstractUnit):
 class AttackEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(AttackEffectUnit, self).__init__(x, y, 2, parent)
-		self.setZValue(0.6)
+		self.setZValue(0.8)
 
 	def boundingRect(self):
 		return QRectF(0, 0, 10, 10)
@@ -362,7 +362,7 @@ class FixEffectUnit(AbstractUnit):
 class ColEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(ColEffectUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.6)
+		self.setZValue(0.8)
 		self.image = QImage(":collect.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
 
 	def boundingRect(self):
@@ -376,7 +376,7 @@ class ColEffectUnit(AbstractUnit):
 class SupEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, x1, y1, z1, parent = None):
 		super(SupEffectUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.6)
+		self.setZValue(0.8)
 		self.pos = (x, y, z, x1, y1, z1)
 		self.image = QImage(":supply.png").scaled(UNIT_WIDTH / 2, UNIT_HEIGHT, Qt.KeepAspectRatio)
 
@@ -399,7 +399,7 @@ class SupEffectUnit(AbstractUnit):
 class BoomEffectUnit(AbstractUnit):
 	def __init__(self, x, y, z, parent = None):
 		super(BoomEffectUnit, self).__init__(x, y, z, parent)
-		self.setZValue(0.6)
+		self.setZValue(0.8)
 		self.image = QImage(":boom.png").scaled(30, 10, Qt.KeepAspectRatio)
 
 	def boundingRect(self):

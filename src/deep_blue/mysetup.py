@@ -1,4 +1,4 @@
-import sys
+import sys, traceback
 from cx_Freeze import setup, Executable
 
 # Dependencies are automatically detected, but it might need fine tuning.
@@ -11,7 +11,7 @@ if sys.platform == "win32":
     base = "Win32GUI"
 
 setup(  name = "teamstyle16",
-        version = "1.0",
+        version = "1.04",
         description = "Teamstyle Sixteen",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("Deep Blue.py", base=base, icon="logo.ico"), Executable("debugger.py")])
+        executables = [Executable("Deep Blue.py", base=base, icon="logo.ico"), Executable("debugger.py"), Executable("ai_battle.py")])

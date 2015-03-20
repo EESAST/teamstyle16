@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import socket
+import sys
 import time
 
 from logic import gamebody, map_info
@@ -37,7 +38,7 @@ class AIBattle(battle.Battle):
             except socket.error:
                 if fixed_port:
                     logger.error('Port %d has already been taken, aborting', port)
-                    exit(1)
+                    sys.exit(1)
                 else:
                     logger.warning('Port %d has already been taken, trying port %d',
                                    port, port + 1)
@@ -141,7 +142,7 @@ def black_box_run(args):
 
     if args.debug:
         while b.gamebody.state == gamebody.STATE_CONTINUE:
-            raw_input('Round %d (press Enter to advance)' % g.round())
+            raw_input('Round %d (press Enter to advance)' % b.round())
             b.feed_ai_commands()
             b.next_round()
     else:
@@ -203,7 +204,7 @@ def main():
     else:
         root.setLevel(logging.DEBUG)
 
-    exit(black_box_run(args))
+    sys.exit(black_box_run(args))
 
 if __name__ == '__main__':
     main()

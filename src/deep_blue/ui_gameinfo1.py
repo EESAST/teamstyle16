@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'GameInfo1.ui'
 #
-# Created: Sat Mar 14 00:32:10 2015
+# Created: Mon Mar 16 21:37:49 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,9 +74,11 @@ class Ui_GameInfo1(object):
         self.label_9.setObjectName(_fromUtf8("label_9"))
         self.gridLayout.addWidget(self.label_9, 1, 0, 1, 1)
         self.ScoreLineEdit1 = QtGui.QLineEdit(self.layoutWidget1)
+        self.ScoreLineEdit1.setReadOnly(True)
         self.ScoreLineEdit1.setObjectName(_fromUtf8("ScoreLineEdit1"))
         self.gridLayout.addWidget(self.ScoreLineEdit1, 1, 1, 1, 1)
         self.ScoreLineEdit2 = QtGui.QLineEdit(self.layoutWidget1)
+        self.ScoreLineEdit2.setReadOnly(True)
         self.ScoreLineEdit2.setObjectName(_fromUtf8("ScoreLineEdit2"))
         self.gridLayout.addWidget(self.ScoreLineEdit2, 1, 2, 1, 1)
         self.label_8 = QtGui.QLabel(self.layoutWidget1)

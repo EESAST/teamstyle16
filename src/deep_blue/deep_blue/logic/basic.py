@@ -31,19 +31,13 @@ POPULATION_MAX = 60    # 单方最大人口数
 INFINITY = float('inf')     # 正无穷, 大于任何有限数
 
 # 积分规则
-FORT_SCORE = 1      # 占领据点每回合奖励积分
+CAPTURE_SCORE = 100  # 攻下据点一次性奖励积分
+FORT_SCORE = 10      # 占领据点每回合奖励积分
 DAMAGE_SCORE = 1    # 每点伤害奖励积分
-COLLECT_SCORE = 1   # 采集一单位资源奖励积分
+COLLECT_SCORE = 10   # 采集一次奖励积分
 
 # 维修代价
 METAL_PER_HEALTH = 0.2    # 恢复1点生命所需金属
-
-# 补给底线
-SUPPLY_LIMIT = 0.1  # 资源数少于 SUPPLY_LIMIT * 上限 即不可继续补给(留给自己用..)(抛锚不可以么？）
-                    # 基地, 据点燃料不设底线
-                    # 基地弹药无限, 故也不必设底线
-                    # 运输舰无攻击能力, 弹药不设底线
-
 
 # 地图分层
 UNDERWATER = 0  # 水下
@@ -316,16 +310,16 @@ class Rectangle(object):
         """返回矩形区域向外延伸range范围的区域点集list"""
         region_points = []
         for i in xrange(self.upper_left.x, self.upper_left.x + self.size[0]):
-            for j in xrange(self.y, self.y + self.size[1]):
+            for j in xrange(self.upper_left.y, self.upper_left.y + self.size[1]):
                 region_points.append(Position(i, j, level))
         if range == 0:
             return region_points
-        region_points += Rectangle(Position(self.upper_left.x, self.y - range), Position(self.lower_right.x, self.y - 1)).region(level, 0)
-        region_points += Rectangle(Position(self.lower_right.x + 1, self.y), Position(self.lower_right.x + range, self.lower_right.y)).region(level, 0)
+        region_points += Rectangle(Position(self.upper_left.x, self.upper_left.y - range), Position(self.lower_right.x, self.upper_left.y - 1)).region(level, 0)
+        region_points += Rectangle(Position(self.lower_right.x + 1, self.upper_left.y), Position(self.lower_right.x + range, self.lower_right.y)).region(level, 0)
         region_points += Rectangle(Position(self.upper_left.x, self.lower_right.y + 1), Position(self.lower_right.x, self.lower_right.y + range)).region(level, 0)
-        region_points += Rectangle(Position(self.upper_left.x - range, self.y), Position(self.upper_left.x - 1, self.lower_right.y)).region(level, 0)
+        region_points += Rectangle(Position(self.upper_left.x - range, self.upper_left.y), Position(self.upper_left.x - 1, self.lower_right.y)).region(level, 0)
         region_points += self.upper_left.region(level, range)
-        region_points += Position(self.lower_right.x, self.y).region(level, range)
+        region_points += Position(self.lower_right.x, self.upper_left.y).region(level, range)
         region_points += self.lower_right.region(level, range)
         region_points += Position(self.upper_left.x, self.lower_right.y).region(level, range)
         return region_points
@@ -432,18 +426,20 @@ class UnitBase(Element):
         if target_unit == None or hasattr(target_unit, 'team') is False or target_unit.team == self.team:
             result_events.append(AttackMiss(self.index, target_pos))    # 坐标不存在敌军单位, miss
             return result_events
-        modified_attacks = modifiedAttacks(distance, range, self.attacks)
+        modified_attacks = modifiedAttacks(distance, range, self.attacks) if self.kind != CARRIER else self.attacks
         fire_damage = max(0, modified_attacks[FIRE] - target_unit.defences[FIRE])
         # 考虑到 defence = INFINITY 可能无法破防
         torpedo_damage = max(0, modified_attacks[TORPEDO] - target_unit.defences[TORPEDO])
         damage = fire_damage + torpedo_damage
-        result_events.append(AttackUnit(self.index, target_unit.index, damage))
         if damage >= target_unit.health:
-            game.scores[self.team] += target_unit.health * DAMAGE_SCORE
+            damage = target_unit.health
+            game.scores[self.team] += damage * DAMAGE_SCORE
+            result_events.append(AttackUnit(self.index, target_unit.index, damage))
             if target_unit.kind == FORT:    # capture fort
                 target_unit.team = self.team
                 target_unit.health = target_unit.health_max
                 result_events.append(Capture(target_unit.index, self.team))
+                game.scores[self.team] += CAPTURE_SCORE
             else:
                 target_unit.health = 0  # killed
                 if isinstance(target_unit, Unit):  # Remove only if it's a unit.
@@ -453,33 +449,16 @@ class UnitBase(Element):
         else:
             target_unit.health -= damage
             game.scores[self.team] += damage * DAMAGE_SCORE
+            result_events.append(AttackUnit(self.index, target_unit.index, damage))
         return result_events
 
 
 def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
-    if giver.kind == BASE:
-        fuel_supply_limit = ammo_supply_limit = 0
-    elif giver.kind == FORT:
-        fuel_supply_limit = 0
-        ammo_supply_limit = SUPPLY_LIMIT
-    elif giver.kind == CARGO:
-        fuel_supply_limit = SUPPLY_LIMIT
-        ammo_supply_limit = 0
-    else:
-        fuel_supply_limit = ammo_supply_limit = SUPPLY_LIMIT
-
-    # not provide ammo for base
-    if receiver.kind == BASE:
-        ammo_supply_limit = 1
-
     provides = [0, 0]    # 维修者提供的燃料, 弹药
-    provides[0] = min(fuel, int(giver.fuel - giver.fuel_max * fuel_supply_limit),
-                            receiver.fuel_max - receiver.fuel)
-    if giver.ammo == INFINITY:
-        provides[1] = min(ammo, receiver.ammo_max - receiver.ammo)
-    else:
-        provides[1] = min(ammo, max(0, int(giver.ammo - giver.ammo_max * ammo_supply_limit)),
-                            receiver.ammo_max - receiver.ammo)
+    provides[0] = min(fuel, giver.fuel, receiver.fuel_max - receiver.fuel)
+    provides[1] = min(ammo, giver.ammo, receiver.ammo_max - receiver.ammo)
+    if receiver.kind == BASE:
+        provides[1] = 0
     giver.fuel -= provides[0]
     giver.ammo -= provides[1]
     receiver.fuel += provides[0]
@@ -489,7 +468,18 @@ def replenishFuelAmmo(giver, receiver, fuel, ammo):   # 补给燃料弹药
 
 class Building(UnitBase):
     """建筑类"""
-    def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):   # 补给操作
+    pass
+
+class Base(Building):
+    """基地, 继承自Building"""
+    kind = BASE
+    def __init__(self, team, pos, **kwargs):
+        pos.level = SURFACE
+        d = PROPERTY[BASE].copy()
+        d.update(kwargs)
+        super(Base, self).__init__(team, pos, **d)
+
+    def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = 0):   # 补给操作
         """建筑对周围单位补给"""
         result_events = []
         provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
@@ -500,15 +490,6 @@ class Building(UnitBase):
             our_unit.metal += provide_metal            
         result_events.append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
         return result_events
-
-class Base(Building):
-    """基地, 继承自Building"""
-    kind = BASE
-    def __init__(self, team, pos, **kwargs):
-        pos.level = SURFACE
-        d = PROPERTY[BASE].copy()
-        d.update(kwargs)
-        super(Base, self).__init__(team, pos, **d)
 
     def globalGhost(self):
         ghost = deepcopy(self)
@@ -538,6 +519,18 @@ class Fort(Building):
         d = PROPERTY[FORT].copy()
         d.update(kwargs)
         super(Fort, self).__init__(team, pos, **d)
+
+    def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):   # 补给操作
+        """建筑对周围单位补给"""
+        result_events = []
+        provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
+        provide_metal = 0
+        if our_unit.metal_max != None:
+            provide_metal = min(metal, self.metal, our_unit.metal_max - our_unit.metal)
+            self.metal -= provide_metal
+            our_unit.metal += provide_metal            
+        result_events.append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
+        return result_events
 
     def globalGhost(self):
         ghost = deepcopy(self)
@@ -613,8 +606,8 @@ class Unit(UnitBase):
                 if isinstance(near_element, Resource):
                     collect_event = self.collect(near_element)
                     events += collect_event
-                    game.scores[self.team] += (max(collect_event[0].fuel, collect_event[0].metal) * COLLECT_SCORE
-                        if len(collect_event) != 0 else 0)
+                    game.scores[self.team] += (COLLECT_SCORE if (len(collect_event) != 0
+                        and max(collect_event[0].fuel, collect_event[0].metal) >= 10) else 0)
 
         # fuel
         if isinstance(self, Plane):
@@ -677,11 +670,12 @@ class Cargo(Ship):
         d = PROPERTY[CARGO].copy()
         d.update(kwargs)
         super(Cargo, self).__init__(team, pos, **d)
-        self.metal = 0
 
     def supply(self, our_unit, fuel = INFINITY, ammo = INFINITY, metal = INFINITY):
         """运输舰对周围单位补给燃料弹药, 可向基地, 据点, 运输舰补充金属"""
         result_events = []
+        if isinstance(our_unit, Plane):
+            return result_events
         provides = replenishFuelAmmo(self, our_unit, fuel, ammo)
         provide_metal = 0
         if our_unit.metal_max != None:

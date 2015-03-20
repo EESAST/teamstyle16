@@ -169,7 +169,7 @@ class AIProxy(threading.Thread):
 
     def __run_ai(self, filename, port):
         try:
-            self.ai_program = subprocess.Popen([filename, 'localhost',
+            self.ai_program = subprocess.Popen([filename, '127.0.0.1',
                                                            str(port)],
                                                stdout=self.std_logpipe,
                                                stderr=self.err_logpipe)

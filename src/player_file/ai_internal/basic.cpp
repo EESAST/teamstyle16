@@ -12,21 +12,24 @@ extern const int kMaxMapSize = 80;
 extern const int kMaxRoundLimit = 200;
 extern const int kMaxPopulationLimit = 60;
 
-extern const int kFortScore = 1;
-extern const int kDamageScore = 1;
-extern const int kCollectScore = 1;
+extern const int kCaptureScore = 100;   // 攻下据点一次性奖励积分
+extern const int kFortScore = 10;       // 占领据点每回合奖励积分
+extern const int kDamageScore = 1;      // 每造成一点伤害奖励积分
+extern const int kCollectScore = 10;    // 有效采集一次资源奖励积分
+
+extern const int kHealthPerMetal = 5;
 
 extern const Property kProperty[kElementTypes] = 
 {
 	{SURFACE,    {4, 10, 8}, {0, 7, 5}, 700, 1000,   -1,  6, 200,  {40, 0},  {15, -1}, 0,  0,  0, 0},
 	{SURFACE,    {3, 8, 6},  {0, 5, 4}, 300,  200,   300, 4, 200,  {30, 0},  {12, -1}, 0,  0,  0, 0},
 	{SURFACE,    {0, 0, 0},  {0, 0, 0}, -1,   0,     0,   0, 500,  {0, 0},   {-1, -1}, 0,  0,  0, 0},
-	{SURFACE,    {0, 0, 0},  {0, 0, 0}, -1,   500,   0,   0, 0,    {0, 0},   {-1, -1}, 0,  0,  0, 0},
+	{SURFACE,    {0, 0, 0},  {0, 0, 0}, -1,  1000,   0,   0, 0,    {0, 0},   {-1, -1}, 0,  0,  0, 0},
 	{UNDERWATER, {6, 5, 3},  {5, 5, 0}, 35,   120,   20,  2, 0,    {0, 40},  {-1, 7},  6,  7,  2, 2},
 	{SURFACE,    {5, 8, 6},  {4, 8, 6}, 70,   150,   40,  4, 0,    {25, 25}, {13, 10}, 7,  14, 3, 3},
-	{SURFACE,    {3, 8, 8},  {0, 8, 6}, 120,  200,   70,  2, 0,    {32, 0},  {16, 10}, 5,  24, 5, 4},
-	{SURFACE,    {2, 6, 5},  {0, 0, 0}, 80,   300,   120, 0, 0,    {0, 0},   {15, 8},  11, 16, 3, 1},
-	{AIR,		 {1, 7, 8},  {1, 3, 4}, 70,   100,   21,  3, 0,    {30, 20}, {10, -1}, 9,  14, 3, 3},
+	{SURFACE,    {3, 8, 8},  {0, 8, 6}, 120,  200,   70,  2, 0,    {32, 0},  {16, 10}, 5,  30, 5, 4},
+	{SURFACE,    {2, 6, 5},  {0, 0, 0}, 80,   300,   120, 0, 50,   {0, 0},   {15, 8},  11, 16, 3, 1},
+	{AIR,		 {1, 7, 8},  {1, 3, 4}, 50,   100,   21,  3, 0,    {30, 20}, {10, -1}, 9,  14, 3, 3},
 	{AIR,		 {2, 12, 16},{2, 3, 4}, 50,   120,   5,   1, 0,    {18, 7},  {7, -1},  10, 10, 2, 1},
 };
 

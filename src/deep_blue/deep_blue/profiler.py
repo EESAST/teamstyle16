@@ -19,6 +19,6 @@ if __name__ == '__main__':
 
     if len(argv) != 4:
         print "Usage: python -m deep_blue.profiler <map> <ai0> <ai1>"
-        exit()
+        sys.exit()
 
     cProfile.run("main(*argv[1:])")
