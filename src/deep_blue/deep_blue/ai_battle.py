@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import os
 import socket
 import sys
 import time
@@ -131,22 +132,26 @@ def black_box_run(args):
     if args.timeout:
         kw['timeout'] = args.timeout
 
-    if args.battle:  # Load from pervious battle
-        b = load(args.map, **kw)
-    else:  # Construct a new battle
-        m = map_info.load(args.map)
-        b = AIBattle(m, **kw)
+    try:
+        if args.battle:  # Load from pervious battle
+            b = load(args.map, **kw)
+        else:  # Construct a new battle
+            m = map_info.load(args.map)
+            b = AIBattle(m, **kw)
 
-    if args.time_per_round:  # override time_per_round of the map
-        b.gamebody.map_info.time_per_round = args.time_per_round
+        if args.time_per_round:  # override time_per_round of the map
+            b.gamebody.map_info.time_per_round = args.time_per_round
 
-    if args.debug:
-        while b.gamebody.state == gamebody.STATE_CONTINUE:
-            raw_input('Round %d (press Enter to advance)' % b.round())
-            b.feed_ai_commands()
-            b.next_round()
-    else:
-        b.run_until_end()
+        if args.debug:
+            while b.gamebody.state == gamebody.STATE_CONTINUE:
+                raw_input('Round %d (press Enter to advance)' % b.round())
+                b.feed_ai_commands()
+                b.next_round()
+        else:
+            b.run_until_end()
+    except KeyboardInterrupt:
+        logger.error("KeyboardInterrupt received, aborting")
+        os.abort()
 
     # Print result
     print b.round(), 'round(s) passed'
