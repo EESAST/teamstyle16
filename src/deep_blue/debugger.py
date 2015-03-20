@@ -1,3 +1,4 @@
+import argparse
 import logging
 import os
 import sys
@@ -61,7 +62,6 @@ def debug(args):
 
 
 if __name__ == '__main__':
-    import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('map', help='map file')
     parser.add_argument('opponent', help='file name of opponent AI (team 1)')
