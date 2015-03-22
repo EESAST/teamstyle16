@@ -1,0 +1,1540 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>body {
+  width: 45em;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 30px;
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before {
+  display: table;
+  content: "";
+}
+
+.markdown-body hr:after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code {
+  font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.markdown-body .octicon {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.markdown-body .octicon-link:before {
+  content: '\f05c';
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .anchor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .anchor:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .highlight {
+  margin-bottom: 16px;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+.markdown-body .highlight {
+  background: #fff;
+}
+
+.markdown-body .highlight .h {
+  color: #333;
+  font-style: normal;
+  font-weight: normal;
+}
+
+.markdown-body .highlight .mf,
+.markdown-body .highlight .mh,
+.markdown-body .highlight .mi,
+.markdown-body .highlight .mo,
+.markdown-body .highlight .il,
+.markdown-body .highlight .m {
+  color: #945277;
+}
+
+.markdown-body .highlight .s,
+.markdown-body .highlight .sb,
+.markdown-body .highlight .sc,
+.markdown-body .highlight .sd,
+.markdown-body .highlight .s2,
+.markdown-body .highlight .se,
+.markdown-body .highlight .sh,
+.markdown-body .highlight .si,
+.markdown-body .highlight .sx,
+.markdown-body .highlight .s1 {
+  color: #df5000;
+}
+
+.markdown-body .highlight .kc,
+.markdown-body .highlight .kd,
+.markdown-body .highlight .kn,
+.markdown-body .highlight .kp,
+.markdown-body .highlight .kr,
+.markdown-body .highlight .kt,
+.markdown-body .highlight .k,
+.markdown-body .highlight .o {
+  font-weight: bold;
+}
+
+.markdown-body .highlight .kt {
+  color: #458;
+}
+
+.markdown-body .highlight .c,
+.markdown-body .highlight .cm,
+.markdown-body .highlight .c1 {
+  color: #998;
+  font-style: italic;
+}
+
+.markdown-body .highlight .cp,
+.markdown-body .highlight .cs,
+.markdown-body .highlight .cp .h {
+  color: #999;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .cs {
+  font-style: italic;
+}
+
+.markdown-body .highlight .n {
+  color: #333;
+}
+
+.markdown-body .highlight .na,
+.markdown-body .highlight .nv,
+.markdown-body .highlight .vc,
+.markdown-body .highlight .vg,
+.markdown-body .highlight .vi {
+  color: #008080;
+}
+
+.markdown-body .highlight .nb {
+  color: #0086B3;
+}
+
+.markdown-body .highlight .nc {
+  color: #458;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .no {
+  color: #094e99;
+}
+
+.markdown-body .highlight .ni {
+  color: #800080;
+}
+
+.markdown-body .highlight .ne {
+  color: #990000;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .nf {
+  color: #945277;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .nn {
+  color: #555;
+}
+
+.markdown-body .highlight .nt {
+  color: #000080;
+}
+
+.markdown-body .highlight .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+
+.markdown-body .highlight .gd {
+  color: #000;
+  background-color: #fdd;
+}
+
+.markdown-body .highlight .gd .x {
+  color: #000;
+  background-color: #faa;
+}
+
+.markdown-body .highlight .ge {
+  font-style: italic;
+}
+
+.markdown-body .highlight .gr {
+  color: #aa0000;
+}
+
+.markdown-body .highlight .gh {
+  color: #999;
+}
+
+.markdown-body .highlight .gi {
+  color: #000;
+  background-color: #dfd;
+}
+
+.markdown-body .highlight .gi .x {
+  color: #000;
+  background-color: #afa;
+}
+
+.markdown-body .highlight .go {
+  color: #888;
+}
+
+.markdown-body .highlight .gp {
+  color: #555;
+}
+
+.markdown-body .highlight .gs {
+  font-weight: bold;
+}
+
+.markdown-body .highlight .gu {
+  color: #800080;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .gt {
+  color: #aa0000;
+}
+
+.markdown-body .highlight .ow {
+  font-weight: bold;
+}
+
+.markdown-body .highlight .w {
+  color: #bbb;
+}
+
+.markdown-body .highlight .sr {
+  color: #017936;
+}
+
+.markdown-body .highlight .ss {
+  color: #8b467f;
+}
+
+.markdown-body .highlight .bp {
+  color: #999;
+}
+
+.markdown-body .highlight .gc {
+  color: #999;
+  background-color: #EAF2F5;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  color: #000;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+}
+
+.markdown-body .highlight .pl-coc,
+.markdown-body .highlight .pl-entm,
+.markdown-body .highlight .pl-eoa,
+.markdown-body .highlight .pl-mai .pl-sf,
+.markdown-body .highlight .pl-pdv,
+.markdown-body .highlight .pl-sc,
+.markdown-body .highlight .pl-sr,
+.markdown-body .highlight .pl-v,
+.markdown-body .highlight .pl-vpf {
+  color: #0086b3;
+}
+
+.markdown-body .highlight .pl-eoac,
+.markdown-body .highlight .pl-mdht,
+.markdown-body .highlight .pl-mi1,
+.markdown-body .highlight .pl-mri,
+.markdown-body .highlight .pl-va,
+.markdown-body .highlight .pl-vpu {
+  color: #008080;
+}
+
+.markdown-body .highlight .pl-c,
+.markdown-body .highlight .pl-pdc {
+  color: #b4b7b4;
+  font-style: italic;
+}
+
+.markdown-body .highlight .pl-k,
+.markdown-body .highlight .pl-ko,
+.markdown-body .highlight .pl-kolp,
+.markdown-body .highlight .pl-mc,
+.markdown-body .highlight .pl-mr,
+.markdown-body .highlight .pl-ms,
+.markdown-body .highlight .pl-s,
+.markdown-body .highlight .pl-sok,
+.markdown-body .highlight .pl-st {
+  color: #6e5494;
+}
+
+.markdown-body .highlight .pl-ef,
+.markdown-body .highlight .pl-enf,
+.markdown-body .highlight .pl-enm,
+.markdown-body .highlight .pl-entc,
+.markdown-body .highlight .pl-eoi,
+.markdown-body .highlight .pl-sf,
+.markdown-body .highlight .pl-smc {
+  color: #d12089;
+}
+
+.markdown-body .highlight .pl-ens,
+.markdown-body .highlight .pl-eoai,
+.markdown-body .highlight .pl-kos,
+.markdown-body .highlight .pl-mh .pl-pdh,
+.markdown-body .highlight .pl-mp,
+.markdown-body .highlight .pl-pde,
+.markdown-body .highlight .pl-stp {
+  color: #458;
+}
+
+.markdown-body .highlight .pl-enti {
+  color: #d12089;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .pl-cce,
+.markdown-body .highlight .pl-enc,
+.markdown-body .highlight .pl-kou,
+.markdown-body .highlight .pl-mq {
+  color: #f93;
+}
+
+.markdown-body .highlight .pl-mp1 .pl-sf {
+  color: #458;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .pl-cos,
+.markdown-body .highlight .pl-ent,
+.markdown-body .highlight .pl-md,
+.markdown-body .highlight .pl-mdhf,
+.markdown-body .highlight .pl-ml,
+.markdown-body .highlight .pl-pdc1,
+.markdown-body .highlight .pl-pds,
+.markdown-body .highlight .pl-s1,
+.markdown-body .highlight .pl-scp,
+.markdown-body .highlight .pl-sol {
+  color: #df5000;
+}
+
+.markdown-body .highlight .pl-c1,
+.markdown-body .highlight .pl-cn,
+.markdown-body .highlight .pl-pse,
+.markdown-body .highlight .pl-pse .pl-s2,
+.markdown-body .highlight .pl-vi {
+  color: #a31515;
+}
+
+.markdown-body .highlight .pl-mb,
+.markdown-body .highlight .pl-pdb {
+  color: #df5000;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .pl-mi,
+.markdown-body .highlight .pl-pdi {
+  color: #6e5494;
+  font-style: italic;
+}
+
+.markdown-body .highlight .pl-ms1 {
+  background-color: #f5f5f5;
+}
+
+.markdown-body .highlight .pl-mdh,
+.markdown-body .highlight .pl-mdi {
+  font-weight: bold;
+}
+
+.markdown-body .highlight .pl-mdr {
+  color: #0086b3;
+  font-weight: bold;
+}
+
+.markdown-body .highlight .pl-s2 {
+  color: #333;
+}
+
+.markdown-body .highlight .pl-ii {
+  background-color: #df5000;
+  color: #fff;
+}
+
+.markdown-body .highlight .pl-ib {
+  background-color: #f93;
+}
+
+.markdown-body .highlight .pl-id {
+  background-color: #a31515;
+  color: #fff;
+}
+
+.markdown-body .highlight .pl-iu {
+  background-color: #b4b7b4;
+}
+
+.markdown-body .highlight .pl-mo {
+  color: #969896;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  float: left;
+  margin: 0.3em 0 0.25em -1.6em;
+  vertical-align: middle;
+}</style><title>rules_v2.0</title></head><body><article class="markdown-body"><h1>
+<a id="user-content-rules---deep-blue" class="anchor" href="#rules---deep-blue" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rules - Deep Blue</h1>
+
+<h2>
+<a id="user-content-游戏背景" class="anchor" href="#%E6%B8%B8%E6%88%8F%E8%83%8C%E6%99%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏背景</h2>
+
+<p>废话从略</p>
+
+<h2>
+<a id="user-content-游戏模式" class="anchor" href="#%E6%B8%B8%E6%88%8F%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏模式</h2>
+
+<ul>
+<li>游戏按回合进行, 但侧重<strong>即时战略</strong>
+</li>
+<li>对战双方各拥有一基地 <code>Base</code>, <strong>己方基地被摧毁</strong>则战败</li>
+<li>基地同时被摧毁 / 回合数达到上限时, 若双方基地均未被摧毁, 则<strong>积分高者获胜</strong>, 积分相等则平局</li>
+</ul>
+
+<h3>
+<a id="user-content-回合" class="anchor" href="#%E5%9B%9E%E5%90%88" aria-hidden="true"><span class="octicon octicon-link"></span></a>回合</h3>
+
+<ul>
+<li>回合以时间划分, 默认<code>time_per_round = 1000</code> (单位: ms)</li>
+<li>回合数从第0回合开始计数, 回合数上限默认<code>round_max = 200</code>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-地图" class="anchor" href="#%E5%9C%B0%E5%9B%BE" aria-hidden="true"><span class="octicon octicon-link"></span></a>地图</h3>
+
+<ul>
+<li>四方格地图</li>
+<li>地图最大边长<code>map_size_max = 80</code>
+</li>
+<li>地形:
+
+<ul>
+<li>海洋 <code>OCEAN</code> </li>
+<li>陆地 <code>LAND</code> </li>
+</ul>
+</li>
+<li>地图分层:
+
+<ul>
+<li>水下 <code>UNDERWATER</code> </li>
+<li>水面或地面 <code>SURFACE</code> </li>
+<li>空中 <code>AIR</code> </li>
+</ul>
+</li>
+<li>海洋的三层均可停留单位</li>
+<li>陆地的水下层不可停留单位</li>
+<li>单位不可在不同层次间穿越</li>
+<li>单位坐标采用三维坐标 <code>(x, y, z)</code>, <code>z</code> 表示所在地图层次 <code>level</code>
+</li>
+<li>每个三维坐标点至多被一个单位占据</li>
+<li>基地大小为 <code>3*3</code>, 其余单位为 <code>1*1</code>
+</li>
+<li>点到点距离按平面直角距离计算<code>distance = abs(x1 - x2) + abs(y1 - y2)</code>
+</li>
+<li>点到矩形距离取点到矩形内各点距离的<strong>最小值</strong>, 矩形到矩形距离同样取最小值</li>
+<li>
+<strong>天气</strong>: 默认 <code>weather = 0</code>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-人口" class="anchor" href="#%E4%BA%BA%E5%8F%A3" aria-hidden="true"><span class="octicon octicon-link"></span></a>人口</h3>
+
+<ul>
+<li>人口限制默认<code>population_max = 60</code>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-积分" class="anchor" href="#%E7%A7%AF%E5%88%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>积分</h3>
+
+<ul>
+<li>攻下据点 <code>Fort</code> 一次性奖励积分<code>capture_score = 100</code>
+</li>
+<li>占领据点每回合奖励积分<code>fort_score = 10</code>
+</li>
+<li>每造成一点伤害奖励积分<code>damage_score = 1</code>
+</li>
+<li>对资源进行一次有效采集(采集到的资源 &gt;= 10)奖励积分<code>collect_score = 10</code>
+</li>
+</ul>
+
+<h2>
+<a id="user-content-单位-element" class="anchor" href="#%E5%8D%95%E4%BD%8D-element" aria-hidden="true"><span class="octicon octicon-link"></span></a>单位 <code>Element</code>
+</h2>
+
+<h3>
+<a id="user-content-单位属性-property" class="anchor" href="#%E5%8D%95%E4%BD%8D%E5%B1%9E%E6%80%A7-property" aria-hidden="true"><span class="octicon octicon-link"></span></a>单位属性 <code>Property</code>
+</h3>
+
+<ul>
+<li>三层视野 <code>sight_ranges</code> </li>
+<li>三层射程 <code>fire_ranges</code> </li>
+<li>生命值上限 <code>health_max</code> </li>
+<li>燃料上限 <code>fuel_max</code> </li>
+<li>弹药上限 <code>ammo_max</code> </li>
+<li>单次攻击消耗弹药量 <code>ammo_once</code> </li>
+<li>金属上限 <code>metal_max</code> </li>
+<li>金属 <code>metal</code> </li>
+<li>速度 <code>speed</code> </li>
+<li>人口 <code>population</code> </li>
+<li>生产花费金属 <code>cost</code> </li>
+<li>生产所需回合 <code>build_round</code> </li>
+<li>火力和鱼雷攻击力 <code>attacks</code> </li>
+<li>对火力和鱼雷防御力 <code>defences</code> </li>
+</ul>
+
+<h3>
+<a id="user-content-单位状态量" class="anchor" href="#%E5%8D%95%E4%BD%8D%E7%8A%B6%E6%80%81%E9%87%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>单位状态量</h3>
+
+<ul>
+<li>索引号 <code>index</code>: 每个单位被生产或初始状态下被随机赋予 <code>index</code>, 单位被摧毁后 <code>index</code> 失效, 各单位 <code>index</code> 不重复</li>
+<li>位置 <code>pos</code>: 单位坐标, 对于基地则是矩形区域左上顶点坐标</li>
+<li>种类 <code>type</code>
+</li>
+<li>队伍 <code>team</code>: <code>team = 2</code> 表示中立</li>
+<li>生命值 <code>health</code>
+</li>
+<li>燃料 <code>fuel</code>
+</li>
+<li>弹药 <code>ammo</code>
+</li>
+<li>金属 <code>metal</code>
+</li>
+<li>当前目的地 <code>destination</code>: 移动目的地, <code>destination == pos</code> 表示原地待命</li>
+</ul>
+
+<h3>
+<a id="user-content-视野与迷雾" class="anchor" href="#%E8%A7%86%E9%87%8E%E4%B8%8E%E8%BF%B7%E9%9B%BE" aria-hidden="true"><span class="octicon octicon-link"></span></a>视野与迷雾</h3>
+
+<ul>
+<li>天气影响所有单位所有层次视野
+<code>modified_sight_range = max(0, sight_range + weather)</code>
+</li>
+<li>天气不影响射程</li>
+<li>视野内
+
+<ul>
+<li>矿场和油田全部信息可见</li>
+<li>其余非己方单位燃料, 弹药, 金属和目的地不可见: <code>fuel = ammo = metal = 0</code>
+</li>
+</ul>
+</li>
+<li>视野外
+
+<ul>
+<li>基地燃料, 弹药和金属不可见: <code>fuel = ammo = metal = 0</code>
+</li>
+<li>据点生命值, 燃料, 弹药和金属不可见: <code>health = fuel = ammo = metal = 0</code>, 归属信息不可见: <code>team = 2</code>
+</li>
+<li>矿场油田剩余资源量不可见: <code>fuel = 0</code> or <code>metal = 0</code>
+</li>
+<li>其余单位完全不可见</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-基地-base" class="anchor" href="#%E5%9F%BA%E5%9C%B0-base" aria-hidden="true"><span class="octicon octicon-link"></span></a>基地 <code>Base</code>
+</h3>
+
+<ul>
+<li>陆地建筑</li>
+<li>地面层</li>
+<li>不可攻击水下目标</li>
+<li>免疫鱼雷伤害</li>
+<li>弹药无限</li>
+<li>可储存金属, 用以生产单位</li>
+<li>自身不可再生, 掉血后不可恢复</li>
+<li>可对周围单位进行补给</li>
+<li>可以维修周围单位</li>
+</ul>
+
+<h3>
+<a id="user-content-据点-fort" class="anchor" href="#%E6%8D%AE%E7%82%B9-fort" aria-hidden="true"><span class="octicon octicon-link"></span></a>据点 <code>Fort</code>
+</h3>
+
+<ul>
+<li>陆地建筑 </li>
+<li>地面层</li>
+<li>不可攻击水下目标</li>
+<li>免疫鱼雷伤害</li>
+<li>可储存金属, 但不可生产单位</li>
+<li>默认初始状态无主, 不属于任何一方</li>
+<li>其他单位通过攻击, 将据点生命值打至0, 即可占领该据点, 据点归造成致命一击的一方所有, 玩家可对己方占领的据点下达指令</li>
+<li>被占领的据点生命值立刻回满, 其余资源保持不变</li>
+<li>无主据点不会自动反击</li>
+<li>可对周围单位进行补给</li>
+</ul>
+
+<h3>
+<a id="user-content-矿场-mine" class="anchor" href="#%E7%9F%BF%E5%9C%BA-mine" aria-hidden="true"><span class="octicon octicon-link"></span></a>矿场 <code>Mine</code>
+</h3>
+
+<ul>
+<li>陆地建筑</li>
+<li>金属资源点</li>
+<li>地面层</li>
+<li>通过运输船采集其中的资源</li>
+<li>无归属, 不可占领</li>
+</ul>
+
+<h3>
+<a id="user-content-油田-oilfield" class="anchor" href="#%E6%B2%B9%E7%94%B0-oilfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>油田 <code>Oilfield</code>
+</h3>
+
+<ul>
+<li>陆地建筑</li>
+<li>燃料资源点</li>
+<li>地面层</li>
+<li>通过运输船采集其中的资源</li>
+<li>无归属, 不可占领</li>
+</ul>
+
+<h3>
+<a id="user-content-潜艇-submarine" class="anchor" href="#%E6%BD%9C%E8%89%87-submarine" aria-hidden="true"><span class="octicon octicon-link"></span></a>潜艇 <code>Submarine</code>
+</h3>
+
+<ul>
+<li>可移动单位 <code>Unit</code> </li>
+<li>水下层</li>
+<li>不可造成火力伤害, 只能造成鱼雷伤害</li>
+<li>免疫火力伤害</li>
+<li>不可运输金属</li>
+</ul>
+
+<h3>
+<a id="user-content-驱逐舰-destroyer" class="anchor" href="#%E9%A9%B1%E9%80%90%E8%88%B0-destroyer" aria-hidden="true"><span class="octicon octicon-link"></span></a>驱逐舰 <code>Destroyer</code>
+</h3>
+
+<ul>
+<li>可移动单位</li>
+<li>水面层</li>
+<li>不可运输金属</li>
+</ul>
+
+<h3>
+<a id="user-content-航母-carrier" class="anchor" href="#%E8%88%AA%E6%AF%8D-carrier" aria-hidden="true"><span class="octicon octicon-link"></span></a>航母 <code>Carrier</code>
+</h3>
+
+<ul>
+<li>可移动单位</li>
+<li>水面层</li>
+<li>不可造成鱼雷伤害</li>
+<li>不可运输金属</li>
+<li>可补给各种单位, 包括飞机</li>
+<li>航母的攻击由舰载机发出, 故航母攻击为常数, 不受距离和射程影响</li>
+</ul>
+
+<h3>
+<a id="user-content-运输舰-cargo" class="anchor" href="#%E8%BF%90%E8%BE%93%E8%88%B0-cargo" aria-hidden="true"><span class="octicon octicon-link"></span></a>运输舰 <code>Cargo</code>
+</h3>
+
+<ul>
+<li>可移动单位</li>
+<li>水面层</li>
+<li>无攻击能力</li>
+<li>可运输金属</li>
+<li>可采集资源</li>
+<li>可补给除飞机外的单位</li>
+</ul>
+
+<h3>
+<a id="user-content-战斗机-fighter" class="anchor" href="#%E6%88%98%E6%96%97%E6%9C%BA-fighter" aria-hidden="true"><span class="octicon octicon-link"></span></a>战斗机 <code>Fighter</code>
+</h3>
+
+<ul>
+<li>可移动单位</li>
+<li>飞机 <code>Plane</code> </li>
+<li>空中层</li>
+<li>可以攻击潜艇</li>
+<li>免疫鱼雷伤害</li>
+<li>不可运输金属</li>
+</ul>
+
+<h3>
+<a id="user-content-侦察机-scout" class="anchor" href="#%E4%BE%A6%E5%AF%9F%E6%9C%BA-scout" aria-hidden="true"><span class="octicon octicon-link"></span></a>侦察机 <code>Scout</code>
+</h3>
+
+<ul>
+<li>可移动单位</li>
+<li>飞机</li>
+<li>空中层</li>
+<li>可以攻击潜艇</li>
+<li>免疫鱼雷伤害</li>
+<li>不可运输金属</li>
+</ul>
+
+<h2>
+<a id="user-content-指令" class="anchor" href="#%E6%8C%87%E4%BB%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>指令</h2>
+
+<h3>
+<a id="user-content-攻击attackpos--attackunit" class="anchor" href="#%E6%94%BB%E5%87%BBattackpos--attackunit" aria-hidden="true"><span class="octicon octicon-link"></span></a>攻击<code>AttackPos &amp; AttackUnit</code>
+</h3>
+
+<ul>
+<li>攻击, 维修, 补给互斥, 同一单位一回合内至多执行上述三个指令之一, 后发出的指令会覆盖前一个指令, 若后发出的指令是无效指令, 则仍保留前一个指令</li>
+<li>两种伤害类型
+
+<ul>
+<li>火力伤害 <code>FIRE</code> </li>
+<li>鱼雷伤害 <code>TORPEDO</code> </li>
+</ul>
+</li>
+<li>火力与鱼雷伤害叠加计算: <code>damage = fire_damage + torpedo_damage</code>
+</li>
+<li>伤害超出目标剩余生命值则 <code>damage = target_unit.health</code>
+</li>
+<li>无友军伤害</li>
+<li>成功发动一次攻击(<strong>不一定造成伤害</strong>, 可能未命中, 伤害被免疫或目标为友军), 则 <code>ammo -= ammo_once</code>
+</li>
+<li>当 <code>ammo &lt; ammo_once</code> 时无法攻击</li>
+<li>
+<code>AttackPos</code> 可能未命中, <code>AttackUnit</code> 必中</li>
+<li>
+<code>AttackPos</code> 有什么用? <strong>任性</strong> (雾霾很重的时候就有用啦= =)</li>
+<li>运输舰无攻击力</li>
+<li>潜艇只能造成和接受鱼雷伤害</li>
+<li>陆地建筑只能造成和受到火力伤害</li>
+<li>飞机对鱼雷伤害免疫</li>
+<li>
+<p>根据攻防双方距离 <code>distance</code> 以及攻方射程 <code>fire_range</code> 对理论攻击力 <code>attack</code> 进行修正</p>
+
+<pre><code>modifiedAttack = int((1 - float(distance - fire_range / 2) / (fire_range + 1)) * attack)
+</code></pre>
+
+<p>修正系数随fire_range的变化：
+<a href="///C://Users/Vone/git/teamstyle16/doc/fire_range.gif" target="_blank"><img src="///C://Users/Vone/git/teamstyle16/doc/fire_range.gif" alt="修正系数" style="max-width:100%;"></a></p>
+</li>
+<li><p>上式攻方射程 <code>fire_range</code> 为攻方在目标所在地图层的射程</p></li>
+<li>修正系数可能 &gt; 1</li>
+<li>航母修正系数恒为1</li>
+<li>将据点生命值减至0的一方即可占领据点</li>
+<li>被摧毁的目标信息将被删除, 之后无法再访问到已死亡单位信息</li>
+</ul>
+
+<h3>
+<a id="user-content-移动-move--改变目的地-changedest" class="anchor" href="#%E7%A7%BB%E5%8A%A8-move--%E6%94%B9%E5%8F%98%E7%9B%AE%E7%9A%84%E5%9C%B0-changedest" aria-hidden="true"><span class="octicon octicon-link"></span></a>移动 <code>Move</code> &amp; 改变目的地 <code>ChangeDest</code>
+</h3>
+
+<ul>
+<li>移动一格消耗1单位燃料</li>
+<li>飞机每回合至少消耗1单位燃料, 即
+
+<ul>
+<li>原地待命(盘旋), 消耗1单位燃料</li>
+<li>移动一格, 消耗1单位燃料</li>
+<li>移动n格, 消耗n单位燃料</li>
+</ul>
+</li>
+<li>飞机燃料 <code>fuel &lt;= 0</code> 时<strong>立即坠毁</strong>
+</li>
+<li>各单位每回合只能移动一次, 移动步数上限为 <code>speed</code>
+</li>
+<li>目的地不一定要设为本回合能到达的位置, 每回合单位会保持原来路线继续自动向目的地移动</li>
+<li>飞机无视地形移动</li>
+<li>其他可移动单位只能在海洋移动</li>
+<li>运输舰移动后停在到资源点距离为1的位置将<strong>自动采集</strong>资源, 移动路径经过资源点则不采集</li>
+<li><strong>不考虑移动过程中被其他单位阻挡</strong></li>
+<li>在移动结算阶段, 速度 <code>speed</code> 较大的单位先结算移动, 速度相等的单位结算顺序随机</li>
+<li>若单位在某回合即将停留在某位置, 但该位置已存在其他单位, 则该单位停在移动路径的上一格, 若仍被占据则继续向回退... 若移动路径全部被其他单位占据, 则无法移动, 原地停留</li>
+</ul>
+
+<h3>
+<a id="user-content-生产-produce" class="anchor" href="#%E7%94%9F%E4%BA%A7-produce" aria-hidden="true"><span class="octicon octicon-link"></span></a>生产 <code>Produce</code>
+</h3>
+
+<ul>
+<li>全局指令</li>
+<li>可同时生产多个单位</li>
+<li>生产消耗金属 <code>metal = cost</code>
+</li>
+<li>消耗的金属从基地扣除</li>
+<li>生产单位需要经过 <code>round = build_round</code>
+</li>
+<li>基地 <code>metal &lt; cost</code> 时, 加入生产队列失败</li>
+<li>达到人口上限不影响继续生产, 但经过 <code>build_round</code> 后, 单位出生时, 若出生后超过人口上限, 则无法造出单位, 卡在生产队列, 直至人口能容纳</li>
+<li>生产出的新单位不附带燃料和金属, 即 <code>fuel = metal = 0</code>, 生产出的飞机附带燃料 <code>fuel = 1</code> 确保其不会立即坠毁</li>
+<li>生产出新单位后基地自动附加补给操作, 对于运输舰, 基地为其补给燃料 <code>= Cargo.fuel_max / 2</code>, 其他尽力补给</li>
+<li>新出生的单位的出生地:
+
+<ul>
+<li>飞机: 基地上空空位随机出现</li>
+<li>其他: 到基地距离为1的位置随机出现</li>
+</ul>
+</li>
+<li>若无空位, 则单位会卡在生产列表</li>
+</ul>
+
+<h3>
+<a id="user-content-维修-fix" class="anchor" href="#%E7%BB%B4%E4%BF%AE-fix" aria-hidden="true"><span class="octicon octicon-link"></span></a>维修 <code>Fix</code>
+</h3>
+
+<ul>
+<li>基地特有指令</li>
+<li>每恢复1点生命所需金属<code>metal_per_health = 0.2</code>
+</li>
+<li>or 1单位金属可恢复生命值<code>health_per_metal = 5</code>
+</li>
+<li>维修模式为尽力补满目标生命值, 理论消耗金属 
+<code>metal = Ceiling(metal_per_health * (target_unit.health_max - target_unit.health))</code>
+</li>
+<li>剩余金属不足以补满目标生命值则耗尽所有剩余金属进行维修操作, 恢复血量
+<code>health_recovery = metal * health_per_metal</code>
+</li>
+<li>维修完毕自动附加补给操作, 且为尽力补给, 不可调补给量(但仍不会补给金属)</li>
+<li>维修距离:
+
+<ul>
+<li>飞机: 0, 即在基地正上方</li>
+<li>其他: 1, 即在基地周围</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-补给-supply" class="anchor" href="#%E8%A1%A5%E7%BB%99-supply" aria-hidden="true"><span class="octicon octicon-link"></span></a>补给 <code>Supply</code>
+</h3>
+
+<ul>
+<li>不同单位补给操作有不同的默认补给量, 提供了接口, 选手可根据实战需要灵活调整补给量</li>
+</ul>
+
+<div class="highlight highlight-cpp"><pre><span class="pl-k">void</span> <span class="pl-en">Supply</span>(<span class="pl-k">int</span> operand, <span class="pl-k">int</span> target, <span class="pl-k">int</span> fuel, <span class="pl-k">int</span> ammo, <span class="pl-k">int</span> metal);</pre></div>
+
+<ul>
+<li>基地默认尽力补给燃料和弹药, 默认不对外补给金属</li>
+<li>基地弹药无限, 其他单位不会向基地补给弹药</li>
+<li>据点默认尽力补给燃料, 弹药和金属</li>
+<li>运输舰对基地据点默认尽力补给燃料, 弹药和金属, 对其他单位默认不补给金属</li>
+<li>航母默认尽力补给燃料和弹药, 航母不可运输金属</li>
+<li>运输舰不可补给飞机</li>
+<li>补给距离:
+
+<ul>
+<li>对飞机补给: 0</li>
+<li>对其他单位补给: 0或1</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-采集-collect" class="anchor" href="#%E9%87%87%E9%9B%86-collect" aria-hidden="true"><span class="octicon octicon-link"></span></a>采集 <code>Collect</code>
+</h3>
+
+<ul>
+<li>被动指令, 移动到合适位置自动生效</li>
+<li>尽力采集</li>
+</ul>
+
+<h3>
+<a id="user-content-取消-cancel" class="anchor" href="#%E5%8F%96%E6%B6%88-cancel" aria-hidden="true"><span class="octicon octicon-link"></span></a>取消 <code>Cancel</code>
+</h3>
+
+<ul>
+<li>取消当前单位的所有指令</li>
+</ul>
+
+<h2>
+<a id="user-content-事件结算顺序" class="anchor" href="#%E4%BA%8B%E4%BB%B6%E7%BB%93%E7%AE%97%E9%A1%BA%E5%BA%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>事件结算顺序</h2>
+
+<p>同种类事件结算顺序随机(<strong>除移动</strong>)</p>
+
+<ul>
+<li>加入生产列表 <code>AddProductionEntry</code>
+</li>
+<li>攻击 <code>AttackPos</code> &amp; <code>AttackUnit</code>
+</li>
+<li>补给 <code>Supply</code>
+</li>
+<li>维修 <code>Fix</code>
+</li>
+<li>改变目的地 <code>ChangeDest</code>
+</li>
+<li>移动 <code>Move</code>
+</li>
+<li>单位出生 <code>Create</code>
+</li>
+<li>占领据点每回合加分</li>
+</ul>
+
+<h1>
+<a id="user-content-附表单位参数" class="anchor" href="#%E9%99%84%E8%A1%A8%E5%8D%95%E4%BD%8D%E5%8F%82%E6%95%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>附表：单位参数</h1>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>基地</th>
+<th>据点</th>
+<th>矿场</th>
+<th>油田</th>
+<th>潜艇</th>
+<th>驱逐舰</th>
+<th>航母</th>
+<th>运输舰</th>
+<th>战斗机</th>
+<th>侦察机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>视野</td>
+<td>4,10,8</td>
+<td>3,8,6</td>
+<td>None</td>
+<td>None</td>
+<td>6,5,3</td>
+<td>5,8,6</td>
+<td>3,8,8</td>
+<td>2,6,5</td>
+<td>1,7,8</td>
+<td>2,12,16</td>
+</tr>
+<tr>
+<td>射程</td>
+<td>0,7,5</td>
+<td>0,5,4</td>
+<td>None</td>
+<td>None</td>
+<td>5,5,0</td>
+<td>4,8,6</td>
+<td>0,8,6</td>
+<td>None</td>
+<td>1,3,4</td>
+<td>2,3,4</td>
+</tr>
+<tr>
+<td>生命值</td>
+<td>700</td>
+<td>300</td>
+<td>None</td>
+<td>None</td>
+<td>35</td>
+<td>70</td>
+<td>120</td>
+<td>80</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td>造价</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>7</td>
+<td>14</td>
+<td>30</td>
+<td>16</td>
+<td>14</td>
+<td>10</td>
+</tr>
+<tr>
+<td>燃料</td>
+<td>1000</td>
+<td>200</td>
+<td>None</td>
+<td>1000</td>
+<td>120</td>
+<td>150</td>
+<td>200</td>
+<td>300</td>
+<td>100</td>
+<td>120</td>
+</tr>
+<tr>
+<td>弹药</td>
+<td>INF</td>
+<td>300</td>
+<td>None</td>
+<td>None</td>
+<td>20</td>
+<td>40</td>
+<td>70</td>
+<td>120</td>
+<td>21</td>
+<td>5</td>
+</tr>
+<tr>
+<td>单次攻击消耗</td>
+<td>6</td>
+<td>4</td>
+<td>None</td>
+<td>None</td>
+<td>2</td>
+<td>4</td>
+<td>2</td>
+<td>None</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>金属</td>
+<td>200</td>
+<td>200</td>
+<td>500</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>50</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr>
+<td>速度</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>6</td>
+<td>7</td>
+<td>5</td>
+<td>11</td>
+<td>9</td>
+<td>10</td>
+</tr>
+<tr>
+<td>人口</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>攻击</td>
+<td>40,0</td>
+<td>30,0</td>
+<td>None</td>
+<td>None</td>
+<td>0,40</td>
+<td>25,25</td>
+<td>32,0</td>
+<td>None</td>
+<td>30,20</td>
+<td>18,7</td>
+</tr>
+<tr>
+<td>防御</td>
+<td>15,INF</td>
+<td>12,INF</td>
+<td>None</td>
+<td>None</td>
+<td>INF,7</td>
+<td>13,10</td>
+<td>16,10</td>
+<td>15,8</td>
+<td>10,INF</td>
+<td>7,INF</td>
+</tr>
+<tr>
+<td>生产所需回合数</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</article></body></html>
