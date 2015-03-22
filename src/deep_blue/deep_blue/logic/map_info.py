@@ -40,7 +40,7 @@ class MapInfo(object):
                 return element
         return None
 
-    def add_element(self, new_element):
+    def add_element(self, new_element, dead_index=[]):
         """Add a new element to current map"""
         for point in new_element.pos.region(level = new_element.level, range = 0):
             if point.inMap(self) is False:
@@ -48,7 +48,7 @@ class MapInfo(object):
             elif self.element(point) != None:
                 return None                     # 位置被占用
         index = choice(xrange(10000))           # 10000以内随机生成index
-        while index in self.elements.keys():    # 检查是否与已有index冲突
+        while index in self.elements.keys() or index in dead_index:    # 检查是否与已有index冲突
             index += 10000                      # 尝试解决冲突
         new_element.index = index
         self.elements[index] = new_element

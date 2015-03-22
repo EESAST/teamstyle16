@@ -201,7 +201,8 @@ class GameBody(object):
                                                       CARGO: 'Cargo', FIGHTER: 'Fighter', SCOUT: 'Scout'}[entry[0]]
                                         class_ = getattr(basic, class_name)
                                         new_element = class_(team_index, point)
-                                        index = self.map_info.add_element(new_element)
+                                        dead_index = [event.index for event in events if isinstance(event, Destroy)]
+                                        index = self.map_info.add_element(new_element, dead_index)
                                         self.populations[team_index] += new_element.population
                                         events.append(Create(index, entry[0], point))
                                         new_element.fuel = 1 if isinstance(new_element, Plane) else 0
