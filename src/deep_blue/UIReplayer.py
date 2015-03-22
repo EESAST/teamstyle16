@@ -508,9 +508,9 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.totalround = self.fileInfo.map_info().max_round
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.CenterWidget.Play(self.fileInfo)
 			self.CenterWidget.Initialize(self.fileInfo)
 			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
+			self.CenterWidget.Play(self.fileInfo)
 			self.isPaused = True
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
@@ -580,9 +580,9 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.totalround = self.fileInfo.map_info().max_round
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.CenterWidget.Play(self.fileInfo)
 			self.CenterWidget.Initialize(self.fileInfo)
 			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
+			self.CenterWidget.Play(self.fileInfo)
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
 			self.RoundLcdNumber.display(self.fileInfo.round())
