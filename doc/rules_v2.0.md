@@ -281,6 +281,9 @@ void Supply(int operand, int target, int fuel, int ammo, int metal);
 * 运输舰对基地据点默认尽力补给燃料, 弹药和金属, 对其他单位默认不补给金属
 * 航母默认尽力补给燃料和弹药, 航母不可运输金属
 * 运输舰不可补给飞机
+* 补给距离:
+    * 对飞机补给: 0
+    * 对其他单位补给: 0或1
 
 ### 采集 `Collect`
 
@@ -300,6 +303,7 @@ void Supply(int operand, int target, int fuel, int ammo, int metal);
 * 维修 `Fix`
 * 改变目的地 `ChangeDest`
 * 移动 `Move`
+* 单位出生 `Create`
 * 占领据点每回合加分
 
 
