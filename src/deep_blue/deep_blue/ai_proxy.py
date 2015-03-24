@@ -214,7 +214,7 @@ class AIProxy(threading.Thread):
 
     def __decode_commands(self, data):
         """Decode incoming data into list of commands"""
-        cmd_strs = data.split(',')
+        cmd_strs = data.strip().split(',')
         if not cmd_strs[-1]:  # last one is empty
             cmd_strs.pop()
 
