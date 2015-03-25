@@ -9,6 +9,7 @@ using namespace teamstyle16;
 using std::vector;
 using std::cout;
 using std::endl;
+using std::abs;
 
 #define INF 1000
 const char * GetTeamName()
