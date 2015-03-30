@@ -251,7 +251,7 @@ class MapMakerReplayer(QGraphicsView):
 			for i in fort_list:
 				self.map.add_element(basic.Fort(2, basic.Position(num[1][0] - i[0] - 1, i[1])))
 		elif num[0] == 1:
-			self.map.add_element(basic.Base(1, basic(basic.Position(base_island[0][0] + 1, num[1][1] - base_island[0][1] - 4),basic.Position(base_island[0][0] + 3, num[1][1] - base_island[0][1] - 2))))
+			self.map.add_element(basic.Base(1, basic.Rectangle(basic.Position(base_island[0][0] + 1, num[1][1] - base_island[0][1] - 4),basic.Position(base_island[0][0] + 3, num[1][1] - base_island[0][1] - 2))))
 			for i in range(len(sourcelist)):
 				if i < len(sourcelist) / 2:
 					self.map.add_element(basic.Mine(basic.Position(sourcelist[i][0], num[1][1] - sourcelist[i][1] - 1)))

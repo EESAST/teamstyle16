@@ -179,10 +179,6 @@ class MapMaker(QWidget, Ui_Mapmaker):
         self.CenterWidget.reset()
         self.RandomButton.setEnabled(True)
         self.create = False
-        self.num = [0 for x in range(11)]
-        self.num[1] = (30, 30)
-        self.population = 60
-        self.round = 200
 
     @pyqtSlot()
     def on_RandomButton_clicked(self):
@@ -194,6 +190,10 @@ class MapMaker(QWidget, Ui_Mapmaker):
     @pyqtSlot()
     def on_ExitButton_clicked(self):
         self.on_ClosePushButton_clicked()
+        self.num = [0 for x in range(11)]
+        self.num[1] = (30, 30)
+        self.population = 60
+        self.round = 200
         self.CargoLineEdit.setText("0")
         self.CarrierLineEdit.setText("0")
         self.ScoutLineEdit.setText("0")
@@ -274,10 +274,6 @@ class MapMaker(QWidget, Ui_Mapmaker):
                 pass
         self.CenterWidget.reset()
         self.RandomButton.setEnabled(True)
-        self.num = [0 for x in range(11)]
-        self.num[1] = (30, 30)
-        self.population = 60
-        self.round = 200
 
     @pyqtSlot(bool)
     def on_ChangeRadioButton_clicked(self, check):
