@@ -178,7 +178,7 @@ class Produce(Command):
             return False
         for element in game.map_info.elements.values():
             if isinstance(element, Base) and element.team == team:
-                if element.metal < int(PROPERTY[self.kind]['health_max'] * METAL_PER_HEALTH):
+                if element.metal < PROPERTY[self.kind]['cost']:
                     return False
                 break
         game.commands[team].append(self)
@@ -188,7 +188,7 @@ class Produce(Command):
     def result_event(self, game):
         for element in game.map_info.elements.values():
             if isinstance(element, Base) and element.team == self.team:
-                metal_need = int(PROPERTY[self.kind]['health_max'] * METAL_PER_HEALTH)
+                metal_need = PROPERTY[self.kind]['cost']
                 if element.metal < metal_need:  # No enough metal
                     return []
                 element.metal -= metal_need
