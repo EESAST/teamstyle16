@@ -110,7 +110,7 @@ class AIBattle(battle.Battle):
             for cmd in cmds[team]:
                 if not self.gamebody.set_command(team, cmd):
                     # Invalid command
-                    logger.error('AI %d provided an invalid command', team)
+                    logger.warning('AI %d provided an invalid command', team)
         logger.info('AIs commands feed')
 
     def run_until_end(self):
@@ -203,8 +203,10 @@ def main():
     v = args.verbose
     root = logging.getLogger()
     if not v:
-        root.setLevel(logging.WARNING)
+        root.setLevel(logging.ERROR)
     elif v == 1:
+        root.setLevel(logging.WARNING)
+    elif v == 2:
         root.setLevel(logging.INFO)
     else:
         root.setLevel(logging.DEBUG)
