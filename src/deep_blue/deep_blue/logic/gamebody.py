@@ -179,7 +179,7 @@ class GameBody(object):
             for entry in production_list:
                 entry[1] -= 1 if entry[1] > 0 else 0
                 if (entry[1] == 0 and
-                    self.populations[team_index] + PROPERTY[entry[0]]['population'] < self.max_population):
+                    self.populations[team_index] + PROPERTY[entry[0]]['population'] <= self.max_population):
                     for element in elements.values():
                         if element.kind == BASE and element.team == team_index:
                             if entry[0] == SUBMARINE:
