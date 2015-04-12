@@ -564,6 +564,15 @@ class Unit(UnitBase):
     def move(self, game):
         events = []
         if self.fuel <= 0:  # cannot move
+            # Collect if possible.
+            if self.kind == CARGO:
+                for point in self.pos.region(level = SURFACE, range = 1):
+                    near_element = game.map_info.element(point)
+                    if isinstance(near_element, Resource):
+                        collect_event = self.collect(near_element)
+                        events += collect_event
+                        game.scores[self.team] += (COLLECT_SCORE if (len(collect_event) != 0
+                            and max(collect_event[0].fuel, collect_event[0].metal) >= 10) else 0)
             return events
 
         # for i in range(len(nodes) - 1):
