@@ -66,8 +66,8 @@ def testgame_capture(game, events):
 def testgame_attackunit(game, events):
     test_state = -1
     for event in events:
-        if event.__class__.__name__ == 'AttackUnit' and not event.taregt in game.map_info.elements.values():
-            test_state = 2 if test_state == 1 - game.map_info.elements[event.index].team or test_state == 2 \
+        if event.__class__.__name__ == 'AttackUnit' and not (event.target in game.map_info.elements.values()):
+            test_state = 2 if (test_state == 1 - game.map_info.elements[event.index].team or test_state == 2) \
                 else game.map_info.elements[event.index].team
     if test_state >= 0:
         if test_state in [0, 1]:

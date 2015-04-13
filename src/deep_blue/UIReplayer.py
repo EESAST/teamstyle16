@@ -208,7 +208,8 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 	@pyqtSlot(QString)
 	def on_ReplayComboBox_currentIndexChanged(self, text):
 		fname = text
-		if fname and fname!= self.repFileName:
+		print "in combo:",fname
+		if fname and fname != self.repFileName:
 			try:
 				fileInfo = replayer.load(fname)
 			except:
@@ -288,8 +289,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				fileInfo = replayer.load(fname)
 			except:
 				if fname != "":
-					QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					print "in except! fname:",fname
+					#QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 			else:
+				print "Load file in else"
 				self.loadRepFile = True
 				self.ReplayComboBox.addItem(fname)
 				self.ReplayComboBox.setCurrentIndex(self.ReplayComboBox.count() - 1)
