@@ -153,7 +153,7 @@ class GameBody(object):
         operator = self.map_info.elements.get(cmd.operand)
         if operator is None:
             return False
-        if !isinstance(operator, UnitBase) or team != operator.team:
+        if not isinstance(operator, UnitBase) or team != operator.team:
             return False
         return cmd.add_to(self)
 
