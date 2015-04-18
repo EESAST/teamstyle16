@@ -62,6 +62,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.loadAi2 = False
 		self.totalround = 0
 		self.one_step = False
+		self.ignore_change = False
 
 		self.connect(self.CenterWidget, SIGNAL("unitSelected"), self.infoWidget2.newUnitInfo)
 		self.connect(self.CenterWidget, SIGNAL("mapSelected"), self.infoWidget2.newMapInfo)
@@ -207,6 +208,9 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	@pyqtSlot(QString)
 	def on_ReplayComboBox_currentIndexChanged(self, text):
+		if self.ignore_change:
+			self.ignore_change = False
+			return
 		fname = text
 		print "in combo:",fname
 		if fname and fname != self.repFileName:
@@ -290,9 +294,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			except:
 				if fname != "":
 					print "in except! fname:",fname
-					#QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 			else:
 				print "Load file in else"
+				self.ignore_change = True
 				self.loadRepFile = True
 				self.ReplayComboBox.addItem(fname)
 				self.ReplayComboBox.setCurrentIndex(self.ReplayComboBox.count() - 1)
