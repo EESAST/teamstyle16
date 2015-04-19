@@ -1,3 +1,4 @@
+from copy import deepcopy
 import logging
 
 from deep_blue import *
@@ -6,13 +7,14 @@ from sys import argv
 logging.getLogger().setLevel(logging.INFO)
 
 def main():
-    if len(argv) < 5:
-        print "Usage: %s <map> <skip_num> <ai0> <ai1> ..." % argv[0]
+    if len(argv) < 6:
+        print "Usage: %s <map> <save_dir> <skip_num> <ai0> <ai1> ..." % argv[0]
         return
 
     m = map_info.load(argv[1])
     skip_num = int(argv[2])
-    ais = argv[3:]
+    save_dir = argv[3]
+    ais = argv[4:]
 
     print "Map: %s" % argv[1]
     print "Skip: %d" % skip_num
@@ -32,8 +34,9 @@ def main():
                 continue
 
             print "(%d, %d)" % (i, j),
-            b = ai_battle.AIBattle(m, ai0_filename=ai0,
-                                      ai1_filename=ai1)
+            b = ai_battle.AIBattle(deepcopy(m),
+                                   ai0_filename=ai0,
+                                   ai1_filename=ai1)
             print "%s vs %s" % (b.team_name(0), b.team_name(1))
             b.run_until_end()
 
@@ -48,8 +51,9 @@ def main():
             print result
 
             # Save to file
-            b.save("%d_vs_%d.battle" % (i, j))
+            b.save("%s/%d_vs_%d.battle" % (save_dir,i, j))
 
+    print
     print "================== Summary =================="
     for result in summary:
         print result
