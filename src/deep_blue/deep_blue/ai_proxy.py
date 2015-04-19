@@ -60,6 +60,7 @@ class AIProxy(threading.Thread):
     """Proxy for AI"""
     def __init__(self, team_num, sock, battle, filename=None):
         threading.Thread.__init__(self)
+        self.bad = False
         self.lock = threading.RLock()
         self.team_num = team_num
         self.commands = []
@@ -163,9 +164,12 @@ class AIProxy(threading.Thread):
 
     def send_info(self, battle):
         """Send infomations to AI"""
-        self.logger.debug('Sending round info')
-        self.__send_round_info(battle)
-        self.logger.debug('Round Info sent')
+        if self.bad:
+            self.logger.debug('AI already exited, round info not sent')
+        else:
+            self.logger.debug('Sending round info')
+            self.__send_round_info(battle)
+            self.logger.debug('Round Info sent')
 
     def __run_ai(self, filename, port):
         try:
@@ -197,8 +201,7 @@ class AIProxy(threading.Thread):
             self.conn.sendall(self.__encode_stable_info(battle))
         except socket.error as e:
             self.logger.error('Failed to send stable info')
-            raise AIConnectError('Failed to send data to AI %d: %s' %
-                                 (self.team_num, e))
+            self.bad = True
 
     def __send_round_info(self, battle):
         """Send infos that change over rounds to the AI"""
@@ -209,8 +212,9 @@ class AIProxy(threading.Thread):
                               len(encoded_info))
             self.conn.sendall(encoded_info)
         except socket.error as e:
-            raise AIConnectError('Failed to send data to AI %d: %s' %
-                                 (self.team_num, e))
+            self.logger.error('Failed to send round info')
+            self.bad = True
+
 
     def __decode_commands(self, data):
         """Decode incoming data into list of commands"""
