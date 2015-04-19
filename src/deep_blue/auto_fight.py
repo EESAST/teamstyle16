@@ -12,8 +12,8 @@ def main():
         return
 
     m = map_info.load(argv[1])
-    skip_num = int(argv[2])
-    save_dir = argv[3]
+    save_dir = argv[2]
+    skip_num = int(argv[3])
     ais = argv[4:]
 
     print "Map: %s" % argv[1]
@@ -53,10 +53,13 @@ def main():
             # Save to file
             b.save("%s/%d_vs_%d.battle" % (save_dir,i, j))
 
+
     print
     print "================== Summary =================="
     for result in summary:
         print result
+
+    open(save_dir + '/' + 'summary.txt', 'w').write('\n'.join(summary))
 
 if __name__ == '__main__':
     main()
