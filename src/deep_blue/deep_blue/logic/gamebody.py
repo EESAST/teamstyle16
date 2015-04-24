@@ -110,8 +110,12 @@ class GameBody(object):
         vision = [[], [], []]
         for level in xrange(3):
             for element in self.elements(team).values():
-                vision[level].extend(element.pos.region(level, 
-                    max(0, element.sight_ranges[level] + self.map_info.weather)))
+                if element.kind == SCOUT:
+                    vision[level].extend(element.pos.region(level, 
+                        max(0, element.sight_ranges[level])))
+                else:
+                    vision[level].extend(element.pos.region(level, 
+                        max(0, element.sight_ranges[level] + self.map_info.weather)))
             vision[level] = set(vision[level])
             tmp = []
             for point in vision[level]:
