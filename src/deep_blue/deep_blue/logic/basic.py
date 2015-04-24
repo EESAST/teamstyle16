@@ -363,10 +363,10 @@ class Mine(Resource):
         super(Mine, self).__init__(pos, **kwargs)
         self.metal = metal
 
-    def globalGhost(self):
-        ghost = deepcopy(self)
-        ghost.metal = 0
-        return ghost
+    # def globalGhost(self):
+    #     ghost = deepcopy(self)
+    #     ghost.metal = 0
+    #     return ghost
 
     def ghost(self):
         return self
@@ -379,10 +379,10 @@ class Oilfield(Resource):
         super(Oilfield, self).__init__(pos, **kwargs)
         self.fuel = fuel
 
-    def globalGhost(self):
-        ghost = deepcopy(self)
-        ghost.fuel = 0
-        return ghost
+    # def globalGhost(self):
+    #     ghost = deepcopy(self)
+    #     ghost.fuel = 0
+    #     return ghost
 
     def ghost(self):
         return self
@@ -491,10 +491,10 @@ class Base(Building):
         result_events.append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
         return result_events
 
-    def globalGhost(self):
-        ghost = deepcopy(self)
-        ghost.fuel = ghost.ammo = ghost.metal = 0
-        return ghost
+    # def globalGhost(self):
+    #     ghost = deepcopy(self)
+    #     ghost.fuel = ghost.ammo = ghost.metal = 0
+    #     return ghost
 
     def repair(self, our_unit):
         """维修"""
@@ -532,11 +532,11 @@ class Fort(Building):
         result_events.append(Supply(self.index, our_unit.index, provides[0], provides[1], provide_metal))
         return result_events
 
-    def globalGhost(self):
-        ghost = deepcopy(self)
-        ghost.team = 2  # Hide team info
-        ghost.health = ghost.fuel = ghost.ammo = ghost.metal = 0
-        return ghost
+    # def globalGhost(self):
+    #     ghost = deepcopy(self)
+    #     ghost.team = 2  # Hide team info
+    #     ghost.health = ghost.fuel = ghost.ammo = ghost.metal = 0
+    #     return ghost
 
 class Unit(UnitBase):
     """可移动单位"""

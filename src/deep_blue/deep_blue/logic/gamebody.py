@@ -129,10 +129,10 @@ class GameBody(object):
         can_see = {}
         vision = self.vision(perspective)
         for index, element in self.map_info.elements.items():
-            if element.kind == BASE or element.kind == FORT or element.kind == MINE or element.kind == OILFIELD:
-                tmp = deepcopy(element)
-                setattr(tmp, 'visible', False)        # in fact, this element is not in sight
-                can_see[index] = tmp.globalGhost()
+            # if element.kind == BASE or element.kind == FORT or element.kind == MINE or element.kind == OILFIELD:
+            #     tmp = deepcopy(element)
+            #     # setattr(tmp, 'visible', False)        # in fact, this element is not in sight
+            #     can_see[index] = tmp.globalGhost()
             for point in element.pos.region(element.level, 0):
                 if point in vision[element.level]:
                     if hasattr(element, 'team') is False or element.team != perspective:     # 非己方
