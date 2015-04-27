@@ -634,6 +634,13 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QRadioButton" name="Team2Button">
+      <property name="text">
+       <string>队伍2</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QPushButton" name="NewButton">

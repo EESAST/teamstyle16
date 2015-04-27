@@ -236,7 +236,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
                 self.round = mapInfo.max_round
                 all_elements = mapInfo.elements
                 for element_ in all_elements.values():
-                    if element_.kind == 2 or element_.kind == 3:
+                    if element_.kind in range(4):
                         continue
                     if element_.team:
                         continue
@@ -245,7 +245,7 @@ class MapMaker(QWidget, Ui_Mapmaker):
                 for i in range(4, 10):
                     self.num[i] = 0
                 for element_ in all_elements.values():
-                    if element_.kind == 2 or element_.kind == 3:
+                    if element_.kind in range(4):
                         continue
                     if element_.team != 1:
                         continue
@@ -344,6 +344,11 @@ class MapMaker(QWidget, Ui_Mapmaker):
     def on_Team1Button_clicked(self, check):
         if check:
             self.CenterWidget.change_team = 1
+
+    @pyqtSlot(bool)
+    def on_Team2Button_clicked(self, check):
+        if check:
+            self.CenterWidget.change_team = 2
 
     @pyqtSlot()
     def on_NewButton_clicked(self):

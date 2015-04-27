@@ -423,7 +423,7 @@ class MapMakerReplayer(QGraphicsView):
 				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
 					return
 				if self.map.map_type(c_pos[0], c_pos[1]):
-					self.map.add_element(basic.Fort(2, basic.Position(c_pos[0], c_pos[1], 1)))
+					self.map.add_element(basic.Fort(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
 
 			elif self.RightState == 3:
 				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
