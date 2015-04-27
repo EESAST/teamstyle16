@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Mapmaker.ui'
 #
-# Created: Sat Mar 14 00:17:52 2015
+# Created: Sat Apr 25 16:34:03 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -252,6 +252,9 @@ class Ui_Mapmaker(object):
         self.Team1Button = QtGui.QRadioButton(self.layoutWidget4)
         self.Team1Button.setObjectName(_fromUtf8("Team1Button"))
         self.verticalLayout_2.addWidget(self.Team1Button)
+        self.Team2Button = QtGui.QRadioButton(self.layoutWidget4)
+        self.Team2Button.setObjectName(_fromUtf8("Team2Button"))
+        self.verticalLayout_2.addWidget(self.Team2Button)
         self.NewButton = QtGui.QPushButton(Mapmaker)
         self.NewButton.setGeometry(QtCore.QRect(10, 90, 75, 23))
         self.NewButton.setObjectName(_fromUtf8("NewButton"))
@@ -337,6 +340,7 @@ class Ui_Mapmaker(object):
         self.RandomButton.setText(_translate("Mapmaker", "随机生成", None))
         self.Team0Button.setText(_translate("Mapmaker", "队伍0", None))
         self.Team1Button.setText(_translate("Mapmaker", "队伍1", None))
+        self.Team2Button.setText(_translate("Mapmaker", "队伍2", None))
         self.NewButton.setText(_translate("Mapmaker", "新建", None))
         self.ClosePushButton.setText(_translate("Mapmaker", "关闭", None))
 
