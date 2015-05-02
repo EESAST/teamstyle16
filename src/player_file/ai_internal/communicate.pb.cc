@@ -249,7 +249,7 @@ void protobuf_AddDesc_communicate_2eproto() {
     "\002(\005\"4\n\003Map\022\r\n\005x_max\030\001 \002(\005\022\r\n\005y_max\030\002 \002(\005"
     "\022\017\n\007terrain\030\003 \003(\005\"\241\001\n\nStableInfo\022)\n\003map\030"
     "\001 \002(\0132\034.teamstyle16.communicate.Map\022\020\n\010t"
-    "eam_num\030\002 \002(\005\022\017\n\007weather\030\003 \001(\010\022\030\n\020popula"
+    "eam_num\030\002 \002(\005\022\017\n\007weather\030\003 \001(\005\022\030\n\020popula"
     "tion_limit\030\004 \001(\005\022\023\n\013round_limit\030\005 \001(\005\022\026\n"
     "\016time_per_round\030\006 \001(\002\"\362\001\n\tRoundInfo\022\r\n\005r"
     "ound\030\001 \002(\005\022\r\n\005score\030\002 \003(\005\022\022\n\npopulation\030"
@@ -1786,7 +1786,7 @@ void StableInfo::SharedCtor() {
   _cached_size_ = 0;
   map_ = NULL;
   team_num_ = 0;
-  weather_ = false;
+  weather_ = 0;
   population_limit_ = 0;
   round_limit_ = 0;
   time_per_round_ = 0;
@@ -1830,7 +1830,7 @@ void StableInfo::Clear() {
       if (map_ != NULL) map_->::teamstyle16::communicate::Map::Clear();
     }
     team_num_ = 0;
-    weather_ = false;
+    weather_ = 0;
     population_limit_ = 0;
     round_limit_ = 0;
     time_per_round_ = 0;
@@ -1874,13 +1874,13 @@ bool StableInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bool weather = 3;
+      // optional int32 weather = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_weather:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &weather_)));
           set_has_weather();
         } else {
@@ -1967,9 +1967,9 @@ void StableInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->team_num(), output);
   }
 
-  // optional bool weather = 3;
+  // optional int32 weather = 3;
   if (has_weather()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->weather(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->weather(), output);
   }
 
   // optional int32 population_limit = 4;
@@ -2007,9 +2007,9 @@ void StableInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->team_num(), target);
   }
 
-  // optional bool weather = 3;
+  // optional int32 weather = 3;
   if (has_weather()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->weather(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->weather(), target);
   }
 
   // optional int32 population_limit = 4;
@@ -2052,9 +2052,11 @@ int StableInfo::ByteSize() const {
           this->team_num());
     }
 
-    // optional bool weather = 3;
+    // optional int32 weather = 3;
     if (has_weather()) {
-      total_size += 1 + 1;
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->weather());
     }
 
     // optional int32 population_limit = 4;
