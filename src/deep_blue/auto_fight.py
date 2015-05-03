@@ -51,7 +51,9 @@ def main():
             print result
 
             # Save to file
-            b.save("%s/%d_vs_%d.battle" % (save_dir,i, j))
+            b.save("%s/%d_vs_%d.battle" % (save_dir, i, j))
+            # Save result
+            open("%s/%d_vs_%d.txt" % (save_dir, i, j)).write(result)
 
 
     print
