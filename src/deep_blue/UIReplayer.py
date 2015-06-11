@@ -10,7 +10,7 @@ from UIInfoWidget2 import *
 from UIHelpdlg import *
 from ReplayEvent import *
 from lib.SmallMap import *
-from platform import *
+from deep_blue import *
 from functools import partial
 from ProductionEvent import *
 
@@ -61,55 +61,98 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.loadAi1 = False
 		self.loadAi2 = False
 		self.totalround = 0
+		self.one_step = False
+		self.ignore_change = False
 
 		self.connect(self.CenterWidget, SIGNAL("unitSelected"), self.infoWidget2.newUnitInfo)
 		self.connect(self.CenterWidget, SIGNAL("mapSelected"), self.infoWidget2.newMapInfo)
 		self.connect(self, SIGNAL("toPause()"),  partial(self.PlayPushButton.setChecked, False), Qt.QueuedConnection)
 		self.CenterWidget.moveAnimEnd.connect(self.on_animEnd)
 		self.connect(self.SmallMap, SIGNAL("areaChanged(QPoint)"), self.CenterWidget.setMapArea)
+		self.connect(self.CenterWidget, SIGNAL("Scaled"), self.SmallMap.ScaleMap)
 
 		self.updateUi()
 
 
 	def updateUi(self):
 		if self.loadRepFile:
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 3
 			self.CreateWidget.team1.HUMAN_REPLAY = 3
 			self.CreateWidget.team2.HUMAN_REPLAY = 3
 		elif self.loadMap and self.loadAi1 and self.HumanCheckBox2.isChecked():
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 1
 			self.CreateWidget.team1.HUMAN_REPLAY = 1
 			self.CreateWidget.team2.HUMAN_REPLAY = 1
 		elif self.loadMap and self.loadAi2 and self.HumanCheckBox1.isChecked():
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 0
 			self.CreateWidget.team1.HUMAN_REPLAY = 0
 			self.CreateWidget.team2.HUMAN_REPLAY = 0
 		elif self.loadMap and self.HumanCheckBox1.isChecked() and self.HumanCheckBox2.isChecked():
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 2
 			self.CreateWidget.team1.HUMAN_REPLAY = 2
 			self.CreateWidget.team2.HUMAN_REPLAY = 2
 		elif self.loadMap and self.loadAi2 and self.loadAi1:
+			self.one_step = False
 			self.CenterWidget.HUMAN_REPLAY = 4
 			self.CreateWidget.team1.HUMAN_REPLAY = 4
 			self.CreateWidget.team2.HUMAN_REPLAY = 4
-		if self.CenterWidget.HUMAN_REPLAY != -1:
+		elif self.loadMap and self.loadAi1 and self.ModeCheck2.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 4
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 4
+			self.CreateWidget.team2.HUMAN_REPLAY = 4
+		elif self.loadMap and self.ModeCheck1.isChecked() and self.ModeCheck2.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 4
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 4
+			self.CreateWidget.team2.HUMAN_REPLAY = 4
+		elif self.loadMap and self.loadAi2 and self.ModeCheck1.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 4
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 4
+			self.CreateWidget.team2.HUMAN_REPLAY = 4
+		elif self.loadMap and self.HumanCheckBox1.isChecked() and self.ModeCheck2.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 0
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 0
+			self.CreateWidget.team2.HUMAN_REPLAY = 0
+		elif self.loadMap and self.HumanCheckBox2.isChecked() and self.ModeCheck1.isChecked():
+			self.CenterWidget.HUMAN_REPLAY = 1
+			self.one_step = True
+			self.CreateWidget.team1.HUMAN_REPLAY = 1
+			self.CreateWidget.team2.HUMAN_REPLAY = 1
+		if self.CenterWidget.HUMAN_REPLAY != -1 and not self.one_step:
 			self.PlayPushButton.setCheckable(True)
 			self.PlayPushButton.setEnabled(True)
+			self.OneStepButton.setCheckable(True)
+			self.OneStepButton.setEnabled(True)
+		elif self.CenterWidget.HUMAN_REPLAY != -1 and self.one_step:
+			self.PlayPushButton.setCheckable(False)
+			self.PlayPushButton.setEnabled(False)
+			self.OneStepButton.setCheckable(True)
+			self.OneStepButton.setEnabled(True)
 		else:
 			self.PlayPushButton.setCheckable(False)
 			self.PlayPushButton.setEnabled(False)
+			self.OneStepButton.setCheckable(False)
+			self.OneStepButton.setEnabled(False)
 		if self.CenterWidget.HUMAN_REPLAY in [3, 4]:
 			self.Frog2RadioButton.setEnabled(self.started)
 			self.Frog1RadioButton.setEnabled(self.started)
+			self.GodVisionRadioButton.setEnabled(self.started)
 		self.OpenFileButton1.setEnabled(not self.started)
 		self.OpenFileButton2.setEnabled(not self.started)
 		self.LoadFilePushButton.setEnabled(not self.started)
 		self.LoadMapPushButton.setEnabled(not self.started)
 		self.HumanCheckBox1.setEnabled(not self.started)
 		self.HumanCheckBox2.setEnabled(not self.started)
+		self.ModeCheck1.setEnabled(not self.started)
+		self.ModeCheck2.setEnabled(not self.started)
 		self.StopPushButton.setEnabled(self.started)
-		self.UpPushButton.setEnabled(self.started)
-		self.DownPushButton.setEnabled(self.started)
 		self.RoundSlider.blockSignals(not self.started)
 		if self.CenterWidget.HUMAN_REPLAY in [0,1,2,4]:
 			self.RoundSlider.blockSignals(True)
@@ -131,7 +174,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	@pyqtSlot(int)
 	def on_SpeedSlider_valueChanged(self, speed):
-		self.CenterWidget.TIME_PER_STEP = 100 - speed * 1
+		self.CenterWidget.TIME_PER_STEP = 100 - speed * 0.8
 
 	@pyqtSlot(QString)
 	def on_OpenFileComboBox1_currentIndexChanged(self, text):
@@ -145,6 +188,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox1.setChecked(False)
+			self.ModeCheck1.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot(QString)
@@ -159,12 +203,17 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox2.setChecked(False)
+			self.ModeCheck2.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot(QString)
 	def on_ReplayComboBox_currentIndexChanged(self, text):
+		if self.ignore_change:
+			self.ignore_change = False
+			return
 		fname = text
-		if fname and fname!= self.repFileName:
+		print "in combo:",fname
+		if fname and fname != self.repFileName:
 			try:
 				fileInfo = replayer.load(fname)
 			except:
@@ -211,9 +260,12 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 	def on_ExitButton_clicked(self):
 		self.HumanCheckBox1.setChecked(False)
 		self.HumanCheckBox2.setChecked(False)
+		self.ModeCheck1.setChecked(False)
+		self.ModeCheck2.setChecked(False)
 		self.isPaused = False
 		self.started = False
 		self.playing = False
+		self.one_step = False
 		self.fileInfo = None
 		self.mapInfo = None
 		self.repFileName = ""
@@ -226,10 +278,10 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 		self.loadAi1 = False
 		self.loadAi2 = False
 		self.on_StopPushButton_clicked()
-		self.MapComboBox.setCurrentIndex(-1)
-		self.ReplayComboBox.setCurrentIndex(-1)
-		self.OpenFileComboBox1.setCurrentIndex(-1)
-		self.OpenFileComboBox2.setCurrentIndex(-1)
+		self.MapComboBox.clear()
+		self.ReplayComboBox.clear()
+		self.OpenFileComboBox1.clear()
+		self.OpenFileComboBox2.clear()
 		self.updateUi()
 		self.willreturn.emit()
 
@@ -241,8 +293,11 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				fileInfo = replayer.load(fname)
 			except:
 				if fname != "":
+					print "in except! fname:",fname
 					QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
 			else:
+				print "Load file in else"
+				self.ignore_change = True
 				self.loadRepFile = True
 				self.ReplayComboBox.addItem(fname)
 				self.ReplayComboBox.setCurrentIndex(self.ReplayComboBox.count() - 1)
@@ -296,6 +351,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox1.setChecked(False)
+			self.ModeCheck1.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot()
@@ -311,6 +367,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.fileInfo = None
 			self.repFileName = ""
 			self.HumanCheckBox2.setChecked(False)
+			self.ModeCheck2.setChecked(False)
 			self.updateUi()
 
 	@pyqtSlot(int)
@@ -323,7 +380,22 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.OpenFileComboBox1.setCurrentIndex(-1)
 			self.aiFileName1 = ""
 			self.loadAi1 = False
+			self.ModeCheck1.setChecked(False)
 		self.updateUi()
+
+	@pyqtSlot(int)
+	def on_ModeCheck1_stateChanged(self):
+		if self.ModeCheck1.isChecked():
+			self.ReplayComboBox.setCurrentIndex(-1)
+			self.loadRepFile = False
+			self.fileInfo = None
+			self.repFileName = ""
+			self.OpenFileComboBox1.setCurrentIndex(-1)
+			self.aiFileName1 = ""
+			self.loadAi1 = False
+			self.HumanCheckBox1.setChecked(False)
+		self.updateUi()
+
 
 	@pyqtSlot(int)
 	def on_HumanCheckBox2_stateChanged(self):
@@ -335,6 +407,20 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.OpenFileComboBox2.setCurrentIndex(-1)
 			self.aiFileName2 = ""
 			self.loadAi2 = False
+			self.ModeCheck2.setChecked(False)
+		self.updateUi()
+
+	@pyqtSlot(int)
+	def on_ModeCheck2_stateChanged(self):
+		if self.ModeCheck2.isChecked():
+			self.ReplayComboBox.setCurrentIndex(-1)
+			self.loadRepFile = False
+			self.fileInfo = None
+			self.repFileName = ""
+			self.OpenFileComboBox2.setCurrentIndex(-1)
+			self.aiFileName2 = ""
+			self.loadAi2 = False
+			self.HumanCheckBox2.setChecked(False)
 		self.updateUi()
 
 	@pyqtSlot(bool)
@@ -355,6 +441,91 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			self.CenterWidget.frogIndex = -1
 			self.CenterWidget.resetFrog()
 
+	@pyqtSlot()
+	def on_OneStepButton_clicked(self):
+		if self.started:
+			if self.CenterWidget.HUMAN_REPLAY == 3:
+					if self.CenterWidget.nowRound == self.fileInfo.max_round:
+						return
+			self.PlayPushButton.setChecked(False)
+			self.CreateWidget.team1.Initialize(self.fileInfo)
+			self.CreateWidget.team2.Initialize(self.fileInfo)
+			if not self.isPaused:
+				self.isPaused = True
+			self.CenterWidget.Play(self.fileInfo)
+			self.isPaused = True
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
+			self.infoWidget1.setText(self.fileInfo)
+			self.infoWidget2.updateInfo(self.fileInfo)
+			self.RoundLcdNumber.display(self.fileInfo.round())
+			self.OneStepButton.setEnabled(False)
+		else:
+			self.updateUi()
+			if self.loadMap and not self.mapInfo:
+				try:
+					mapInfo = map_info.load(self.mapFileName)
+				except:
+					if self.mapFileName != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				else:
+					self.mapInfo = mapInfo
+			if self.loadRepFile and not self.fileInfo:
+				try:
+					fileInfo = replayer.load(self.repFileName)
+				except:
+					if self.repFileName != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				else:
+					self.fileInfo = fileInfo
+			if self.CenterWidget.HUMAN_REPLAY == 4:
+				if self.ModeCheck2.isChecked() and self.loadAi1:
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, timeout = None, ai0_filename = str(self.aiFileName1), fixed_port = True)
+				elif self.ModeCheck1.isChecked() and self.loadAi2:
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, timeout = None, ai1_filename = str(self.aiFileName2), fixed_port = True)
+				elif self.ModeCheck1.isChecked() and self.ModeCheck2.isChecked():
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, timeout = None, fixed_port = True)
+				else:
+					self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
+				self.GodVisionRadioButton.setChecked(True)
+			elif self.CenterWidget.HUMAN_REPLAY == 0:
+				if self.ModeCheck2.isChecked():
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, timeout = None, fixed_port = True)
+				else:
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName2))
+			elif self.CenterWidget.HUMAN_REPLAY == 1:
+				if self.ModeCheck1.isChecked():
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, timeout = None, fixed_port = True, ai_team_num = 0)
+				else:
+					self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1), 0)
+			elif self.CenterWidget.HUMAN_REPLAY == 2:
+				QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("人人对战即将推出，敬请期待"), QMessageBox.Ok)
+				self.HumanCheckBox2.setChecked(False)
+				self.HumanCheckBox1.setChecked(False)
+				self.on_StopPushButton_clicked()
+			else:
+				self.GodVisionRadioButton.setChecked(True)
+			self.started = True
+			if self.CenterWidget.HUMAN_REPLAY == 3:
+				self.totalround = self.fileInfo.max_round
+				self.RoundSlider.setRange(0,self.totalround)
+				self.fileInfo.goto(0)
+				self.synRoundSlider()
+			else:
+				self.totalround = self.fileInfo.map_info().max_round
+			self.CreateWidget.team1.Initialize(self.fileInfo)
+			self.CreateWidget.team2.Initialize(self.fileInfo)
+			self.CenterWidget.Initialize(self.fileInfo)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
+			self.CenterWidget.Play(self.fileInfo)
+			self.isPaused = True
+			self.infoWidget1.setText(self.fileInfo)
+			self.infoWidget2.updateInfo(self.fileInfo)
+			self.RoundLcdNumber.display(self.fileInfo.round())
+			self.updateUi()
+			self.OneStepButton.setEnabled(False)
+
 	@pyqtSlot(bool)
 	def on_PlayPushButton_toggled(self, trigger):
 		if self.started:
@@ -365,8 +536,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 						return
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
-				self.CenterWidget.Play(self.fileInfo)
-				self.SmallMap.Initialize(self.fileInfo)
+				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 				self.infoWidget1.setText(self.fileInfo)
 				self.infoWidget2.updateInfo(self.fileInfo)
 				self.RoundLcdNumber.display(self.fileInfo.round())
@@ -375,27 +545,51 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 				self.isPaused = True
 
 		else:
+			self.updateUi()
+			if self.loadMap and not self.mapInfo:
+				try:
+					mapInfo = map_info.load(self.mapFileName)
+				except:
+					if self.mapFileName != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				else:
+					self.mapInfo = mapInfo
+			if self.loadRepFile and not self.fileInfo:
+				try:
+					fileInfo = replayer.load(self.repFileName)
+				except:
+					if self.repFileName != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				else:
+					self.fileInfo = fileInfo
 			if self.CenterWidget.HUMAN_REPLAY == 4:
 				self.fileInfo = ai_battle.AIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, str(self.aiFileName1), str(self.aiFileName2))
+				self.GodVisionRadioButton.setChecked(True)
 			elif self.CenterWidget.HUMAN_REPLAY == 0:
 				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName2))
 			elif self.CenterWidget.HUMAN_REPLAY == 1:
-				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1))
+				self.fileInfo = human_ai_battle.HumanAIBattle(self.mapInfo, DEFAULT_PORT, DEFAULT_TIMEOUT, None, str(self.aiFileName1), 0)
 			elif self.CenterWidget.HUMAN_REPLAY == 2:
 				QMessageBox.information(self, QString.fromUtf8("抱歉"), QString.fromUtf8("人人对战即将推出，敬请期待"), QMessageBox.Ok)
 				self.HumanCheckBox2.setChecked(False)
 				self.HumanCheckBox1.setChecked(False)
 				self.on_StopPushButton_clicked()
+			else:
+				self.GodVisionRadioButton.setChecked(True)
 			self.started = True
 			if self.CenterWidget.HUMAN_REPLAY == 3:
 				self.totalround = self.fileInfo.max_round
 				self.RoundSlider.setRange(0,self.totalround)
 				self.fileInfo.goto(0)
 				self.synRoundSlider()
-			self.CenterWidget.Initialize(self.fileInfo)
+			else:
+				self.totalround = self.fileInfo.map_info().max_round
 			self.CreateWidget.team1.Initialize(self.fileInfo)
 			self.CreateWidget.team2.Initialize(self.fileInfo)
-			self.SmallMap.Initialize(self.fileInfo)
+			self.CenterWidget.Initialize(self.fileInfo)
+			self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 			self.CenterWidget.Play(self.fileInfo)
 			self.infoWidget1.setText(self.fileInfo)
 			self.infoWidget2.updateInfo(self.fileInfo)
@@ -404,6 +598,7 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 
 	def on_animEnd(self):
 		self.CenterWidget.TerminateAni()
+		self.OneStepButton.setEnabled(True)
 		if self.CenterWidget.changed:
 			self.CenterWidget.setMap()
 			self.CenterWidget.setUnit()
@@ -411,36 +606,39 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			if self.CenterWidget.frogIndex != -1:
 				self.CenterWidget.setFrog(self.frogIndex)
 			self.CenterWidget.changed = False
-		print "over animation"
 		if self.isPaused:
 			return
-		if self.CenterWidget.nowRound == self.totalround:
-			sts = None
-			if self.fileInfo.state() == 0: 
-				sts = "0队获胜"
-			elif self.fileInfo.state() == 1:
-				sts = "1队获胜"
-			else:
-				sts = "平局"
-			QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
-			if self.CenterWidget.HUMAN_REPLAY != 3:
-				choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
-				if choice == QMessageBox.Yes():
-					saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
-					try:
-						battle.Battle.save(self.fileInfo, saveFile)
-					except:
-						if saveFile != "":
-							QMessageBox.critical(self, QString.fromUtf8("文件加载错误"), QString.fromUtf8("加载中出现问题,加载失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+		print "now:",self.CenterWidget.nowRound, "total is:		",self.totalround," state:",self.fileInfo.state()
+		if self.CenterWidget.HUMAN_REPLAY == 3:
+			if self.CenterWidget.nowRound == self.totalround:
+				sts = None
+				if self.fileInfo.state() == 0: 
+					sts = "0队获胜"
+				elif self.fileInfo.state() == 1:
+					sts = "1队获胜"
 				else:
-					pass
-			self.on_StopPushButton_clicked()
-			return
-		self.synRoundSlider()
-		self.CenterWidget.Play(self.fileInfo)
-		self.SmallMap.Initialize(self.fileInfo)
+					sts = "平局"
+				QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
+				self.on_StopPushButton_clicked()
+				return
+		else:
+			if self.fileInfo.state() in [0, 1, 2] or self.CenterWidget.nowRound == self.totalround:
+				sts = None
+				if self.fileInfo.state() == 0: 
+					sts = "0队获胜"
+				elif self.fileInfo.state() == 1:
+					sts = "1队获胜"
+				else:
+					sts = "平局"
+				QMessageBox.information(self, QString.fromUtf8("游戏结束"), QString.fromUtf8(sts+" "+str(self.fileInfo.score(0))+":"+str(self.fileInfo.score(1))), QMessageBox.Ok)
+				self.on_StopPushButton_clicked()
+				return
+		if self.CenterWidget.HUMAN_REPLAY == 3:
+			self.synRoundSlider()
 		self.CreateWidget.team1.Initialize(self.fileInfo)
 		self.CreateWidget.team2.Initialize(self.fileInfo)
+		self.CenterWidget.Play(self.fileInfo)
+		self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 		self.infoWidget2.updateInfo(self.fileInfo)
 		self.infoWidget1.setText(self.fileInfo)
 		self.RoundLcdNumber.display(self.fileInfo.round())
@@ -451,39 +649,51 @@ class AIReplayerWidget(QWidget, Ui_AIReplayer):
 			if round_ != self.CenterWidget.nowRound:
 				self.CenterWidget.mouseUnit.setVisible(False)
 				self.fileInfo.goto(round_)
-				self.CenterWidget.nowRound = round_
-				self.CenterWidget.Initialize(self.fileInfo)
 				self.CreateWidget.team1.Initialize(self.fileInfo)
 				self.CreateWidget.team2.Initialize(self.fileInfo)
-				self.SmallMap.Initialize(self.fileInfo)
+				self.CenterWidget.nowRound = round_
 				if not self.isPaused:
 					self.CenterWidget.Play(self.fileInfo)
+				self.CenterWidget.Initialize(self.fileInfo)
+				self.SmallMap.Initialize(self.fileInfo, self.CenterWidget.frogIndex)
 				self.RoundLcdNumber.display(round_)
 				self.infoWidget1.setText(self.fileInfo)
 				self.infoWidget2.updateInfo(self.fileInfo)
 
 	@pyqtSlot()
-	def on_UpPushButton_clicked(self):
-		self.CenterWidget.scale(1.1,1.1)
-
-	@pyqtSlot()
-	def on_DownPushButton_clicked(self):
-		self.CenterWidget.scale(0.9,0.9)
-
-	@pyqtSlot()
 	def on_StopPushButton_clicked(self):
-		self.CenterWidget.reset()
+		self.started = False
+		self.isPaused = True
+		if self.CenterWidget.HUMAN_REPLAY != 3 and self.CenterWidget.HUMAN_REPLAY != -1:
+			choice = QMessageBox.question(self, QString.fromUtf8("储存"), QString.fromUtf8("您想储存回放文件吗？"), QMessageBox.Yes|QMessageBox.No)
+			if choice == QMessageBox.Yes:
+				saveFile = QFileDialog.getSaveFileName(self, QString.fromUtf8("储存回放文件"), REPLAY_FILE_DIR, "replay files(*.battle)")
+				try:
+					self.fileInfo.map_info().max_round = self.CenterWidget.nowRound
+					battle.Battle.save(self.fileInfo, saveFile)
+				except:
+					if saveFile != "":
+						QMessageBox.critical(self, QString.fromUtf8("文件储存错误"), QString.fromUtf8("储存中出现问题,储存失败。"), QMessageBox.Ok, QMessageBox.NoButton)
+			else:
+				pass
+		self.isPaused = False
+		self.mapInfo = None
+		self.CenterWidget.scale(1.0/self.CenterWidget.scale_num, 1.0/self.CenterWidget.scale_num)
+		self.CenterWidget.scale_num = 1.0
 		self.SmallMap.reset()
 		self.CreateWidget.team1.reset()
 		self.CreateWidget.team2.reset()
 		self.infoWidget1.reset()
 		self.infoWidget2.resetUnitInfo()
-		self.started = False
+		self.infoWidget2.reset()
 		self.PlayPushButton.setCheckable(False)
 		self.PlayPushButton.setEnabled(False)
 		self.RoundSlider.setRange(0, 0)
 		self.RoundLcdNumber.display(0)
+		self.fileInfo = None
 		self.updateUi()
+		self.CenterWidget.reset()
+		
 
 	@pyqtSlot()
 	def on_HelpButton_clicked(self):

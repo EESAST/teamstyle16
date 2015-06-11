@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'helpdlg2.ui'
 #
-# Created: Wed Sep 24 17:01:26 2014
+# Created: Sun Mar 15 19:04:33 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,9 +26,9 @@ except AttributeError:
 class Ui_HelpDialog(object):
     def setupUi(self, HelpDialog):
         HelpDialog.setObjectName(_fromUtf8("HelpDialog"))
-        HelpDialog.resize(400, 168)
+        HelpDialog.resize(400, 151)
         self.textBrowser = QtGui.QTextBrowser(HelpDialog)
-        self.textBrowser.setGeometry(QtCore.QRect(10, 10, 381, 151))
+        self.textBrowser.setGeometry(QtCore.QRect(10, 10, 381, 131))
         self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
 
         self.retranslateUi(HelpDialog)
@@ -41,11 +41,9 @@ class Ui_HelpDialog(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">使用方法：</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -首先请选择地图的行列大小。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -选定地形/单位然后在地图上点击即可创建地形/单位。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -选中删除地形/单位然后在已有地形/单位的格子上点击可以将其删除。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -可以通过下拉菜单选择对称性。本游戏中必须要有一定的对称性以保持平衡。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -可以通过随机生成按钮来生成新地图。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -可以打开已有地图进行编辑，一定记得保存。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    </p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -首先请选择地图的规模，最大回合数，最大人口数和天气</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -如果要随机生成，请选择陆地比例，资源数，对称性以及各单位数，然后点击随机生成。</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -如果要手动构建，请单击新建。</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -无论随机生成还是手动，均可以选择右下方的单项选择键后右键点击的方式对地图进行修改。</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -一定记得保存。</p></body></html>", None))
 

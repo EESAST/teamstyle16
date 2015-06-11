@@ -1,0 +1,1657 @@
+{
+  "gamebody": "{\"__class__\":\"GameBody\",\"__module__\":\"deep_blue.logic.gamebody\",\"commands\":[[],[]],\"map_info\":{\"__class__\":\"MapInfo\",\"__module__\":\"deep_blue.logic.map_info\",\"elements\":{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":0,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":0,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"464\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":295,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":464,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":165,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"2532\":{\"__class__\":\"Destroyer\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":40,\"ammo_max\":40,\"ammo_once\":4,\"attacks\":[22,11],\"build_round\":3,\"cost\":14,\"defences\":[13,10],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1},\"fire_ranges\":[2,8,6],\"fuel\":143,\"fuel_max\":150,\"health\":70,\"health_max\":70,\"index\":2532,\"metal\":null,\"metal_max\":null,\"population\":3,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":13,\"y\":0,\"z\":1},\"sight_ranges\":[4,9,7],\"speed\":7,\"team\":0},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7942\":{\"__class__\":\"Submarine\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":16,\"ammo_max\":20,\"ammo_once\":2,\"attacks\":[0,40],\"build_round\":2,\"cost\":7,\"defences\":[Infinity,7],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":0,\"z\":0},\"fire_ranges\":[5,5,0],\"fuel\":102,\"fuel_max\":120,\"health\":35,\"health_max\":35,\"index\":7942,\"metal\":null,\"metal_max\":null,\"population\":2,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":0,\"z\":0},\"sight_ranges\":[6,5,3],\"speed\":6,\"team\":0},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9917\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":9917,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":0,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}},\"max_population\":60,\"max_round\":10,\"record_interval\":1,\"time_per_round\":1.0,\"types\":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0],[0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0],[0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],[0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],[0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,1,1,1,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,0,1,1,1,0,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,1,1,1,0,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,1,1,1,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0],[0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],[0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],\"weather\":0,\"x_max\":30,\"y_max\":30},\"populations\":[8,0],\"production_lists\":[[[8,1],[8,2]],[]],\"round\":10,\"scores\":[0,0],\"state\":2}", 
+  "history": {
+    "command": [
+      [
+        [
+          {
+            "__class__": "Produce", 
+            "__module__": "deep_blue.logic.command", 
+            "kind": 7, 
+            "operand": -1, 
+            "team": 0
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "Produce", 
+            "__module__": "deep_blue.logic.command", 
+            "kind": 7, 
+            "operand": -1, 
+            "team": 0
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "Produce", 
+            "__module__": "deep_blue.logic.command", 
+            "kind": 7, 
+            "operand": -1, 
+            "team": 0
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "Produce", 
+            "__module__": "deep_blue.logic.command", 
+            "kind": 4, 
+            "operand": -1, 
+            "team": 0
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 44
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "Produce", 
+            "__module__": "deep_blue.logic.command", 
+            "kind": 5, 
+            "operand": -1, 
+            "team": 0
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 44, 
+            "target": 939
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 44
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 44
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 44, 
+            "target": 939
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 939, 
+            "target": 44
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 464
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 22, 
+              "y": 2, 
+              "z": 0
+            }, 
+            "operand": 7942
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 22, 
+              "y": 2, 
+              "z": 0
+            }, 
+            "operand": 7942
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 939, 
+            "target": 44
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 44
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 44, 
+            "target": 939
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 8, 
+              "y": 0, 
+              "z": 1
+            }, 
+            "operand": 9917
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 464
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 22, 
+              "y": 2, 
+              "z": 0
+            }, 
+            "operand": 7942
+          }, 
+          {
+            "__class__": "Produce", 
+            "__module__": "deep_blue.logic.command", 
+            "kind": 8, 
+            "operand": -1, 
+            "team": 0
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 44, 
+            "target": 939
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 44
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 9917
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 464
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "AttackUnit", 
+            "__module__": "deep_blue.logic.command", 
+            "operand": 7942, 
+            "target": 3437
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 20, 
+              "y": 0, 
+              "z": 0
+            }, 
+            "operand": 7942
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 939, 
+            "target": 44
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 44
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 44, 
+            "target": 939
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 1, 
+              "z": 1
+            }, 
+            "operand": 9917
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 464
+          }
+        ], 
+        []
+      ], 
+      [
+        [
+          {
+            "__class__": "AttackUnit", 
+            "__module__": "deep_blue.logic.command", 
+            "operand": 7942, 
+            "target": 3437
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 20, 
+              "y": 0, 
+              "z": 0
+            }, 
+            "operand": 7942
+          }, 
+          {
+            "__class__": "Produce", 
+            "__module__": "deep_blue.logic.command", 
+            "kind": 8, 
+            "operand": -1, 
+            "team": 0
+          }, 
+          {
+            "__class__": "Supply", 
+            "__module__": "deep_blue.logic.command", 
+            "ammo": 1000, 
+            "fuel": 1000, 
+            "metal": 1000, 
+            "operand": 44, 
+            "target": 939
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 44
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 1, 
+              "z": 1
+            }, 
+            "operand": 9917
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 464
+          }, 
+          {
+            "__class__": "ChangeDest", 
+            "__module__": "deep_blue.logic.command", 
+            "dest": {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 22, 
+              "y": 2, 
+              "z": 1
+            }, 
+            "operand": 2532
+          }
+        ], 
+        []
+      ]
+    ], 
+    "event": [
+      [
+        {
+          "__class__": "AddProductionEntry", 
+          "__module__": "deep_blue.logic.event", 
+          "kind": 7, 
+          "team": 0
+        }
+      ], 
+      [
+        {
+          "__class__": "AddProductionEntry", 
+          "__module__": "deep_blue.logic.event", 
+          "kind": 7, 
+          "team": 0
+        }
+      ], 
+      [
+        {
+          "__class__": "AddProductionEntry", 
+          "__module__": "deep_blue.logic.event", 
+          "kind": 7, 
+          "team": 0
+        }, 
+        {
+          "__class__": "Create", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 44, 
+          "kind": 7, 
+          "pos": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 7, 
+            "y": 1, 
+            "z": 1
+          }
+        }
+      ], 
+      [
+        {
+          "__class__": "AddProductionEntry", 
+          "__module__": "deep_blue.logic.event", 
+          "kind": 4, 
+          "team": 0
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 5, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 44
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 44, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 1, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 6, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 1, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 1
+            }
+          ]
+        }
+      ], 
+      [
+        {
+          "__class__": "AddProductionEntry", 
+          "__module__": "deep_blue.logic.event", 
+          "kind": 5, 
+          "team": 0
+        }, 
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 120, 
+          "fuel": 0, 
+          "index": 44, 
+          "metal": 50, 
+          "target": 939
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 5, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 44
+        }, 
+        {
+          "__class__": "Create", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 464, 
+          "kind": 7, 
+          "pos": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 7, 
+            "y": 1, 
+            "z": 1
+          }
+        }, 
+        {
+          "__class__": "Create", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 7942, 
+          "kind": 4, 
+          "pos": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 0
+          }
+        }
+      ], 
+      [
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 120, 
+          "fuel": 6, 
+          "index": 939, 
+          "metal": 50, 
+          "target": 44
+        }, 
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 120, 
+          "fuel": 6, 
+          "index": 44, 
+          "metal": 50, 
+          "target": 939
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 5, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 464
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 22, 
+            "y": 2, 
+            "z": 0
+          }, 
+          "index": 7942
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 44
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 7942, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 2, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 1, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 6, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 8, 
+              "y": 0, 
+              "z": 0
+            }
+          ]
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 464, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 1, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 6, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 1, 
+              "z": 1
+            }
+          ]
+        }, 
+        {
+          "__class__": "Create", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 9917, 
+          "kind": 7, 
+          "pos": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 7, 
+            "y": 1, 
+            "z": 1
+          }
+        }
+      ], 
+      [
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 0, 
+          "fuel": 0, 
+          "index": 44, 
+          "metal": 0, 
+          "target": 939
+        }, 
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 120, 
+          "fuel": 6, 
+          "index": 939, 
+          "metal": 50, 
+          "target": 44
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 44
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 8, 
+            "y": 0, 
+            "z": 1
+          }, 
+          "index": 9917
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 22, 
+            "y": 2, 
+            "z": 0
+          }, 
+          "index": 7942
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 464
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 7942, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 8, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 9, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 10, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 11, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 12, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 13, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 14, 
+              "y": 0, 
+              "z": 0
+            }
+          ]
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 9917, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 1, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 8, 
+              "y": 0, 
+              "z": 1
+            }
+          ]
+        }
+      ], 
+      [
+        {
+          "__class__": "AddProductionEntry", 
+          "__module__": "deep_blue.logic.event", 
+          "kind": 8, 
+          "team": 0
+        }, 
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 120, 
+          "fuel": 6, 
+          "index": 44, 
+          "metal": 50, 
+          "target": 939
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 464
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 22, 
+            "y": 2, 
+            "z": 0
+          }, 
+          "index": 7942
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 5, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 9917
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 5, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 44
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 7942, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 14, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 15, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 16, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 17, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 18, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 19, 
+              "y": 0, 
+              "z": 0
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 20, 
+              "y": 0, 
+              "z": 0
+            }
+          ]
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 9917, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 8, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 6, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 5, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 4, 
+              "y": 0, 
+              "z": 1
+            }
+          ]
+        }
+      ], 
+      [
+        {
+          "__class__": "AttackUnit", 
+          "__module__": "deep_blue.logic.event", 
+          "damage": 0, 
+          "index": 7942, 
+          "target": 3437
+        }, 
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 0, 
+          "fuel": 0, 
+          "index": 44, 
+          "metal": 0, 
+          "target": 939
+        }, 
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 120, 
+          "fuel": 6, 
+          "index": 939, 
+          "metal": 50, 
+          "target": 44
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 464
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 44
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 20, 
+            "y": 0, 
+            "z": 0
+          }, 
+          "index": 7942
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 1, 
+            "z": 1
+          }, 
+          "index": 9917
+        }, 
+        {
+          "__class__": "Create", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 2532, 
+          "kind": 5, 
+          "pos": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 7, 
+            "y": 1, 
+            "z": 1
+          }
+        }
+      ], 
+      [
+        {
+          "__class__": "AddProductionEntry", 
+          "__module__": "deep_blue.logic.event", 
+          "kind": 8, 
+          "team": 0
+        }, 
+        {
+          "__class__": "AttackUnit", 
+          "__module__": "deep_blue.logic.event", 
+          "damage": 0, 
+          "index": 7942, 
+          "target": 3437
+        }, 
+        {
+          "__class__": "Supply", 
+          "__module__": "deep_blue.logic.event", 
+          "ammo": 120, 
+          "fuel": 6, 
+          "index": 44, 
+          "metal": 50, 
+          "target": 939
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 22, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 2532
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 464
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 5, 
+            "y": 2, 
+            "z": 1
+          }, 
+          "index": 44
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 20, 
+            "y": 0, 
+            "z": 0
+          }, 
+          "index": 7942
+        }, 
+        {
+          "__class__": "ChangeDest", 
+          "__module__": "deep_blue.logic.event", 
+          "dest": {
+            "__class__": "Position", 
+            "__module__": "deep_blue.logic.basic", 
+            "x": 4, 
+            "y": 1, 
+            "z": 1
+          }, 
+          "index": 9917
+        }, 
+        {
+          "__class__": "Move", 
+          "__module__": "deep_blue.logic.event", 
+          "index": 2532, 
+          "nodes": [
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 1, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 7, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 8, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 9, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 10, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 11, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 12, 
+              "y": 0, 
+              "z": 1
+            }, 
+            {
+              "__class__": "Position", 
+              "__module__": "deep_blue.logic.basic", 
+              "x": 13, 
+              "y": 0, 
+              "z": 1
+            }
+          ]
+        }
+      ]
+    ], 
+    "population": [
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        1, 
+        0
+      ], 
+      [
+        1, 
+        0
+      ], 
+      [
+        4, 
+        0
+      ], 
+      [
+        5, 
+        0
+      ], 
+      [
+        5, 
+        0
+      ], 
+      [
+        5, 
+        0
+      ], 
+      [
+        8, 
+        0
+      ], 
+      [
+        8, 
+        0
+      ]
+    ], 
+    "score": [
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ], 
+      [
+        0, 
+        0
+      ]
+    ], 
+    "unit_num": [
+      [
+        1, 
+        1
+      ], 
+      [
+        1, 
+        1
+      ], 
+      [
+        1, 
+        1
+      ], 
+      [
+        2, 
+        1
+      ], 
+      [
+        2, 
+        1
+      ], 
+      [
+        4, 
+        1
+      ], 
+      [
+        5, 
+        1
+      ], 
+      [
+        5, 
+        1
+      ], 
+      [
+        5, 
+        1
+      ], 
+      [
+        6, 
+        1
+      ], 
+      [
+        6, 
+        1
+      ]
+    ]
+  }, 
+  "key_frames": [
+    [
+      "{\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [], 
+        []
+      ]
+    ], 
+    [
+      "{\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":188,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            7, 
+            2
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":176,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            7, 
+            1
+          ], 
+          [
+            7, 
+            2
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"fire_ranges\":null,\"fuel\":300,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":164,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            7, 
+            2
+          ], 
+          [
+            7, 
+            2
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":157,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            7, 
+            1
+          ], 
+          [
+            7, 
+            1
+          ], 
+          [
+            4, 
+            1
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":0,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":0,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"464\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"fire_ranges\":null,\"fuel\":300,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":464,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":193,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7942\":{\"__class__\":\"Submarine\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":20,\"ammo_max\":20,\"ammo_once\":2,\"attacks\":[0,40],\"build_round\":2,\"cost\":7,\"defences\":[Infinity,7],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":0},\"fire_ranges\":[5,5,0],\"fuel\":120,\"fuel_max\":120,\"health\":35,\"health_max\":35,\"index\":7942,\"metal\":null,\"metal_max\":null,\"population\":2,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":0},\"sight_ranges\":[6,5,3],\"speed\":6,\"team\":0},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            7, 
+            1
+          ], 
+          [
+            5, 
+            3
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":0,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":0,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"464\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":295,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":464,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":193,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7942\":{\"__class__\":\"Submarine\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":20,\"ammo_max\":20,\"ammo_once\":2,\"attacks\":[0,40],\"build_round\":2,\"cost\":7,\"defences\":[Infinity,7],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":0},\"fire_ranges\":[5,5,0],\"fuel\":114,\"fuel_max\":120,\"health\":35,\"health_max\":35,\"index\":7942,\"metal\":null,\"metal_max\":null,\"population\":2,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":0,\"z\":0},\"sight_ranges\":[6,5,3],\"speed\":6,\"team\":0},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9917\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"fire_ranges\":null,\"fuel\":300,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":9917,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            5, 
+            3
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":300,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"464\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":295,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":464,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":994,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":143,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7942\":{\"__class__\":\"Submarine\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":20,\"ammo_max\":20,\"ammo_once\":2,\"attacks\":[0,40],\"build_round\":2,\"cost\":7,\"defences\":[Infinity,7],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":0},\"fire_ranges\":[5,5,0],\"fuel\":108,\"fuel_max\":120,\"health\":35,\"health_max\":35,\"index\":7942,\"metal\":null,\"metal_max\":null,\"population\":2,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":14,\"y\":0,\"z\":0},\"sight_ranges\":[6,5,3],\"speed\":6,\"team\":0},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9917\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":0,\"z\":1},\"fire_ranges\":null,\"fuel\":298,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":9917,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":0,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            5, 
+            2
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":0,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":0,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"464\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":295,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":464,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":179,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7942\":{\"__class__\":\"Submarine\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":20,\"ammo_max\":20,\"ammo_once\":2,\"attacks\":[0,40],\"build_round\":2,\"cost\":7,\"defences\":[Infinity,7],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":0},\"fire_ranges\":[5,5,0],\"fuel\":102,\"fuel_max\":120,\"health\":35,\"health_max\":35,\"index\":7942,\"metal\":null,\"metal_max\":null,\"population\":2,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":0,\"z\":0},\"sight_ranges\":[6,5,3],\"speed\":6,\"team\":0},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9917\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":9917,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":0,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            5, 
+            1
+          ], 
+          [
+            8, 
+            2
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":300,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"464\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":295,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":464,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":994,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":129,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"2532\":{\"__class__\":\"Destroyer\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":40,\"ammo_max\":40,\"ammo_once\":4,\"attacks\":[22,11],\"build_round\":3,\"cost\":14,\"defences\":[13,10],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"fire_ranges\":[2,8,6],\"fuel\":150,\"fuel_max\":150,\"health\":70,\"health_max\":70,\"index\":2532,\"metal\":null,\"metal_max\":null,\"population\":3,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":1,\"z\":1},\"sight_ranges\":[4,9,7],\"speed\":7,\"team\":0},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7942\":{\"__class__\":\"Submarine\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":18,\"ammo_max\":20,\"ammo_once\":2,\"attacks\":[0,40],\"build_round\":2,\"cost\":7,\"defences\":[Infinity,7],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":0,\"z\":0},\"fire_ranges\":[5,5,0],\"fuel\":102,\"fuel_max\":120,\"health\":35,\"health_max\":35,\"index\":7942,\"metal\":null,\"metal_max\":null,\"population\":2,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":0,\"z\":0},\"sight_ranges\":[6,5,3],\"speed\":6,\"team\":0},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9917\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":9917,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":0,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            8, 
+            2
+          ]
+        ], 
+        []
+      ]
+    ], 
+    [
+      "{\"44\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":0,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":44,\"metal\":0,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"464\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":2,\"z\":1},\"fire_ranges\":null,\"fuel\":295,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":464,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"939\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":939,\"metal\":165,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":5,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":0},\"1146\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":1146,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":1,\"z\":1}},\"2193\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":2193,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":10,\"y\":24,\"z\":1}},\"2532\":{\"__class__\":\"Destroyer\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":40,\"ammo_max\":40,\"ammo_once\":4,\"attacks\":[22,11],\"build_round\":3,\"cost\":14,\"defences\":[13,10],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1},\"fire_ranges\":[2,8,6],\"fuel\":143,\"fuel_max\":150,\"health\":70,\"health_max\":70,\"index\":2532,\"metal\":null,\"metal_max\":null,\"population\":3,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":13,\"y\":0,\"z\":1},\"sight_ranges\":[4,9,7],\"speed\":7,\"team\":0},\"3374\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":3374,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":21,\"y\":7,\"z\":1}},\"3437\":{\"__class__\":\"Base\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":Infinity,\"ammo_max\":Infinity,\"ammo_once\":6,\"attacks\":[40,0],\"build_round\":null,\"cost\":null,\"defences\":[15,Infinity],\"fire_ranges\":[0,7,5],\"fuel\":1000,\"fuel_max\":1000,\"health\":20,\"health_max\":20,\"index\":3437,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Rectangle\",\"__module__\":\"deep_blue.logic.basic\",\"lower_right\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":24,\"y\":4,\"z\":1},\"upper_left\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":2,\"z\":1}},\"sight_ranges\":[4,10,8],\"speed\":null,\"team\":1},\"3689\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":3689,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":12,\"y\":12,\"z\":1}},\"4294\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":4294,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":23,\"y\":23,\"z\":1}},\"4315\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":4315,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":9,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"4491\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":4491,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":11,\"y\":2,\"z\":1}},\"5827\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":5827,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":22,\"y\":25,\"z\":1}},\"5936\":{\"__class__\":\"Fort\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":300,\"ammo_max\":300,\"ammo_once\":4,\"attacks\":[25,0],\"build_round\":null,\"cost\":null,\"defences\":[12,Infinity],\"fire_ranges\":[0,5,4],\"fuel\":200,\"fuel_max\":200,\"health\":800,\"health_max\":800,\"index\":5936,\"metal\":200,\"metal_max\":200,\"population\":null,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":25,\"z\":1},\"sight_ranges\":[3,8,6],\"speed\":null,\"team\":2},\"7353\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7353,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":17,\"y\":12,\"z\":1}},\"7859\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7859,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":23,\"z\":1}},\"7915\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":7915,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":7,\"y\":25,\"z\":1}},\"7942\":{\"__class__\":\"Submarine\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":16,\"ammo_max\":20,\"ammo_once\":2,\"attacks\":[0,40],\"build_round\":2,\"cost\":7,\"defences\":[Infinity,7],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":0,\"z\":0},\"fire_ranges\":[5,5,0],\"fuel\":102,\"fuel_max\":120,\"health\":35,\"health_max\":35,\"index\":7942,\"metal\":null,\"metal_max\":null,\"population\":2,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":20,\"y\":0,\"z\":0},\"sight_ranges\":[6,5,3],\"speed\":6,\"team\":0},\"7995\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":7995,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":6,\"y\":1,\"z\":1}},\"8005\":{\"__class__\":\"Mine\",\"__module__\":\"deep_blue.logic.basic\",\"index\":8005,\"metal\":1000,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":18,\"y\":2,\"z\":1}},\"9379\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9379,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":19,\"y\":24,\"z\":1}},\"9917\":{\"__class__\":\"Cargo\",\"__module__\":\"deep_blue.logic.basic\",\"ammo\":120,\"ammo_max\":120,\"ammo_once\":null,\"attacks\":null,\"build_round\":3,\"cost\":12,\"defences\":[15,8],\"dest\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":1,\"z\":1},\"fire_ranges\":null,\"fuel\":294,\"fuel_max\":300,\"health\":60,\"health_max\":60,\"index\":9917,\"metal\":50,\"metal_max\":50,\"population\":1,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":4,\"y\":0,\"z\":1},\"sight_ranges\":[3,7,6],\"speed\":8,\"team\":0},\"9989\":{\"__class__\":\"Oilfield\",\"__module__\":\"deep_blue.logic.basic\",\"fuel\":1000,\"index\":9989,\"pos\":{\"__class__\":\"Position\",\"__module__\":\"deep_blue.logic.basic\",\"x\":8,\"y\":7,\"z\":1}}}", 
+      [
+        [
+          [
+            8, 
+            1
+          ], 
+          [
+            8, 
+            2
+          ]
+        ], 
+        []
+      ]
+    ]
+  ], 
+  "team_names": [
+    "teamstyle16", 
+    "0xFFFFFF"
+  ], 
+  "version": 3
+}

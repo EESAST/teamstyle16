@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'helpdlg.ui'
 #
-# Created: Wed Sep 24 01:46:00 2014
+# Created: Sat Mar 14 00:31:28 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,9 +26,9 @@ except AttributeError:
 class Ui_HelpDialog(object):
     def setupUi(self, HelpDialog):
         HelpDialog.setObjectName(_fromUtf8("HelpDialog"))
-        HelpDialog.resize(400, 219)
+        HelpDialog.resize(473, 219)
         self.textBrowser = QtGui.QTextBrowser(HelpDialog)
-        self.textBrowser.setGeometry(QtCore.QRect(10, 10, 381, 201))
+        self.textBrowser.setGeometry(QtCore.QRect(10, 10, 451, 201))
         self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
 
         self.retranslateUi(HelpDialog)
@@ -42,11 +42,11 @@ class Ui_HelpDialog(object):
 "</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">使用方法：</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -如果想要进行ai对战，请在两侧的ai选择区加载两个ai</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -如果想要进行人机对战，只需加载一侧的ai并在另一侧的human选择框上打勾</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -友情提示，不推荐两侧human选择框都打勾，这样会使这个游戏显得很傻。</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -如果想要进行人机对战，只需加载一侧的ai并在另一侧的“人”选择框上打勾</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -勾选“调试”后可以在VS中编译或双击来打开该方ai，进行调试</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">操作方法：</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -ai对战时，可通过下侧的进度条来调整播放速度以及播放回合数，开关战争迷雾。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -人机对战时下侧按钮将会失效。鼠标左键选择单位以及选择生产，右键点击目标可以进行攻击/移动/采集/输送。</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    </p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -播放按钮再次按下可以暂停。单步调试按钮每次只会进行一个回合。</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    -人机对战时下侧按钮将会失效。数字键1-6或者鼠标左键点击选择生产，左键选中单位后，a/s/m/f+左键对应攻击/补给/移动/修理，右键点击可以进行攻击/移动。</p></body></html>", None))
 

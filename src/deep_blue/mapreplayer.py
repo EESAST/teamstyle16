@@ -3,7 +3,7 @@
 #地图编辑器
 
 from lib.PaintEvent import *
-from platform import *
+from deep_blue import *
 from ui_mapmaker import *
 import random
 import copy
@@ -43,12 +43,19 @@ class MapMakerReplayer(QGraphicsView):
 		self.y_max = 0
 		self.MapList = []
 		self.size = 30
+		self.RightState = 0
+		self.now_population = [0, 0]
+		self.have_base = [False, False]
+		self.copy = 0
+		self.change_team = 0
 
 	def wheelEvent(self, event):
 	    factor = 1.41 ** (event.delta() / 240.0)
 	    self.scale(factor, factor)
 
 	def createMap(self, num, population, round_):#num: 0对称方式 1地图大小 2陆海对比 3资源数量 4-9：6单位数量
+		self.have_base = [False, False]
+		self.copy = num[0]
 		if not self.mapcreate.running:
 			self.mapcreate.run()
 		self.map = map_info.MapInfo(num[1][0], num[1][1], population, round_, 1, 1.0, num[10])
@@ -70,9 +77,11 @@ class MapMakerReplayer(QGraphicsView):
 			for j in range(6):
 				water.remove((base_island[0][0] + i + 1,base_island[0][1] + j + 1))
 				land_list.append((base_island[0][0] + i + 1,base_island[0][1] + j + 1))
+		randomset = []
 		for i in [0,7]:
 			for j in range(6):
-				if random.randint(0, 1):
+				if not random.randint(0, 2):
+					randomset.append((i,j))
 					water.remove((base_island[0][0] + i, base_island[0][1] + j + 1))
 					land_list.append((base_island[0][0] + i, base_island[0][1] + j + 1))
 					near_sea_list.append((base_island[0][0] + i, base_island[0][1] + j + 1))
@@ -82,7 +91,8 @@ class MapMakerReplayer(QGraphicsView):
 					near_sea_list.append((base_island[0][0] + i - 1, base_island[0][1] + j + 1))
 		for j in [0,7]:
 			for i in range(6):
-				if random.randint(0, 1):
+				if not random.randint(0, 2):
+					randomset.append((i,j))
 					water.remove((base_island[0][0] + i + 1, base_island[0][1] + j))
 					land_list.append((base_island[0][0] + i + 1, base_island[0][1] + j))
 					near_sea_list.append((base_island[0][0] + i + 1, base_island[0][1] + j))
@@ -90,6 +100,14 @@ class MapMakerReplayer(QGraphicsView):
 					near_sea_list.append((base_island[0][0] + i + 1, base_island[0][1] + j + 1))
 				else:
 					near_sea_list.append((base_island[0][0] + i + 1, base_island[0][1] + j - 1))
+		if len(randomset) == 24:
+			water.append((base_island[0][0], base_island[0][1] + 2))
+			water.append((base_island[0][0] + 2, base_island[0][1]))
+			land_list.remove((base_island[0][0], base_island[0][1] + 2))
+			land_list.remove((base_island[0][0] + 2, base_island[0][1]))
+			near_sea_list.append((base_island[0][0] + 1, base_island[0][1] + 2))
+			near_sea_list.append((base_island[0][0] + 2, base_island[0][1] + 1))
+		randomset = []
 		self.water_list = copy.deepcopy(water)
 		self.land_list = copy.deepcopy(land_list)
 		self.near_sea_list = copy.deepcopy(near_sea_list)
@@ -168,7 +186,22 @@ class MapMakerReplayer(QGraphicsView):
 				self.map.set_map_type(i[0], num[1][1] - i[1] - 1, 1)
 			else:
 				self.map.set_map_type(num[1][0] - i[0] - 1, num[1][1] - i[1] - 1, 1)
-		self.map.add_element(basic.Base(0, basic.Position(base_island[0][0] + 2, base_island[0][1] + 2)))
+		self.map.add_element(basic.Base(0, basic.Rectangle(basic.Position(base_island[0][0] + 1, base_island[0][1] + 1), basic.Position(base_island[0][0] + 3, base_island[0][1] + 3))))
+		near_water_flag = False
+		nr_list = []
+		for i in range(3):
+			if not base_island[0][i] in self.land_list:
+				near_water_flag = True
+				break
+			if not base_island[i][0] in self.land_list:
+				near_water_flag = True
+				break
+			nr_list.append(base_island[0][i])
+			nr_list.append(base_island[i][0])
+		if not near_water_flag:
+			create_sea = random.sample(nr_list, 2)
+			self.map.set_map_type(create_sea[0][0], create_sea[0][1], 0)
+			self.map.set_map_type(create_sea[1][0], create_sea[1][1], 0)
 		sourcelist = random.sample(self.near_sea_list, min(len(self.near_sea_list), min(num[3] * 3 + random.randint(5, 7), 12)))
 		planelist = random.sample(wholemap, num[8] + num[9])
 		shiplist = random.sample(self.water_list, num[5] + num[6] + num[7])
@@ -195,7 +228,7 @@ class MapMakerReplayer(QGraphicsView):
 		for i in fort_list:
 			self.map.add_element(basic.Fort(2, basic.Position(i[0], i[1])))
 		if num[0] == 0:
-			self.map.add_element(basic.Base(1, basic.Position(num[1][0] - base_island[0][0] - 3, base_island[0][1] + 2)))
+			self.map.add_element(basic.Base(1, basic.Rectangle(basic.Position(num[1][0] - base_island[0][0] - 4, base_island[0][1] + 1), basic.Position(num[1][0] - base_island[0][0] - 2, base_island[0][1] + 3))))
 			for i in range(len(sourcelist)):
 				if i < len(sourcelist) / 2:
 					self.map.add_element(basic.Mine(basic.Position(num[1][0] - sourcelist[i][0] - 1, sourcelist[i][1])))
@@ -218,7 +251,7 @@ class MapMakerReplayer(QGraphicsView):
 			for i in fort_list:
 				self.map.add_element(basic.Fort(2, basic.Position(num[1][0] - i[0] - 1, i[1])))
 		elif num[0] == 1:
-			self.map.add_element(basic.Base(1, basic.Position(base_island[0][0] + 2, num[1][1] - base_island[0][1] - 3)))
+			self.map.add_element(basic.Base(1, basic.Rectangle(basic.Position(base_island[0][0] + 1, num[1][1] - base_island[0][1] - 4),basic.Position(base_island[0][0] + 3, num[1][1] - base_island[0][1] - 2))))
 			for i in range(len(sourcelist)):
 				if i < len(sourcelist) / 2:
 					self.map.add_element(basic.Mine(basic.Position(sourcelist[i][0], num[1][1] - sourcelist[i][1] - 1)))
@@ -241,7 +274,7 @@ class MapMakerReplayer(QGraphicsView):
 			for i in fort_list:
 				self.map.add_element(basic.Fort(2, basic.Position(i[0], num[1][1] - i[1] - 1)))
 		else:
-			self.map.add_element(basic.Base(1, basic.Position(num[1][0] - base_island[0][0] - 3, num[1][1] - base_island[0][1] - 3)))
+			self.map.add_element(basic.Base(1, basic.Rectangle(basic.Position(num[1][0] - base_island[0][0] - 4, num[1][1] - base_island[0][1] - 4), basic.Position(num[1][0] - base_island[0][0] - 2, num[1][1] - base_island[0][1] - 2))))
 			for i in range(len(sourcelist)):
 				if i < len(sourcelist) / 2:
 					self.map.add_element(basic.Mine(basic.Position(num[1][0] - sourcelist[i][0] - 1, num[1][1] - sourcelist[i][1] - 1)))
@@ -266,8 +299,11 @@ class MapMakerReplayer(QGraphicsView):
 		self.show()
 
 	def show(self):
+		if not self.mapcreate.running:
+			self.mapcreate.run()
 		self.setSceneRect(0,0,30*self.x_max, 30*self.y_max)
 		Elements = self.map.elements
+		self.Unit_Info = {}
 		for element in Elements.values():
 			self.Unit_Info[element.position] = element
 		self.Map_Info = [[0 for y in range(self.map.y_max)] for x in range(self.map.x_max)]
@@ -327,5 +363,127 @@ class MapMakerReplayer(QGraphicsView):
 		self.map = None
 		self.Unit_Info = {}
 		self.Map_Info = [[]]
+		self.UnitBase = []
 		self.x_max = 0
 		self.y_max = 0
+		self.MapList = []
+		self.size = 30
+		self.RightState = 0
+		self.now_population = [0, 0]
+		self.have_base = [False, False]
+		self.copy = 0
+		self.change_team = 0
+
+	def mousePressEvent(self, event):
+		if not self.create:
+			QGraphicsView.mousePressEvent(self, event)
+			return
+
+		if event.button() == Qt.RightButton:
+			pos = event.pos()
+			items = self.items(pos)
+			c_pos = None
+			for it in items:
+				if isinstance(it, MapMakerUnit):
+					c_pos = (it.corX, it.corY, it.corZ)
+			if not c_pos:
+				return
+
+			if self.RightState == 0:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 0)) or self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					QMessageBox.critical(self, QString.fromUtf8("无法修改"), QString.fromUtf8("已有单位，请先删除再重新修改"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				self.map.set_map_type(c_pos[0], c_pos[1], 1 - self.map.map_type(c_pos[0], c_pos[1]))
+
+			elif self.RightState == 1:
+				have_sea = False
+				if self.have_base[self.change_team]:
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("已有基地，请先删除再重新放置"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				for c_x in range(c_pos[0], c_pos[0] + 3):
+					for c_y in range(c_pos[1], c_pos[1] + 3):
+						if self.map.element(basic.Position(c_x, c_y, 1)) or not self.map.map_type(c_x, c_y):
+							QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("基地需要3*3的陆地空间"), QMessageBox.Ok, QMessageBox.NoButton)
+							return
+				for c_x in [c_pos[0] - 1, c_pos[0] + 3]:
+					for c_y in range(c_pos[1], c_pos[1] + 3):
+						if not self.map.map_type(c_x, c_y):
+							have_sea = True
+				for c_y in [c_pos[1] - 1, c_pos[1] + 3]:
+					for c_x in range(c_pos[0], c_pos[0] + 3):
+						if not self.map.map_type(c_x, c_y):
+							have_sea = True
+				if not have_sea:
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("基地周围需要有海洋"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				self.map.add_element(basic.Base(self.change_team, basic.Rectangle(basic.Position(c_pos[0], c_pos[1]), basic.Position(c_pos[0] + 2, c_pos[1] + 2))))
+				self.have_base[self.change_team] = True
+
+			elif self.RightState == 2:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Fort(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 3:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if self.map.map_type(c_pos[0] + 1, c_pos[1]) and self.map.map_type(c_pos[0] - 1, c_pos[1]) and self.map.map_type(c_pos[0], c_pos[1] + 1) and self.map.map_type(c_pos[0] - 1, c_pos[1]):
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("资源周围需要有海洋"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				if self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Mine(basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 4:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if self.map.map_type(c_pos[0] + 1, c_pos[1]) and self.map.map_type(c_pos[0] - 1, c_pos[1]) and self.map.map_type(c_pos[0], c_pos[1] + 1) and self.map.map_type(c_pos[0] - 1, c_pos[1]):
+					QMessageBox.critical(self, QString.fromUtf8("无法放置"), QString.fromUtf8("资源周围需要有海洋"), QMessageBox.Ok, QMessageBox.NoButton)
+					return
+				if self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Oilfield(basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 5:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 0)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Submarine(self.change_team, basic.Position(c_pos[0], c_pos[1], 0)))
+
+			elif self.RightState == 6:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Destroyer(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 7:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Carrier(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 8:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 1)):
+					return
+				if not self.map.map_type(c_pos[0], c_pos[1]):
+					self.map.add_element(basic.Cargo(self.change_team, basic.Position(c_pos[0], c_pos[1], 1)))
+
+			elif self.RightState == 9:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 2)):
+					return
+				self.map.add_element(basic.Fighter(self.change_team, basic.Position(c_pos[0], c_pos[1], 2)))
+
+			elif self.RightState == 10:
+				if self.map.element(basic.Position(c_pos[0], c_pos[1], 2)):
+					return
+				self.map.add_element(basic.Scout(self.change_team, basic.Position(c_pos[0], c_pos[1], 2)))
+
+			elif self.RightState == -1:
+				for it in items:
+					if isinstance(it, SoldierMakerUnit):
+						if it.obj.kind == 0:
+							self.have_base[it.obj.team] = False
+						del self.map.elements[it.obj.index]
+			else:
+				return
+
+			self.show()

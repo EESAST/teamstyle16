@@ -5,4 +5,14 @@
 *.o
 
 # CMake build files
-src/player_file/build
+src/player_file/build/
+src/player_file/projcts/
+
+# Package
+src/deep_blue/build/
+
+# Binaries
+src/deep_blue/dist/
+
+# Released files
+src/player_file_released/

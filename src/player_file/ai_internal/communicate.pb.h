@@ -603,12 +603,12 @@ class StableInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 team_num() const;
   inline void set_team_num(::google::protobuf::int32 value);
 
-  // optional bool weather = 3;
+  // optional int32 weather = 3;
   inline bool has_weather() const;
   inline void clear_weather();
   static const int kWeatherFieldNumber = 3;
-  inline bool weather() const;
-  inline void set_weather(bool value);
+  inline ::google::protobuf::int32 weather() const;
+  inline void set_weather(::google::protobuf::int32 value);
 
   // optional int32 population_limit = 4;
   inline bool has_population_limit() const;
@@ -650,7 +650,7 @@ class StableInfo : public ::google::protobuf::Message {
 
   ::teamstyle16::communicate::Map* map_;
   ::google::protobuf::int32 team_num_;
-  bool weather_;
+  ::google::protobuf::int32 weather_;
   ::google::protobuf::int32 population_limit_;
   ::google::protobuf::int32 round_limit_;
   float time_per_round_;
@@ -1442,7 +1442,7 @@ inline void StableInfo::set_team_num(::google::protobuf::int32 value) {
   team_num_ = value;
 }
 
-// optional bool weather = 3;
+// optional int32 weather = 3;
 inline bool StableInfo::has_weather() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -1453,13 +1453,13 @@ inline void StableInfo::clear_has_weather() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void StableInfo::clear_weather() {
-  weather_ = false;
+  weather_ = 0;
   clear_has_weather();
 }
-inline bool StableInfo::weather() const {
+inline ::google::protobuf::int32 StableInfo::weather() const {
   return weather_;
 }
-inline void StableInfo::set_weather(bool value) {
+inline void StableInfo::set_weather(::google::protobuf::int32 value) {
   set_has_weather();
   weather_ = value;
 }

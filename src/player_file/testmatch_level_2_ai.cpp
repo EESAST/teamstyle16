@@ -29,7 +29,7 @@ void AIMain()
 		if(Element->team == INFO->team_num &&Element->type == CARGO)
 		{
 			if(DistToBase(Element->pos, GetBase(INFO->team_num)))
-			if(Element->fuel <= 0.5 * kElementInfos[CARGO].fuel_max && Element->metal <= 0.5 * kElementInfos[CARGO].metal_max)
+			if(Element->fuel <= 0.5 * kProperty[CARGO].fuel_max && Element->metal <= 0.5 * kProperty[CARGO].metal_max)
 			{
 				if(flag == 1)
 				{
@@ -61,13 +61,13 @@ int GetNear(Position pos, ElementType type)
 				min_distance = distance(GetState(INFO->elements[i])->pos, pos);
 			}
 		else if(GetState(INFO->elements[i])->type == type &&  distance(GetState(INFO->elements[i])->pos, pos)<min_distance   //保证油田有油
-			&& type == OILFIELD && GetState(INFO->elements[i])->fuel >= kElementInfos[CARGO].fuel_max)
+			&& type == OILFIELD && GetState(INFO->elements[i])->fuel >= kProperty[CARGO].fuel_max)
 		{
 			near_index = i;
 			min_distance = distance(GetState(INFO->elements[i])->pos, pos);
 		}
 		else if(GetState(INFO->elements[i])->type == type &&  distance(GetState(INFO->elements[i])->pos, pos)<min_distance //保证矿场还有金属
-			&& type == MINE  && GetState(INFO->elements[i])->metal >= kElementInfos[CARGO].metal_max)
+			&& type == MINE  && GetState(INFO->elements[i])->metal >= kProperty[CARGO].metal_max)
 		{
 			near_index = i;
 			min_distance = distance(GetState(INFO->elements[i])->pos, pos);

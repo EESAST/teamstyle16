@@ -75,7 +75,7 @@ struct State
 
     Position pos;  // position of the upper-left corner
     Size size;
-    int type;
+    ElementType type;
     int team;
     bool visible;
 
@@ -110,7 +110,11 @@ struct GameInfo  // Necessary informations about the game
     int population;
 
     int element_num;
-    int elements[kMaxElementNum];  // array of indexes
+    // WARNING: Do NOT keep these pointers!
+    // Pointers from previous rounds are dangling!!!
+    // If you want to keep track of an element, keep its index and find it
+    //     using GetState().
+    const State *elements[kMaxElementNum];  // array of States
 
     int production_num;
     ProductionEntry production_list[kMaxProductionListSize];
@@ -127,8 +131,9 @@ extern const int kFortScore;
 extern const int kDamageScore;     // Score reward per damage made.
 extern const int kCollectScore;    // Score reward per resource collected.
 
-extern const Property kElementInfos[kElementTypes];
+extern const int kHealthPerMetal;
 
+extern const Property kProperty[kElementTypes];
 
 const GameInfo * Info();  // Get game information
 MapType Map(int x, int y);

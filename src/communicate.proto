@@ -39,7 +39,7 @@ message StableInfo {
     required Map map = 1;
     required int32 team_num = 2;
     // Extra infomation about the game
-    optional bool weather = 3;
+    optional int32 weather = 3;
     optional int32 population_limit = 4;
     optional int32 round_limit = 5;
     optional float time_per_round = 6;

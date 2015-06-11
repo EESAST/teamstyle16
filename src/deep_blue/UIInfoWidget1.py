@@ -5,7 +5,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 from ui_gameinfo1 import *
-from platform import *
+from deep_blue import *
 
 
 class InfoWidget1(QWidget, Ui_GameInfo1):
@@ -15,8 +15,10 @@ class InfoWidget1(QWidget, Ui_GameInfo1):
 
 	def setText(self, battle):
 		self.RoundNumberLineEdit.setText("%d" %battle.round())
-		self.PeopleNumberLineEdit1.setText("%d" %battle.population(0))
-		self.PeopleNumberLineEdit2.setText("%d" %battle.population(1))
+		self.PeopleNumberLineEdit1.setText("%d/%d" %(battle.population(0),battle.map_info().max_population))
+		self.PeopleNumberLineEdit2.setText("%d/%d" %(battle.population(1),battle.map_info().max_population))
+		self.ScoreLineEdit1.setText("%d" %battle.score(0))
+		self.ScoreLineEdit2.setText("%d" %battle.score(1))
 		airUnit = 0
 		waterUnit = 0
 		underWaterUnit = 0
@@ -74,6 +76,8 @@ class InfoWidget1(QWidget, Ui_GameInfo1):
 		self.ShipNumberLineEdit2.setText("")
 		self.PlaneNumberLineEdit2.setText("")
 		self.FortNumberLineEdit2.setText("")
+		self.ScoreLineEdit1.setText("")
+		self.ScoreLineEdit2.setText("")
 
 
 

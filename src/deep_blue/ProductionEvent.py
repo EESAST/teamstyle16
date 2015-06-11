@@ -7,7 +7,7 @@ from PyQt4.QtCore import *
 from lib.ui_ProductionPaint import *
 import lib.qrc_source
 from lib.PaintEvent import *
-from platform import *
+from deep_blue import *
 
 UNIT_WIDTH = 60
 UNIT_HEIGHT = 45
@@ -54,22 +54,27 @@ class ProductionReplay(QGraphicsView):
 		self.stateMachine.setInitialState(self.State_Run)
 		self.State_Final = QFinalState(self.stateMachine)
 
+
+		self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.statelist = []
 
 	def mousePressEvent(self, event):
-		print "in mousePressEvent!"
+		print "in mousePressEvent!1"
 		if not self.run:
 			QGraphicsView.mousePressEvent(self, event)
 			return
-		print "in mousePressEvent!"
-		if Qt.LeftButton:
+		print "in mousePressEvent!2"
+		if event.button() == Qt.LeftButton:
 			if self.index != self.HUMAN_REPLAY:
 				return
+			print "in mousePressEvent!3"
 			pos = event.pos()
 			items = self.items(pos)
 
 			for it in items:
-				if isinstance(it, SoldierUnit):
+				if isinstance(it, SoldierMakerUnit):
+					print "in mousePressEvent!4"
 					new_command = command.Produce(it.obj.kind)
 					self.battle.add_command(new_command)
 
@@ -96,51 +101,54 @@ class ProductionReplay(QGraphicsView):
 		self.num()
 		self.battle = battle
 		if not self.objects1:
-			new_unit = SoldierMakerUnit(basic.Submarine(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Submarine(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(0,0,2)
+			new_unit.setPos(0,0,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Destroyer(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Destroyer(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(2,0,2)
+			new_unit.setPos(2,0,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Carrier(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Carrier(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(4,0,2)
+			new_unit.setPos(4,0,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Cargo(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Cargo(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(0,1,2)
+			new_unit.setPos(0,2,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Fighter(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Fighter(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(2,1,2)
+			new_unit.setPos(2,2,2,40)
 			self.scene.addItem(new_unit)
-			new_unit = SoldierMakerUnit(basic.Scout(self.index, basic.Position(0,0,0)), 50)
+			new_unit = SoldierMakerUnit(basic.Scout(self.index, basic.Position(0,0,0)), 60)
 			self.objects1.append(new_unit)
-			new_unit.setPos(4,1,2)
+			new_unit.setPos(4,2,2,40)
 			self.scene.addItem(new_unit)
 
 
-		now_list = [[9999,9999,9999,9999,9999,9999],[9999,9999,9999,9999,9999,9999]]
+		now_list = [9999,9999,9999,9999,9999,9999]
 
-		for prod in battle.production_list(0):
-			if prod[1] < now_list[0][prod[0] - 4] and now_list[0][prod[0] - 4] != 0:
-				now_list[0][prod[0] - 4] = prod[1]
+		if self.HUMAN_REPLAY in [0, 1]:
+			if self.index == self.HUMAN_REPLAY:
+				for prod in battle.production_list(self.index):
+					if prod[1] < now_list[prod[0] - 4] and now_list[prod[0] - 4] != 0:
+						now_list[prod[0] - 4] = prod[1]
 
-		for prod in battle.production_list(1):
-			if prod[1] < now_list[1][prod[0] - 4] and now_list[1][prod[0] - 4] != 0:
-				now_list[1][prod[0] - 4] = prod[1]
+		else:
+			for prod in battle.production_list(self.index):
+					if prod[1] < now_list[prod[0] - 4] and now_list[prod[0] - 4] != 0:
+						now_list[prod[0] - 4] = prod[1]
 
 		for i in range(6):
-			if now_list[0][i] == 9999:
+			if now_list[i] == 9999:
 				number = EffectIndUnit("0")
 			else:
-				number = EffectIndUnit("%d" %now_list[0][i])
+				number = EffectIndUnit("%d" %now_list[i])
 			if i < 3:
-				number.setPos(i*60, 10)
+				number.setPos(i*80, 35)
 			else:
-				number.setPos((i-3)*60, 60)
+				number.setPos((i-3)*80, 95)
 			number.setScale(1.2)
 			number.setDefaultTextColor(QColor(Qt.blue))
 			self.scene.addItem(number)

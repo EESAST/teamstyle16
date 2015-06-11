@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GameInfo2</class>
+ <widget class="QWidget" name="GameInfo2">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>235</width>
+    <height>427</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>单位信息</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>211</width>
+     <height>411</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string/>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="8" column="2">
+     <widget class="QLineEdit" name="AmmoLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_13">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>血量：</string>
+      </property>
+      <property name="buddy">
+       <cstring>HealthLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>人口数：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QLineEdit" name="DefenceLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_17">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>视野：</string>
+      </property>
+      <property name="buddy">
+       <cstring>SightRangeLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QLineEdit" name="HealthLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_14">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>燃料：</string>
+      </property>
+      <property name="buddy">
+       <cstring>FuelLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="label_16">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>金属：</string>
+      </property>
+      <property name="buddy">
+       <cstring>CarrySourceLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0">
+     <widget class="QLabel" name="label_18">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>移动目标：</string>
+      </property>
+      <property name="buddy">
+       <cstring>MoveTargetLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_15">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>弹药：</string>
+      </property>
+      <property name="buddy">
+       <cstring>AmmoLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <widget class="QLineEdit" name="FuelLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="0">
+     <widget class="QLabel" name="label">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>坐标：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="2">
+     <widget class="QLineEdit" name="FireRangeLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="2">
+     <widget class="QLineEdit" name="SightRangeLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="2">
+     <widget class="QLineEdit" name="MoveTargetLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="2">
+     <widget class="QLineEdit" name="TerrainLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>攻击范围：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="2">
+     <widget class="QLineEdit" name="CoordinateLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLineEdit" name="TypeLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>攻击力：</string>
+      </property>
+      <property name="buddy">
+       <cstring>AttackLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>地形：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QLineEdit" name="SpeedLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLineEdit" name="AttackLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="2">
+     <widget class="QLineEdit" name="PopulationLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="2">
+     <widget class="QLineEdit" name="CarrySourceLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>种类：</string>
+      </property>
+      <property name="buddy">
+       <cstring>TypeLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_10">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>防御力：</string>
+      </property>
+      <property name="buddy">
+       <cstring>DefenceLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>所需金属：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="2">
+     <widget class="QLineEdit" name="NeedMetalLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_11">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>速度：</string>
+      </property>
+      <property name="buddy">
+       <cstring>SpeedLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="styleSheet">
+       <string/>
+      </property>
+      <property name="text">
+       <string>队伍：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLineEdit" name="TeamLineEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
